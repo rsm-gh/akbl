@@ -1,9 +1,0 @@
-
-
-Arguments:--dont-sign-targz,--debian-targz
-
-CodeName:stable
-RepositoryLocation:/web/media_public/repository
-
-CopyChangelog:/web/media_public/repository/pool/main/a/alienware-kbl
-TarGzLocation:/web/media_public/repository/pool/main/a/alienware-kbl

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015  Rafael Senties Martinelli <rsm@imap.cc>
+#  Copyright (C) 2015  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -22,7 +22,6 @@ if [ "$EUID" -ne 0 ]
 fi
 
 
-
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR
 chmod -R 0755 $DIR/
@@ -30,7 +29,7 @@ chown root:root -R $DIR/
 
 
 echo -e "\nExecuting the pre-removal script."
-./DEBIAN/prerm
+./prerm
 echo "pre-removal done."
 
 
@@ -55,5 +54,6 @@ fi
 if [ -f /usr/bin/alienware-kbl ]; then
 	rm -f /usr/bin/alienware-kbl
 fi
+
 
 echo -e "\nalienware-kbl has been removed."

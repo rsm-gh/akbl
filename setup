@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -19,29 +19,11 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR
 
 
-
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root."
   exit
 fi
 
-
-#
-# Confirm the installation
-#
-echo -e "\n\e[00;33m Before installing check that all the following dependencies are installed: \e[00m \n "
-while read line; do
-	depends="Depends:"
-	if [[ "$line" =~ "$depends" ]]; then
-		echo ${line#${depends}}
-	fi
-done < ./DEBIAN/control
-read -p "Do you want to continue with the installation? (y/n) " prompt
-if [[ $prompt =~ [yY](es)* ]]; then
-	true
-else
-	exit 0
-fi
 #
 #
 echo -e "\nInstalling...\n"
@@ -68,7 +50,7 @@ fi
 #
 # Save the user configuration files
 #
-./DEBIAN/preinst
+./preinst
 
 #
 # Remove previous versions
@@ -79,7 +61,7 @@ echo -e "\nThe old version will be removed:"
 #
 # Start the installation
 #
-echo -e "\nCopying files.."
+echo -e "\nCopying the new files.."
 cp -ar $DIR/usr/. /usr/
 
 
@@ -87,8 +69,6 @@ cp -ar $DIR/usr/. /usr/
 # Post installation
 #
 echo -e "\nExecuting the post-installation script"
-./DEBIAN/postinst
-echo "post-installation done."
-
+./postinst
 
 echo -e "\n \e[00;32m The installation is finished.\e[00m"

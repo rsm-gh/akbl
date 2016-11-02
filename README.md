@@ -1,56 +1,26 @@
-** License **
-*************
 
-	GPL3 to the code and CC-BY for the artwork. Take a look to the copyright file for more info.
+# [Alienware-KBL | Home](https://rafael.senties-martinelli.com/software/alienware-kbl)
 
-** Home **
-**********
+## How to install
 
-	http://rafael.senties-martinelli.com/software/alienware-kbl
+ 1. Download the [Stable/Main branch](https://github.com/rsm-gh/alienware-kbl/archive/master.zip)
+ 2. Install the dependencies
 
+ For Debian Based distributions:
+ 	* Depends: gksu, libgtk-3-0 (>=3.10), libgtk-3-dev (>=3.10), python3, python3-gi, python3-cairo, libusb-1.0-0
+ 	* Recommends: systemd, gir1.2-appindicator3, python3-serpent, gir1.2-appindicator3-0.1
 
-** Installation **
-******************
+ 3. Execute the setup file
 
-	Just get sure of having the dependencies installed and then execute 
-    the setup file as root.
+## License
 
-    To find more details about the package (dependencies, description, etc) 
-    take a look to the ./DEBIAN/control file
+GPL3 to the code and CC-BY for the artwork. More details at /usr/share/doc/copyright
 
+## Development Notes
 
-    *Note that the program is developed/tested under Debian Stable. It may
-     not work under other distributions.
-     
-        https://www.debian.org/
++ The software is currently maintained and tested to be compatible with Debian Stable.
++ `python3-usb` is currently shipped because the pacakge does not exists at Debian Stable.
++ Some docummentation is placed at /usr/share/doc/alienware-kbl/
 
-
-** Possible Problems **
-***********************
-        
-    https://www.rafael.senties-martinelli.com/software/alienware-kbl/faq
-    https://www.rafael.senties-martinelli.com/software/alienware-kbl/list-bugs
-
-
-** Documentation **
-*******************
-
-    https://rafael.senties-martinelli.com/software/alienware-kbl/faq
-    ./usr/share/doc/alienware-kbl/alienware-bus
-    ./usr/share/doc/alienware-kbl/changelog
-
-
-** Build **
-***********
-
-	The Debian and Tar.Gz packages are build by using build-deb: 
-    
-        https://rafael.senties-martinelli.com/software/build-deb
-
-
-** Development Notes **
-***********************
-
-    python3-usb is currently shipped because the pacakge does not exists at debian stable.
 
 
