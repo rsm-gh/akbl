@@ -1,0 +1,94 @@
+#!/bin/bash
+
+#  Copyright (C) 2015  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License 3 as published by
+#   the Free Software Foundation.
+#
+#  This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software Foundation,
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR
+
+
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root."
+  exit
+fi
+
+
+#
+# Confirm the installation
+#
+echo -e "\n\e[00;33m Before installing check that all the following dependencies are installed: \e[00m \n "
+while read line; do
+	depends="Depends:"
+	if [[ "$line" =~ "$depends" ]]; then
+		echo ${line#${depends}}
+	fi
+done < ./DEBIAN/control
+read -p "Do you want to continue with the installation? (y/n) " prompt
+if [[ $prompt =~ [yY](es)* ]]; then
+	true
+else
+	exit 0
+fi
+#
+#
+echo -e "\nInstalling...\n"
+chmod -R 0755 $DIR
+chown root:root -R $DIR
+
+#
+# These files shouldn't be shiped with the package,
+# they are removed in case they've been forgotten
+# at the source code.
+#
+if [ -d $DIR/usr/share/alienware-kbl/Profiles ]; then
+	rm -rf $DIR/usr/share/alienware-kbl/Profiles
+fi
+
+if [ -d $DIR/usr/share/alienware-kbl/config ]; then
+	rm -rf $DIR/usr/share/alienware-kbl/config
+fi
+
+if [ -d $DIR/usr/share/alienware-kbl/__pycache__ ]; then
+	rm -rf $DIR/usr/share/alienware-kbl/__pycache__
+fi
+
+#
+# Save the user configuration files
+#
+./DEBIAN/preinst
+
+#
+# Remove previous versions
+#
+echo -e "\nThe old version will be removed:"
+./removal
+
+#
+# Start the installation
+#
+echo -e "\nCopying files.."
+cp -ar $DIR/usr/. /usr/
+
+
+#
+# Post installation
+#
+echo -e "\nExecuting the post-installation script"
+./DEBIAN/postinst
+echo "post-installation done."
+
+
+echo -e "\n \e[00;32m The installation is finished.\e[00m"

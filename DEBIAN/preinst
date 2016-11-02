@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#  Copyright (C) 2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License 3 as published by
+#   the Free Software Foundation.
+#
+#  This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software Foundation,
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+
+
+#
+# alienware-kbl doesn't includes anymore python-usb.
+# this will prevent users from using the old python-usb
+#
+if [ -d /usr/share/alienware-kbl/usb ]; then
+    rm -rf /usr/share/alienware-kbl/usb
+fi
+
+#
+#  Move the profiles from /usr/share/ to /etc/   (in case of upgrading an older version of akbl)
+#
+if [ -d /usr/share/alienware-kbl/Profiles ]; then
+
+    if ! [ -d /etc/alienware-kbl ]; then
+        mkdir /etc/alienware-kbl
+    fi
+
+    if ! [ -d /etc/alienware-kbl/profiles ]; then
+        mkdir /etc/alienware-kbl/profiles
+    fi
+
+    cp -r /usr/share/alienware-kbl/Profiles /etc/alienware-kbl/profiles
+    rm -rf /usr/share/alienware-kbl/Profiles
+fi
+
+#
+#  Move the configuration file to /etc/         (in case of upgrading an older version of akbl)
+#
+if [ -f /usr/share/alienware-kbl/config ]; then
+
+    if ! [ -d /etc/alienware-kbl ]; then
+        mkdir /etc/alienware-kbl
+    fi
+
+    cp /usr/share/alienware-kbl/config /etc/alienware-kbl/alienware-kbl.ini
+    rm -f /usr/share/alienware-kbl/config
+fi

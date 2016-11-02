@@ -1,0 +1,59 @@
+#!/bin/bash
+
+#  Copyright (C) 2015  Rafael Senties Martinelli <rsm@imap.cc>
+#
+#  This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License 3 as published by
+#   the Free Software Foundation.
+#
+#  This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software Foundation,
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root."
+  exit
+fi
+
+
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR
+chmod -R 0755 $DIR/
+chown root:root -R $DIR/
+
+
+echo -e "\nExecuting the pre-removal script."
+./DEBIAN/prerm
+echo "pre-removal done."
+
+
+echo "Removing files and directories.."
+
+if [ -f /usr/lib/systemd/system/alienware-kbl.service ]; then
+	rm -rf /usr/lib/systemd/system/alienware-kbl.service
+fi
+
+if [ -d /usr/share/alienware-kbl ]; then
+	rm -rf /usr/share/alienware-kbl
+fi
+
+if [ -d /usr/share/doc/alienware-kbl ]; then
+	rm -rf /usr/share/doc/alienware-kbl
+fi
+
+if [ -f /usr/share/applications/alienware-kbl.desktop ]; then
+	rm -f /usr/share/applications/alienware-kbl.desktop
+fi
+
+if [ -f /usr/bin/alienware-kbl ]; then
+	rm -f /usr/bin/alienware-kbl
+fi
+
+echo -e "\nalienware-kbl has been removed."

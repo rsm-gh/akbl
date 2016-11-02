@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Alienware Keyboard Lights
+Exec=alienware-kbl
+Terminal=false
+Type=Application
+Icon=/usr/share/alienware-kbl/images/icon.png
+Categories=Settings;

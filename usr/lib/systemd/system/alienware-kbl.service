@@ -1,0 +1,8 @@
+[Unit]
+Description=alienware-kbl daemon
+
+[Service]
+ExecStart=/bin/bash -c "/usr/bin/alienware-kbl --start-daemon"
+
+[Install]
+WantedBy=basic.target

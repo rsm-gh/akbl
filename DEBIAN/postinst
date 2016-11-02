@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License 3 as published by
+#   the Free Software Foundation.
+#
+#  This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software Foundation,
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+
+if [ -f /bin/systemctl ]; then
+	systemctl enable alienware-kbl
+	systemctl start alienware-kbl
+fi
+
+if [ ! -d /usr/lib/python3 ]; then
+    mkdir /usr/lib/python3
+fi
+
+if [ -d /usr/lib/python3 ]; then
+    ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3/AlienwareKBL.py
+fi
+
+if [ -d /usr/lib/python3.4 ]; then
+    ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3.4/AlienwareKBL.py
+fi
+
+if [ -d /usr/lib/python3.5 ]; then
+    ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3.5/AlienwareKBL.py
+fi
+
+
+
+
+
+
+

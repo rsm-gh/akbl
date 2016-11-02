@@ -1,0 +1,377 @@
+[1.5.0~0]
+
+     + Support added to Alienware 13 computers
+     * Bug Fixed: The root account was not always being detected
+     - The biding `command` has been finally removed     
+     ~ Code changes
+     ~ The M15XAllPowerful was renamed to M17X R2                    (#68)
+
+[1.4.8~4]
+
+     * Missing dependence for the indicator: gir1.2-appindicator3-0.1
+
+     ~ The package is now shipped with python3-usb and python-ccparser
+         to simplify the installation for the newbies
+
+[1.4.8~3]
+
+     * Missing dependences added: gir1.2-appindicator3, libgtk-3-dev (#63)
+     * Added the dependence python3-serpent to fix the missing dependence of python3-pyro4 (#69)
+     * Bug Fixed for distributions without systemd (#65)
+     * Computer renamed: M15XAllPowerful to M17XR2 (#68)
+
+[1.4.8~2]
+
+    * Bug fixed for debian distributions, the "Recommends" wasn't
+      being installed. (#64)
+
+[1.4.8~1]
+
+    * Bug fixed when the local prgram folders doesn't exist
+
+    ~ Exception added to avoid warning message when pyro is not installed
+    
+    - The old message at the startup has been removed.
+
+[1.4.8~0]
+
+    + No more root permission is necessary for using the
+        GUI when the daemon is active
+
+    + New default commands 
+            "alienware-kbl --set-profile <profilename>"      (#53)
+            "alienware-kbl --set-boot-user <username>"       (#52,#55)
+            "alienware-kbl --get-boot-user"                  (#52,#55)
+        
+    + Improvements to the "Block Testing" window.      
+
+    + Simplification to the python bindings. Take a look to the API/Examples
+      for more help.
+
+    + New possibility of choosing the zones to turn off. (#57)
+        
+    + New buttons and keyboard options to import & export themes        
+        
+        
+    * Bug fixed for M11x (#52)
+    * Bug fixed for M17x (#51)
+    * Some GTK warnings went removed.
+    * Bug fixed betwen the daemon and the indicator when
+        using `set_lights`.    
+    
+    ~ Computer added M18XR? 
+        
+    ~ Some files went renamed to simplify the process recognition
+        in the system
+    
+     ~ The "save" keyword of the binding "set_lights" is now initialized
+        to "True"   
+        
+    - The option "Write Blocks" of the graphical interphase is deprecated
+    
+    
+﻿[1.4.7~3]
+
+    * Bug fixed when using GTK gtk+3.0 >= 3.18 
+    (important for bleeding edge distributions)
+
+    ~ pyUSB is not distributed anymore with the package and it is now
+        a dependence: python3-usb
+
+    ~ Review of the package dependences
+    
+
+﻿[1.4.7~2]
+
+    * Bugs Fixed for the Alienware 15
+    ~ The keyboard accelerators and menuitem labels code were improved
+    ~ very small code changes, the Properties file was removed
+
+[1.4.7~1]
+
+    + Configuration added: M14xR3 (May work with problems)
+    + Tooltip comments added to the buttons.
+    
+    ~ The minimum value of the "tempo" is now set to 1
+    ~ The tempo button is now a Gtk.volumebutton, the option
+        checkbutton_hide_tempo is deprecated
+
+    * Bug Fixed: RGB values are floats (#44)
+
+
+[1.4.7~0]
+
+    + Improvements to the power button (the power eye buttons were disabled).
+    + Better sorting on the GUI
+    + The indicator was debugged
+    + Better compatibility for distos without systemd
+
+[1.4.6~2]
+
+    * Bug Fixed: import problem when using the python-bindings
+    * Bug Fixed: indicator not showing the profiles
+
+[1.4.6~0]
+
+    + Support for Alienware 15 (2015) computer
+    + Update to python 3
+    + The "reading configurations" code is more smarter
+        and it prevents some possible bugs.
+    
+    * Bug fixed (#28): Sometimes the image of the indicator disappears
+    
+    ~ small programing modifications
+
+
+[1.4.5~1]
+
+    * More compatibility for users without the indicator/daemon
+    * Bug Fixed: The option "write blocks" has been corrected to be desactivated by default. (unless you already have a configuration file)
+
+    ~ More detailed installation instructions for Arch Users.
+    ~ Package improved Tar.Gz installations.
+
+[1.4.5~0]
+
+    * A new window for testing the computer blocks (SHOULD NOT BE USED)
+    * The profiles of the indicator was not being sorted
+    * The option "write blocks" is now desactivated by default (important)
+    * Missing dependence: pyro
+    * Some configurations have been desactivated, please read :
+        https://www.rsm.website/software/gnu-linux/software/alienware-kbl/support
+
+[1.4.4~1]
+
+    + The GUI has a new button: write blocks
+    
+    ~ python-usb is now shipped with the package in order to
+        don't overwrite the official package python-usb
+
+    * Bug Fixed: When new adding zones.
+    * Bug Fixed: Marking the last used profile
+    * Bug Fixed: Updating the selected profile over the indicator
+    * Bug Fixed: The lights was failing over serveral computers
+        (M15's,17's,18's).
+
+    * python-appindicator was missing over the Recommends
+
+[1.4.3~0]
+
+    + SystemTry indicator. use "alienware-kbl --start-indicator" to activate it. (systemd required)
+    ~ Some improvements betwen the GUI and the Daemon status    
+        
+[1.4.2~0]
+
+    + Easy python bindings for controlling the keyboard lights.
+        For more info take a look to the bindings part in:
+            http://rsm.website/software/gnu-linux/software/alienware-kbl
+    
+    + Programming improvements to the Daemon
+    
+[1.4.1~2]
+
+    + The "modes" went completely desactivated, they were
+        making a bug over all the lights configuration.
+
+[1.4.1~1]
+
+    + The power button states have been added.
+        (But it seems that they are not working yet)
+        
+    - The combobox "modes" has been removed.
+
+[1.4.1~0]
+
+    + Programming improvements when setting colors:
+        + The tempo seems to be fixed
+        + All the columns of the configurations seems to work
+        + The power button seems to be more responsive, but it 
+            stills having problems.
+            
+    ~ A new combobox has been added, but for the moment it doesn't seems
+        to work.
+
+    * Bug Fixed for tar.gz packages: The configuration file was not being saved.
+
+[1.4.0~3]
+
+    + When using the command line options the last used profile
+        will be loaded.
+        
+    * Bug Fixed: Boot lights on
+    ~ The computer M14XR2 was being detected as an M14XR1
+
+[1.4.0~2]
+
+    * python-cairo was missing over the dependences.
+    * libgtk-3-0 has been downgraded to >= 3.10 to allow
+        some distros like mint use the package.
+    * systemd has been put has "recommended" in order to allow
+      to some distros like mint and kubuntu to use the new
+      version. Just consider that you won't have the daemon.
+
+[1.4.0~1]
+
+    * Bug Fixed: The window "computer data" was not being correctly
+        closed.
+
+[1.4.0~0]
+
+    + New GUI design and Artwork.
+    + The program has been updated to GTK+3.
+    + Keyboard shortcuts and a status bar
+    + A simple daemon has been writed. This daemon allows to use
+        some commands without root permission.
+    + pyUSB/python-usb has been set as a dependence. It is avilable
+        over my repository.
+    + Lots of programings improvements
+    + Message when computers are not supported
+    + Computer data dialog.
+    
+    * Bug fixed: Missing batery block for alienware M14XRX computers
+    
+    - The autoapply button has been removed for a better control of
+        the lights.
+    
+    New Dependences:
+    
+        libgtk-3-0 (>=3.12), systemd, python-usb/pyUSB, python-ccparser (>= 0.3~3)
+    
+[1.3.8~7]
+
+    * Bug fixed: The desktop launcher was having some problems
+
+    ***** Bug fixed: *****
+    
+        The checkbutton "remove/add root" may have corrupted your
+        /etc/bash.bashrc file.
+        
+        You can easily check this by open it, and if the only text you see is "alias alienwarekbl.." 
+        and not much more lines, I'd advice you to replace it with a new file.
+        
+        I'll publy some fresh bash.bashrc files next to the debian package.
+        
+        * This bug has been fixed and it should not be a problem anymore.*
+        
+    ~ The python-gtk2 dependence was missing
+
+[1.3.8~5]
+
+    The libusb patch is now applied by default. This should be an advantage in most of distributions, 
+    but in some like Debian Wheezy will create conflicts. If so, please edit /usr/bin/alienware-kbl, 
+    and change the variable libusb_patch to 0.
+
+[1.3.8~4]
+
+    * Bugs Fixed: The "auto-apply" and "remove root" buttons.
+
+    + The custom colors of the program has been removed to respect
+        the users theme.
+
+
+[1.3.8~2] && ﻿[1.3.8~3]
+
+    * Bug Fixed: For the M17X computers
+
+[1.3.8~1]
+
+    + Support for M17X computers. (By Oleg)
+    
+    * The tar.gz has been corrected. The user profiles was beeing deleted,
+        and the automated tasks by build-deb wasn't included.
+    
+    - The "Configuration Menu" has been removed. It is no longer needed.
+    ~ The structure of the program has changed.
+    
+[1.3.8~0]
+
+    + Support for Mageia Distributions
+    + If the "Auto Apply" button is selected and a new profile is open the
+        keyboard colors changes automatically.
+    + The ".cfg" extension is automatically added when saving profiles.
+    + Duplicated profiles are loaded with a new name.
+        
+    
+    * Bugs Fixed: A lot of bugs comming from pyAlienFX has been fixed, when:
+        Reading, Writing, Saving configurations and updating the profiles combobox.
+    
+    
+    * Bug Fixed: The program wasn't loading the configuration files.
+    
+    ~ The about window has been centered on its parent.
+    ~ The command line options change,on,off have been renamed to --change,--on,--off
+    ~ Some information about the package has been updated.
+
+[1.3.7~2] & [1.3.7~1]
+    
+    ~ Debian Section updated
+    ~ Home link updated
+    
+[1.3.7~0]
+
+    ~ The bug about libusb10 pyalienfx issues 8,20,33 seems to be fixed.
+    ? The pyusb folder was replaced with pyusb-1.0.0b2
+    ~ The libusb-1.0-0 was missing in the control file.
+    ~ The license was missing in the about window.
+    
+    - The post-installation script has been removed.
+
+[1.3.6~3]
+
+    + "Remove Root" option. This option allows to use the program without asking for root permission
+
+    * Bug Fixed: The commands "-su" and "-sudo" has been removed, and if it is necessary to modify
+      the binary file it should be done manually.
+    
+    ~ The bin file has been renamed to "alienware-kbl" (instead of kbl)
+    ~ A todo list has been written.
+
+[1.3.6~2]
+
+    * Bug Fixed: When using for the first time <kbl change>
+    ~ The about dialog has been updated.
+    
+[1.3.6~1]
+
+    * Bug Prevented: When the program gets an error loading this speed.
+    ~ The window starts now in the center of the screen.
+    ~ The "Normal Mode" has been removed.
+
+[1.3.6~0]
+
+    + The change command has been added.
+    * Bug Fixed: When using the button of the GUI to turn off the lights.
+
+[1.3.5~2]
+
+    ~ When turning off the ligts self.controller.Send_Packet() has been disabled, so no error is 
+        created.
+
+[1.3.5~1]
+
+    + The about dialog was added
+    * Bug Fixed: The auto apply check button was inverted.
+
+[1.3.5~0]
+
+    ~ Package Signature Update
+    ~ Some doc files has been deprecated
+
+[v1.3.5]
+
+    + A postinst script has been added in order to detect if the program should use "gksu" or "gksudo" to log in.
+    + Some terminal commands has been added to the program, to check them out look at "fresh-instal --help".
+
+[v1.3.4]
+
+    + Command line arguments
+
+[v1.3.3]
+
+    + gksu message changed
+    ~ Programming improvement
+    ~ Some info updated
+
+[v1.3.2-alienware_kbl]
+
+    + Creation of the deb package
