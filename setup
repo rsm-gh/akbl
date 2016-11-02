@@ -56,7 +56,7 @@ fi
 # Remove previous versions
 #
 echo -e "\nThe old version will be removed:"
-./removal
+./remove
 
 #
 # Start the installation
