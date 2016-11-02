@@ -6,7 +6,7 @@
  1. Download the [Stable/Main branch](https://github.com/rsm-gh/alienware-kbl/archive/master.zip)
  2. Install the dependencies
 
-    * For Debian Based distributions: `systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent`
+    * For Debian Based distributions: `systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pyro4`
 
  3. Execute the setup file
 
