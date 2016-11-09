@@ -25,14 +25,11 @@ from gi.repository import AppIndicator3 as appindicator
 import os
 import sys
 import threading
+import Pyro4
 from time import sleep
 from common import getuser
 
-import Pyro4 as Pyro
-
-
 from AlienwareKBL import AlienwareKBL
-
 
 # local imports
 from Paths import Paths
@@ -50,7 +47,7 @@ class ConnectIndicator:
     
     def __init__(self):
         self.connected=False
-        self.daemon=Pyro.Daemon()
+        self.daemon=Pyro4.Daemon()
         self.uri=self.daemon.register(Indicator(self))
         threading.Thread(target=self.pycore_thread).start()
         threading.Thread(target=self.connect).start()
@@ -109,10 +106,14 @@ class Indicator:
         
         self.set_code(666)
         threading.Thread(target=self.daemon_check).start()
-        
+
+    
+    @Pyro4.expose
     def ping(self):
         pass
 
+
+    @Pyro4.expose
     def set_code(self, val):
         """
             Codes:
@@ -146,7 +147,7 @@ class Indicator:
                 self.switch_state.set_sensitive(False)
                 self.profiles_menu.set_sensitive(False)
 
-
+    @Pyro4.expose
     def load_profiles(self, list, current, state):
         for children in self.submenu_profiles.get_children():
             self.submenu_profiles.remove(children)
@@ -161,8 +162,22 @@ class Indicator:
             self.submenu_profiles.append(submenu)
         self.submenu_profiles.show_all()    
             
+    @Pyro4.expose
     def set_profile(self, widget, item):
         AlienwareKBL.set_profile(item)
+
+    def daemon_check(self):
+        while self.check_daemon:
+            
+            if daemon_is_active():
+                if self.current_code == 666:                
+                    self._.connect()        
+                    AlienwareKBL._command('indicator_get_state')
+                    
+            elif self.current_code != 666: 
+                GObject.idle_add(self.set_code, 666)
+                    
+            sleep(1)
         
     def on_menuitem_off(self, widget, data=None):
         AlienwareKBL.set_lights(False)
@@ -178,19 +193,6 @@ class Indicator:
 
     def on_menuitem_change(self, widget, data=None):
         AlienwareKBL.switch_lights()
-
-    def daemon_check(self):
-        while self.check_daemon:
-            
-            if daemon_is_active():
-                if self.current_code == 666:                
-                    self._.connect()        
-                    AlienwareKBL._command('indicator_get_state')
-                    
-            elif self.current_code != 666: 
-                GObject.idle_add(self.set_code, 666)
-                    
-            sleep(1)
 
     def on_menuitem_exit(self, widget, data=None):
         AlienwareKBL._command('indicator_kill')

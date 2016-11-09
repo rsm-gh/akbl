@@ -19,7 +19,7 @@
 
 import os
 import sys
-import Pyro4 as Pyro
+import Pyro4
 import getpass
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__))) 
@@ -75,7 +75,7 @@ class AlienwareKBL:
             with open(self._paths.DAEMON_PYRO_PATH, mode='rt', encoding='utf-8') as f:
                 address=f.readline().strip()
             try:
-                pyro=Pyro.Proxy(address)
+                pyro=Pyro4.Proxy(address)
                 pyro.ping()
                 
                 self._address=address
@@ -107,12 +107,14 @@ class AlienwareKBL:
                 
         return False        
     
+
     def get_address(self):
         """
             Return the current URI of the Daemon.
         """
         
         return self._address
+
 
     def get_profile_names(self):
         """
@@ -166,10 +168,10 @@ class AlienwareKBL:
 
     def switch_lights(self):
         return self._command('switch_lights')
-        
+    
     def set_lights(self, state):
         return self._command('set_lights', state)
-        
+      
     def set_colors(self, mode, speed, colors1, colors2=None):
         return self._command('set_colors', mode, speed, colors1, colors2)
 

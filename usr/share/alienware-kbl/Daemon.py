@@ -17,30 +17,24 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-try:
-    import Pyro4 as Pyro
-except Exception as e:
-    print(e)
-    print("The daemon can't run without python3-pyro4.")
-    exit()
 
+import Pyro4
 import os
 import pwd
 import traceback
 from time import time, sleep
 from common import getuser
-
 from CCParser import CCParser
 
 # local imports
-from Engine import *
 import Configuration
+from Engine import *
 from Paths import Paths
 from Texts import *
 
 class ConnectDaemon:
     def __init__(self):
-        self.daemon=Pyro.Daemon()
+        self.daemon=Pyro4.Daemon()
         self.paths=Paths()
         
         uri=self.daemon.register(Daemon(self))
@@ -133,10 +127,11 @@ class Daemon:
         General Bindings
     """
 
-
+    @Pyro4.expose
     def ping(self):
         pass
     
+    @Pyro4.expose
     def reload_configurations(self, user, indicator=True, set_default=True):
         
         if user != self._user:
@@ -160,6 +155,8 @@ class Daemon:
     """
         Bindings for the users
     """
+    
+    @Pyro4.expose
     def set_profile(self, user, profile):
         """
             Set a profile from the existing profiles.
@@ -180,6 +177,7 @@ class Daemon:
             self._iluminate_keyboard()
 
 
+    @Pyro4.expose
     def switch_lights(self, user):
         """
             If the lights are on, put them off
@@ -190,6 +188,8 @@ class Daemon:
         else:
             self.set_lights(user, True)
 
+
+    @Pyro4.expose
     def set_lights(self, user, state):
         """
             Turn the lights on or off.
@@ -231,6 +231,8 @@ class Daemon:
 
             self._iluminate_keyboard()
     
+    
+    @Pyro4.expose
     def set_colors(self, mode, speed, colors1, colors2=None):
         """
             Change the colors and the mode of the keyboard.
@@ -292,12 +294,16 @@ class Daemon:
     """
         Bindings for the graphical interphase
     """
+    
+    @Pyro4.expose
     def get_computer_name(self):
         return self._driver.computer.name
     
+    @Pyro4.expose
     def get_computer_info(self):
         return (self._computer.name, self._driver.vendorId, self._driver.productId, str(self._driver.dev))
-        
+    
+    @Pyro4.expose    
     def modify_lights_state(self, bool):
         """ 
             This method does not changes the lights of the keyboard,
@@ -313,21 +319,27 @@ class Daemon:
     """
         Indicator Bindings
     """
+    
+    @Pyro4.expose
     def indicator_get_state(self):
         if self._lights_state:
             self._indicator_send_code(100)
         else:
             self._indicator_send_code(150)      
-        
+    
+    
+    @Pyro4.expose    
     def indicator_init(self, uri):
         try:
-            self._indicator_pyro = Pyro.Proxy(str(uri))
+            self._indicator_pyro = Pyro4.Proxy(str(uri))
             self.reload_configurations(self._user)
         except Exception as e:
             print("Indicator failed initialization")
             print(traceback.format_exc())
             self._indicator_pyro=False
         
+        
+    @Pyro4.expose
     def indicator_kill(self):
         self._indicator_pyro=False
 
