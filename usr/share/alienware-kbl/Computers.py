@@ -553,6 +553,7 @@ class AllComputers():
 
         'M15XArea51' :      Computer('M15XArea51',      0x187c, 0x0511, M15XArea51()),
         'Alienware 15' :    Computer('Alienware 15',    0x187c, 0x0528, Alienware15()),
+        'Alienware 15R3':   Computer('Alienware 15R3',  0x187c, 0x0530, Alienware15()),
 
         'M17X'  :           Computer('M17X',            0x187c, 0x0524, M17X()),            
         'M17XR2' :          Computer('M17XR2',          0x187c, 0x0512, M17XR2()),
