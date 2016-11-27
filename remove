@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael AT senties-martinelli DOT com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -27,11 +27,7 @@ cd $DIR
 chmod -R 0755 $DIR/
 chown root:root -R $DIR/
 
-
-echo -e "\nExecuting the pre-removal script."
 ./prerm
-echo "pre-removal done."
-
 
 echo "Removing files and directories.."
 
@@ -55,5 +51,4 @@ if [ -f /usr/bin/alienware-kbl ]; then
 	rm -f /usr/bin/alienware-kbl
 fi
 
-
-echo -e "\nalienware-kbl has been removed."
+echo -e "\e[00;32mAlienware-KBL has been removed.\e[00m"

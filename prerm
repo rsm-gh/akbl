@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael AT senties-martinelli DOT com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,11 +15,14 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+
+echo "Disabling the systemd daemon..."
 if [ -f /bin/systemctl ]; then
 	systemctl stop alienware-kbl
 	systemctl disable alienware-kbl
 fi
 
+echo "Removing the links to the python bindings..."
 if [ -f /usr/lib/python3/AlienwareKBL.py ]; then
 	rm -f /usr/lib/python3/AlienwareKBL.py
 fi 
@@ -32,6 +35,10 @@ if [ -f /usr/lib/python3.5/AlienwareKBL.py ]; then
 	rm -f /usr/lib/python3.5/AlienwareKBL.py
 fi 
 
+#
+# Is this for Debian packages? Maybe when removing the software, if this directory is not
+# removed, apt denies to uninstall the software? what's the reason of this line?
+#
 if [ -d /usr/share/alienware-kbl/__pycache__ ]; then
 	rm -rf /usr/share/alienware-kbl/__pycache__
 fi 

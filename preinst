@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2016  Rafael Senties Martinelli <rafael AT senties-martinelli DOT com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -24,6 +24,7 @@ if [ -d /usr/share/alienware-kbl/usb ]; then
     rm -rf /usr/share/alienware-kbl/usb
 fi
 
+echo "Saving possible configuration files from older versions..."
 #
 #  Move the profiles from /usr/share/ to /etc/   (in case of upgrading an older version of akbl)
 #
@@ -39,6 +40,8 @@ if [ -d /usr/share/alienware-kbl/Profiles ]; then
 
     cp -r /usr/share/alienware-kbl/Profiles /etc/alienware-kbl/profiles
     rm -rf /usr/share/alienware-kbl/Profiles
+    
+    echo "Profiles saved."
 fi
 
 #
@@ -52,4 +55,6 @@ if [ -f /usr/share/alienware-kbl/config ]; then
 
     cp /usr/share/alienware-kbl/config /etc/alienware-kbl/alienware-kbl.ini
     rm -f /usr/share/alienware-kbl/config
+    
+    echo "Configuration saved."
 fi
