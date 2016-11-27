@@ -36,10 +36,10 @@ class Paths:
         
         
         """
-			Maybe these files should be called from the location of the paths file.
-			I actually dont't have any problem when developing the software because I
-			use some commad like './setup; chown rsm -R *', and I actually install it 
-			for making the tests.
+            Maybe these files should be called from the location of the paths file.
+            I actually dont't have any problem when developing the software because I
+            use some commad like './setup; chown rsm -R *', and I actually install it 
+            for making the tests.
         """
         self.GLADE_FILE='/usr/share/alienware-kbl/GUI.glade'
         self.IMAGES='/usr/share/alienware-kbl/images/'
@@ -68,8 +68,8 @@ class Paths:
         #
         if os.path.isdir(self.CONFIGURATION_PATH):
             shutil.rmtree(self.CONFIGURATION_PATH)
-		#
-		#
+        #
+        #
         for dir in (os.path.dirname(self.CONFIGURATION_PATH), self.PROFILES_PATH):
             if not os.path.exists(dir):
                 os.makedirs(dir)

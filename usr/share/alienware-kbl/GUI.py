@@ -250,13 +250,13 @@ class GUI(Gtk.Window):
         """
         _global_ccp=CCParser(self._paths.GLOBAL_CONFIG,'Global alienware-kbl Configuration')
 
-        if _global_ccp.get_str('boot_user') != getuser():
+        if _global_ccp.get_str_defval('boot_user','root') != getuser():
             self.checkbutton_boot_off.set_sensitive(False)
 
 
         """
             Ask to the user if he wants to import its global configuration
-            (this is a support for older alienware-kbl versions)
+            (this is a support for older versions of alienware-kbl)
         """
         if (not os.path.exists(self._paths.CONFIGURATION_PATH) and os.path.exists(self._paths.BACKUP_CONFIG)) or \
            (not os.path.exists(self._paths.PROFILES_PATH) and os.path.exists(self._paths.BACKUP_PROFILES)):

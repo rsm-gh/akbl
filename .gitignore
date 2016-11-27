@@ -1,1 +1,8 @@
+
+# Python compiled dirs
+#
 __pycache__/
+
+# Backup files
+#
+**~
