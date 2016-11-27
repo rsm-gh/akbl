@@ -280,17 +280,7 @@ class GUI(Gtk.Window):
                 
                 
             self.window_root.show()
-                
-
-        # In case there be a folder instead of the configuration file, delete the folder! Bug #84
-        # I didn't had the time to find the reason of why the folder was being created..
-        #
-        if os.path.isdir(self._paths.CONFIGURATION_PATH):
-            print("Fixing bug 84!!")
-            shutil.rmtree(self._paths.CONFIGURATION_PATH)
-
-
-        
+                        
         """
             Program Variables / Diver / Controller
         """
