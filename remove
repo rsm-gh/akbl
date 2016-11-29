@@ -21,11 +21,8 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR
-chmod -R 0755 $DIR/
-chown root:root -R $DIR/
 
 ./prerm
 
