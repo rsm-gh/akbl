@@ -18,6 +18,7 @@
 
 import os
 from common import getuser
+from shutil import rmtree
 
 class Paths:
     

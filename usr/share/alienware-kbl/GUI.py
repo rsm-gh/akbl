@@ -264,7 +264,6 @@ class GUI(Gtk.Window):
             self.window_root.hide()
             
             if gtk_dialog_question(self.window_root, TEXT_COPY_CONFIG, icon=self._paths.SMALL_ICON):
-                from shutil import copyfile
                 from distutils.dir_util import copy_tree
                 
                 if not os.path.exists(os.path.dirname(self._paths.CONFIGURATION_PATH)):
@@ -274,7 +273,7 @@ class GUI(Gtk.Window):
                 if not os.path.exists(self._paths.PROFILES_PATH):
                     os.makedirs(self._paths.PROFILES_PATH)
                 
-                copyfile(self._paths.BACKUP_CONFIG, self._paths.CONFIGURATION_PATH)
+                shutil.copyfile(self._paths.BACKUP_CONFIG, self._paths.CONFIGURATION_PATH)
                 copy_tree(self._paths.BACKUP_PROFILES, self._paths.PROFILES_PATH)
                 
                 
