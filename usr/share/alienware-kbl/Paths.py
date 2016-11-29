@@ -68,7 +68,7 @@ class Paths:
         # Old versions of alienware-kbl may still creating the folder. The bug was in the Paths class.
         #
         if os.path.isdir(self.CONFIGURATION_PATH):
-            shutil.rmtree(self.CONFIGURATION_PATH)
+            rmtree(self.CONFIGURATION_PATH)
         #
         #
         for dir in (os.path.dirname(self.CONFIGURATION_PATH), self.PROFILES_PATH):
