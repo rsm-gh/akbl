@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael AT senties-martinelli DOT com>
+#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -39,6 +39,11 @@ fi
 if [ -d /usr/lib/python3.5 ]; then
     ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3.5/AlienwareKBL.py
     echo "Python3.5 linked."
+fi
+
+if [ -d /usr/lib/python3.6 ]; then
+    ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3.6/AlienwareKBL.py
+    echo "Python3.6 linked."
 fi
 
 
