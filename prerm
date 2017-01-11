@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael AT senties-martinelli DOT com>
+#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -33,6 +33,10 @@ fi
 
 if [ -f /usr/lib/python3.5/AlienwareKBL.py ]; then
 	rm -f /usr/lib/python3.5/AlienwareKBL.py
+fi 
+
+if [ -f /usr/lib/python3.6/AlienwareKBL.py ]; then
+	rm -f /usr/lib/python3.6/AlienwareKBL.py
 fi 
 
 #
