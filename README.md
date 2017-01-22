@@ -18,14 +18,17 @@ Alienware-KBl is a software to control the lights of alienware computers and it 
 3. Execute the setup file
 
 ## Supported Computers
-```
-Legend:
-  :) = Eveything works good (confirmed)
-  :? = Eveything works good (not confirmed)
-  :S = It works, but with some problems
-  :/ = Configuration missing
-```
-If your computer is not supported, look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).
+
+*If your computer is not supported look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).
+
+*The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.
+
+|Symbol | Meaning                               |
+|-------|---------------------------------------|
+|:)     | Eveything works good (confirmed)      |
+|:?     | Eveything works good (not confirmed)  |
+|:S     | It works, but with some problems      |
+|:/     | Configuration missing                 |
 
 |Computer       |Status  |Comment|
 |---------------|--------|-------|
@@ -49,7 +52,7 @@ If your computer is not supported, look at the [F.A.Q.](https://github.com/rsm-g
 |M15X-R2        |:?      ||
 |Alienware 13   |:)      ||
 |Alienware 15   |:)      ||
-|Alienware 15-R3|:S      |Added in to the testing branch. [#8](https://github.com/rsm-gh/alienware-kbl/issues/8)|
+|Alienware 15-R3|:S      |Added in to the [testing branch](https://github.com/rsm-gh/alienware-kbl/tree/testing) [#8](https://github.com/rsm-gh/alienware-kbl/issues/8).|
 |M17X           |:)      ||
 |M17X-R1        |:/      ||
 |M17X-R2        |:/      ||
@@ -61,14 +64,15 @@ If your computer is not supported, look at the [F.A.Q.](https://github.com/rsm-g
 |M18X-R3        |:/      ||
 |M18X-RX        |:S      |It may be an R1 or R2|
 
-*The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.
-
 ## [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
 
 Please look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.) before asking questions and submiting bugs !
 
 ## License
 
-The code is licensed GPL3 and the artwork CC-BY. For more details look at the copyright file placed under `./usr/share/doc/alienware-kbl/`
+The code is licensed GPL3 and the artwork CC-BY. For more details look at the [copyright file](./usr/share/doc/alienware-kbl/copyright). 
 
 ## [Credits](https://github.com/rsm-gh/alienware-kbl/wiki/Credits)
+
+The software has been developed by GNU/Linux users and hackers, it doesn't belongs to any corporation and many people have contributed ! Look at the [credits page](https://github.com/rsm-gh/alienware-kbl/wiki/Credits) for more info. 
+
