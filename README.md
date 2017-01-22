@@ -25,7 +25,7 @@ Legend:
   :S = It works, but with some problems
   :/ = Configuration missing
 ```
-If your computer is not supported, look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported).
+If your computer is not supported, look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).
 
 |Computer       |Status  |Comment|
 |---------------|--------|-------|
@@ -64,6 +64,8 @@ If your computer is not supported, look at the [F.A.Q.](https://github.com/rsm-g
 *The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.
 
 ## [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
+
+Please look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.) before asking questions and submiting bugs !
 
 ## License
 
