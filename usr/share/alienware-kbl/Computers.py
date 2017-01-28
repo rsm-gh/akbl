@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com> 
+#  Copyright (C) 2014-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com> 
 #                2011-2012  the pyAlienFX team
 #                
 #
@@ -269,7 +269,7 @@ class Alienware13(CommonConf):
 
         self.regions[self.CodeAreaNames.HARD_DISK_DRIVE_ID]         = Region(self.CodeAreaNames.HARD_DISK_DRIVE_ID,         TEXT_DESCRIPTION_HDD,                           self.REGION_HARD_DISK_DRIVE,        self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
         self.regions[self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID]   = Region(self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,   TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,         self.REGION_RIGHT_CENTER_KEYBOARD,  self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
-        self.regions[self.CodeAreaNames.CAPS_LOCK_ID]          	    = Region(self.CodeAreaNames.CAPS_LOCK_ID,          		TEXT_DESCRIPTION_CAPS_LOCK,                		self.REGION_CAPS_LOCK,              self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
+        self.regions[self.CodeAreaNames.CAPS_LOCK_ID]               = Region(self.CodeAreaNames.CAPS_LOCK_ID,               TEXT_DESCRIPTION_CAPS_LOCK,                     self.REGION_CAPS_LOCK,              self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
         self.regions[self.CodeAreaNames.RIGHT_KEYBOARD_ID]          = Region(self.CodeAreaNames.RIGHT_KEYBOARD_ID,          TEXT_DESCRIPTION_RIGHT_KEYBOARD,                self.REGION_RIGHT_KEYBOARD,         self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
         self.regions[self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID]   = Region(self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,   TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,         self.REGION_RIGHT_CENTER_KEYBOARD,  self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
         self.regions[self.CodeAreaNames.LEFT_KEYBOARD_ID]           = Region(self.CodeAreaNames.LEFT_KEYBOARD_ID,           TEXT_DESCRIPTION_LEFT_KEYBOARD,                 self.REGION_LEFT_KEYBOARD,          self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
@@ -553,6 +553,7 @@ class AllComputers():
 
         'M15XArea51' :      Computer('M15XArea51',      0x187c, 0x0511, M15XArea51()),
         'Alienware 15' :    Computer('Alienware 15',    0x187c, 0x0528, Alienware15()),
+        'Alienware 15R3':   Computer('Alienware 15R3',  0x187c, 0x0530, Alienware15()),
 
         'M17X'  :           Computer('M17X',            0x187c, 0x0524, M17X()),            
         'M17XR2' :          Computer('M17XR2',          0x187c, 0x0512, M17XR2()),
