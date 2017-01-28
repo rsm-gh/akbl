@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2011-2012  the pyAlienFX team
-#                2014-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2014-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#                2011-2012  the pyAlienFX team                
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -26,7 +26,7 @@ from gi.repository import Gtk, GObject, Gdk, GdkPixbuf
 import threading
 import shutil
 import getpass
-import traceback
+from traceback import format_exc
 from time import time, sleep
 from copy import deepcopy
 
@@ -267,7 +267,7 @@ class GUI(Gtk.Window):
                 from distutils.dir_util import copy_tree
                 
                 if not os.path.exists(os.path.dirname(self._paths.CONFIGURATION_PATH)):
-                    print('adding the configuration',self._paths.CONFIGURATION_PATH)
+                    print('Warning: Adding the configuration',self._paths.CONFIGURATION_PATH)
                     os.makedirs(os.path.dirname(self._paths.CONFIGURATION_PATH))
                 
                 if not os.path.exists(self._paths.PROFILES_PATH):
@@ -349,7 +349,7 @@ class GUI(Gtk.Window):
             # Add the zones to turn off to the  "menuitem_off_zones"
             #
             self.menu_turn_off_zones=Gtk.Menu()
-            self.zones_and_descriptions_dict=dict((self.configuration.area[zone].description, zone) for zone in self.configuration.area.keys())
+            self.zones_and_descriptions_dict=dict((self.theme.area[zone].description, zone) for zone in self.theme.area.keys())
             active_configuration_zones=self.ccp.get_str_defval('zones_to_keep_alive','').split('|')
             
             for description, zone in sorted(self.zones_and_descriptions_dict.items(), key=lambda x: x[0]):            
@@ -411,7 +411,7 @@ class GUI(Gtk.Window):
 
         # organize the zones order
         #
-        ordered_areas=sorted(self.configuration.area.keys(), key=lambda x:self.configuration.area[x].description)
+        ordered_areas=sorted(self.theme.area.keys(), key=lambda x:self.theme.area[x].description)
         #set the power buttons at the top. This was disabled because the multiple power buttons were disabled #100
         #if 'PB' in ordered_areas:
         #    ordered_areas.insert(0, ordered_areas.pop(ordered_areas.index('PB')))
@@ -421,13 +421,13 @@ class GUI(Gtk.Window):
         #
         for key in ordered_areas: # rows
             
-            area=self.configuration.area[key]
+            area=self.theme.area[key]
             lenght=len(area)
             box=Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
             
             if 'PB' in key and lenght < 1: # replaced 8 by 1 because of the power button #100
                 while lenght < 1: # replaced 8 by 1 because of the power button #100
-                    self.configuration.add_zone(deepcopy(area[0]))
+                    self.theme.add_zone(deepcopy(area[0]))
                     lenght=len(area)
                 
             
@@ -463,7 +463,7 @@ class GUI(Gtk.Window):
             
         self.combobox_profiles.set_active(row)
 
-        self.speed=self.configuration.speed
+        self.speed=self.theme.speed
 
 
     def DELETE_current_configuration(self):
@@ -479,10 +479,10 @@ class GUI(Gtk.Window):
         self.label_user_message.set_text(TEXT_CONFIGURATION_DELETED)
         Gdk.threads_leave()
         
-        Configuration.profiles.pop(self.configuration.name)
+        Configuration.profiles.pop(self.theme.name)
         
-        if os.path.exists(self.configuration.path):
-            os.remove(self.configuration.path)
+        if os.path.exists(self.theme.path):
+            os.remove(self.theme.path)
         
         if len(Configuration.profiles.keys()) == 0:
             Configuration.CREATE_default_profile(self.computer)
@@ -525,7 +525,7 @@ class GUI(Gtk.Window):
                         zone=chosen_widget.zone
                         column=chosen_widget.column
 
-                        self.configuration.delete_zone(zone, column)
+                        self.theme.delete_zone(zone, column)
                         
                         after=False
                         for widget in row_box.get_children():
@@ -555,7 +555,7 @@ class GUI(Gtk.Window):
                                 
                     elif isinstance(chosen_widget, Zone) and chosen_widget.color_updated:
                         # Update the configuration
-                        self.configuration.modify_zone( chosen_widget.zone, 
+                        self.theme.modify_zone( chosen_widget.zone, 
                                                         chosen_widget.column, 
                                                         rgb_to_hex(chosen_widget.color1), 
                                                         rgb_to_hex(chosen_widget.color2),  
@@ -600,9 +600,9 @@ class GUI(Gtk.Window):
                     self.controller.Set_Loop_Conf(False, self.driver.computer.BLOCK_LOAD_ON_BOOT)
                     self.controller.Add_Speed_Conf(1)
 
-                    for key in sorted(self.configuration.area.keys()):
+                    for key in sorted(self.theme.area.keys()):
                         if not key in keep_alive_zones:
-                            area=self.configuration.area[key]
+                            area=self.theme.area[key]
                             for zone in area:
                                 self.controller.Add_Loop_Conf(zone.regionId, 'fixed', '#000000', '#000000')
 
@@ -628,7 +628,7 @@ class GUI(Gtk.Window):
         
         self.window_new_profile.hide()
         
-        clone=deepcopy(Configuration.profiles[self.configuration.name])
+        clone=deepcopy(Configuration.profiles[self.theme.name])
         clone.name=text 
         clone.path='{}{}.cfg'.format(self._paths.PROFILES_PATH, text)
         clone.save()
@@ -686,8 +686,11 @@ class GUI(Gtk.Window):
         Gdk.threads_leave()
 
         # This is to make the program recognize the last profile that has been used
-        os.utime(self.configuration.path, None)
-
+        try: # Patch (#12)
+            os.utime(self.theme.path, None)
+        except Exception as e:
+            print('Warning: It was not possible to os.utime the profile path: \n{}'.format(self.theme.path))
+            print(format_exc())
 
         if AKBL_DAEMON:
             AKBLConnection._command('reload_configurations')
@@ -701,10 +704,10 @@ class GUI(Gtk.Window):
 
 
             self.controller.Set_Loop_Conf(False, self.driver.computer.BLOCK_LOAD_ON_BOOT)
-            self.controller.Add_Speed_Conf(self.configuration.speed)
+            self.controller.Add_Speed_Conf(self.theme.speed)
 
-            for key in sorted(self.configuration.area.keys()):
-                area=self.configuration.area[key]
+            for key in sorted(self.theme.area.keys()):
+                area=self.theme.area[key]
                 for zone in area:
                     self.controller.Add_Loop_Conf(  zone.regionId,
                                                     zone.mode,
@@ -727,7 +730,7 @@ class GUI(Gtk.Window):
         self.label_user_message.set_text(TEXT_SAVING_THE_CONFIGURATION)
         Gdk.threads_leave()
         
-        self.configuration.save()
+        self.theme.save()
         
         sleep(0.5)
         
@@ -787,7 +790,7 @@ class GUI(Gtk.Window):
         zone.mode='fixed'       
         
         new_zone=Zone(self.computer.default_color, self.computer.default_color, self.colorchooserdialog, zone, column, self.colorchooserwidget2)        
-        self.configuration.add_zone(zone)
+        self.theme.add_zone(zone)
 
         box.remove(button)
         
@@ -807,7 +810,7 @@ class GUI(Gtk.Window):
             
         value = 256 - value
 
-        self.configuration.set_speed(value*256)
+        self.theme.set_speed(value*256)
         
     def on_tempobutton_button_release_event(self, widget, data=None):
         if self.checkbutton_autosave.get_active():
@@ -819,7 +822,7 @@ class GUI(Gtk.Window):
         if tree_iter != None:
             model=widget.get_model()
             profile_name=model[tree_iter][0]
-            self.configuration=Configuration.profiles[profile_name]
+            self.theme=Configuration.profiles[profile_name]
             self.POPULATE_zones()            
         
     def on_button_new_profile_create_clicked(self, button, data=None):
@@ -869,12 +872,12 @@ class GUI(Gtk.Window):
         
         
         if folder_path:
-            new_path='{}/{}.cfg'.format(folder_path, self.configuration.name)
+            new_path='{}/{}.cfg'.format(folder_path, self.theme.name)
             
             if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, TEXT_THEME_ALREADY_EXISTS):
                 return
             
-            shutil.copy(self.configuration.path, new_path)
+            shutil.copy(self.theme.path, new_path)
         
 
     def on_imagemenuitem_new_activate(self, widget=None, data=None):
@@ -1077,7 +1080,7 @@ class GUI(Gtk.Window):
                 else:               
                     entry.set_text(str(old_value))
         except Exception as e:
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+traceback.format_exc()+'\n')
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+format_exc()+'\n')
             
             
     def on_button_block_make_test_clicked(self, button, data=None):
@@ -1087,7 +1090,7 @@ class GUI(Gtk.Window):
         try:
             self.ILUMINATE_keyboard_block()
         except Exception as e:
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+traceback.format_exc()+'\n')
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+format_exc()+'\n')
 
 
     def on_button_block_testing_lights_off_clicked(self, button, data=None):
@@ -1095,7 +1098,7 @@ class GUI(Gtk.Window):
             self.testing_controller.Reset(self.testing_driver.computer.RESET_ALL_LIGHTS_OFF)
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+BLOCK_LIGHTS_OFF+'\n')
         except Exception as e:
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+traceback.format_exc())
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+format_exc())
 
 
     def on_checkbutton_protect_common_blocks_clicked(self, checkbutton, data=None):
@@ -1129,8 +1132,6 @@ class GUI(Gtk.Window):
 if __name__ == '__main__':
     
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
-
-    print(getuser())
 
     if not AKBL_DAEMON and getuser() != 'root':
         print(TEXT_THE_GUI_NEEDS_ROOT)

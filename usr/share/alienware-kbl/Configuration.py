@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2015  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2014-2015, 2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -23,6 +23,7 @@
 """ 
  
 import os 
+from traceback import format_exc 
  
 # local imports 
 from Computers import *
@@ -106,7 +107,7 @@ class New:
         if not area.name in self.area.keys():
             self.area[area.name] = AreaData(area)
         else:
-            print("Duplicated area: {}, {}".format(area.name, self.area.keys()))
+            print("Warning: Duplicated area `{}`, `{}`".format(area.name, self.area.keys()))
 
     def save(self):
         with open(self.path, encoding='utf-8', mode='wt') as f:
@@ -174,7 +175,7 @@ class New:
                             current_area=self.computer.regions[area_name]
                             self.add_area(current_area)
                         else:
-                            print("Wrong area name: {}, missing in dict: ".format(area_name, self.computer.regions))
+                            print("Warning: Wrong area name: {}, missing in dict: ".format(area_name, self.computer.regions))
                         
                     elif var_name == 'type' or var_name == 'mode':
                         mode=var_arg
@@ -195,7 +196,7 @@ class New:
         #
         for area_name in self.computer.regions.keys():
             if not area_name in added_areas:
-                print("Missing area:{}, in profile: {}".format(area_name, self.name))
+                print("Warning: Missing area:{}, in profile: {}".format(area_name, self.name))
                 current_area=self.computer.regions[area_name]
                 self.add_area(current_area)
                 self.add_zone(ZoneData( current_area.regionId, 
@@ -210,7 +211,7 @@ class New:
         # Add the configuration
         #
         profiles[self.name]=self
-        print('profile added', self.name)
+        #print('profile added', self.name)
         
                 
     def set_speed(self, speed):
@@ -226,8 +227,8 @@ class New:
         except Exception as e:
             self.speed=1
             
-            print("Configuration.py: Error setting the speed.")
-            print(e)
+            print("Warning: Configuration.py Error setting the speed.")
+            print(format_exc())
             
     def modify_zone(self, zone, column, color1, color2, mode):      
         zone_data=self.area[zone.name][column]
@@ -245,8 +246,8 @@ class New:
             area_data.remove_zone(column)
             
         except Exception as e:
-            print('column: {}'.format(column))
-            print(e)
+            print('Warning: column `{}`'.format(column))
+            print(format_exc())
             
     def update_time(self):
         if os.path.exists(self.path):

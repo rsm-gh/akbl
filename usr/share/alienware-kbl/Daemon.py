@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -21,7 +21,7 @@
 import Pyro4
 import os
 import pwd
-import traceback
+from traceback import format_exc
 from time import time, sleep
 from common import getuser
 from CCParser import CCParser
@@ -50,7 +50,7 @@ class Daemon:
         
         self._driver = Driver()     
         if self._driver.not_found:
-            print("The computer is not supported")
+            print("Warning: The computer is not supported")
             exit(1)
 
         self.loop_self=loop_self
@@ -68,7 +68,10 @@ class Daemon:
         try:
             pwd.getpwnam(self._user)
         except:
-            self._user='root'
+            user=getuser()
+            print('Warning: The `{}` of the configuration file does not exists, it has been replaced by `{}`.'.format(self._user, user))
+            self._user=user
+            
         self._paths=Paths(self._user)
         
         # Initialize the daemon
@@ -89,19 +92,23 @@ class Daemon:
         self._lights_state = True
         
         self._controller.Set_Loop_Conf(False, self._computer.BLOCK_LOAD_ON_BOOT)
-        self._controller.Add_Speed_Conf(self._configuration.speed)
+        self._controller.Add_Speed_Conf(self._theme.speed)
 
-        os.utime(self._configuration.path, None)
+        try: # Patch (#12)
+            os.utime(self.theme.path, None)
+        except Exception as e:
+            print('Warning: It was not possible to os.utime the profile path: \n{}'.format(self._theme.path))
+            print(format_exc())
 
         try:
             self._indicator_send_code(100)
             self._indicator_pyro.load_profiles(list(Configuration.profiles.keys()), self.profile_name, self._lights_state)
         except Exception as e:
-            print(traceback.format_exc())
+            print(format_exc())
 
         
-        for key in sorted(self._configuration.area.keys()):            
-            area=self._configuration.area[key]
+        for key in sorted(self._theme.area.keys()):            
+            area=self._theme.area[key]
             for zone in area:
                 self._controller.Add_Loop_Conf( zone.regionId,
                                                 zone.mode,
@@ -120,7 +127,7 @@ class Daemon:
             try:
                 self._indicator_pyro.set_code(val)
             except Exception as e:
-                traceback.format_exc()
+                format_exc()
 
 
     """
@@ -143,13 +150,13 @@ class Daemon:
         
         if set_default:
             _, self.profile_name = Configuration.GET_last_configuration()
-            self._configuration=Configuration.profiles[self.profile_name]
+            self._theme=Configuration.profiles[self.profile_name]
         
         if self._indicator_pyro and indicator:
             try:
                 self._indicator_pyro.load_profiles(list(Configuration.profiles.keys()), self.profile_name, self._lights_state)
             except Exception as e:
-                print(traceback.format_exc())
+                print(format_exc())
 
 
     """
@@ -171,7 +178,7 @@ class Daemon:
         self.reload_configurations(user, False, False)
  
         if profile in Configuration.profiles.keys():
-            self._configuration=Configuration.profiles[profile]
+            self._theme=Configuration.profiles[profile]
             self.profile_name=profile
             self._iluminate_keyboard()
             self._iluminate_keyboard()
@@ -212,9 +219,9 @@ class Daemon:
                 self._controller.Set_Loop_Conf(False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
                 self._controller.Add_Speed_Conf(1)
 
-                for key in sorted(self._configuration.area.keys()):
+                for key in sorted(self._theme.area.keys()):
                     if not key in keep_alive_zones:
-                        area=self._configuration.area[key]
+                        area=self._theme.area[key]
                         for zone in area:
                             self._controller.Add_Loop_Conf(zone.regionId, 'fixed', '#000000', '#000000')
 
@@ -248,10 +255,10 @@ class Daemon:
         """
         
         if not mode in ('fixed','morph','blink'):
-            print("Wrong mode",mode)
+            print("Warning: Wrong mode",mode)
             return
         elif not isinstance(speed, int):
-            print("Speed must be an integer")
+            print("Warning: Speed must be an integer")
             return
         elif speed >= 256:
             speed=255
@@ -270,7 +277,7 @@ class Daemon:
             colors2=[colors2]
 
         if len(colors1) != len(colors2):
-            print("The colors list do not have the same lenght")
+            print("Warning: The colors list do not have the same lenght")
             return
 
         self._lights_state = True
@@ -334,8 +341,8 @@ class Daemon:
             self._indicator_pyro = Pyro4.Proxy(str(uri))
             self.reload_configurations(self._user)
         except Exception as e:
-            print("Indicator failed initialization")
-            print(traceback.format_exc())
+            print("Warning: Indicator failed its initialization")
+            print(format_exc())
             self._indicator_pyro=False
         
         

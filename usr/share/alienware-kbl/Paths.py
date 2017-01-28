@@ -74,4 +74,6 @@ class Paths:
         for dir in (os.path.dirname(self.CONFIGURATION_PATH), self.PROFILES_PATH):
             if not os.path.exists(dir):
                 os.makedirs(dir)
+                
+ 
 
