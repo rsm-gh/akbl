@@ -52,7 +52,7 @@ Alienware-KBl is a software to control the lights of alienware computers and it 
 |M15X-R2        |:?      ||
 |Alienware 13   |:)      ||
 |Alienware 15   |:)      ||
-|Alienware 15-R3|:S      |Added in to the [testing branch](https://github.com/rsm-gh/alienware-kbl/tree/testing) [#8](https://github.com/rsm-gh/alienware-kbl/issues/8).|
+|Alienware 15-R3|:S      ||
 |M17X           |:)      ||
 |M17X-R1        |:/      ||
 |M17X-R2        |:/      ||
