@@ -11,7 +11,9 @@ Alienware-KBl is a software to control the lights of alienware computers and it 
 
 1. Download the stable branch
 2. Install the dependencies:
- * Debian Based Distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pyro4`
+ * Debian Based Distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
+ 
+    Note: `python3-pyro4` shall be `>= 4.47`, this is why it must be installed trought `python-pip`. 
  
  * ArchLinux: `pacman -S systemd gksu gtk3 libappindicator-gtk3 python python-cairo python-gobject python-pyusb python-pyro python-pip` and also use `pip install serpent`.
  
