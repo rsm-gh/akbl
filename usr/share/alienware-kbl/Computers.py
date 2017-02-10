@@ -18,15 +18,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-"""
-    The power button eyes "PBE" was removed so the lights of the head can "properly work",
-    in reallity I think it didn't make any change..
-    
-    The PBE are weird, sometimes they work in my computer and sometimes they dont
-"""
-
 from Texts import *
-
 
 class CodeAreaNames:
     
@@ -165,7 +157,7 @@ class CommonConf:
 class M11XR1(CommonConf):
     def __init__(self):
         super().__init__()
-        self.name = 'M11XR1'
+        self.name = TEXT_M11XR1
                     
         self.REGION_KEYBOARD = 0x0001 
         self.REGION_RIGHT_SPEAKER = 0x0020 
@@ -192,24 +184,24 @@ class M11XR1(CommonConf):
 class M11XR2(M11XR1):
     def __init__(self):
         super().__init__()
-        self.name = 'M11XR2'
+        self.name = TEXT_M11XR2
 
 class M11XR3(M11XR1):
 
     def __init__(self):
         super().__init__()
-        self.name = 'M11XR3'
+        self.name = TEXT_M11XR3
 
 class M11XR25(M11XR1):
 
     def __init__(self):
         super().__init__()
-        self.name = 'M11XR25'
+        self.name = TEXT_M11XR25
 
 class M14XR1(CommonConf):
     def __init__(self):
         super().__init__()
-        self.name = 'M14XR1'
+        self.name = TEXT_M14XR1
 
         self.REGION_RIGHT_KEYBOARD = 0x0008
         self.REGION_RIGHT_CENTER_KEYBOARD = 0x0004
@@ -248,7 +240,7 @@ class M14XR1(CommonConf):
 class Alienware13(CommonConf):
     def __init__(self):
         super().__init__()
-        self.name = 'Alienware 13'
+        self.name = TEXT_ALIENWARE13
 
         self.REGION_RIGHT_KEYBOARD = 0x0001  # 0x200 seems to work too
         self.REGION_LEFT_KEYBOARD = 0x0008
@@ -286,17 +278,17 @@ class Alienware13(CommonConf):
 class M14XR2(M14XR1):
     def __init__(self):
         super().__init__()
-        self.name = 'M14XR2'
+        self.name = TEXT_M14XR2
 
 class M14XR3(M14XR1):
     def __init__(self):
         super().__init__()
-        self.name = 'M14XR3'
+        self.name = TEXT_M14XR3
 
 class M15XArea51(CommonConf):
     def __init__(self):
         super().__init__()
-        self.name = 'M15XArea51'
+        self.name = TEXT_M15XAREA51
         
         self.REGION_TOUCH_PAD = 0x000001
         self.REGION_LIGHTPIPE = 0x000020 
@@ -324,7 +316,7 @@ class M15XArea51(CommonConf):
 class Alienware15(CommonConf):
     def __init__(self):
         super().__init__()
-        self.name = 'Alienware 15'
+        self.name = TEXT_ALIENWARE15
                 
         self.REGION_RIGHT_KEYBOARD = 0x0001
         self.REGION_RIGHT_CENTER_KEYBOARD = 0x0002
@@ -362,12 +354,15 @@ class Alienware15(CommonConf):
         self.regions[self.CodeAreaNames.POWER_BUTTON_EYES_ID]       = Region(self.CodeAreaNames.POWER_BUTTON_EYES_ID,       TEXT_DESCRIPTION_ALIENWARE_POWERBUTTON_EYES,    self.REGION_POWER_BUTTON_EYES,1,                            False,False,True, self.default_color , self.suportedMode)
         self.regions[self.CodeAreaNames.POWER_BUTTON_ID]            = Region(self.CodeAreaNames.POWER_BUTTON_ID,            TEXT_DESCRIPTION_POWER_BUTTON,                  self.REGION_POWER_BUTTON,2,                                 True,True,True, self.default_color , self.suportedMode, power_button = True)
 
-
+class Alienware15R3(Alienware15):
+    def __init__(self):
+        super().__init__()
+        self.name = TEXT_ALIENWARE15R3
 
 class M17X(CommonConf):
     def __init__(self):
         super().__init__()
-        self.name = 'M17X'
+        self.name = TEXT_M17X
         
         self.REGION_RIGHT_KEYBOARD = 0x0008
         self.REGION_RIGHT_CENTER_KEYBOARD = 0x0002 
@@ -406,7 +401,7 @@ class M17X(CommonConf):
 class M17XR2(CommonConf):
     def __init__(self):
         super().__init__()
-        self.name = 'M17XR2'
+        self.name = TEXT_M17XR2
                 
         self.REGION_RIGHT_KEYBOARD = 0x0001 
         self.REGION_RIGHT_CENTER_KEYBOARD = 0x0002 
@@ -446,22 +441,13 @@ class M17XR2(CommonConf):
 class M17XR3(M17X):
     def __init__(self):
         super().__init__()
-        self.name = 'M17XR3'
+        self.name = TEXT_M17XR3
         
-class M17XR4(M17X):
-    def __init__(self):
-        super().__init__()
-        self.name = 'M17XR4'
         
-class M17XR5(M17X):
-    def __init__(self):
-        super().__init__()
-        self.name = 'M17XR5'        
-                
 class M18XR2(CommonConf):
     def __init__(self):
         super().__init__()
-        self.name = 'M18XR2'
+        self.name = TEXT_M18XR2
 
         self.REGION_RIGHT_KEYBOARD = 0x0001
         self.REGION_RIGHT_CENTER_KEYBOARD = 0x0002
@@ -499,7 +485,7 @@ class M18XR2(CommonConf):
 class M18XRX(M18XR2):
     def __init__(self):
         super().__init__()
-        self.name = 'M18XRX'
+        self.name = TEXT_M18XRX
 
 class Computer:
     def __init__(self, name, vendorId, productId, computer):
@@ -535,31 +521,31 @@ class AllComputers():
     ALIENFX_BUSY            = 0x11
     ALIENFX_UNKOWN_COMMAND  = 0x12
     
-    # If you add a new computer please send me an email/open a bug repport so I can add it to the main program too
     #
+    # If you add a new computer please send me an email/open a bug repport so I can add it to the main program too.
     # The names are taken from wikipedia:  https://en.wikipedia.org/wiki/Alienware
     #
     computerList = {
-                                                        # id vendor, id product 
-        'M11XR1' :          Computer('M11XR1',          0x187c, 0x0514, M11XR1()),
-        'M11XR2' :          Computer('M11XR2',          0x187c, 0x0515, M11XR2()),
-        'M11XR3' :          Computer('M11XR3',          0x187c, 0x0522, M11XR3()),
-        'M11XR25' :         Computer('M11XR25',         0x187c, 0x0516, M11XR25()),
-        'Alienware 13':     Computer('Alienware 13',    0x187c, 0x0527, Alienware13()),
+                                                       # id vendor, id product 
+        TEXT_M11XR1 :          Computer(TEXT_M11XR1,          0x187c, 0x0514, M11XR1()),
+        TEXT_M11XR2 :          Computer(TEXT_M11XR2,          0x187c, 0x0515, M11XR2()),
+        TEXT_M11XR3 :          Computer(TEXT_M11XR3,          0x187c, 0x0522, M11XR3()),
+        TEXT_M11XR25 :         Computer(TEXT_M11XR25,         0x187c, 0x0516, M11XR25()),
+        TEXT_ALIENWARE13:      Computer(TEXT_ALIENWARE13,    0x187c, 0x0527, Alienware13()),
 
-        'M14XR1' :          Computer('M14XR1',          0x187c, 0x0521, M14XR1()),  # M14XR2 is differenciated from M14XR1 by reading 
-        'M14XR2' :          Computer('M14XR2',          0x187c, 0x0521, M14XR2()),  # the device information. > Gaming' take a look to Engine.py
-        'M14XR3' :          Computer('M14XR3',          0x187c, 0x0525, M14XR3()),
+        TEXT_M14XR1 :          Computer(TEXT_M14XR1,          0x187c, 0x0521, M14XR1()),  # M14XR2 is differenciated from M14XR1 by reading 
+        TEXT_M14XR2 :          Computer(TEXT_M14XR2,          0x187c, 0x0521, M14XR2()),  # the device information. > Gaming' take a look to Engine.py
+        TEXT_M14XR3 :          Computer(TEXT_M14XR3,          0x187c, 0x0525, M14XR3()),
 
-        'M15XArea51' :      Computer('M15XArea51',      0x187c, 0x0511, M15XArea51()),
-        'Alienware 15' :    Computer('Alienware 15',    0x187c, 0x0528, Alienware15()),
-        'Alienware 15R3':   Computer('Alienware 15R3',  0x187c, 0x0530, Alienware15()),
+        TEXT_M15XAREA51 :      Computer(TEXT_M15XAREA51,      0x187c, 0x0511, M15XArea51()),
+        TEXT_ALIENWARE15 :     Computer(TEXT_ALIENWARE15,    0x187c, 0x0528, Alienware15()),
+        TEXT_ALIENWARE15R3:    Computer(TEXT_ALIENWARE15R3,  0x187c, 0x0530, Alienware15R3()),
 
-        'M17X'  :           Computer('M17X',            0x187c, 0x0524, M17X()),            
-        'M17XR2' :          Computer('M17XR2',          0x187c, 0x0512, M17XR2()),
-        'M17XR3'    :       Computer('M17XR3',          0x187c, 0x0520, M17XR3()),
+        TEXT_M17X  :           Computer(TEXT_M17X,            0x187c, 0x0524, M17X()),            
+        TEXT_M17XR2 :          Computer(TEXT_M17XR2,          0x187c, 0x0512, M17XR2()),
+        TEXT_M17XR3    :       Computer(TEXT_M17XR3,          0x187c, 0x0520, M17XR3()),
 
-        'M18XRX'    :       Computer('M18XRX',          0x187c, 0x0523, M18XRX()),  
-        'M18XR2'    :       Computer('M18XR2',          0x187c, 0x0518, M18XR2()),
+        TEXT_M18XRX    :       Computer(TEXT_M18XRX,          0x187c, 0x0523, M18XRX()),  
+        TEXT_M18XR2    :       Computer(TEXT_M18XR2,          0x187c, 0x0518, M18XR2()),
     }
     
