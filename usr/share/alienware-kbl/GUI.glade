@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 
 
-Copyright (C) 2014 - 2016 Rafael Senties Martinelli <rafael@senties-martinelli.com>
+Copyright (C) 2014 - 2017 Rafael Senties Martinelli <rafael@senties-martinelli.com>
 
 This file is part of alienware-kbl.
 
@@ -23,7 +23,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
   <requires lib="gtk+" version="3.10"/>
   <!-- interface-license-type gplv3 -->
   <!-- interface-name alienware-kbl -->
-  <!-- interface-copyright 2014 - 2016 Rafael Senties Martinelli <rafael@senties-martinelli.com> -->
+  <!-- interface-copyright 2014 - 2017 Rafael Senties Martinelli <rafael@senties-martinelli.com> -->
   <object class="GtkAdjustment" id="adjustment_blocks">
     <property name="upper">100000000000000</property>
     <property name="step_increment">1</property>
@@ -299,7 +299,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="height_request">600</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Alienware Keyboard Lights</property>
+    <property name="title" translatable="yes">Alienware-KBL</property>
     <property name="window_position">center</property>
     <property name="icon">images/icon-m.png</property>
     <signal name="destroy" handler="on_window_root_destroy" swapped="no"/>
@@ -841,7 +841,7 @@ only root users can use it.</property>
                         <property name="margin_top">10</property>
                         <property name="label" translatable="yes">You can find the suported computers/status over:
 
-https://rsm.website/software/alienware-kbl/support
+https://github.com/rsm-gh/alienware-kbl
 </property>
                         <property name="justify">center</property>
                       </object>
@@ -938,15 +938,14 @@ https://rsm.website/software/alienware-kbl/support
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_root</property>
     <property name="program_name">Alienware-KBL</property>
-    <property name="version">Stable Branch</property>
     <property name="copyright" translatable="yes">© 2011-2012 The pyAlienFX team
-© 2014-2016 Rafael Senties Martinelli &lt;rafael@senties-martinelli.com&gt;</property>
+© 2014-2017 Rafael Senties Martinelli &lt;rafael@senties-martinelli.com&gt;</property>
     <property name="comments" translatable="yes">
 </property>
-    <property name="website">http://rsm.website/software/alienware-kbl</property>
+    <property name="website">https://github.com/rsm-gh/alienware-kbl</property>
     <property name="website_label" translatable="yes">Home</property>
     <property name="authors">
-Alienware Keyboard Lights:
+Alienware-KBL:
 RSM &lt;rafael@senties-martinelli.com&gt;
 
 PyALienFX:
@@ -1268,10 +1267,11 @@ Amalia Angeli
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_bottom">20</property>
-                <property name="label" translatable="yes">** Warning: This window is a block tester to help improve and add support to computers. 
-The wrong use of this window could damage your keyboard lights. 
-
-Use it at your own risk!</property>
+                <property name="label" translatable="yes">Warning: This window is a block tester to help improve and add support to computers.  
+The wrong use of this window could damage your keyboard lights, use it under your own risk!</property>
+                <property name="justify">center</property>
+                <property name="wrap">True</property>
+                <property name="width_chars">40</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                   <attribute name="foreground" value="#a4a400000000"/>
@@ -2231,22 +2231,6 @@ Use it at your own risk!</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="checkbutton_auto_turn_off">
-                    <property name="label" translatable="yes">Auto Lights Off</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -2353,6 +2337,24 @@ Use it at your own risk!</property>
                         <property name="top_attach">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkCheckButton" id="checkbutton_auto_turn_off">
+                        <property name="label" translatable="yes">Auto Lights Off</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -2410,7 +2412,7 @@ Use it at your own risk!</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -2426,7 +2428,41 @@ Use it at your own risk!</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_block_testing_lights_off">
+                        <property name="label" translatable="yes">Lights Off</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="image">image25</property>
+                        <signal name="clicked" handler="on_button_block_testing_lights_off_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="button_block_make_test">
+                        <property name="label" translatable="yes">TEST BLOCK</property>
+                        <property name="width_request">40</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="image">image21</property>
+                        <property name="xalign">0.51999998092651367</property>
+                        <property name="yalign">0.49000000953674316</property>
+                        <signal name="clicked" handler="on_button_block_make_test_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
@@ -2452,52 +2488,6 @@ Use it at your own risk!</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">8</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                    <child>
-                      <object class="GtkButton" id="button_block_testing_lights_off">
-                        <property name="label" translatable="yes">Lights Off</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="image">image25</property>
-                        <signal name="clicked" handler="on_button_block_testing_lights_off_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_block_make_test">
-                        <property name="label" translatable="yes">TEST</property>
-                        <property name="width_request">40</property>
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="image">image21</property>
-                        <property name="xalign">0.51999998092651367</property>
-                        <property name="yalign">0.49000000953674316</property>
-                        <signal name="clicked" handler="on_button_block_make_test_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">9</property>
                   </packing>

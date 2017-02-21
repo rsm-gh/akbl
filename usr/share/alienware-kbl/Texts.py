@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C)  2014-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #                 2011-2012  the pyAlienFX team
 #                 
 #
@@ -139,8 +139,8 @@ TEXT_VALUE_CHANGED='''[Value Changed]: {}\t int: {}\t hex: {}\n'''
 TEXT_NON_INTEGER='''[Error Fixed]: Non integer {}\tvalue:{} .\n'''
 TEXT_DEVICE_NOT_FOUND='''[Device not found]: Vendor ID: {}\t Product ID: {}\n'''
 TEXT_DEVICE_FOUND='''[Device found]: Vendor ID: {}\t Product ID: {}\n'''
-TEXT_TEXT_BLOCK_TEST='''[TEST]: block: {}\t hex: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
-TEXT_TEXT_BLOCK_LIGHTS_OFF='''[Command]: Lights off'''
+TEXT_BLOCK_TEST='''[TEST]: block: {}\t hex: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
+TEXT_BLOCK_LIGHTS_OFF='''[Command]: Lights off'''
 
 #
 #   Zones Description
