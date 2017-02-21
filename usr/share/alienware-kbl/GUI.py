@@ -659,7 +659,7 @@ class GUI(Gtk.Window):
         zone_mode = zone_mode.lower()
 
         # Log the test
-        gtk_append_text_to_buffer(self.textbuffer_block_testing,BLOCK_TEST.format( zone_block,
+        gtk_append_text_to_buffer(self.textbuffer_block_testing,TEXT_BLOCK_TEST.format( zone_block,
                                                                                 hex(zone_block),
                                                                                 zone_mode,
                                                                                 speed,
@@ -1033,7 +1033,7 @@ class GUI(Gtk.Window):
                 self.box_block_testing.set_sensitive(True)
                 self.entry_id_vendor.set_sensitive(False)
                 self.entry_id_product.set_sensitive(False)
-                gtk_append_text_to_buffer(self.textbuffer_block_testing, DEVICE_FOUND.format(vendor, product))
+                gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_DEVICE_FOUND.format(vendor, product))
                 
                 self.combobox_default_blocks.set_active(0) 
                 
@@ -1042,7 +1042,7 @@ class GUI(Gtk.Window):
                 self.togglebutton_find_device.set_active(False)
                 self.entry_id_vendor.set_sensitive(True)
                 self.entry_id_product.set_sensitive(True)
-                gtk_append_text_to_buffer(self.textbuffer_block_testing, DEVICE_NOT_FOUND.format(vendor, product))
+                gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_DEVICE_NOT_FOUND.format(vendor, product))
                 
         else:
             self.box_block_testing.set_sensitive(False)
@@ -1068,14 +1068,14 @@ class GUI(Gtk.Window):
                 try:
                     new_value=int(new_value)
                 except:
-                    gtk_append_text_to_buffer(self.textbuffer_block_testing, NON_INTEGER.format(text, new_value))
+                    gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_NON_INTEGER.format(text, new_value))
                     new_value=old_value
                     submit=False
                 
                 if submit:
                     if new_value != old_value:
                         setattr(self.testing_driver.computer, text, new_value)
-                        gtk_append_text_to_buffer(self.textbuffer_block_testing, VALUE_CHANGED.format(text, new_value, hex(new_value)))
+                        gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_VALUE_CHANGED.format(text, new_value, hex(new_value)))
                         self.grid_common_blocks.get_child_at(2, i).set_text(hex(int(new_value)))    
                 else:               
                     entry.set_text(str(old_value))
@@ -1096,7 +1096,7 @@ class GUI(Gtk.Window):
     def on_button_block_testing_lights_off_clicked(self, button, data=None):
         try:
             self.testing_controller.Reset(self.testing_driver.computer.RESET_ALL_LIGHTS_OFF)
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+BLOCK_LIGHTS_OFF+'\n')
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+TEXT_BLOCK_LIGHTS_OFF+'\n')
         except Exception as e:
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n'+format_exc())
 
