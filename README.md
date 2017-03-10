@@ -25,12 +25,12 @@ Alienware-KBl is a software to control the lights of alienware computers and it 
 
 *The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.
 
-|Symbol | Meaning                               |
-|-------|---------------------------------------|
-|:)     | Eveything works good (confirmed)      |
-|:?     | Eveything works good (not confirmed)  |
-|:S     | It works, but with some problems      |
-|:/     | Configuration missing                 |
+|Symbol | Meaning                                  |
+|-------|------------------------------------------|
+|:)     | Eveything works good (confirmed)         |
+|:?     | Eveything works good (not confirmed)     |
+|:S     | It works, but with some problems         |
+|:/     | Configuration missing / untested computer|
 
 |Computer       |Status  |Comment|
 |---------------|--------|-------|
@@ -53,7 +53,10 @@ Alienware-KBl is a software to control the lights of alienware computers and it 
 |M15X-R1        |:?      ||
 |M15X-R2        |:?      ||
 |Alienware 13   |:)      ||
+|Alienware 13-R2|:/      ||
+|Alienware 13-R3|:S      ||
 |Alienware 15   |:)      ||
+|Alienware 15-R2|:/      ||
 |Alienware 15-R3|:S      ||
 |M17X           |:)      ||
 |M17X-R1        |:/      ||
