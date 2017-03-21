@@ -1,5 +1,5 @@
 
-Alienware-KBl is a software to control the lights of alienware computers and it commes with the following features:
+Alienware-KBL is a software to control the lights of alienware computers under GNU/Linux systems, and it is shipped with the following features:
 
 * A graphical interface
 * [Python Bindings](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Bindings)
