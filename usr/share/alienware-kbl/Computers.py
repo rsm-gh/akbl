@@ -270,11 +270,13 @@ class Alienware13(CommonConf):
         self.regions[self.CodeAreaNames.ALIEN_LOGO_ID]              = Region(self.CodeAreaNames.ALIEN_LOGO_ID,              TEXT_DESCRIPTION_ALIENWARE_LOGO,                self.REGION_ALIEN_NAME,             self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
         self.regions[self.CodeAreaNames.ALIEN_OUTER_LID_ID]         = Region(self.CodeAreaNames.ALIEN_OUTER_LID_ID,         TEXT_DESCRIPTION_OUTER_LID,                     self.REGION_OUTER_LID,              self.SUPPORTED_COMMANDS,            True,True,True, self.default_color, self.suportedMode)
 
-        
+
+class Alienware13R3(Alienware13):
+    def __init__(self):
+        super().__init__()
+        self.name = TEXT_ALIENWARE13R3        
 
 
-        
-        
 class M14XR2(M14XR1):
     def __init__(self):
         super().__init__()
@@ -531,15 +533,16 @@ class AllComputers():
         TEXT_M11XR2 :          Computer(TEXT_M11XR2,          0x187c, 0x0515, M11XR2()),
         TEXT_M11XR3 :          Computer(TEXT_M11XR3,          0x187c, 0x0522, M11XR3()),
         TEXT_M11XR25 :         Computer(TEXT_M11XR25,         0x187c, 0x0516, M11XR25()),
-        TEXT_ALIENWARE13:      Computer(TEXT_ALIENWARE13,    0x187c, 0x0527, Alienware13()),
+        TEXT_ALIENWARE13:      Computer(TEXT_ALIENWARE13,     0x187c, 0x0527, Alienware13()),
+        TEXT_ALIENWARE13R3:    Computer(TEXT_ALIENWARE13R3,   0x187c, 0x0529, Alienware13R3()),
 
         TEXT_M14XR1 :          Computer(TEXT_M14XR1,          0x187c, 0x0521, M14XR1()),  # M14XR2 is differenciated from M14XR1 by reading 
         TEXT_M14XR2 :          Computer(TEXT_M14XR2,          0x187c, 0x0521, M14XR2()),  # the device information. > Gaming' take a look to Engine.py
         TEXT_M14XR3 :          Computer(TEXT_M14XR3,          0x187c, 0x0525, M14XR3()),
 
         TEXT_M15XAREA51 :      Computer(TEXT_M15XAREA51,      0x187c, 0x0511, M15XArea51()),
-        TEXT_ALIENWARE15 :     Computer(TEXT_ALIENWARE15,    0x187c, 0x0528, Alienware15()),
-        TEXT_ALIENWARE15R3:    Computer(TEXT_ALIENWARE15R3,  0x187c, 0x0530, Alienware15R3()),
+        TEXT_ALIENWARE15 :     Computer(TEXT_ALIENWARE15,     0x187c, 0x0528, Alienware15()),
+        TEXT_ALIENWARE15R3:    Computer(TEXT_ALIENWARE15R3,   0x187c, 0x0530, Alienware15R3()),
 
         TEXT_M17X  :           Computer(TEXT_M17X,            0x187c, 0x0524, M17X()),            
         TEXT_M17XR2 :          Computer(TEXT_M17XR2,          0x187c, 0x0512, M17XR2()),

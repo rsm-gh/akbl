@@ -56,7 +56,7 @@ TEXT_HELP='''
     --change                        Changes the state on/off.
     --on                            Turns on the alienware keyboard lights.
     --off                           Turns off the alienware keyboard lights.
-    --set-profile <profle name>     Activate a profile
+    --set-profile <profile name>    Activate a profile
     
     --get-boot-user                 Get the user that is started by the daemon
     --set-boot-user <username>      Set the user that is started by the daemon
@@ -68,13 +68,12 @@ TEXT_HELP='''
     -v, --version                   Display the current version.
     
     
- *If no option is introduced the Graphical Interface is launched.
- *Systemd is required to use most of the commands.
+ *If no option is introduced the graphical interface is launched.
 
 '''
 
 TEXT_LICENSE='''
-  Copyright (C) 2014-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+  Copyright (C) 2014-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
                 2011-2012  the pyAlienFX team
 
   This program is free software; you can redistribute it and/or modify
@@ -179,6 +178,7 @@ TEXT_M11XR2='M11XR2'
 TEXT_M11XR3='M11XR3'
 TEXT_M11XR25='M11XR25'
 TEXT_ALIENWARE13='Alienware 13'
+TEXT_ALIENWARE13R3='Alienware 13R3'
 TEXT_M14XR1='M14XR1'
 TEXT_M14XR2='M14XR2'
 TEXT_M14XR3='M14XR3'
