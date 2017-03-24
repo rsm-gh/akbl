@@ -1,5 +1,16 @@
+**Index:**
 
-Alienware-KBL is a software to control the lights of alienware computers under GNU/Linux systems, and it is shipped with the following features:
+* [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
+* [Installation instructions](https://github.com/rsm-gh/alienware-kbl#how-to-install)
+* [Supported computers](https://github.com/rsm-gh/alienware-kbl#supported-computers)
+* [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
+* [License](https://github.com/rsm-gh/alienware-kbl#license)
+* [Credits](https://github.com/rsm-gh/alienware-kbl#credits)
+
+
+## Introduction
+
+Alienware-KBL is a software to control the lights of alienware computers under GNU/Linux systems. These are its main features:
 
 * **A graphical interface**:  
 ![gui](https://cloud.githubusercontent.com/assets/11134652/24292992/f16cd1f6-108f-11e7-9257-650b34197d84.png)
@@ -10,7 +21,7 @@ Alienware-KBL is a software to control the lights of alienware computers under G
 * [Python Bindings](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Bindings)
 * [Default commands](https://github.com/rsm-gh/alienware-kbl/wiki/Default-Commands)
 	
-## How to Install
+## Installation instructions
 
 1. Download the stable branch
 2. Install the dependencies:
@@ -22,7 +33,7 @@ Alienware-KBL is a software to control the lights of alienware computers under G
  
 3. Execute the setup file
 
-## Supported Computers
+## Supported computers
 
 *If your computer is not supported look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).  
 *The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.  
@@ -77,7 +88,7 @@ Please look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
 
 ## License
 
-The code is licensed GPL3 and the artwork CC-BY. For more details look at the [copyright file](./usr/share/doc/alienware-kbl/copyright). 
+The code is licensed [GPL3](./usr/share/doc/alienware-kbl/GPL3) and the artwork [CC-BY-4.0](./usr/share/doc/alienware-kbl/CC-BY-4.0), for more details look at the [copyright file](./usr/share/doc/alienware-kbl/copyright). 
 
 ## Credits
 
@@ -86,12 +97,12 @@ The software has been developed with the contributions many GNU/Linux users and 
 Alienware-KBL is based on [pyAlienFX](https://github.com/Xqua/pyAlienFX), which was based on AlienFX Lite. These are the main credits and contributors:
 
 	
-**Alienware-KBL, 2014-2017**
+**Alienware-KBL**
 
 * Rafael Senties Martinelli
 * Amalia Angeli (ArtWork)
 
-**PyALienFX, 2011-2012**
+**PyALienFX**
 
 * Ledjfou125
 * LightHash
@@ -102,7 +113,7 @@ Alienware-KBL is based on [pyAlienFX](https://github.com/Xqua/pyAlienFX), which 
 
 * Wattos
 
-Beside the main code of the software, some users have contributed to add the configuration of their computers, these are some of the names:
+Beside the main code of the software, some users have contributed to the support configuration of their computer, this are some of the names:
 
 * Alienware 13 by Francesco Rosa
 * M11XR1 by aehs29
