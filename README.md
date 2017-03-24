@@ -1,11 +1,14 @@
 
 Alienware-KBL is a software to control the lights of alienware computers under GNU/Linux systems, and it is shipped with the following features:
 
-* A graphical interface
+* **A graphical interface**:  
+![gui](https://cloud.githubusercontent.com/assets/11134652/24292992/f16cd1f6-108f-11e7-9257-650b34197d84.png)
+
+* **A system-try indicator**:  
+![indicator](https://cloud.githubusercontent.com/assets/11134652/24293017/0c107260-1090-11e7-8c57-ef52c8f9854a.png)
+
 * [Python Bindings](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Bindings)
 * [Default commands](https://github.com/rsm-gh/alienware-kbl/wiki/Default-Commands)
-* A system-try Indicator
-
 	
 ## How to Install
 
@@ -21,9 +24,8 @@ Alienware-KBL is a software to control the lights of alienware computers under G
 
 ## Supported Computers
 
-*If your computer is not supported look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).
-
-*The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.
+*If your computer is not supported look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).  
+*The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.  
 
 |Symbol | Meaning                                  |
 |-------|------------------------------------------|
@@ -77,7 +79,41 @@ Please look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
 
 The code is licensed GPL3 and the artwork CC-BY. For more details look at the [copyright file](./usr/share/doc/alienware-kbl/copyright). 
 
-## [Credits](https://github.com/rsm-gh/alienware-kbl/wiki/Credits)
+## Credits
 
-The software has been developed by GNU/Linux users and hackers, it doesn't belongs to any corporation and many people have contributed ! Look at the [credits page](https://github.com/rsm-gh/alienware-kbl/wiki/Credits) for more info. 
+The software has been developed with the contributions many GNU/Linux users and hackers. It doesn't belongs any corporation and it should not be confused with a formal projet.
+
+Alienware-KBL is based on [pyAlienFX](https://github.com/Xqua/pyAlienFX), which was based on AlienFX Lite. These are the main credits and contributors:
+
+	
+**Alienware-KBL, 2014-2017**
+
+* Rafael Senties Martinelli
+* Amalia Angeli (ArtWork)
+
+**PyALienFX, 2011-2012**
+
+* Ledjfou125
+* LightHash
+* Corp
+* Niai
+
+**AlienFX Lite**
+
+* Wattos
+
+Beside the main code of the software, some users have contributed to add the configuration of their computers, these are some of the names:
+
+* Alienware 13 by Francesco Rosa
+* M11XR1 by aehs29
+* M11XR2 by iferlive
+* M14XR1 by LightHash
+* M14XR3 by nshp
+* Alienware 15 by trollsid
+* M17XR3 by Niai
+* M18XR2 by SuperTool
+
+
+
+
 
