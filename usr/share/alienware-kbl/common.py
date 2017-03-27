@@ -19,5 +19,6 @@
 import os
 import pwd
 
+
 def getuser():
     return pwd.getpwuid(os.geteuid()).pw_name
