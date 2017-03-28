@@ -16,36 +16,6 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-""" Bug under Kubuntu:
-
-    Traceback (most recent call last):
-      File "/usr/share/alienware-kbl/ZoneWidget.py", line 259, in on_drawingarea_click
-        self.create_gradient(widget, self.cr, 1)
-    AttributeError: 'Zone' object has no attribute 'cr'
-"""
-
-"""
-    Zone Widget Architecture:
-
-        Gtk.Frame()
-            > Gtk.Box()
-                > Gtk.DrawingArea()
-                > Gtk.DrawingArea()
-                > Gtk.VBox()
-                    > Gtk.EventBox()
-                        > Gtk.Image()
-                    > Gtk.EventBox()
-                        > Gtk.Image()
-                    > Gtk.EventBox()
-                        > Gtk.Image()
-                    > Gtk.EventBox()
-                        > Gtk.Image()
-
-    Usage:
-
-        > To change a color left-click on the drawing area and then use the color chooser.
-        > To use the last selected color, just right-click on the drawing area.
-"""
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -57,6 +27,7 @@ _RIGHT_CLICK = 3
 
 
 def norm_color(color):
+    
     doit = False
     for i in color:
         if i > 1:
@@ -72,28 +43,70 @@ def middle_color(color1, color2):
             ((color1[2] + color2[2]) / 2.0)]
 
 
-def get_rgb_list(rgba_string):
-    colors_str = str(rgba_string).split('=')
-    colors = []
-    for color in colors_str:
-        if '0' in color:
-            color = color.split(',')
-            for subcolor in color:
-                if ')' not in subcolor and '0' in subcolor:
-                    colors.append(float(subcolor))
+def get_rgb_list(gdk3_rgba_object):
+    """
+        Returns a list of the RGB values of an Gdk.RGBA object.
+        Ex: `Gdk.RGBA(red=0.937255, green=0.160784, blue=0.160784, alpha=1.000000)` to `[0.937255, 0.160784, 0.160784]`
+        
+        I'd like to do this properly, with something like `[gdk3_rgba_object.red(), gdk3_rgba_object.green(), gdk3_rgba_object.blue()]`
+        but I didn't find the solution. Some doc at:
+        
+            https://developer.gnome.org/gdk3/stable/gdk3-RGBA-Colors.html#gdk-rgba-to-string
+    """
 
-    return colors
+    rgb_list = []
+
+    gdk3_rgb_str_items = str(gdk3_rgba_object).split('=')
+    for item in gdk3_rgb_str_items:
+        if '.' in item:
+            for subitem in item.split(','):
+                if '(' not in subitem and ')' not in subitem and '.' in subitem:
+                    rgb_list.append(float(subitem))
+
+    return rgb_list
 
 
-def hex_to_rgb(value):
-    value = value.lstrip('#')
-    lv = len(value)
-    r, g, b = tuple(int(value[i:i + lv // 3], 16)
+def hex_to_rgb(string):
+    """ 
+        Convert hex color strings to an RGB list. 
+        Ex:  `0000FF` to `[0, 0, 255]` 
+    """
+
+    if string.startswith('#'):
+        string = string.lstrip('#')
+        
+    lv = len(string)
+    r, g, b = tuple(int(string[i:i + lv // 3], 16)
                     for i in range(0, lv, lv // 3))
+                    
     return [r, g, b]
 
 
 class Zone(Gtk.Frame):
+
+    """
+        Zone Widget Architecture:
+
+            Gtk.Frame()
+                > Gtk.Box()
+                    > Gtk.DrawingArea()
+                    > Gtk.DrawingArea()
+                    > Gtk.VBox()
+                        > Gtk.EventBox()
+                            > Gtk.Image()
+                        > Gtk.EventBox()
+                            > Gtk.Image()
+                        > Gtk.EventBox()
+                            > Gtk.Image()
+                        > Gtk.EventBox()
+                            > Gtk.Image()
+
+        Usage:
+
+            > To change a color left-click on the drawing area and then use the color chooser.
+            > To use the last selected color, just right-click on the drawing area.
+    """
+
 
     __gtype_name__ = 'Zone'
 
@@ -200,7 +213,7 @@ class Zone(Gtk.Frame):
 
     def set_mode(self, mode):
         """
-            this is only for initializing the zone from the configuration file
+            This is only for initializing the zone from the configuration file
         """
         if mode == 'morph':
             self.mode = 'morph'
@@ -209,12 +222,12 @@ class Zone(Gtk.Frame):
             self.mode = 'blink'
             self.on_command_button_click(self.commands_buttons_events[3], True)
 
-    def set_color(self, color, area_1_or_2):
+    def set_color(self, color, widget_zone):
 
-        if isinstance(color, str) and color.startswith('#'):
+        if isinstance(color, str):
             color = hex_to_rgb(color)
 
-        if area_1_or_2 == 1:
+        if widget_zone == 1:
             self.color1 = norm_color(color)
         else:
             self.color2 = norm_color(color)
