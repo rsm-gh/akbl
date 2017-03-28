@@ -92,9 +92,9 @@ The code is licensed [GPL3](./usr/share/doc/alienware-kbl/GPL3) and the artwork 
 
 ## Credits
 
-The software has been developed with the contributions many GNU/Linux users and hackers. It doesn't belongs any corporation and it should not be confused with a formal projet.
+The software has been developed with the contributions of many GNU/Linux users and hackers. It doesn't belongs any corporation and it should not be confused with a formal projet !
 
-Alienware-KBL is based on [pyAlienFX](https://github.com/Xqua/pyAlienFX), which was based on AlienFX Lite. These are the main credits and contributors:
+Alienware-KBL is based on [pyAlienFX](https://github.com/Xqua/pyAlienFX), which had a strong influence from AlienFX Lite. These are the main credits and contributors:
 
 	
 **Alienware-KBL**
@@ -113,7 +113,7 @@ Alienware-KBL is based on [pyAlienFX](https://github.com/Xqua/pyAlienFX), which 
 
 * Wattos
 
-Beside the main code of the software, some users have contributed to the support configuration of their computer, this are some of the names:
+Beside the main code of the software, some users have contributed to the support the configuration of their computer, these are some of the names:
 
 * Alienware 13 by Francesco Rosa
 * M11XR1 by aehs29

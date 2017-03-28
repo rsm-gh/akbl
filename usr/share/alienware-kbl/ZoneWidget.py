@@ -16,36 +16,6 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-""" Bug under Kubuntu:
-
-    Traceback (most recent call last):
-      File "/usr/share/alienware-kbl/ZoneWidget.py", line 259, in on_drawingarea_click
-        self.create_gradient(widget, self.cr, 1)
-    AttributeError: 'Zone' object has no attribute 'cr'
-"""
-
-"""
-    Zone Widget Architecture:
-
-        Gtk.Frame()
-            > Gtk.Box()
-                > Gtk.DrawingArea()
-                > Gtk.DrawingArea()
-                > Gtk.VBox()
-                    > Gtk.EventBox()
-                        > Gtk.Image()
-                    > Gtk.EventBox()
-                        > Gtk.Image()
-                    > Gtk.EventBox()
-                        > Gtk.Image()
-                    > Gtk.EventBox()
-                        > Gtk.Image()
-
-    Usage:
-
-        > To change a color left-click on the drawing area and then use the color chooser.
-        > To use the last selected color, just right-click on the drawing area.
-"""
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -57,46 +27,99 @@ _RIGHT_CLICK = 3
 
 
 def norm_color(color):
+    
     doit = False
     for i in color:
         if i > 1:
             doit = True
     for i in range(0, len(color)):
-        color[i] = color[i]/255.0
+        color[i] = color[i] / 255.0
     return color
 
 
 def middle_color(color1, color2):
-    return [((color1[0] + color2[0])/2.0),
-            ((color1[1] + color2[1])/2.0),
-            ((color1[2] + color2[2])/2.0)]
+    return [((color1[0] + color2[0]) / 2.0),
+            ((color1[1] + color2[1]) / 2.0),
+            ((color1[2] + color2[2]) / 2.0)]
 
 
-def get_rgb_list(rgba_string):
-    colors_str = str(rgba_string).split('=')
-    colors = []
-    for color in colors_str:
-        if '0' in color:
-            color = color.split(',')
-            for subcolor in color:
-                if ')' not in subcolor and '0' in subcolor:
-                    colors.append(float(subcolor))
+def get_rgb_list(gdk3_rgba_object):
+    """
+        Returns a list of the RGB values of an Gdk.RGBA object.
+        Ex: `Gdk.RGBA(red=0.937255, green=0.160784, blue=0.160784, alpha=1.000000)` to `[0.937255, 0.160784, 0.160784]`
+        
+        I'd like to do this properly, with something like `[gdk3_rgba_object.red(), gdk3_rgba_object.green(), gdk3_rgba_object.blue()]`
+        but I didn't find the solution. Some doc at:
+        
+            https://developer.gnome.org/gdk3/stable/gdk3-RGBA-Colors.html#gdk-rgba-to-string
+    """
 
-    return colors
+    rgb_list = []
+
+    gdk3_rgb_str_items = str(gdk3_rgba_object).split('=')
+    for item in gdk3_rgb_str_items:
+        if '.' in item:
+            for subitem in item.split(','):
+                if '(' not in subitem and ')' not in subitem and '.' in subitem:
+                    rgb_list.append(float(subitem))
+
+    return rgb_list
 
 
-def hex_to_rgb(value):
-    value = value.lstrip('#')
-    lv = len(value)
-    r, g, b = tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
+def hex_to_rgb(string):
+    """ 
+        Convert hex color strings to an RGB list. 
+        Ex:  `0000FF` to `[0, 0, 255]` 
+    """
+
+    if string.startswith('#'):
+        string = string.lstrip('#')
+        
+    lv = len(string)
+    r, g, b = tuple(int(string[i:i + lv // 3], 16)
+                    for i in range(0, lv, lv // 3))
+                    
     return [r, g, b]
 
 
 class Zone(Gtk.Frame):
 
+    """
+        Zone Widget Architecture:
+
+            Gtk.Frame()
+                > Gtk.Box()
+                    > Gtk.DrawingArea()
+                    > Gtk.DrawingArea()
+                    > Gtk.VBox()
+                        > Gtk.EventBox()
+                            > Gtk.Image()
+                        > Gtk.EventBox()
+                            > Gtk.Image()
+                        > Gtk.EventBox()
+                            > Gtk.Image()
+                        > Gtk.EventBox()
+                            > Gtk.Image()
+
+        Usage:
+
+            > To change a color left-click on the drawing area and then use the color chooser.
+            > To use the last selected color, just right-click on the drawing area.
+    """
+
+
     __gtype_name__ = 'Zone'
 
-    def __init__(self, color1, color2, colorchooser, zone, column, colorchooser2=False, *args, **kwds):
+    def __init__(
+            self,
+            color1,
+            color2,
+            colorchooser,
+            zone,
+            column,
+            colorchooser2=False,
+            *args,
+            **kwds):
 
         super(self.__class__, self).__init__(*args, **kwds)
 
@@ -107,9 +130,11 @@ class Zone(Gtk.Frame):
         self.color2 = False
         self.heigth = 100
         self.width = 90
-        self.color_updated = False  # this indicates to the THREAD_zones if there has been changes
+        # this indicates to the THREAD_zones if there has been changes
+        self.color_updated = False
         self.mode = 'fixed'
-        self.commands_buttons_state = [False, True, False, False]  # delete, fixed, morph, blink
+        self.commands_buttons_state = [
+            False, True, False, False]  # delete, fixed, morph, blink
 
         # Created Gtk objects
         box = Gtk.Box()
@@ -156,7 +181,8 @@ class Zone(Gtk.Frame):
 
     def set_column(self, column):
 
-        # The removed parts of the code enable the power button/eyes names. bug(#100)
+        # The removed parts of the code enable the power button/eyes names.
+        # bug(#100)
         '''
         blocks=['A/C Power','Battery Critical','Battery Power','Battery Sleeping','Charging','Load on Boot','Standby']
         '''
@@ -187,7 +213,7 @@ class Zone(Gtk.Frame):
 
     def set_mode(self, mode):
         """
-            this is only for initializing the zone from the configuration file
+            This is only for initializing the zone from the configuration file
         """
         if mode == 'morph':
             self.mode = 'morph'
@@ -196,12 +222,12 @@ class Zone(Gtk.Frame):
             self.mode = 'blink'
             self.on_command_button_click(self.commands_buttons_events[3], True)
 
-    def set_color(self, color, area_1_or_2):
+    def set_color(self, color, widget_zone):
 
-        if isinstance(color, str) and color.startswith('#'):
+        if isinstance(color, str):
             color = hex_to_rgb(color)
 
-        if area_1_or_2 == 1:
+        if widget_zone == 1:
             self.color1 = norm_color(color)
         else:
             self.color2 = norm_color(color)
@@ -224,7 +250,9 @@ class Zone(Gtk.Frame):
             if i == 4 and self.column <= 0:
                 pass
             else:
-                event_box.connect('button-press-event', self.on_command_button_click)
+                event_box.connect(
+                    'button-press-event',
+                    self.on_command_button_click)
 
             self.commands_buttons_box.pack_start(event_box, False, False, 0)
             self.commands_buttons_events.append(event_box)
@@ -241,7 +269,8 @@ class Zone(Gtk.Frame):
 
         elif key == _LEFT_CLICK:
 
-            if not self.colorchooserwidget2 or not self.colorchooserwidget2.get_property('visible'):
+            if not self.colorchooserwidget2 or not self.colorchooserwidget2.get_property(
+                    'visible'):
                 response = self.colorchooserdialog.run()
                 if response == Gtk.ResponseType.OK:
                     color = get_rgb_list(self.colorchooserdialog.get_rgba())
@@ -255,7 +284,8 @@ class Zone(Gtk.Frame):
 
             if color:
 
-                if area_number == 1 or not self.commands_buttons_state[2]:  # morph
+                if area_number == 1 or not self.commands_buttons_state[
+                        2]:  # morph
                     self.color1 = color
                 else:
                     self.color2 = color
@@ -266,18 +296,18 @@ class Zone(Gtk.Frame):
 
         elif key == _RIGHT_CLICK:
 
-                color = get_rgb_list(self.colorchooserdialog.get_rgba())
+            color = get_rgb_list(self.colorchooserdialog.get_rgba())
 
-                if area_number == 1 or not self.commands_buttons_state[2]:  # morph
-                    self.color1 = color
-                else:
-                    self.color2 = color
+            if area_number == 1 or not self.commands_buttons_state[2]:  # morph
+                self.color1 = color
+            else:
+                self.color2 = color
 
-                self.color3 = middle_color(self.color1, self.color2)
+            self.color3 = middle_color(self.color1, self.color2)
 
-                self.create_gradient(self.darea1, self.cr, 1)
-                self.color_updated = True
-                self.create_gradient(self.darea2, self.cr, 2)
+            self.create_gradient(self.darea1, self.cr, 1)
+            self.color_updated = True
+            self.create_gradient(self.darea2, self.cr, 2)
 
         self.update_commands_buttons_background()
 
@@ -308,7 +338,7 @@ class Zone(Gtk.Frame):
                     self.color_updated = True
 
             else:
-                event_box.add(self.command_buttons_get_image(i+4))
+                event_box.add(self.command_buttons_get_image(i + 4))
                 self.commands_buttons_state[i] = False
 
         self.update_commands_buttons_background()
@@ -317,11 +347,27 @@ class Zone(Gtk.Frame):
     def command_buttons_get_image(self, number):
 
         if self.column == 0 or (self.zone and 'PB' in self.zone.name):
-            paths = ['empty', 'fixed_on', 'morph_on', 'blink_on', 'empty', 'fixed_off', 'morph_off', 'blink_off']
+            paths = [
+                'empty',
+                'fixed_on',
+                'morph_on',
+                'blink_on',
+                'empty',
+                'fixed_off',
+                'morph_off',
+                'blink_off']
         else:
-            paths = ['cross_on', 'fixed_on', 'morph_on', 'blink_on', 'cross_off', 'fixed_off', 'morph_off', 'blink_off']
+            paths = [
+                'cross_on',
+                'fixed_on',
+                'morph_on',
+                'blink_on',
+                'cross_off',
+                'fixed_off',
+                'morph_off',
+                'blink_off']
 
-        return Gtk.Image.new_from_file('./images/'+paths[number]+'.png')
+        return Gtk.Image.new_from_file('./images/' + paths[number] + '.png')
 
     def create_gradient(self, widget, cr, area_number):
 
@@ -357,9 +403,12 @@ class Zone(Gtk.Frame):
 
         for children in self.commands_buttons_box.get_children():
             for child in children.get_children():
-                child.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
+                child.override_background_color(
+                    Gtk.StateType.NORMAL, Gdk.RGBA(
+                        color[0], color[1], color[2], 1))
 
-        self.commands_buttons_box.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
+        self.commands_buttons_box.override_background_color(
+            Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
 
 
 if __name__ == '__main__':
@@ -380,7 +429,8 @@ if __name__ == '__main__':
     #
     for row in range(2):
         fixed_zone = Zone('#020202', [255, 34, 122], cc, None, 0)
-        grid.attach(fixed_zone, 0, row, 1, 1)  # widget, column, row, column width, row width
+        # widget, column, row, column width, row width
+        grid.attach(fixed_zone, 0, row, 1, 1)
 
     blink_zone = Zone([122, 255, 22], [255, 34, 122], cc, None, 1)
     blink_zone.set_mode('blink')
