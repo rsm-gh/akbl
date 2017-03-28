@@ -113,7 +113,7 @@ Alienware-KBL is based on [pyAlienFX](https://github.com/Xqua/pyAlienFX), which 
 
 * Wattos
 
-Beside the main code of the software, some users have contributed to the support configuration of their computer, this are some of the names:
+Beside the main code of the software, some users have contributed to the support the configuration of their computer, these are some of the names:
 
 * Alienware 13 by Francesco Rosa
 * M11XR1 by aehs29
