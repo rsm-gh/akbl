@@ -46,9 +46,6 @@ if __name__ == '__main__':
         if arg == '--help' or arg == '-h':
             print(TEXT_HELP)
 
-        elif arg == '-v' or arg == '--version':
-            print(TEXT_VERSION)
-
         elif arg == '--license' or arg == '-l':
             print(TEXT_LICENSE)
 

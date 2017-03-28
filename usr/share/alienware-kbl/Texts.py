@@ -48,28 +48,26 @@ DATA_INFO_ERROR = '''
 '''
 
 TEXT_HELP = '''
- Usage:
+Usage:
+
     alienware-kbl <option>
 
  Options:
-
-    --change                        Changes the state on/off.
-    --on                            Turns on the alienware keyboard lights.
-    --off                           Turns off the alienware keyboard lights.
-    --set-profile <profile name>    Activate a profile
-
-    --get-boot-user                 Get the user that is started by the daemon
-    --set-boot-user <username>      Set the user that is started by the daemon
-
-    --start-indicator               Start the indicator.
-
-    -h, -help                       Display this dialog.
-    -l, --license                   Display the license.
-    -v, --version                   Display the current version.
-
-
+        
+    --change                          Changes the computer lights on/off.
+    --on                              Turns on the computer lights.
+    --off                             Turns off the computer lights.
+    --set-profile <profile_name>      Turns on the selected profile.
+    
+    --get-boot-user                   Get the user that is started by the daemon.
+    --set-boot-user <user_name>       Set the user that is started by the daemon.
+    
+    --start-indicator                 Start the indicator.
+    
+    -h, -help                         Display this dialog.
+    -l, --license                     Display the license.
+    
  *If no option is introduced the graphical interface is launched.
-
 '''
 
 TEXT_LICENSE = '''
@@ -93,8 +91,6 @@ TEXT_LICENSE = '''
 TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be stablished."
 
 TEXT_WRONG_ARGUMENT = '''alienware-kbl: wrong argument. use "alienware-kbl --help"'''
-
-TEXT_VERSION = "alienware-kbl DEB_BUILDER_VERSION"
 
 TEXT_RESTART_THE_SYSTEM = "{0} You will have to restart the system to make it effective."
 
