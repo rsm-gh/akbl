@@ -71,7 +71,7 @@ class Daemon:
         except:
             user = getuser()
             print(
-                'Warning: The `{}` of the configuration file does not exists, it has been replaced by `{}`.'.format(
+                'Warning: The `{}` of the configuration file does not exist, it has been replaced by `{}`.'.format(
                     self._user,
                     user))
             self._user = user
@@ -264,7 +264,7 @@ class Daemon:
               the same number of items.
         """
 
-        if not mode in ('fixed', 'morph', 'blink'):
+        if mode not in ('fixed', 'morph', 'blink'):
             print("Warning: Wrong mode", mode)
             return
         elif not isinstance(speed, int):

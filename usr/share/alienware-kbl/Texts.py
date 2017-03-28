@@ -53,20 +53,20 @@ Usage:
     alienware-kbl <option>
 
  Options:
-        
+
     --change                          Changes the computer lights on/off.
     --on                              Turns on the computer lights.
     --off                             Turns off the computer lights.
     --set-profile <profile_name>      Turns on the selected profile.
-    
+
     --get-boot-user                   Get the user that is started by the daemon.
     --set-boot-user <user_name>       Set the user that is started by the daemon.
-    
+
     --start-indicator                 Start the indicator.
-    
+
     -h, -help                         Display this dialog.
     -l, --license                     Display the license.
-    
+
  *If no option is introduced the graphical interface is launched.
 '''
 
@@ -167,7 +167,7 @@ TEXT_DESCRIPTION_CAPS_LOCK = "Caps Lock"
 TEXT_DESCRIPTION_BOOT = "Boot"
 
 #
-#	Computer Names
+#    Computer Names
 #
 TEXT_M11XR1 = 'M11XR1'
 TEXT_M11XR2 = 'M11XR2'
