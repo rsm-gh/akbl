@@ -1,0 +1,15 @@
+{
+  "Bindings.py": true,
+  "CCParser.py": true,
+  "Computers.py": true,
+  "Configuration.py": true,
+  "Daemon.py": true,
+  "DefaultArguments.py": true,
+  "Engine.py": true,
+  "GUI.py": true,
+  "Indicator.py": true,
+  "Paths.py": true,
+  "Texts.py": true,
+  "ZoneWidget.py": true,
+  "common.py": true
+}

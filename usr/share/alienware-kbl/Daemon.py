@@ -71,7 +71,7 @@ class Daemon:
         except:
             user = getuser()
             print(
-                'Warning: The `{}` of the configuration file does not exists, it has been replaced by `{}`.'.format(
+                'Warning: The `{}` of the configuration file does not exist, it has been replaced by `{}`.'.format(
                     self._user,
                     user))
             self._user = user
@@ -101,10 +101,10 @@ class Daemon:
         self._controller.Add_Speed_Conf(self._theme.speed)
 
         try:  # Patch (#12)
-            os.utime(self.theme.path, None)
+            os.utime(self._theme.path, None)
         except Exception as e:
             print(
-                'Warning: It was not possible to os.utime the profile path: \n{}'.format(
+                '''Warning: It was not possible to `os.utime` the theme's path: \n{}'''.format(
                     self._theme.path))
             print(format_exc())
 
@@ -264,7 +264,7 @@ class Daemon:
               the same number of items.
         """
 
-        if not mode in ('fixed', 'morph', 'blink'):
+        if mode not in ('fixed', 'morph', 'blink'):
             print("Warning: Wrong mode", mode)
             return
         elif not isinstance(speed, int):

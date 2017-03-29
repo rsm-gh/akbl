@@ -226,7 +226,6 @@ class New:
         # Add the configuration
         #
         profiles[self.name] = self
-        #print('profile added', self.name)
 
     def set_speed(self, speed):
         try:

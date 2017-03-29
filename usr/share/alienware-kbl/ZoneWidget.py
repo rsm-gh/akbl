@@ -27,7 +27,7 @@ _RIGHT_CLICK = 3
 
 
 def norm_color(color):
-    
+
     doit = False
     for i in color:
         if i > 1:
@@ -47,10 +47,10 @@ def get_rgb_list(gdk3_rgba_object):
     """
         Returns a list of the RGB values of an Gdk.RGBA object.
         Ex: `Gdk.RGBA(red=0.937255, green=0.160784, blue=0.160784, alpha=1.000000)` to `[0.937255, 0.160784, 0.160784]`
-        
+
         I'd like to do this properly, with something like `[gdk3_rgba_object.red(), gdk3_rgba_object.green(), gdk3_rgba_object.blue()]`
         but I didn't find the solution. Some doc at:
-        
+
             https://developer.gnome.org/gdk3/stable/gdk3-RGBA-Colors.html#gdk-rgba-to-string
     """
 
@@ -67,18 +67,18 @@ def get_rgb_list(gdk3_rgba_object):
 
 
 def hex_to_rgb(string):
-    """ 
-        Convert hex color strings to an RGB list. 
-        Ex:  `0000FF` to `[0, 0, 255]` 
+    """
+        Convert hex color strings to an RGB list.
+        Ex:  `0000FF` to `[0, 0, 255]`
     """
 
     if string.startswith('#'):
         string = string.lstrip('#')
-        
+
     lv = len(string)
     r, g, b = tuple(int(string[i:i + lv // 3], 16)
                     for i in range(0, lv, lv // 3))
-                    
+
     return [r, g, b]
 
 
@@ -106,7 +106,6 @@ class Zone(Gtk.Frame):
             > To change a color left-click on the drawing area and then use the color chooser.
             > To use the last selected color, just right-click on the drawing area.
     """
-
 
     __gtype_name__ = 'Zone'
 
