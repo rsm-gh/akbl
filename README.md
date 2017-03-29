@@ -23,7 +23,7 @@ Alienware-KBL is a software to control the lights of alienware computers under G
 	
 ## Installation instructions
 
-1. Download the stable branch
+1. Download the [stable branch](https://github.com/rsm-gh/alienware-kbl/archive/stable.zip)
 2. Install the dependencies:
  * Debian Based Distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
  
