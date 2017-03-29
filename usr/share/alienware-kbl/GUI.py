@@ -31,10 +31,10 @@ from time import time, sleep
 from copy import deepcopy
 
 # local imports
-import Configuration
+import Theme
 from Engine import *
 from Texts import *
-from ZoneWidget import *
+from Zone import ZoneWidget, ZoneData
 from CCParser import CCParser
 from Paths import Paths
 from common import getuser
@@ -55,8 +55,9 @@ except:
 
 
 def rgb_to_hex(rgb):
-    return '#%02x%02x%02x' % (
-        int(rgb[0] * 255), int(rgb[1] * 255), int(rgb[2] * 255))
+    return '#%02x%02x%02x' % (int(rgb[0] * 255), 
+                              int(rgb[1] * 255), 
+                              int(rgb[2] * 255))
 
 
 def get_text_gtk_buffer(textbuffer):
@@ -197,7 +198,7 @@ class GUI(Gtk.Window):
         builder.add_from_file(self._paths.GLADE_FILE)
         builder.connect_signals(self)
 
-        glade_objects = (
+        glade_object_names = (
             'window_root',
             'label_computername',
             'label_user_message',
@@ -209,9 +210,9 @@ class GUI(Gtk.Window):
             'checkbutton_profile_buttons',
             'checkbutton_delete_warning',
             'checkbutton_static_colorchooser',
-            'colorchooserdialog',
-            'colorchooserwidget2',
-            'box_zones',
+            'color_chooser_dialog',
+            'color_chooser_widget',
+            'box_areas',
             'entry_new_profile',
             'liststore_profiles',
             'tempobutton',
@@ -250,7 +251,7 @@ class GUI(Gtk.Window):
             'combobox_block_modes',
         )
 
-        for glade_object in glade_objects:
+        for glade_object in glade_object_names:
             setattr(self, glade_object, builder.get_object(glade_object))
 
         self.colorbutton_1_block.set_color(
@@ -274,8 +275,11 @@ class GUI(Gtk.Window):
             imagemenuitem_apply_configuration = builder.get_object(id)
             accel_group = Gtk.AccelGroup()
             self.window_root.add_accel_group(accel_group)
-            imagemenuitem_apply_configuration.add_accelerator('activate', accel_group, ord(
-                shorcut), Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE)
+            imagemenuitem_apply_configuration.add_accelerator('activate', 
+                                                              accel_group, 
+                                                              ord(shorcut), 
+                                                              Gdk.ModifierType.CONTROL_MASK, 
+                                                              Gtk.AccelFlags.VISIBLE)
 
         if getuser() != 'root':
             self.imagemenuitem_block_testing.set_sensitive(False)
@@ -341,7 +345,7 @@ class GUI(Gtk.Window):
 
         if not AKBL_DAEMON and self.driver.not_found:
             self.label_computername.set_label('')
-            self.colorchooserwidget2.hide()
+            self.color_chooser_widget.hide()
             self.box_profile_buttons.hide()
             self.menuitem_profile.set_sensitive(False)
             self.menuitem_options.set_sensitive(False)
@@ -381,7 +385,7 @@ class GUI(Gtk.Window):
 
             #   Load a configuration
             #
-            Configuration.LOAD_profiles(
+            Theme.LOAD_profiles(
                 self.computer, self._paths.PROFILES_PATH)
             self.POPULATE_liststore_profiles()
 
@@ -408,7 +412,7 @@ class GUI(Gtk.Window):
             #
             self.menu_turn_off_zones = Gtk.Menu()
             self.zones_and_descriptions_dict = dict(
-                (self.theme.area[zone].description, zone) for zone in self.theme.area.keys())
+                (self.theme.get_areas()[zone].description, zone) for zone in self.theme.get_areas().keys())
             active_configuration_zones = self.ccp.get_str_defval(
                 'zones_to_keep_alive', '').split('|')
 
@@ -437,7 +441,7 @@ class GUI(Gtk.Window):
             self.checkbutton_static_colorchooser.set_active(
                 self.ccp.get_bool_defval('static_chooser', False))
 
-            self.POPULATE_zones()
+            self.populate_box_areas()
 
             self.window_root.show_all()
 
@@ -445,7 +449,7 @@ class GUI(Gtk.Window):
                 self.box_profile_buttons.hide()
 
             if not self.checkbutton_static_colorchooser.get_active():
-                self.colorchooserwidget2.hide()
+                self.color_chooser_widget.hide()
 
             self.scrolledwindow_no_computer.hide()
 
@@ -465,77 +469,63 @@ class GUI(Gtk.Window):
         return [self.zones_and_descriptions_dict[checkbox.get_label()]
                 for checkbox in self.menu_turn_off_zones.get_children() if checkbox.get_active()]
 
-    def POPULATE_zones(self):
+    def populate_box_areas(self):
 
-        # empty the grid
+        # Empty the grid
         #
-        for children in self.box_zones.get_children():
-            self.box_zones.remove(children)
+        for box_area in self.box_areas.get_children():
+            self.box_areas.remove(box_area)
 
-        # Organize the zones order
+        areas_dict = self.theme.get_areas()
+
+        # Organize the areas
         #
         ordered_areas = sorted(
-            self.theme.area.keys(),
-            key=lambda x: self.theme.area[x].description)
-        # set the power buttons at the top. This was disabled because the
-        # multiple power buttons were disabled #100
-        '''
-        if 'PB' in ordered_areas:
-            ordered_areas.insert(0, ordered_areas.pop(ordered_areas.index('PB')))
-        '''
+            areas_dict.keys(),
+            key=lambda x: areas_dict[x].description)
 
-        # Populate
+        # Populate the `box_area`
         #
-        for key in ordered_areas:  # rows
+        for area_id in ordered_areas:
 
-            area = self.theme.area[key]
-            lenght = len(area)
-            box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+            area = areas_dict[area_id]
+            
+            add_button_column = area.get_number_of_zones() - 1
+            box_area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
-            if 'PB' in key and lenght < 1:  # replaced 8 by 1 because of the power button #100
-                while lenght < 1:  # replaced 8 by 1 because of the power button #100
-                    self.theme.add_zone(deepcopy(area[0]))
-                    lenght = len(area)
+            for column_index, zone_data in enumerate(area):
 
-            for column, zone_data in enumerate(area):
+                zone_widget = ZoneWidget(left_color=zone_data.get_left_color(),
+                                         right_color=zone_data.get_right_color(),
+                                         mode=zone_data.get_mode(),
+                                         column=column_index,
+                                         colorchooser_dialog=self.color_chooser_dialog,
+                                         colorchooser_widget=self.color_chooser_widget)
 
-                if 'PB' in key and column >= 1:  # 7 replaced by 0 #100
-                    continue
+                box_area.pack_start(child=zone_widget, expand=False, fill=False, padding=5)
 
-                zone_widget = Zone(
-                    zone_data.color1,
-                    zone_data.color2,
-                    self.colorchooserdialog,
-                    zone_data,
-                    column,
-                    self.colorchooserwidget2)
-                zone_widget.set_mode(zone_data.mode)
+                if column_index == add_button_column:
+                    add_button = Gtk.Button(label=TEXT_ADD)
+                    add_button.set_alignment(0.5, 0.5)
+                    add_button.connect('button-press-event',
+                                        self.on_button_add_zone_clicked,
+                                        zone_data,
+                                        box_area,
+                                        column_index + 1)
+                    box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
 
-                box.pack_start(zone_widget, False, False, 5)
+            self.box_areas.pack_start(child=box_area, expand=False, fill=False, padding=5)
 
-                if column == lenght - 1 and zone_data.name != 'PB' and zone_data.name != 'PBE':
-                    button = Gtk.Button(label=TEXT_ADD)
-                    button.set_alignment(0.5, 0.5)
-                    button.connect(
-                        'button-press-event',
-                        self.on_button_add_zone_clicked,
-                        zone_data,
-                        box,
-                        column + 1)
-                    box.pack_start(button, False, False, 5)
-
-                self.box_zones.pack_start(box, False, False, 5)
-
-            self.box_zones.show_all()
+        self.box_areas.show_all()
 
     def POPULATE_liststore_profiles(self):
 
         self.liststore_profiles.clear()
 
-        for profile_name in sorted(Configuration.profiles.keys()):
+        for profile_name in sorted(Theme.INSTANCES_DIC.keys()):
             self.liststore_profiles.append([profile_name])
 
-        row, name = Configuration.GET_last_configuration()
+        row, name = Theme.GET_last_configuration()
 
         self.combobox_profiles.set_active(row)
 
@@ -557,13 +547,13 @@ class GUI(Gtk.Window):
         self.label_user_message.set_text(TEXT_CONFIGURATION_DELETED)
         Gdk.threads_leave()
 
-        Configuration.profiles.pop(self.theme.name)
+        Theme.INSTANCES_DIC.pop(self.theme.name)
 
         if os.path.exists(self.theme.path):
             os.remove(self.theme.path)
 
-        if len(Configuration.profiles.keys()) == 0:
-            Configuration.CREATE_default_profile(self.computer)
+        if len(Theme.INSTANCES_DIC.keys()) == 0:
+            Theme.CREATE_default_profile(self.computer)
 
         Gdk.threads_enter()
         self.POPULATE_liststore_profiles()
@@ -588,39 +578,41 @@ class GUI(Gtk.Window):
         while self.thread_zones:
             # Get the update of the zones and delete them if requested
             #
-            for row_box in self.box_zones.get_children():
+            for box_area in self.box_areas.get_children():
                 deleted = False
-                for chosen_widget in row_box.get_children():
+
+                for zone_widget in box_area.get_children():
 
                     # Delete from the GUI
-                    if isinstance(chosen_widget,
-                                  Zone) and chosen_widget.mode == 'delete':
+                    #
+                    if isinstance(zone_widget, ZoneWidget) and zone_widget.get_mode() == 'delete':
+
                         self.light_changes = True
                         deleted = True
 
-                        zone = chosen_widget.zone
-                        column = chosen_widget.column
+                        #zone = zone_widget.zone
+                        column = zone_widget.get_column()
 
                         self.theme.delete_zone(zone, column)
 
                         after = False
-                        for widget in row_box.get_children():
-                            if widget == chosen_widget:
+                        for widget in box_area.get_children():
+                            if widget == zone_widget:
                                 after = True
 
-                            if after and isinstance(widget, Zone):
+                            if after and isinstance(widget, ZoneWidget):
                                 Gdk.threads_enter()
-                                column = widget.column
+                                column = widget.get_column()
                                 widget.set_column(column - 1)
                                 Gdk.threads_leave()
 
                         Gdk.threads_enter()
-                        row_box.remove(chosen_widget)
+                        box_area.remove(zone_widget)
                         Gdk.threads_leave()
 
-                    elif deleted and self.light_changes and isinstance(chosen_widget, Gtk.Button):
+                    elif deleted and self.light_changes and isinstance(zone_widget, Gtk.Button):
                         Gdk.threads_enter()
-                        row_box.remove(chosen_widget)
+                        box_area.remove(zone_widget)
                         Gdk.threads_leave()
 
                         button = Gtk.Button(label=TEXT_ADD)
@@ -629,23 +621,26 @@ class GUI(Gtk.Window):
                             'button-press-event',
                             self.on_button_add_zone_clicked,
                             zone,
-                            row_box,
+                            box_area,
                             column)
-                        row_box.pack_start(button, False, False, 5)
+                        box_area.pack_start(button, False, False, 5)
 
-                    elif isinstance(chosen_widget, Zone) and chosen_widget.color_updated:
+                    elif isinstance(zone_widget, ZoneWidget) and zone_widget.color_updated:
                         # Update the configuration
+                        #
                         self.theme.modify_zone(
-                            chosen_widget.zone, chosen_widget.column, rgb_to_hex(
-                                chosen_widget.color1), rgb_to_hex(
-                                chosen_widget.color2), chosen_widget.mode)
+                            zone_widget.zone,
+                            zone_widget.get_column(),
+                            rgb_to_hex(zone_widget.get_left_color()),
+                            rgb_to_hex(zone_widget.get_right_color()),
+                            zone_widget.get_mode())
 
-                        chosen_widget.color_updated = False
+                        zone_widget.color_updated = False
                         self.light_changes = True
 
             if self.light_changes:
                 Gdk.threads_enter()
-                self.box_zones.show_all()
+                self.box_areas.show_all()
                 Gdk.threads_leave()
 
                 if self.checkbutton_autosave.get_active():
@@ -679,9 +674,9 @@ class GUI(Gtk.Window):
                         False, self.driver.computer.BLOCK_LOAD_ON_BOOT)
                     self.controller.Add_Speed_Conf(1)
 
-                    for key in sorted(self.theme.area.keys()):
+                    for key in sorted(self.theme.get_areas().keys()):
                         if key not in keep_alive_zones:
-                            area = self.theme.area[key]
+                            area = self.theme.get_areas()[key]
                             for zone in area:
                                 self.controller.Add_Loop_Conf(
                                     zone.regionId, 'fixed', '#000000', '#000000')
@@ -705,11 +700,11 @@ class GUI(Gtk.Window):
 
         self.window_new_profile.hide()
 
-        clone = deepcopy(Configuration.profiles[self.theme.name])
+        clone = deepcopy(Theme.INSTANCES_DIC[self.theme.name])
         clone.name = text
         clone.path = '{}{}.cfg'.format(self._paths.PROFILES_PATH, text)
         clone.save()
-        Configuration.profiles[clone.name] = clone
+        Theme.INSTANCES_DIC[clone.name] = clone
         self.POPULATE_liststore_profiles()
 
         if AKBL_DAEMON:
@@ -717,19 +712,19 @@ class GUI(Gtk.Window):
 
     def ILUMINATE_keyboard_block(self):
 
-        zone_color1 = self.colorbutton_1_block.get_color()
-        zone_color1 = rgb_to_hex([zone_color1.red /
-                                  65535.0, zone_color1.green /
-                                  65535.0, zone_color1.blue /
+        zone_left_color = self.colorbutton_1_block.get_color()
+        zone_left_color = rgb_to_hex([zone_left_color.red /
+                                  65535.0, zone_left_color.green /
+                                  65535.0, zone_left_color.blue /
                                   65535.0])
 
-        zone_color2 = self.colorbutton_2_block.get_color()
-        zone_color2 = rgb_to_hex([zone_color2.red /
-                                  65535.0, zone_color2.green /
-                                  65535.0, zone_color2.blue /
+        zone_right_color = self.colorbutton_2_block.get_color()
+        zone_right_color = rgb_to_hex([zone_right_color.red /
+                                  65535.0, zone_right_color.green /
+                                  65535.0, zone_right_color.blue /
                                   65535.0])
 
-        zone_color2 = zone_color1
+        zone_right_color = zone_left_color
 
         zone_block = int(self.entry_block_testing.get_text())
 
@@ -741,6 +736,7 @@ class GUI(Gtk.Window):
         zone_mode = zone_mode.lower()
 
         # Log the test
+        #
         gtk_append_text_to_buffer(
             self.textbuffer_block_testing,
             TEXT_BLOCK_TEST.format(
@@ -748,18 +744,18 @@ class GUI(Gtk.Window):
                 hex(zone_block),
                 zone_mode,
                 speed,
-                zone_color1,
-                zone_color2))
+                zone_left_color,
+                zone_right_color))
 
-        #
         #   Test
         #
-        # self.testing_controller.Reset()
         self.testing_controller.Set_Loop_Conf(
             False, self.testing_driver.computer.BLOCK_LOAD_ON_BOOT)
         self.testing_controller.Add_Speed_Conf(speed * 256)
-        self.testing_controller.Add_Loop_Conf(
-            zone_block, zone_mode, zone_color1, zone_color2)
+        self.testing_controller.Add_Loop_Conf(zone_block, 
+                                              zone_mode,
+                                              zone_left_color,
+                                              zone_right_color)
         self.testing_controller.End_Loop_Conf()
         self.testing_controller.End_Transfert_Conf()
         self.testing_controller.Write_Conf()
@@ -772,7 +768,8 @@ class GUI(Gtk.Window):
 
         # This is to make the program recognize the last profile that has been
         # used
-        try:  # Patch (#12)
+        try:
+            # Patch (#12)
             os.utime(self.theme.path, None)
         except Exception as e:
             print(
@@ -794,13 +791,13 @@ class GUI(Gtk.Window):
                 False, self.driver.computer.BLOCK_LOAD_ON_BOOT)
             self.controller.Add_Speed_Conf(self.theme.speed)
 
-            for key in sorted(self.theme.area.keys()):
-                area = self.theme.area[key]
+            for key in sorted(self.theme.get_areas().keys()):
+                area = self.theme.get_areas()[key]
                 for zone in area:
                     self.controller.Add_Loop_Conf(zone.regionId,
-                                                  zone.mode,
-                                                  zone.color1,
-                                                  zone.color2)
+                                                  zone.get_mode(),
+                                                  zone.get_left_color(),
+                                                  zone.get_right_color())
 
                 self.controller.End_Loop_Conf()
 
@@ -833,10 +830,10 @@ class GUI(Gtk.Window):
 
     def on_checkbutton_static_colorchooser_activate(self, button, data=None):
         if self.checkbutton_static_colorchooser.get_active():
-            self.colorchooserwidget2.show()
+            self.color_chooser_widget.show()
             self.ccp.write('static_chooser', True)
         else:
-            self.colorchooserwidget2.hide()
+            self.color_chooser_widget.hide()
             self.ccp.write('static_chooser', False)
 
     def on_checkbox_turnoff_zones_checked(self, checkbox, data=None):
@@ -870,36 +867,34 @@ class GUI(Gtk.Window):
     def on_button_new_profile_cancel_clicked(self, button, data=None):
         self.window_new_profile.hide()
 
-    def on_button_add_zone_clicked(self, button, event, zone, box, column):
+    def on_button_add_zone_clicked(self, button, event, area, area_box, column):
         """
-            This button is not in glade, is dynamically generated
+            This button is not in glade, it is dynamically generated.
         """
-        zone = deepcopy(zone)
-        zone.color1 = self.computer.default_color
-        zone.color2 = self.computer.default_color
-        zone.mode = 'fixed'
+        
+        
+        new_zone = ZoneWidget(
+            left_color=self.computer.default_color,
+            right_color=self.computer.default_color,
+            mode='fixed',
+            column=column,
+            colorchooser_dialog=self.color_chooser_dialog,
+            colorchooser_widget=self.color_chooser_widget)
 
-        new_zone = Zone(
-            self.computer.default_color,
-            self.computer.default_color,
-            self.colorchooserdialog,
-            zone,
-            column,
-            self.colorchooserwidget2)
-        self.theme.add_zone(zone)
+        #area.add_zone()
 
-        box.remove(button)
+        area_box.remove(button)
 
         new_button = Gtk.Button(label=TEXT_ADD)
         new_button.connect(
             'button-press-event',
             self.on_button_add_zone_clicked,
-            zone,
-            box,
+            area,
+            area_box,
             column + 1)
 
-        box.pack_start(new_zone, False, False, 5)
-        box.pack_start(new_button, False, False, 5)
+        area_box.pack_start(child=new_zone, expand=False, fill=False, padding=5)
+        area_box.pack_start(child=new_button, expand=False, fill=False, padding=5)
 
         self.light_changes = True
 
@@ -922,8 +917,8 @@ class GUI(Gtk.Window):
         if tree_iter is not None:
             model = widget.get_model()
             profile_name = model[tree_iter][0]
-            self.theme = Configuration.profiles[profile_name]
-            self.POPULATE_zones()
+            self.theme = Theme.INSTANCES_DIC[profile_name]
+            self.populate_box_areas()
 
     def on_button_new_profile_create_clicked(self, button, data=None):
         self.NEW_profile()
@@ -959,7 +954,7 @@ class GUI(Gtk.Window):
                 return
 
             shutil.copy(file_path, new_path)
-            Configuration.LOAD_profile(self.computer, new_path)
+            Theme.LOAD_profile(self.computer, new_path)
             self.POPULATE_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, widget=None, data=None):
@@ -1025,7 +1020,7 @@ class GUI(Gtk.Window):
                 self.button_new_profile_create.set_sensitive(False)
                 return
 
-        for name in Configuration.profiles.keys():
+        for name in Theme.INSTANCES_DIC.keys():
             if name == text:
                 self.button_new_profile_create.set_sensitive(False)
                 return
@@ -1033,8 +1028,8 @@ class GUI(Gtk.Window):
         self.button_new_profile_create.set_sensitive(True)
 
     def on_colorchooserwidget2_button_press_event(self, button, data=None):
-        if self.colorchooserwidget2.get_property('show-editor'):
-            self.colorchooserwidget2.set_property('show-editor', False)
+        if self.color_chooser_widget.get_property('show-editor'):
+            self.color_chooser_widget.set_property('show-editor', False)
 
     """
         BLOCK TESTING

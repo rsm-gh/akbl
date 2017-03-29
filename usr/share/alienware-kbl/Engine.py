@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2011-2012  the pyAlienFX team
-#                 2014-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C)  2014-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#                 2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -87,7 +87,6 @@ class Driver(AllComputers):
 
             return False
 
-        #
         #   Normal initialization
         #
         for computer in sorted(self.computerList.keys()):
@@ -131,8 +130,11 @@ class Driver(AllComputers):
 
     def ReadDevice(self, msg):
         msg = self.dev.ctrl_transfer(
-            self.READ_REQUEST_TYPE, self.READ_REQUEST, self.READ_VALUE, self.READ_INDEX, len(
-                msg[0].packet))
+            self.READ_REQUEST_TYPE, 
+            self.READ_REQUEST, 
+            self.READ_VALUE, 
+            self.READ_INDEX, 
+            len(msg[0].packet))
 
         return msg
 
@@ -385,7 +387,7 @@ class Constructor(list):
 
     def Area(self, areas):  # gotta check the power button to understand it ...
         """
-            This method will parse an area to a list of tree values.
+            This method will parse an area to a list of three values.
 
             area = 0x000000
 

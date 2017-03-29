@@ -751,7 +751,7 @@ only root users can use it.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkColorChooserWidget" id="colorchooserwidget2">
+          <object class="GtkColorChooserWidget" id="color_chooser_widget">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
@@ -776,7 +776,7 @@ only root users can use it.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkBox" id="box_zones">
+                  <object class="GtkBox" id="box_areas">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -905,7 +905,7 @@ https://github.com/rsm-gh/alienware-kbl
     <property name="transient_for">window_root</property>
     <property name="rgba">rgb(255,255,255)</property>
     <child internal-child="vbox">
-      <object class="GtkBox" id="colorchooserdialog-vbox1">
+      <object class="GtkBox" id="color_chooser_dialog">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>

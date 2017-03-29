@@ -19,52 +19,13 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 from Texts import *
-
-
-class CodeAreaNames:
-
-    def __init__(self):
-
-        self.POWER_BUTTON_ID = 'PB'
-        self.POWER_BUTTON_EYES_ID = 'PBE'
-
-        self.ALIEN_LOGO_ID = 'AL'
-        self.ALIEN_HEAD_ID = 'AH'
-        self.ALIEN_OUTER_LID_ID = 'OI'
-
-        self.LEFT_SPEAKER_ID = 'LS'
-        self.RIGHT_SPEAKER_ID = 'RS'
-
-        self.LEFT_KEYBOARD_ID = 'LK'
-        self.LEFT_CENTER_KEYBOARD_ID = 'LCK'
-        self.RIGHT_CENTER_KEYBOARD_ID = 'RCK'
-        self.RIGHT_KEYBOARD_ID = 'RK'
-        self.KEYBOARD_ID = 'KB'
-
-        self.MEDIA_BAR_ID = 'MB'
-        self.TOUCH_PAD_ID = 'TP'
-        self.LIGHT_PIPE_ID = 'LP'
-        self.TACTX_ID = 'TX'
-
-        self.HARD_DISK_DRIVE_ID = 'HDD'
-        self.WIFI_ID = 'WF'
-        self.CAPS_LOCK_ID = 'CL'
-
-        self.BOOT_ID = 'BT'
-
-        self.ALIEN_FX_DEFAULT_POWER_MODE = ''
-        self.ON_BATTERY_ID = 'BAT'
-        self.CHARGING_ID = 'CH'
-        self.AC_POWER_ID = 'AC'
-        self.STANDBY_ID = 'SB'
-
+from Area import AreaIDS
 
 class PowerMode:
 
     def __init__(self, name, description, block):
         self.description = description
         self.name = name
-
 
 class Region:
 
@@ -78,13 +39,12 @@ class Region:
             canMorph,
             canLight,
             default_color,
-            supportedModes,
             default_mode='fixed',
             power_button=False):
 
+        self.name = name
         self.description = description
         self.regionId = regionId
-        self.name = name
         self.canLight = canLight
         self.canBlink = canBlink
         self.canMorph = canMorph
@@ -93,7 +53,6 @@ class Region:
         self.mode = default_mode
         self.power_button = power_button
         self.maxCommands = maxCommands
-        self.supportedModes = supportedModes
         self.line = {1: Configuration(self.mode, self.color1, self.color2)}
 
     def update_line(self, Id, mode=None, color1=None, color2=None):
@@ -131,9 +90,8 @@ class CommonConf:
 
     def __init__(self):
 
-        self.CodeAreaNames = CodeAreaNames()
+        self.AreaIDS = AreaIDS()
         self.regions = {}
-        self.suportedMode = {}
         self.default_color = '0000FF'
         self.default_mode = 'fixed'
 
@@ -193,30 +151,9 @@ class M11XR1(CommonConf):
         self.REGION_POWER_BUTTON = 0x6000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.suportedMode['normal'] = PowerMode(
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.BLOCK_LOAD_ON_BOOT),
-        self.suportedMode['standby'] = PowerMode(
-            self.CodeAreaNames.STANDBY_ID,
-            TEXT_DESCRIPTION_STAND_BY,
-            self.BLOCK_STANDBY),
-        self.suportedMode['acPower'] = PowerMode(
-            self.CodeAreaNames.AC_POWER_ID,
-            TEXT_DESCRIPTION_AC_POWER,
-            self.BLOCK_AC_POWER),
-        self.suportedMode['charging'] = PowerMode(
-            self.CodeAreaNames.CHARGING_ID,
-            TEXT_DESCRIPTION_CHARGING,
-            self.BLOCK_CHARGING),
-        self.suportedMode['onBat'] = PowerMode(
-            self.CodeAreaNames.ON_BATTERY_ID,
-            TEXT_DESCRIPTION_ON_BATTERY,
-            self.BLOCK_BAT_POWER)
 
-        self.regions[
-            self.CodeAreaNames.KEYBOARD_ID] = Region(
-            self.CodeAreaNames.KEYBOARD_ID,
+        self.regions[self.AreaIDS.KEYBOARD_ID] = Region(
+            self.AreaIDS.KEYBOARD_ID,
             TEXT_DESCRIPTION_KEYBOARD,
             self.REGION_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -226,8 +163,8 @@ class M11XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.RIGHT_SPEAKER_ID,
+            self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
+            self.AreaIDS.RIGHT_SPEAKER_ID,
             TEXT_DESCRIPTION_RIGHT_SPEAKER,
             self.REGION_RIGHT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -237,8 +174,8 @@ class M11XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.LEFT_SPEAKER_ID,
+            self.AreaIDS.LEFT_SPEAKER_ID] = Region(
+            self.AreaIDS.LEFT_SPEAKER_ID,
             TEXT_DESCRIPTION_LEFT_SPEAKER,
             self.REGION_LEFT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -248,8 +185,8 @@ class M11XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_LOGO_ID] = Region(
-            self.CodeAreaNames.ALIEN_LOGO_ID,
+            self.AreaIDS.ALIEN_LOGO_ID] = Region(
+            self.AreaIDS.ALIEN_LOGO_ID,
             TEXT_DESCRIPTION_ALIENWARE_LOGO,
             self.REGION_ALIEN_NAME,
             self.SUPPORTED_COMMANDS,
@@ -259,8 +196,8 @@ class M11XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.MEDIA_BAR_ID] = Region(
-            self.CodeAreaNames.MEDIA_BAR_ID,
+            self.AreaIDS.MEDIA_BAR_ID] = Region(
+            self.AreaIDS.MEDIA_BAR_ID,
             TEXT_DESCRIPTION_MEDIA_BAR,
             self.REGION_MEDIA_BAR,
             self.SUPPORTED_COMMANDS,
@@ -270,8 +207,8 @@ class M11XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_ID,
+            self.AreaIDS.POWER_BUTTON_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_ID,
             TEXT_DESCRIPTION_POWER_BUTTON,
             self.REGION_POWER_BUTTON,
             2,
@@ -324,30 +261,11 @@ class M14XR1(CommonConf):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.suportedMode['normal'] = PowerMode(
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.BLOCK_LOAD_ON_BOOT)
-        self.suportedMode['standby'] = PowerMode(
-            self.CodeAreaNames.STANDBY_ID,
-            TEXT_DESCRIPTION_STAND_BY,
-            self.BLOCK_STANDBY)
-        self.suportedMode['acPower'] = PowerMode(
-            self.CodeAreaNames.AC_POWER_ID,
-            TEXT_DESCRIPTION_AC_POWER,
-            self.BLOCK_AC_POWER)
-        self.suportedMode['charging'] = PowerMode(
-            self.CodeAreaNames.CHARGING_ID,
-            TEXT_DESCRIPTION_CHARGING,
-            self.BLOCK_CHARGING)
-        self.suportedMode['onBat'] = PowerMode(
-            self.CodeAreaNames.ON_BATTERY_ID,
-            TEXT_DESCRIPTION_ON_BATTERY,
-            self.BLOCK_BAT_POWER)
+
 
         self.regions[
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_KEYBOARD,
             self.REGION_RIGHT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -357,8 +275,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
             self.REGION_RIGHT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -368,8 +286,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_KEYBOARD_ID,
+            self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_KEYBOARD,
             self.REGION_LEFT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -379,8 +297,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
             self.REGION_LEFT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -390,8 +308,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.RIGHT_SPEAKER_ID,
+            self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
+            self.AreaIDS.RIGHT_SPEAKER_ID,
             TEXT_DESCRIPTION_RIGHT_SPEAKER,
             self.REGION_RIGHT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -401,8 +319,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.LEFT_SPEAKER_ID,
+            self.AreaIDS.LEFT_SPEAKER_ID] = Region(
+            self.AreaIDS.LEFT_SPEAKER_ID,
             TEXT_DESCRIPTION_LEFT_SPEAKER,
             self.REGION_LEFT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -412,8 +330,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_HEAD_ID] = Region(
-            self.CodeAreaNames.ALIEN_HEAD_ID,
+            self.AreaIDS.ALIEN_HEAD_ID] = Region(
+            self.AreaIDS.ALIEN_HEAD_ID,
             TEXT_DESCRIPTION_ALIENWARE_HEAD,
             self.REGION_ALIEN_HEAD,
             self.SUPPORTED_COMMANDS,
@@ -423,8 +341,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_LOGO_ID] = Region(
-            self.CodeAreaNames.ALIEN_LOGO_ID,
+            self.AreaIDS.ALIEN_LOGO_ID] = Region(
+            self.AreaIDS.ALIEN_LOGO_ID,
             TEXT_DESCRIPTION_ALIENWARE_LOGO,
             self.REGION_ALIEN_NAME,
             self.SUPPORTED_COMMANDS,
@@ -434,8 +352,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.TOUCH_PAD_ID] = Region(
-            self.CodeAreaNames.TOUCH_PAD_ID,
+            self.AreaIDS.TOUCH_PAD_ID] = Region(
+            self.AreaIDS.TOUCH_PAD_ID,
             TEXT_DESCRIPTION_TOUCHPAD,
             self.REGION_TOUCH_PAD,
             self.SUPPORTED_COMMANDS,
@@ -445,8 +363,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.MEDIA_BAR_ID] = Region(
-            self.CodeAreaNames.MEDIA_BAR_ID,
+            self.AreaIDS.MEDIA_BAR_ID] = Region(
+            self.AreaIDS.MEDIA_BAR_ID,
             TEXT_DESCRIPTION_MEDIA_BAR,
             self.REGION_MEDIA_BAR,
             self.SUPPORTED_COMMANDS,
@@ -456,8 +374,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID,
+            self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_EYES_ID,
             TEXT_DESCRIPTION_ALIENWARE_POWERBUTTON_EYES,
             self.REGION_POWER_BUTTON_EYES,
             1,
@@ -467,8 +385,8 @@ class M14XR1(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_ID,
+            self.AreaIDS.POWER_BUTTON_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_ID,
             TEXT_DESCRIPTION_POWER_BUTTON,
             self.REGION_POWER_BUTTON,
             2,
@@ -497,30 +415,10 @@ class Alienware13(CommonConf):
         self.REGION_HARD_DISK_DRIVE = 0x0200
         self.REGION_CAPS_LOCK = 0x80
 
-        self.suportedMode['normal'] = PowerMode(
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.BLOCK_LOAD_ON_BOOT)
-        self.suportedMode['standby'] = PowerMode(
-            self.CodeAreaNames.STANDBY_ID,
-            TEXT_DESCRIPTION_STAND_BY,
-            self.BLOCK_STANDBY)
-        self.suportedMode['acPower'] = PowerMode(
-            self.CodeAreaNames.AC_POWER_ID,
-            TEXT_DESCRIPTION_AC_POWER,
-            self.BLOCK_AC_POWER)
-        self.suportedMode['charging'] = PowerMode(
-            self.CodeAreaNames.CHARGING_ID,
-            TEXT_DESCRIPTION_CHARGING,
-            self.BLOCK_CHARGING)
-        self.suportedMode['onBat'] = PowerMode(
-            self.CodeAreaNames.ON_BATTERY_ID,
-            TEXT_DESCRIPTION_ON_BATTERY,
-            self.BLOCK_BAT_POWER)
 
         self.regions[
-            self.CodeAreaNames.HARD_DISK_DRIVE_ID] = Region(
-            self.CodeAreaNames.HARD_DISK_DRIVE_ID,
+            self.AreaIDS.HARD_DISK_DRIVE_ID] = Region(
+            self.AreaIDS.HARD_DISK_DRIVE_ID,
             TEXT_DESCRIPTION_HDD,
             self.REGION_HARD_DISK_DRIVE,
             self.SUPPORTED_COMMANDS,
@@ -530,8 +428,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
             self.REGION_RIGHT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -541,8 +439,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.CAPS_LOCK_ID] = Region(
-            self.CodeAreaNames.CAPS_LOCK_ID,
+            self.AreaIDS.CAPS_LOCK_ID] = Region(
+            self.AreaIDS.CAPS_LOCK_ID,
             TEXT_DESCRIPTION_CAPS_LOCK,
             self.REGION_CAPS_LOCK,
             self.SUPPORTED_COMMANDS,
@@ -552,8 +450,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_KEYBOARD,
             self.REGION_RIGHT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -563,8 +461,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
             self.REGION_RIGHT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -574,8 +472,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_KEYBOARD_ID,
+            self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_KEYBOARD,
             self.REGION_LEFT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -585,8 +483,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
             self.REGION_LEFT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -596,8 +494,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_HEAD_ID] = Region(
-            self.CodeAreaNames.ALIEN_HEAD_ID,
+            self.AreaIDS.ALIEN_HEAD_ID] = Region(
+            self.AreaIDS.ALIEN_HEAD_ID,
             TEXT_DESCRIPTION_ALIENWARE_HEAD,
             self.REGION_ALIEN_HEAD,
             self.SUPPORTED_COMMANDS,
@@ -607,8 +505,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_LOGO_ID] = Region(
-            self.CodeAreaNames.ALIEN_LOGO_ID,
+            self.AreaIDS.ALIEN_LOGO_ID] = Region(
+            self.AreaIDS.ALIEN_LOGO_ID,
             TEXT_DESCRIPTION_ALIENWARE_LOGO,
             self.REGION_ALIEN_NAME,
             self.SUPPORTED_COMMANDS,
@@ -618,8 +516,8 @@ class Alienware13(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_OUTER_LID_ID] = Region(
-            self.CodeAreaNames.ALIEN_OUTER_LID_ID,
+            self.AreaIDS.ALIEN_OUTER_LID_ID] = Region(
+            self.AreaIDS.ALIEN_OUTER_LID_ID,
             TEXT_DESCRIPTION_OUTER_LID,
             self.REGION_OUTER_LID,
             self.SUPPORTED_COMMANDS,
@@ -666,30 +564,9 @@ class M15XArea51(CommonConf):
         self.REGION_POWER_BUTTON = 0x008000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.suportedMode['normal'] = PowerMode(
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.BLOCK_LOAD_ON_BOOT)
-        self.suportedMode['standby'] = PowerMode(
-            self.CodeAreaNames.STANDBY_ID,
-            TEXT_DESCRIPTION_STAND_BY,
-            self.BLOCK_STANDBY)
-        self.suportedMode['acPower'] = PowerMode(
-            self.CodeAreaNames.AC_POWER_ID,
-            TEXT_DESCRIPTION_AC_POWER,
-            self.BLOCK_AC_POWER)
-        self.suportedMode['charging'] = PowerMode(
-            self.CodeAreaNames.CHARGING_ID,
-            TEXT_DESCRIPTION_CHARGING,
-            self.BLOCK_CHARGING)
-        self.suportedMode['onBat'] = PowerMode(
-            self.CodeAreaNames.ON_BATTERY_ID,
-            TEXT_DESCRIPTION_ON_BATTERY,
-            self.BLOCK_BAT_POWER)
-
         self.regions[
-            self.CodeAreaNames.LIGHT_PIPE_ID] = Region(
-            self.CodeAreaNames.LIGHT_PIPE_ID,
+            self.AreaIDS.LIGHT_PIPE_ID] = Region(
+            self.AreaIDS.LIGHT_PIPE_ID,
             TEXT_DESCRIPTION_LIGHT_PIPE,
             self.REGION_LIGHTPIPE,
             self.SUPPORTED_COMMANDS,
@@ -699,8 +576,8 @@ class M15XArea51(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.KEYBOARD_ID] = Region(
-            self.CodeAreaNames.KEYBOARD_ID,
+            self.AreaIDS.KEYBOARD_ID] = Region(
+            self.AreaIDS.KEYBOARD_ID,
             TEXT_DESCRIPTION_KEYBOARD,
             self.REGION_KEY_BOARD,
             self.SUPPORTED_COMMANDS,
@@ -710,8 +587,8 @@ class M15XArea51(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_HEAD_ID] = Region(
-            self.CodeAreaNames.ALIEN_HEAD_ID,
+            self.AreaIDS.ALIEN_HEAD_ID] = Region(
+            self.AreaIDS.ALIEN_HEAD_ID,
             TEXT_DESCRIPTION_ALIENWARE_HEAD,
             self.REGION_ALIEN_HEAD,
             self.SUPPORTED_COMMANDS,
@@ -721,8 +598,8 @@ class M15XArea51(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_LOGO_ID] = Region(
-            self.CodeAreaNames.ALIEN_LOGO_ID,
+            self.AreaIDS.ALIEN_LOGO_ID] = Region(
+            self.AreaIDS.ALIEN_LOGO_ID,
             TEXT_DESCRIPTION_ALIENWARE_LOGO,
             self.REGION_ALIEN_LOGO,
             self.SUPPORTED_COMMANDS,
@@ -732,8 +609,8 @@ class M15XArea51(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.TOUCH_PAD_ID] = Region(
-            self.CodeAreaNames.TOUCH_PAD_ID,
+            self.AreaIDS.TOUCH_PAD_ID] = Region(
+            self.AreaIDS.TOUCH_PAD_ID,
             TEXT_DESCRIPTION_TOUCHPAD,
             self.REGION_TOUCH_PAD,
             self.SUPPORTED_COMMANDS,
@@ -743,8 +620,8 @@ class M15XArea51(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.MEDIA_BAR_ID] = Region(
-            self.CodeAreaNames.MEDIA_BAR_ID,
+            self.AreaIDS.MEDIA_BAR_ID] = Region(
+            self.AreaIDS.MEDIA_BAR_ID,
             TEXT_DESCRIPTION_MEDIA_BAR,
             self.REGION_TOUCH_PANEL,
             self.SUPPORTED_COMMANDS,
@@ -754,8 +631,8 @@ class M15XArea51(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_ID,
+            self.AreaIDS.POWER_BUTTON_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_ID,
             TEXT_DESCRIPTION_POWER_BUTTON,
             self.REGION_POWER_BUTTON,
             1,
@@ -789,30 +666,9 @@ class Alienware15(CommonConf):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         # 0x1800 primitive speaker-both
 
-        self.suportedMode['normal'] = PowerMode(
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.BLOCK_LOAD_ON_BOOT)
-        self.suportedMode['standby'] = PowerMode(
-            self.CodeAreaNames.STANDBY_ID,
-            TEXT_DESCRIPTION_STAND_BY,
-            self.BLOCK_STANDBY)
-        self.suportedMode['acPower'] = PowerMode(
-            self.CodeAreaNames.AC_POWER_ID,
-            TEXT_DESCRIPTION_AC_POWER,
-            self.BLOCK_AC_POWER)
-        self.suportedMode['charging'] = PowerMode(
-            self.CodeAreaNames.CHARGING_ID,
-            TEXT_DESCRIPTION_CHARGING,
-            self.BLOCK_CHARGING)
-        self.suportedMode['onBat'] = PowerMode(
-            self.CodeAreaNames.ON_BATTERY_ID,
-            TEXT_DESCRIPTION_ON_BATTERY,
-            self.BLOCK_BAT_POWER)
-
         self.regions[
-            self.CodeAreaNames.TACTX_ID] = Region(
-            self.CodeAreaNames.TACTX_ID,
+            self.AreaIDS.TACTX_ID] = Region(
+            self.AreaIDS.TACTX_ID,
             TEXT_DESCRIPTION_TACTX,
             self.REGION_TACTX,
             self.SUPPORTED_COMMANDS,
@@ -822,8 +678,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_KEYBOARD,
             self.REGION_RIGHT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -833,8 +689,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
             self.REGION_RIGHT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -844,8 +700,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_KEYBOARD_ID,
+            self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_KEYBOARD,
             self.REGION_LEFT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -855,8 +711,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
             self.REGION_LEFT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -866,8 +722,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.RIGHT_SPEAKER_ID,
+            self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
+            self.AreaIDS.RIGHT_SPEAKER_ID,
             TEXT_DESCRIPTION_RIGHT_SPEAKER,
             self.REGION_RIGHT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -877,8 +733,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.LEFT_SPEAKER_ID,
+            self.AreaIDS.LEFT_SPEAKER_ID] = Region(
+            self.AreaIDS.LEFT_SPEAKER_ID,
             TEXT_DESCRIPTION_LEFT_SPEAKER,
             self.REGION_LEFT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -888,8 +744,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_HEAD_ID] = Region(
-            self.CodeAreaNames.ALIEN_HEAD_ID,
+            self.AreaIDS.ALIEN_HEAD_ID] = Region(
+            self.AreaIDS.ALIEN_HEAD_ID,
             TEXT_DESCRIPTION_ALIENWARE_HEAD,
             self.REGION_ALIEN_HEAD,
             self.SUPPORTED_COMMANDS,
@@ -899,8 +755,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_LOGO_ID] = Region(
-            self.CodeAreaNames.ALIEN_LOGO_ID,
+            self.AreaIDS.ALIEN_LOGO_ID] = Region(
+            self.AreaIDS.ALIEN_LOGO_ID,
             TEXT_DESCRIPTION_ALIENWARE_LOGO,
             self.REGION_ALIEN_NAME,
             self.SUPPORTED_COMMANDS,
@@ -910,8 +766,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.TOUCH_PAD_ID] = Region(
-            self.CodeAreaNames.TOUCH_PAD_ID,
+            self.AreaIDS.TOUCH_PAD_ID] = Region(
+            self.AreaIDS.TOUCH_PAD_ID,
             TEXT_DESCRIPTION_TOUCHPAD,
             self.REGION_TOUCH_PAD,
             self.SUPPORTED_COMMANDS,
@@ -921,8 +777,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.MEDIA_BAR_ID] = Region(
-            self.CodeAreaNames.MEDIA_BAR_ID,
+            self.AreaIDS.MEDIA_BAR_ID] = Region(
+            self.AreaIDS.MEDIA_BAR_ID,
             TEXT_DESCRIPTION_MEDIA_BAR,
             self.REGION_MEDIA_BAR,
             self.SUPPORTED_COMMANDS,
@@ -932,8 +788,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID,
+            self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_EYES_ID,
             TEXT_DESCRIPTION_ALIENWARE_POWERBUTTON_EYES,
             self.REGION_POWER_BUTTON_EYES,
             1,
@@ -943,8 +799,8 @@ class Alienware15(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_ID,
+            self.AreaIDS.POWER_BUTTON_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_ID,
             TEXT_DESCRIPTION_POWER_BUTTON,
             self.REGION_POWER_BUTTON,
             2,
@@ -983,30 +839,10 @@ class M17X(CommonConf):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.suportedMode['normal'] = PowerMode(
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.BLOCK_LOAD_ON_BOOT)
-        self.suportedMode['standby'] = PowerMode(
-            self.CodeAreaNames.STANDBY_ID,
-            TEXT_DESCRIPTION_STAND_BY,
-            self.BLOCK_STANDBY)
-        self.suportedMode['acPower'] = PowerMode(
-            self.CodeAreaNames.AC_POWER_ID,
-            TEXT_DESCRIPTION_AC_POWER,
-            self.BLOCK_AC_POWER)
-        self.suportedMode['charging'] = PowerMode(
-            self.CodeAreaNames.CHARGING_ID,
-            TEXT_DESCRIPTION_CHARGING,
-            self.BLOCK_CHARGING)
-        self.suportedMode['onBat'] = PowerMode(
-            self.CodeAreaNames.ON_BATTERY_ID,
-            TEXT_DESCRIPTION_ON_BATTERY,
-            self.BLOCK_BAT_POWER)
 
         self.regions[
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_KEYBOARD,
             self.REGION_RIGHT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1016,8 +852,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
             self.REGION_RIGHT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1027,8 +863,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_KEYBOARD_ID,
+            self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_KEYBOARD,
             self.REGION_LEFT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1038,8 +874,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
             self.REGION_LEFT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1049,8 +885,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.RIGHT_SPEAKER_ID,
+            self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
+            self.AreaIDS.RIGHT_SPEAKER_ID,
             TEXT_DESCRIPTION_RIGHT_SPEAKER,
             self.REGION_RIGHT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -1060,8 +896,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.LEFT_SPEAKER_ID,
+            self.AreaIDS.LEFT_SPEAKER_ID] = Region(
+            self.AreaIDS.LEFT_SPEAKER_ID,
             TEXT_DESCRIPTION_LEFT_SPEAKER,
             self.REGION_LEFT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -1071,8 +907,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_HEAD_ID] = Region(
-            self.CodeAreaNames.ALIEN_HEAD_ID,
+            self.AreaIDS.ALIEN_HEAD_ID] = Region(
+            self.AreaIDS.ALIEN_HEAD_ID,
             TEXT_DESCRIPTION_ALIENWARE_HEAD,
             self.REGION_ALIEN_HEAD,
             self.SUPPORTED_COMMANDS,
@@ -1082,8 +918,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_LOGO_ID] = Region(
-            self.CodeAreaNames.ALIEN_LOGO_ID,
+            self.AreaIDS.ALIEN_LOGO_ID] = Region(
+            self.AreaIDS.ALIEN_LOGO_ID,
             TEXT_DESCRIPTION_ALIENWARE_LOGO,
             self.REGION_ALIEN_NAME,
             self.SUPPORTED_COMMANDS,
@@ -1093,8 +929,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.TOUCH_PAD_ID] = Region(
-            self.CodeAreaNames.TOUCH_PAD_ID,
+            self.AreaIDS.TOUCH_PAD_ID] = Region(
+            self.AreaIDS.TOUCH_PAD_ID,
             TEXT_DESCRIPTION_TOUCHPAD,
             self.REGION_TOUCH_PAD,
             self.SUPPORTED_COMMANDS,
@@ -1104,8 +940,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.MEDIA_BAR_ID] = Region(
-            self.CodeAreaNames.MEDIA_BAR_ID,
+            self.AreaIDS.MEDIA_BAR_ID] = Region(
+            self.AreaIDS.MEDIA_BAR_ID,
             TEXT_DESCRIPTION_MEDIA_BAR,
             self.REGION_MEDIA_BAR,
             self.SUPPORTED_COMMANDS,
@@ -1115,8 +951,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID,
+            self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_EYES_ID,
             TEXT_DESCRIPTION_ALIENWARE_POWERBUTTON_EYES,
             self.REGION_POWER_BUTTON_EYES,
             1,
@@ -1126,8 +962,8 @@ class M17X(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_ID,
+            self.AreaIDS.POWER_BUTTON_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_ID,
             TEXT_DESCRIPTION_POWER_BUTTON,
             self.REGION_POWER_BUTTON,
             2,
@@ -1159,30 +995,10 @@ class M17XR2(CommonConf):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.suportedMode['normal'] = PowerMode(
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.BLOCK_LOAD_ON_BOOT)
-        self.suportedMode['standby'] = PowerMode(
-            self.CodeAreaNames.STANDBY_ID,
-            TEXT_DESCRIPTION_STAND_BY,
-            self.BLOCK_STANDBY)
-        self.suportedMode['acPower'] = PowerMode(
-            self.CodeAreaNames.AC_POWER_ID,
-            TEXT_DESCRIPTION_AC_POWER,
-            self.BLOCK_AC_POWER)
-        self.suportedMode['charging'] = PowerMode(
-            self.CodeAreaNames.CHARGING_ID,
-            TEXT_DESCRIPTION_CHARGING,
-            self.BLOCK_CHARGING)
-        self.suportedMode['onBat'] = PowerMode(
-            self.CodeAreaNames.ON_BATTERY_ID,
-            TEXT_DESCRIPTION_ON_BATTERY,
-            self.BLOCK_BAT_POWER)
 
         self.regions[
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_KEYBOARD,
             self.REGION_RIGHT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1192,8 +1008,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
             self.REGION_RIGHT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1203,8 +1019,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_KEYBOARD_ID,
+            self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_KEYBOARD,
             self.REGION_LEFT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1214,8 +1030,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
             self.REGION_LEFT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1225,8 +1041,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.RIGHT_SPEAKER_ID,
+            self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
+            self.AreaIDS.RIGHT_SPEAKER_ID,
             TEXT_DESCRIPTION_RIGHT_SPEAKER,
             self.REGION_RIGHT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -1236,8 +1052,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.LEFT_SPEAKER_ID,
+            self.AreaIDS.LEFT_SPEAKER_ID] = Region(
+            self.AreaIDS.LEFT_SPEAKER_ID,
             TEXT_DESCRIPTION_LEFT_SPEAKER,
             self.REGION_LEFT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -1247,8 +1063,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_HEAD_ID] = Region(
-            self.CodeAreaNames.ALIEN_HEAD_ID,
+            self.AreaIDS.ALIEN_HEAD_ID] = Region(
+            self.AreaIDS.ALIEN_HEAD_ID,
             TEXT_DESCRIPTION_ALIENWARE_HEAD,
             self.REGION_ALIEN_HEAD,
             self.SUPPORTED_COMMANDS,
@@ -1258,8 +1074,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_LOGO_ID] = Region(
-            self.CodeAreaNames.ALIEN_LOGO_ID,
+            self.AreaIDS.ALIEN_LOGO_ID] = Region(
+            self.AreaIDS.ALIEN_LOGO_ID,
             TEXT_DESCRIPTION_ALIENWARE_LOGO,
             self.REGION_ALIEN_NAME,
             self.SUPPORTED_COMMANDS,
@@ -1269,8 +1085,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.TOUCH_PAD_ID] = Region(
-            self.CodeAreaNames.TOUCH_PAD_ID,
+            self.AreaIDS.TOUCH_PAD_ID] = Region(
+            self.AreaIDS.TOUCH_PAD_ID,
             TEXT_DESCRIPTION_TOUCHPAD,
             self.REGION_TOUCH_PAD,
             self.SUPPORTED_COMMANDS,
@@ -1280,8 +1096,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.MEDIA_BAR_ID] = Region(
-            self.CodeAreaNames.MEDIA_BAR_ID,
+            self.AreaIDS.MEDIA_BAR_ID] = Region(
+            self.AreaIDS.MEDIA_BAR_ID,
             TEXT_DESCRIPTION_MEDIA_BAR,
             self.REGION_MEDIA_BAR,
             self.SUPPORTED_COMMANDS,
@@ -1291,8 +1107,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID,
+            self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_EYES_ID,
             TEXT_DESCRIPTION_ALIENWARE_POWERBUTTON_EYES,
             self.REGION_POWER_BUTTON_EYES,
             1,
@@ -1302,8 +1118,8 @@ class M17XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_ID,
+            self.AreaIDS.POWER_BUTTON_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_ID,
             TEXT_DESCRIPTION_POWER_BUTTON,
             self.REGION_POWER_BUTTON,
             2,
@@ -1342,30 +1158,10 @@ class M18XR2(CommonConf):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.suportedMode['normal'] = PowerMode(
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.CodeAreaNames.ALIEN_FX_DEFAULT_POWER_MODE,
-            self.BLOCK_LOAD_ON_BOOT)
-        self.suportedMode['standby'] = PowerMode(
-            self.CodeAreaNames.STANDBY_ID,
-            TEXT_DESCRIPTION_STAND_BY,
-            self.BLOCK_STANDBY)
-        self.suportedMode['acPower'] = PowerMode(
-            self.CodeAreaNames.AC_POWER_ID,
-            TEXT_DESCRIPTION_AC_POWER,
-            self.BLOCK_AC_POWER)
-        self.suportedMode['charging'] = PowerMode(
-            self.CodeAreaNames.CHARGING_ID,
-            TEXT_DESCRIPTION_CHARGING,
-            self.BLOCK_CHARGING)
-        self.suportedMode['onBat'] = PowerMode(
-            self.CodeAreaNames.ON_BATTERY_ID,
-            TEXT_DESCRIPTION_ON_BATTERY,
-            self.BLOCK_BAT_POWER)
 
         self.regions[
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_KEYBOARD,
             self.REGION_RIGHT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1375,8 +1171,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.RIGHT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
             self.REGION_RIGHT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1386,8 +1182,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_KEYBOARD_ID,
+            self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_KEYBOARD,
             self.REGION_LEFT_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1397,8 +1193,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID] = Region(
-            self.CodeAreaNames.LEFT_CENTER_KEYBOARD_ID,
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
+            self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
             TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
             self.REGION_LEFT_CENTER_KEYBOARD,
             self.SUPPORTED_COMMANDS,
@@ -1408,8 +1204,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.RIGHT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.RIGHT_SPEAKER_ID,
+            self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
+            self.AreaIDS.RIGHT_SPEAKER_ID,
             TEXT_DESCRIPTION_RIGHT_SPEAKER,
             self.REGION_RIGHT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -1419,8 +1215,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.LEFT_SPEAKER_ID] = Region(
-            self.CodeAreaNames.LEFT_SPEAKER_ID,
+            self.AreaIDS.LEFT_SPEAKER_ID] = Region(
+            self.AreaIDS.LEFT_SPEAKER_ID,
             TEXT_DESCRIPTION_LEFT_SPEAKER,
             self.REGION_LEFT_SPEAKER,
             self.SUPPORTED_COMMANDS,
@@ -1430,8 +1226,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_HEAD_ID] = Region(
-            self.CodeAreaNames.ALIEN_HEAD_ID,
+            self.AreaIDS.ALIEN_HEAD_ID] = Region(
+            self.AreaIDS.ALIEN_HEAD_ID,
             TEXT_DESCRIPTION_ALIENWARE_HEAD,
             self.REGION_ALIEN_HEAD,
             self.SUPPORTED_COMMANDS,
@@ -1441,8 +1237,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.ALIEN_LOGO_ID] = Region(
-            self.CodeAreaNames.ALIEN_LOGO_ID,
+            self.AreaIDS.ALIEN_LOGO_ID] = Region(
+            self.AreaIDS.ALIEN_LOGO_ID,
             TEXT_DESCRIPTION_ALIENWARE_LOGO,
             self.REGION_ALIEN_NAME,
             self.SUPPORTED_COMMANDS,
@@ -1452,8 +1248,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.TOUCH_PAD_ID] = Region(
-            self.CodeAreaNames.TOUCH_PAD_ID,
+            self.AreaIDS.TOUCH_PAD_ID] = Region(
+            self.AreaIDS.TOUCH_PAD_ID,
             TEXT_DESCRIPTION_TOUCHPAD,
             self.REGION_TOUCH_PAD,
             self.SUPPORTED_COMMANDS,
@@ -1463,8 +1259,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.MEDIA_BAR_ID] = Region(
-            self.CodeAreaNames.MEDIA_BAR_ID,
+            self.AreaIDS.MEDIA_BAR_ID] = Region(
+            self.AreaIDS.MEDIA_BAR_ID,
             TEXT_DESCRIPTION_MEDIA_BAR,
             self.REGION_MEDIA_BAR,
             self.SUPPORTED_COMMANDS,
@@ -1474,8 +1270,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_EYES_ID,
+            self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_EYES_ID,
             TEXT_DESCRIPTION_ALIENWARE_POWERBUTTON_EYES,
             self.REGION_POWER_BUTTON_EYES,
             1,
@@ -1485,8 +1281,8 @@ class M18XR2(CommonConf):
             self.default_color,
             self.suportedMode)
         self.regions[
-            self.CodeAreaNames.POWER_BUTTON_ID] = Region(
-            self.CodeAreaNames.POWER_BUTTON_ID,
+            self.AreaIDS.POWER_BUTTON_ID] = Region(
+            self.AreaIDS.POWER_BUTTON_ID,
             TEXT_DESCRIPTION_POWER_BUTTON,
             self.REGION_POWER_BUTTON,
             2,

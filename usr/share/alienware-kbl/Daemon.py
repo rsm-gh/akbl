@@ -101,18 +101,17 @@ class Daemon:
         self._controller.Add_Speed_Conf(self._theme.speed)
 
         try:  # Patch (#12)
-            os.utime(self.theme.path, None)
+            os.utime(self._theme.path, None)
         except Exception as e:
             print(
-                'Warning: It was not possible to os.utime the profile path: \n{}'.format(
+                '''Warning: It was not possible to `os.utime` the theme's path: \n{}'''.format(
                     self._theme.path))
             print(format_exc())
 
         try:
             self._indicator_send_code(100)
             self._indicator_pyro.load_profiles(
-                list(
-                    Configuration.profiles.keys()),
+                list(Configuration.profiles.keys()),
                 self.profile_name,
                 self._lights_state)
         except Exception as e:
@@ -136,7 +135,7 @@ class Daemon:
             try:
                 self._indicator_pyro.set_code(val)
             except Exception as e:
-                format_exc()
+                print(format_exc())
 
     """
         General Bindings
