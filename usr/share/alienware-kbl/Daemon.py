@@ -101,10 +101,10 @@ class Daemon:
         self._controller.Add_Speed_Conf(self._theme.speed)
 
         try:  # Patch (#12)
-            os.utime(self.theme.path, None)
+            os.utime(self._theme.path, None)
         except Exception as e:
             print(
-                'Warning: It was not possible to os.utime the profile path: \n{}'.format(
+                '''Warning: It was not possible to `os.utime` the theme's path: \n{}'''.format(
                     self._theme.path))
             print(format_exc())
 
