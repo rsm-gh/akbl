@@ -6,3 +6,7 @@ __pycache__/
 # Backup files
 #
 **~
+
+# Created with some program related to the PEP8
+#
+.cache

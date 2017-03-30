@@ -23,6 +23,7 @@ import os
 import time
 import usb
 from copy import copy
+from traceback import format_exc
 
 # local imports
 from Computers import AllComputers, CommonConf
@@ -41,95 +42,76 @@ class Driver(AllComputers):
         self.READ_VALUE = 0x101
         self.READ_INDEX = 0x0
 
-        # Initializing !
-        # find our device
-        if not self.FindDevice():
-            self.not_found = True
-            return
-        else:
-            self.not_found = False
+        self.computer = None
+        self._device = None
+        self._device_found = False
 
-        self.Take_over()
-
-    def FindDevice(self, id_vendor=False, id_product=False):
-        """
-            Look for all the devices listed in the Computer file, if found return True, else return False.
-            If a computer is found, the device is loaded, as well as all the parameters for the computer
-            (which are in the Computer)
-        """
-
-        #
-        #   Block Testing
-        #
-        if id_vendor or id_product:
-            """
-                Normally if the id_vendor or id_product are supplied it is because the block
-                testing, and the block testing needs both so:
-            """
-            if not id_vendor or not id_product:
-                return False
-
-            try:
-                dev = usb.core.find(idVendor=id_vendor, idProduct=id_product)
-
-                if dev is not None:
-
-                    self.computer_name = 'Block Testing'
-                    self.vendorId = id_vendor
-                    self.productId = id_product
-                    self.dev = dev
-                    self.computer = CommonConf()
-
-                    self.Take_over()
-                    return True
-            except Exception as e:
-                print(e)
-
+    def has_device(self):
+        if self._device is None:
             return False
+        return True
 
-        #   Normal initialization
-        #
-        for computer in sorted(self.computerList.keys()):
-            dev = usb.core.find(
-                idVendor=self.computerList[computer].vendorId,
-                idProduct=self.computerList[computer].productId)
+    def find_device(self, id_vendor=False, id_product=False):
+        """
+            Look for all the devices listed in the `Computer.py` file.
+            If a computer is finded, the device is loaded as well as 
+            all the parameters of the computer.
+        """
 
-            if dev is not None:
+        if id_vendor and id_product:
+            try:
+                device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
+            except Exception as e:
+                print(format_exc())
 
-                # This hack was made to differenciate the M14XR1 from the R2
+                if device is not None:
+                    self.computer_name = 'Block Testing'
+                    self.vendor_id = id_vendor
+                    self.product_id = id_product
+                    self.computer = CommonConf()
+                    self._device = device
+                    self.take_over()
+                    return
+
+        for computer_name in sorted(self.computers_list.keys()):
+            device = usb.core.find(
+                idVendor=self.computers_list[computer_name].vendor_id,
+                idProduct=self.computers_list[computer_name].product_id)
+
+            if device is not None:
+
+                # This hack was made to differenciate the M14XR1 from the M14XR2R2
                 if computer == 'M14XR1' and 'Gaming' in str(dev):
                     computer = 'M14XR2'
 
                 self.computer_name = computer
-                self.computer = self.computerList[computer].computer
-                self.vendorId = self.computerList[computer].vendorId
-                self.productId = self.computerList[computer].productId
-                self.dev = dev
+                self.computer = self.computers_list[computer_name].computer
+                self.vendor_id = self.computers_list[computer_name].vendor_id
+                self.product_id = self.computers_list[computer_name].product_id
+                self._device = device
+                self.take_over()
+                return
 
-                return True
-
-        return False
-
-    def WriteDevice(self, MSG):
+    def write_device(self, MSG):
         if len(MSG[0].packet) == self.computer.DATA_LENGTH:
             for msg in MSG:
                 time.sleep(0.02)
-                self.dev.ctrl_transfer(
+                self._device.ctrl_transfer(
                     self.SEND_REQUEST_TYPE,
                     self.SEND_REQUEST,
                     self.SEND_VALUE,
                     self.SEND_INDEX,
                     msg.packet)
         else:
-            self.dev.ctrl_transfer(
+            self._device.ctrl_transfer(
                 self.SEND_REQUEST_TYPE,
                 self.SEND_REQUEST,
                 self.SEND_VALUE,
                 self.SEND_INDEX,
                 MSG)
 
-    def ReadDevice(self, msg):
-        msg = self.dev.ctrl_transfer(
+    def read_device(self, msg):
+        msg = self._device.ctrl_transfer(
             self.READ_REQUEST_TYPE, 
             self.READ_REQUEST, 
             self.READ_VALUE, 
@@ -138,16 +120,15 @@ class Driver(AllComputers):
 
         return msg
 
-    def Take_over(self):
+    def take_over(self):
         try:
-            self.dev.set_configuration()
+            self._device.set_configuration()
         except:
-            self.dev.detach_kernel_driver(0)
+            self._device.detach_kernel_driver(0)
             try:
-                self.dev.set_configuration()
+                self._device.set_configuration()
             except Exception as e:
-                raise DeviceNotFound(
-                    "Can't set the configuration. Error: {}".format(e))
+                raise DeviceNotFound("Can't set the configuration. Error: {}".format(e))
                 sys.exit(1)
 
 
@@ -155,165 +136,162 @@ class Controller:
 
     def __init__(self, driver):
         self.driver = driver
+        self.constructor = None
 
-    def Bye(self):
+    def quit(self):
         sys.exit(0)
 
-    def Set_Loop(self, action):
-        self.WaitForOk()
-        self.driver.WriteDevice(action)
+    def set_loop(self, action):
+        self.wait_for_ok()
+        self.driver.write_device(action)
 
-    def Set_Loop_Conf(self, Save=False, block=0x01):
-        self.request = Constructor(self.driver, Save, block)
+    def set_loop_conf(self, save=False, block=0x01):
+        self.constructor = Constructor(self.driver, save, block)
 
-    def Add_Loop_Conf(self, area, mode, color1, color2=None):
+    def add_loop_conf(self, area, mode, left_color, right_color=None):
 
         if not isinstance(area, list):
-            area = self.request.Area(area)
+            area = self.constructor.parse_areas(area)
 
-        if not isinstance(color1, list):
-            color1 = self.request.Color(color1)
+        if not isinstance(left_color, list):
+            left_color = self.constructor.convert_color(left_color)
 
-        if not isinstance(color2, list) and color2:
-            color2 = self.request.Color2(color2)
+        if right_color is not None and not isinstance(right_color, list):
+            right_color = self.constructor.convert_color(right_color)
 
         if mode == 'fixed':
-            self.request.Set_Color(area, color1)
+            self.constructor.set_fixed_color(area, left_color)
         elif mode == 'blink':
-            self.request.Set_Blink_Color(area, color1)
-        elif mode == 'morph' and color2:
-            self.request.Set_Morph_Color(area, color1, color2)
+            self.constructor.set_blink_color(area, left_color)
+        elif mode == 'morph' and right_color:
+            self.constructor.set_color_morph(area, left_color, right_color)
+        else:
+            print('Warning: wrong mode `{}` on `add_loop_conf` of `Controller`.'.format(mode))
 
-    def Add_Speed_Conf(self, speed=0xc800):
-        self.request.Set_Speed(speed)
+    def add_speed_conf(self, speed=0xc800):
+        self.constructor.set_speed(speed)
 
-    def End_Loop_Conf(self):
-        self.request.End_Loop()
+    def end_loop_conf(self):
+        self.constructor.end_loop()
 
-    def End_Transfert_Conf(self):
-        self.request.End_Transfert()
+    def end_transfer_conf(self):
+        self.constructor.end_transfer()
 
-    def Write_Conf(self):
-        self.WaitForOk()
-        self.driver.WriteDevice(self.request)
+    def write_conf(self):
+        self.wait_for_ok()
+        self.driver.write_device(self.request)
 
-    def Set_Color(self, Area, Color, Save=False, Apply=False, block=0x01):
-        """Set the Color of an Area """
+    def set_color(self, area, color, save=False, Apply=False, block=0x01):
 
-        request = Constructor(self.driver, Save, block)
-        if not isinstance(Area, list):
-            Area = request.Area(Area)
-        if not isinstance(Color, list):
-            Color = request.Color(Color)
+        constructor = Constructor(self.driver, save, block)
+        if not isinstance(area, list):
+            area = constructor.parse_areas(area)
 
-        self.WaitForOk()
-        request.Set_Color(Area, Color)
-        request.End_Loop()
-        request.End_Transfert()
-        self.driver.WriteDevice(request)
+        if not isinstance(color, list):
+            color = constructor.convert_color(color)
 
-        if Apply:
-            self.WaitForOk()
-            request = Constructor(self.driver, False, block)
-            request.Set_Color(Area, Color)
-            request.End_Loop()
-            request.End_Transfert()
-            self.driver.WriteDevice(request)
-
-    def Set_Color_Blink(
-            self,
-            Area,
-            Color,
-            Save=False,
-            Apply=False,
-            block=0x01):
-        self.WaitForOk()
-        request = Constructor(self.driver, Save, block)
-        if not isinstance(Area, list):
-            Area = request.Area(Area)
-        if not isinstance(Color, list):
-            Color = request.Color(Color)
-        request.Set_Speed()
-        request.Set_Blink_Color(Area, Color)
-        request.End_Loop()
-        request.End_Transfert()
-        self.driver.WriteDevice(request)
+        self.wait_for_ok()
+        constructor.set_color(area, color)
+        constructor.end_loop()
+        constructor.end_transfer()
+        self.driver.write_device(constructor)
 
         if Apply:
-            self.WaitForOk()
-            request = Constructor(self.driver)
-            request.Set_Speed()
-            request.Set_Blink_Color(Area, Color)
-            request.End_Loop()
-            request.End_Transfert()
-            self.driver.WriteDevice(request)
+            self.wait_for_ok()
+            constructor = Constructor(self.driver, False, block)
+            constructor.set_color(area, color)
+            constructor.end_loop()
+            constructor.end_transfer()
+            self.driver.write_device(constructor)
 
-    def Set_Color_Morph(
-            self,
-            Area,
-            Color1,
-            Color2,
-            Save=False,
-            Apply=False,
-            block=0x01):
-        self.WaitForOk()
-        request = Constructor(self.driver, Save, block)
-        if not isinstance(Area, list):
-            Area = request.Area(Area)
-        if not isinstance(Color1, list):
-            Color1 = request.Color(Color1)
-        if not isinstance(Color2, list):
-            Color2 = request.Color(Color2)
-        request.Set_Speed()
-        request.Set_Morph_Color(Area, Color1, Color2)
-        request.End_Loop()
-        request.End_Transfert()
-        self.driver.WriteDevice(request)
+    def set_color_blink(self, area, color, save=False, Apply=False, block=0x01):
+        self.wait_for_ok()
+        constructor = Constructor(self.driver, save, block)
+
+        if not isinstance(area, list):
+            area = constructor.parse_areas(area)
+
+        if not isinstance(left_color, list):
+            left_color = constructor.convert_color(color)
+
+        constructor.set_speed()
+        constructor.set_blink_color(area, color)
+        constructor.end_loop()
+        constructor.end_transfer()
+        self.driver.write_device(constructor)
 
         if Apply:
-            self.WaitForOk()
-            request = Constructor(self.driver, Save, block)
-            request.Set_Speed()
-            request.Set_Morph_Color(Area, Color1, Color2)
-            request.End_Loop()
-            request.End_Transfert()
-            self.driver.WriteDevice(request)
+            self.wait_for_ok()
+            constructor = Constructor(self.driver)
+            constructor.set_speed()
+            constructor.set_blink_color(area, color)
+            constructor.end_loop()
+            constructor.end_transfer()
+            self.driver.write_device(constructor)
 
-    def WaitForOk(self):
-        self.driver.Take_over()
-        self.Get_State()
+    def set_color_morph(self, area, left_color, right_color, save=False, Apply=False, block=0x01):
+        self.wait_for_ok()
+        constructor = Constructor(self.driver, save, block)
+
+        if not isinstance(Area, list):
+            area = constructor.parse_areas(area)
+
+        if not isinstance(left_color, list):
+            left_color1 = constructor.convert_color(left_color)
+
+        if not isinstance(right_color, list):
+            right_color = constructor.convert_color(right_color)
+
+        constructor.set_speed()
+        constructor.set_color_morph(area, left_color1, right_color)
+        constructor.end_loop()
+        constructor.end_transfer()
+        self.driver.write_device(constructor)
+
+        if Apply:
+            self.wait_for_ok()
+            constructor = Constructor(self.driver, save, block)
+            constructor.set_speed()
+            constructor.set_color_morph(area, left_color1, right_color)
+            constructor.end_loop()
+            constructor.end_transfer()
+            self.driver.write_device(constructor)
+
+    def wait_for_ok(self):
+        self.driver.take_over()
+        self.get_state()
         request = Constructor(self.driver)
-        request.Reset_all()
-        self.driver.WriteDevice(request)
-        while not self.Get_State():
+        request.reset_all()
+        self.driver.write_device(request)
+        while not self.get_state():
             request.raz()
-            request.Get_Status()
-            request.Reset_all()
-            self.driver.WriteDevice(request)
+            request.get_color_status()
+            request.reset_all()
+            self.driver.write_device(request)
         return True
 
-    def Get_State(self):
-        self.driver.Take_over()
+    def get_state(self):
+        self.driver.take_over()
         request = Constructor(self.driver)
-        request.Get_Status()
-        self.driver.WriteDevice(request)
-        msg = self.driver.ReadDevice(request)
+        request.get_color_status()
+        self.driver.write_device(request)
+        msg = self.driver.read_device(request)
         return msg[0] == self.driver.computer.STATE_READY
 
-    def Reset(self, res_cmd):
-        self.driver.Take_over()
+    def reset(self, res_cmd):
+        self.driver.take_over()
         request = Constructor(self.driver)
         while True:
-            request.Get_Status()
-            self.driver.WriteDevice(request)
-            msg = self.driver.ReadDevice(request)
+            request.get_color_status()
+            self.driver.write_device(request)
+            msg = self.driver.read_device(request)
             if msg[0] == 0x10:
                 break
             request.raz()
-            request.Get_Status()
-            request.Reset(res_cmd)
-            self.driver.WriteDevice(request)
-            msg = self.driver.ReadDevice(request)
+            request.get_color_status()
+            request.reset(res_cmd)
+            self.driver.write_device(request)
+            msg = self.driver.read_device(request)
             if msg[0] == 0x10:
                 break
         return True
@@ -329,63 +307,66 @@ class Constructor(list):
         self.save = save
         self.block = block
 
-    def Save(self, end=False):
+    def save(self, end=False):
         if self.save:
             if not end:
-                self.Set_Save_Block(self.block)
+                self.set_save_block(self.block)
             else:
-                self.Set_Save()
+                self.set_save()
 
-    def Show_Request(self):
+    def show_request(self):
         for i in self:
             packet = ''
             for j in i.packet:
                 packet += hex(int(j)) + ' '
 
-    def Set_Speed(self, Speed=0xc800):
-        self.Save()
+    def set_speed(self, speed=0xc800):
+        self.save()
         cmd = copy(self.void)
-        legend = "Set Speed: {}".format(Speed)
+        legend = "set_speed =  {}".format(speed)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_SPEED
         cmd[3] = int(Speed / 256)
         cmd[4] = int(Speed - (Speed / 256) * 256)
         self.append(Request(legend, cmd))
 
-    def Set_Blink_Color(self, Area, Color):
-        self.Save()
+    def set_blink_color(self, area, color):
+        self.save()
         cmd = copy(self.void)
-        legend = "Set Blink Color"
+        legend = "set_blink_color `{}` on area `{}`".format(color, area)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_BLINK_COLOR
         cmd[2] = self.Id
-        cmd[3] = Area[0]
-        cmd[4] = Area[1]
-        cmd[5] = Area[2]
-        cmd[6] = Color[0]
-        cmd[7] = Color[1]
-
+        cmd[3] = area[0]
+        cmd[4] = area[1]
+        cmd[5] = area[2]
+        cmd[6] = left_color[0]
+        cmd[7] = left_color[1]
         self.append(Request(legend, cmd))
 
-    def Set_Morph_Color(self, Area, Color1, Color2):
-        self.Save()
+    def set_color_morph(self, area, left_color, right_color):
+        self.save()
         cmd = copy(self.void)
-        legend = "Set Morph Color"
-
-        Color12 = Color1[1] + Color2[0]
+        color = left_color[1] + right_color[0]
+        legend = '''set_color_morph:
+            left_color: `{}`
+            right_color: `{}`
+            color: `{}`
+            area: `{}`
+            '''.format(left_color, right_color, color, area)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_MORPH_COLOR
         cmd[2] = self.Id
-        cmd[3] = Area[0]
-        cmd[4] = Area[1]
-        cmd[5] = Area[2]
-        cmd[6] = Color1[0]
-        cmd[7] = Color12
-        cmd[8] = Color2[1]
+        cmd[3] = area[0]
+        cmd[4] = area[1]
+        cmd[5] = area[2]
+        cmd[6] = left_color[0]
+        cmd[7] = color
+        cmd[8] = right_color[1]
 
         self.append(Request(legend, cmd))
 
-    def Area(self, areas):  # gotta check the power button to understand it ...
+    def parse_areas(self, areas):  # gotta check the power button to understand it ...
         """
             This method will parse an area to a list of three values.
 
@@ -420,45 +401,44 @@ class Constructor(list):
         ret[0] = area // 65536
         # Takes the four first digit and remove the two first digit
         ret[1] = area // 256 - ret[0] * 256
-        ret[2] = area - ret[0] * 65536 - ret[1] * \
-            256  # Same but remove the first 4 digit
+        ret[2] = area - ret[0] * 65536 - ret[1] * 256  # Same but remove the first 4 digit
 
         return ret
 
-    def Set_Color(self, Area, Color, Id=0x01):
+    def set_color(self, Area, left_color, hex_id=0x01):
 
-        self.Save()
+        self.save()
         cmd = copy(self.void)
-        legend = "Set Color"
+        legend = "Set left_color"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_COLOR
-        cmd[2] = self.Id
+        cmd[2] = self.hex_id
         cmd[3] = Area[0]
         cmd[4] = Area[1]
         cmd[5] = Area[2]
-        cmd[6] = Color[0]
-        cmd[7] = Color[1]
+        cmd[6] = left_color[0]
+        cmd[7] = left_color[1]
 
         self.append(Request(legend, cmd))
 
-    def Set_Save_Block(self, block):
+    def set_save_block(self, block):
         cmd = copy(self.void)
-        legend = "Save block: {}".format(block)
+        legend = "save block: {}".format(block)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SAVE_NEXT
         cmd[2] = block
 
         self.append(Request(legend, cmd))
 
-    def Set_Save(self):
+    def set_save(self):
         cmd = copy(self.void)
-        legend = "Set Save"
+        legend = "Set save"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SAVE
 
         self.append(Request(legend, cmd))
 
-    def Color(self, color):
+    def convert_color(self, color):
         color = color.replace('#', '')
         r = int(color[0:2], 16) // 16
         g = int(color[2:4], 16) // 16
@@ -468,43 +448,33 @@ class Constructor(list):
         c[1] = b * 16
         return c
 
-    def Color2(self, color):
-        color = color.replace('#', '')
-        r = int(color[0:2], 16) // 16
-        g = int(color[2:4], 16) // 16
-        b = int(color[4:6], 16) // 16
-        c = [0x00, 0x00]
-        c[0] = r  # if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
-        c[1] = g * 16 + b
-        return c
-
-    def Get_Status(self):
+    def get_color_status(self):
         cmd = copy(self.void)
-        legend = "Get Status"
+        legend = "get_color_status"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_GET_STATUS
 
         self.append(Request(legend, cmd))
 
-    def Reset_all(self):
-        self.Save()
+    def reset_all(self):
+        self.save()
         cmd = copy(self.void)
-        legend = "Reset All Lights On"
+        legend = "reset_all"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_RESET
         cmd[2] = self.computer.RESET_ALL_LIGHTS_ON
 
         self.append(Request(legend, cmd))
 
-    def Reset(self, command):
+    def reset(self, command):
         if command in [self.computer.RESET_ALL_LIGHTS_ON,
                        self.computer.RESET_ALL_LIGHTS_OFF,
                        self.computer.RESET_TOUCH_CONTROLS,
-                       self.computer.RESET_SLEEP_LIGHTS_ON
-                       ]:
-            self.Save()
+                       self.computer.RESET_SLEEP_LIGHTS_ON]:
+
+            self.save()
             cmd = copy(self.void)
-            legend = "Reset All Lights On"
+            legend = "reset"
             cmd[0] = self.computer.START_BYTE
             cmd[1] = self.computer.COMMAND_RESET
             cmd[2] = command
@@ -513,21 +483,21 @@ class Constructor(list):
         else:
             print("Engine > Constructor error: WRONG RESET COMMAND")
 
-    def End_Loop(self):
-        self.Save()
+    def end_loop(self):
+        self.save()
         cmd = copy(self.void)
-        legend = "End Loop"
+        legend = "end_loop"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_LOOP_BLOCK_END
 
         self.Id += 0x01
         self.append(Request(legend, cmd))
 
-    def End_Transfert(self):
-        self.Save(end=True)
+    def end_transfer(self):
+        self.save(end=True)
         if not self.save:
             cmd = copy(self.void)
-            legend = "End Transfert"
+            legend = "end_transfert"
             cmd[0] = self.computer.START_BYTE
             cmd[1] = self.computer.COMMAND_TRANSMIT_EXECUTE
 

@@ -343,7 +343,7 @@ class GUI(Gtk.Window):
             self.driver = Driver()
             self.testing_driver = Driver()
 
-        if not AKBL_DAEMON and self.driver.not_found:
+        if not AKBL_DAEMON and self.driver.has_device():
             self.label_computername.set_label('')
             self.color_chooser_widget.hide()
             self.box_profile_buttons.hide()
@@ -365,105 +365,104 @@ class GUI(Gtk.Window):
 
             except Exception as e:
                 data_info = DATA_INFO_ERROR + e
+                self.textbuffer_computer_data.set_text(data_info)
+        
+        elif getuser() == 'root':
+            self.controller = Controller(self.driver)
+            self.computer = self.driver.computer
 
-            self.textbuffer_computer_data.set_text(data_info)
         else:
+            computer_name = AKBLConnection._command('get_computer_name')
+            self.computer = getattr(Computers, computer_name)()
 
-            if getuser() == 'root':
-                self.controller = Controller(self.driver)
-                self.computer = self.driver.computer
-            else:
-                computer_name = AKBLConnection._command('get_computer_name')
-                self.computer = getattr(Computers, computer_name)()
+        self.apply_configuration = False
+        self.thread_zones = True
+        self.queue_zones = []
+        self.ccp = CCParser(
+            self._paths.CONFIGURATION_PATH,
+            'GUI Configuration')
 
-            self.apply_configuration = False
-            self.thread_zones = True
-            self.queue_zones = []
-            self.ccp = CCParser(
-                self._paths.CONFIGURATION_PATH,
-                'GUI Configuration')
+        #   Load a configuration
+        #
+        Theme.LOAD_profiles(
+            self.computer, self._paths.PROFILES_PATH)
+        self.POPULATE_liststore_profiles()
 
-            #   Load a configuration
-            #
-            Theme.LOAD_profiles(
-                self.computer, self._paths.PROFILES_PATH)
-            self.POPULATE_liststore_profiles()
+        """
+            Extra GUI initialization
+        """
 
-            """
-                Extra GUI initialization
-            """
+        self.label_computername.set_label(
+            '{} - {}'.format(getuser(), self.computer.name))
 
-            self.label_computername.set_label(
-                '{} - {}'.format(getuser(), self.computer.name))
+        if getuser() == 'root':
+            computer_data = (
+                self.computer.name,
+                self.driver.vendor_id,
+                self.driver.product_id,
+                self.driver.dev)
+        else:
+            computer_data = AKBLConnection._command('get_computer_info')
 
-            if getuser() == 'root':
-                computer_data = (
-                    self.computer.name,
-                    self.driver.vendorId,
-                    self.driver.productId,
-                    self.driver.dev)
-            else:
-                computer_data = AKBLConnection._command('get_computer_info')
+        self.textbuffer_computer_data.set_text(
+            TEXT_COMPUTER_DATA.format(*computer_data[0:5]))
 
-            self.textbuffer_computer_data.set_text(
-                TEXT_COMPUTER_DATA.format(*computer_data[0:5]))
+        # Add the zones to turn off to the  "menuitem_off_zones"
+        #
+        self.menu_turn_off_zones = Gtk.Menu()
+        self.zones_and_descriptions_dict = dict(
+            (self.theme.get_areas()[zone].description, zone) for zone in self.theme.get_areas().keys())
+        active_configuration_zones = self.ccp.get_str_defval(
+            'zones_to_keep_alive', '').split('|')
 
-            # Add the zones to turn off to the  "menuitem_off_zones"
-            #
-            self.menu_turn_off_zones = Gtk.Menu()
-            self.zones_and_descriptions_dict = dict(
-                (self.theme.get_areas()[zone].description, zone) for zone in self.theme.get_areas().keys())
-            active_configuration_zones = self.ccp.get_str_defval(
-                'zones_to_keep_alive', '').split('|')
+        for description, zone in sorted(
+                self.zones_and_descriptions_dict.items(), key=lambda x: x[0]):
+            checkbox = Gtk.CheckMenuItem(label=description)
 
-            for description, zone in sorted(
-                    self.zones_and_descriptions_dict.items(), key=lambda x: x[0]):
-                checkbox = Gtk.CheckMenuItem(label=description)
+            if zone in active_configuration_zones:
+                checkbox.set_active(True)
 
-                if zone in active_configuration_zones:
-                    checkbox.set_active(True)
+            checkbox.connect('activate',
+                             self.on_checkbox_turnoff_zones_checked)
 
-                checkbox.connect('activate',
-                                 self.on_checkbox_turnoff_zones_checked)
+            self.menu_turn_off_zones.append(checkbox)
 
-                self.menu_turn_off_zones.append(checkbox)
+        self.menuitem_off_zones.set_submenu(self.menu_turn_off_zones)
 
-            self.menuitem_off_zones.set_submenu(self.menu_turn_off_zones)
+        # Extra stuff
+        #
+        self.checkbutton_autosave.set_active(
+            self.ccp.get_bool_defval('auto_save', True))
+        self.checkbutton_profile_buttons.set_active(
+            self.ccp.get_bool_defval('profile_buttons', False))
+        self.checkbutton_delete_warning.set_active(
+            self.ccp.get_bool_defval('delete_warning', True))
+        self.checkbutton_static_colorchooser.set_active(
+            self.ccp.get_bool_defval('static_chooser', False))
 
-            # Extra stuff
-            #
-            self.checkbutton_autosave.set_active(
-                self.ccp.get_bool_defval('auto_save', True))
-            self.checkbutton_profile_buttons.set_active(
-                self.ccp.get_bool_defval('profile_buttons', False))
-            self.checkbutton_delete_warning.set_active(
-                self.ccp.get_bool_defval('delete_warning', True))
-            self.checkbutton_static_colorchooser.set_active(
-                self.ccp.get_bool_defval('static_chooser', False))
+        self.populate_box_areas()
 
-            self.populate_box_areas()
+        self.window_root.show_all()
 
-            self.window_root.show_all()
+        if not self.checkbutton_profile_buttons.get_active():
+            self.box_profile_buttons.hide()
 
-            if not self.checkbutton_profile_buttons.get_active():
-                self.box_profile_buttons.hide()
+        if not self.checkbutton_static_colorchooser.get_active():
+            self.color_chooser_widget.hide()
 
-            if not self.checkbutton_static_colorchooser.get_active():
-                self.color_chooser_widget.hide()
+        self.scrolledwindow_no_computer.hide()
 
-            self.scrolledwindow_no_computer.hide()
+        # check for systemctl
+        '''
+        if self.ccp.get_bool_defval('systemd', True):
+            if not os.path.exists(self._paths.SYSTEMCTL_PATH):
+                gtk_dialog_info(self.window_root, TEXT_SYSTEMD)
+                self.ccp.write('systemd', False)
+        '''
 
-            # check for systemctl
-            '''
-            if self.ccp.get_bool_defval('systemd', True):
-                if not os.path.exists(self._paths.SYSTEMCTL_PATH):
-                    gtk_dialog_info(self.window_root, TEXT_SYSTEMD)
-                    self.ccp.write('systemd', False)
-            '''
-
-            # Start the zones thread !
-            #
-            threading.Thread(target=self.THREAD_zones).start()
+        # Start the zones thread !
+        #
+        threading.Thread(target=self.THREAD_zones).start()
 
     def get_zones_to_keep_alive(self):
         return [self.zones_and_descriptions_dict[checkbox.get_label()]
@@ -663,22 +662,22 @@ class GUI(Gtk.Window):
                 keep_alive_zones = self.get_zones_to_keep_alive()
 
                 if keep_alive_zones == []:
-                    self.controller.Set_Loop_Conf(
+                    self.controller.set_loop_conf(
                         state, self.driver.computer.BLOCK_LOAD_ON_BOOT)
                     self.controller.Reset(self.computer.RESET_ALL_LIGHTS_OFF)
                 else:
                     """
                         This hack, it will set black as color to all the lights that should be turned off
                     """
-                    self.controller.Set_Loop_Conf(
+                    self.controller.set_loop_conf(
                         False, self.driver.computer.BLOCK_LOAD_ON_BOOT)
-                    self.controller.Add_Speed_Conf(1)
+                    self.controller.add_speed_conf(1)
 
                     for key in sorted(self.theme.get_areas().keys()):
                         if key not in keep_alive_zones:
                             area = self.theme.get_areas()[key]
                             for zone in area:
-                                self.controller.Add_Loop_Conf(
+                                self.controller.add_loop_conf(
                                     zone.regionId, 'fixed', '#000000', '#000000')
 
                             self.controller.End_Loop_Conf()
@@ -749,10 +748,10 @@ class GUI(Gtk.Window):
 
         #   Test
         #
-        self.testing_controller.Set_Loop_Conf(
+        self.testing_controller.set_loop_conf(
             False, self.testing_driver.computer.BLOCK_LOAD_ON_BOOT)
-        self.testing_controller.Add_Speed_Conf(speed * 256)
-        self.testing_controller.Add_Loop_Conf(zone_block, 
+        self.testing_controller.add_speed_conf(speed * 256)
+        self.testing_controller.add_loop_conf(zone_block, 
                                               zone_mode,
                                               zone_left_color,
                                               zone_right_color)
@@ -787,14 +786,14 @@ class GUI(Gtk.Window):
             if AKBL_DAEMON:
                 AKBLConnection._command('modify_lights_state', True)
 
-            self.controller.Set_Loop_Conf(
+            self.controller.set_loop_conf(
                 False, self.driver.computer.BLOCK_LOAD_ON_BOOT)
-            self.controller.Add_Speed_Conf(self.theme.speed)
+            self.controller.add_speed_conf(self.theme.speed)
 
             for key in sorted(self.theme.get_areas().keys()):
                 area = self.theme.get_areas()[key]
                 for zone in area:
-                    self.controller.Add_Loop_Conf(zone.regionId,
+                    self.controller.add_loop_conf(zone.regionId,
                                                   zone.get_mode(),
                                                   zone.get_left_color(),
                                                   zone.get_right_color())

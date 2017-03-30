@@ -48,42 +48,42 @@ class Region:
         self.canLight = canLight
         self.canBlink = canBlink
         self.canMorph = canMorph
-        self.color1 = default_color
-        self.color2 = default_color
+        self.left_color = default_color
+        self.right_color = default_color
         self.mode = default_mode
         self.power_button = power_button
         self.maxCommands = maxCommands
-        self.line = {1: Configuration(self.mode, self.color1, self.color2)}
+        self.line = {1: Configuration(self.mode, self.left_color, self.right_color)}
 
-    def update_line(self, Id, mode=None, color1=None, color2=None):
+    def update_line(self, Id, mode=None, left_color=None, right_color=None):
         if Id in self.line:
             if mode:
                 self.line[Id].mode = mode
-            if color1:
-                self.line[Id].color1 = color1
-            if color2:
-                self.line[Id].color2 = color2
+            if left_color:
+                self.line[Id].left_color = left_color
+            if right_color:
+                self.line[Id].right_color = right_color
             return True
         return False
 
-    def add_line(self, Id, mode, color1, color2):
+    def add_line(self, Id, mode, left_color, right_color):
         Id = max(self.line.keys())
         if Id + 1 not in self.line:
-            self.line[Id + 1] = Configuration(mode, color1, color2)
+            self.line[Id + 1] = Configuration(mode, left_color, right_color)
             return True
         return False
 
 
 class Configuration:
 
-    def __init__(self, mode, color1, color2=None):
+    def __init__(self, mode, left_color, right_color=None):
         self.mode = mode
-        self.color1 = color1
-        self.color2 = color2
+        self.left_color = left_color
+        self.right_color = right_color
 
     def __str__(self):
-        return 'Mode: {0}\t Color1: {1}\t Color2: {2}'.format(
-            self.mode, self.color1, self.color2)
+        return 'Mode: {0}\t left_color: {1}\t right_color: {2}'.format(
+            self.mode, self.left_color, self.right_color)
 
 
 class CommonConf:
@@ -111,9 +111,9 @@ class CommonConf:
         # Get device status (see get device status)
         self.COMMAND_GET_STATUS = 0x06
         self.COMMAND_RESET = 0x07  # Reset (See reset)
-        # Save next instruction in storage block (see storage)
+        # save next instruction in storage block (see storage)
         self.COMMAND_SAVE_NEXT = 0x08
-        self.COMMAND_SAVE = 0x09  # Save storage data (See storage)
+        self.COMMAND_SAVE = 0x09  # save storage data (See storage)
         # Set batery state (See set commands)
         self.COMMAND_BATTERY_STATE = 0x0F
         self.COMMAND_SET_SPEED = 0x0E  # Set display speed (see set speed)
@@ -160,8 +160,7 @@ class M11XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
             self.AreaIDS.RIGHT_SPEAKER_ID,
@@ -171,8 +170,7 @@ class M11XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_SPEAKER_ID] = Region(
             self.AreaIDS.LEFT_SPEAKER_ID,
@@ -182,8 +180,7 @@ class M11XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_LOGO_ID] = Region(
             self.AreaIDS.ALIEN_LOGO_ID,
@@ -193,8 +190,7 @@ class M11XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.MEDIA_BAR_ID] = Region(
             self.AreaIDS.MEDIA_BAR_ID,
@@ -204,8 +200,7 @@ class M11XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_ID] = Region(
             self.AreaIDS.POWER_BUTTON_ID,
@@ -216,7 +211,6 @@ class M11XR1(CommonConf):
             True,
             False,
             self.default_color,
-            self.suportedMode,
             power_button=True)
 
 
@@ -272,8 +266,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
@@ -283,8 +276,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_KEYBOARD_ID,
@@ -294,8 +286,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
@@ -305,8 +296,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
             self.AreaIDS.RIGHT_SPEAKER_ID,
@@ -316,8 +306,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_SPEAKER_ID] = Region(
             self.AreaIDS.LEFT_SPEAKER_ID,
@@ -327,8 +316,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_HEAD_ID] = Region(
             self.AreaIDS.ALIEN_HEAD_ID,
@@ -338,8 +326,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_LOGO_ID] = Region(
             self.AreaIDS.ALIEN_LOGO_ID,
@@ -349,8 +336,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.TOUCH_PAD_ID] = Region(
             self.AreaIDS.TOUCH_PAD_ID,
@@ -360,8 +346,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.MEDIA_BAR_ID] = Region(
             self.AreaIDS.MEDIA_BAR_ID,
@@ -371,8 +356,7 @@ class M14XR1(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
             self.AreaIDS.POWER_BUTTON_EYES_ID,
@@ -382,8 +366,7 @@ class M14XR1(CommonConf):
             False,
             False,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_ID] = Region(
             self.AreaIDS.POWER_BUTTON_ID,
@@ -394,7 +377,6 @@ class M14XR1(CommonConf):
             True,
             True,
             self.default_color,
-            self.suportedMode,
             power_button=True)
 
 
@@ -425,8 +407,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
@@ -436,8 +417,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.CAPS_LOCK_ID] = Region(
             self.AreaIDS.CAPS_LOCK_ID,
@@ -447,8 +427,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_KEYBOARD_ID,
@@ -458,8 +437,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
@@ -469,8 +447,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_KEYBOARD_ID,
@@ -480,8 +457,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
@@ -491,8 +467,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_HEAD_ID] = Region(
             self.AreaIDS.ALIEN_HEAD_ID,
@@ -502,8 +477,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_LOGO_ID] = Region(
             self.AreaIDS.ALIEN_LOGO_ID,
@@ -513,8 +487,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_OUTER_LID_ID] = Region(
             self.AreaIDS.ALIEN_OUTER_LID_ID,
@@ -524,8 +497,7 @@ class Alienware13(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
 
 
 class Alienware13R3(Alienware13):
@@ -573,8 +545,7 @@ class M15XArea51(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.KEYBOARD_ID] = Region(
             self.AreaIDS.KEYBOARD_ID,
@@ -584,8 +555,7 @@ class M15XArea51(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_HEAD_ID] = Region(
             self.AreaIDS.ALIEN_HEAD_ID,
@@ -595,8 +565,7 @@ class M15XArea51(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_LOGO_ID] = Region(
             self.AreaIDS.ALIEN_LOGO_ID,
@@ -606,8 +575,7 @@ class M15XArea51(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.TOUCH_PAD_ID] = Region(
             self.AreaIDS.TOUCH_PAD_ID,
@@ -617,8 +585,7 @@ class M15XArea51(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.MEDIA_BAR_ID] = Region(
             self.AreaIDS.MEDIA_BAR_ID,
@@ -628,8 +595,7 @@ class M15XArea51(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_ID] = Region(
             self.AreaIDS.POWER_BUTTON_ID,
@@ -640,7 +606,6 @@ class M15XArea51(CommonConf):
             False,
             True,
             self.default_color,
-            self.suportedMode,
             power_button=True)
 
 
@@ -675,8 +640,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_KEYBOARD_ID,
@@ -686,8 +650,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
@@ -697,8 +660,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_KEYBOARD_ID,
@@ -708,8 +670,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
@@ -719,8 +680,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
             self.AreaIDS.RIGHT_SPEAKER_ID,
@@ -730,8 +690,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_SPEAKER_ID] = Region(
             self.AreaIDS.LEFT_SPEAKER_ID,
@@ -741,8 +700,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_HEAD_ID] = Region(
             self.AreaIDS.ALIEN_HEAD_ID,
@@ -752,8 +710,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_LOGO_ID] = Region(
             self.AreaIDS.ALIEN_LOGO_ID,
@@ -763,8 +720,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.TOUCH_PAD_ID] = Region(
             self.AreaIDS.TOUCH_PAD_ID,
@@ -774,8 +730,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.MEDIA_BAR_ID] = Region(
             self.AreaIDS.MEDIA_BAR_ID,
@@ -785,8 +740,7 @@ class Alienware15(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
             self.AreaIDS.POWER_BUTTON_EYES_ID,
@@ -796,8 +750,7 @@ class Alienware15(CommonConf):
             False,
             False,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_ID] = Region(
             self.AreaIDS.POWER_BUTTON_ID,
@@ -808,7 +761,6 @@ class Alienware15(CommonConf):
             True,
             True,
             self.default_color,
-            self.suportedMode,
             power_button=True)
 
 
@@ -849,8 +801,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
@@ -860,8 +811,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_KEYBOARD_ID,
@@ -871,8 +821,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
@@ -882,8 +831,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
             self.AreaIDS.RIGHT_SPEAKER_ID,
@@ -893,8 +841,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_SPEAKER_ID] = Region(
             self.AreaIDS.LEFT_SPEAKER_ID,
@@ -904,8 +851,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_HEAD_ID] = Region(
             self.AreaIDS.ALIEN_HEAD_ID,
@@ -915,8 +861,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_LOGO_ID] = Region(
             self.AreaIDS.ALIEN_LOGO_ID,
@@ -926,8 +871,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.TOUCH_PAD_ID] = Region(
             self.AreaIDS.TOUCH_PAD_ID,
@@ -937,8 +881,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.MEDIA_BAR_ID] = Region(
             self.AreaIDS.MEDIA_BAR_ID,
@@ -948,8 +891,7 @@ class M17X(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
             self.AreaIDS.POWER_BUTTON_EYES_ID,
@@ -959,8 +901,7 @@ class M17X(CommonConf):
             False,
             False,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_ID] = Region(
             self.AreaIDS.POWER_BUTTON_ID,
@@ -971,7 +912,6 @@ class M17X(CommonConf):
             True,
             True,
             self.default_color,
-            self.suportedMode,
             power_button=True)
 
 
@@ -1005,8 +945,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
@@ -1016,8 +955,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_KEYBOARD_ID,
@@ -1027,8 +965,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
@@ -1038,8 +975,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
             self.AreaIDS.RIGHT_SPEAKER_ID,
@@ -1049,8 +985,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_SPEAKER_ID] = Region(
             self.AreaIDS.LEFT_SPEAKER_ID,
@@ -1060,8 +995,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_HEAD_ID] = Region(
             self.AreaIDS.ALIEN_HEAD_ID,
@@ -1071,8 +1005,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_LOGO_ID] = Region(
             self.AreaIDS.ALIEN_LOGO_ID,
@@ -1082,8 +1015,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.TOUCH_PAD_ID] = Region(
             self.AreaIDS.TOUCH_PAD_ID,
@@ -1093,8 +1025,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.MEDIA_BAR_ID] = Region(
             self.AreaIDS.MEDIA_BAR_ID,
@@ -1104,8 +1035,7 @@ class M17XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
             self.AreaIDS.POWER_BUTTON_EYES_ID,
@@ -1115,8 +1045,7 @@ class M17XR2(CommonConf):
             False,
             False,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_ID] = Region(
             self.AreaIDS.POWER_BUTTON_ID,
@@ -1127,7 +1056,6 @@ class M17XR2(CommonConf):
             True,
             True,
             self.default_color,
-            self.suportedMode,
             power_button=True)
 
 
@@ -1168,8 +1096,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.RIGHT_CENTER_KEYBOARD_ID,
@@ -1179,8 +1106,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_KEYBOARD_ID,
@@ -1190,8 +1116,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID] = Region(
             self.AreaIDS.LEFT_CENTER_KEYBOARD_ID,
@@ -1201,8 +1126,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.RIGHT_SPEAKER_ID] = Region(
             self.AreaIDS.RIGHT_SPEAKER_ID,
@@ -1212,8 +1136,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.LEFT_SPEAKER_ID] = Region(
             self.AreaIDS.LEFT_SPEAKER_ID,
@@ -1223,8 +1146,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_HEAD_ID] = Region(
             self.AreaIDS.ALIEN_HEAD_ID,
@@ -1234,8 +1156,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.ALIEN_LOGO_ID] = Region(
             self.AreaIDS.ALIEN_LOGO_ID,
@@ -1245,8 +1166,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.TOUCH_PAD_ID] = Region(
             self.AreaIDS.TOUCH_PAD_ID,
@@ -1256,8 +1176,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.MEDIA_BAR_ID] = Region(
             self.AreaIDS.MEDIA_BAR_ID,
@@ -1267,8 +1186,7 @@ class M18XR2(CommonConf):
             True,
             True,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_EYES_ID] = Region(
             self.AreaIDS.POWER_BUTTON_EYES_ID,
@@ -1278,8 +1196,7 @@ class M18XR2(CommonConf):
             False,
             False,
             True,
-            self.default_color,
-            self.suportedMode)
+            self.default_color)
         self.regions[
             self.AreaIDS.POWER_BUTTON_ID] = Region(
             self.AreaIDS.POWER_BUTTON_ID,
@@ -1290,7 +1207,6 @@ class M18XR2(CommonConf):
             True,
             True,
             self.default_color,
-            self.suportedMode,
             power_button=True)
 
 
@@ -1303,10 +1219,10 @@ class M18XRX(M18XR2):
 
 class Computer:
 
-    def __init__(self, name, vendorId, productId, computer):
+    def __init__(self, name, vendor_id, product_id, computer):
         self.name = name
-        self.vendorId = vendorId
-        self.productId = productId
+        self.vendor_id = vendor_id
+        self.product_id = product_id
         self.computer = computer
 
 
@@ -1336,33 +1252,30 @@ class AllComputers():
     ALIENFX_BUSY = 0x11
     ALIENFX_UNKOWN_COMMAND = 0x12
 
+    VENDOR_ID = 0x187c
+
     #
     # If you add a new computer please send me an email/open a bug repport so I can add it to the main program too.
     # The names are taken from wikipedia:  https://en.wikipedia.org/wiki/Alienware
     #
-    computerList = {
-        # id vendor, id product
-        TEXT_M11XR1: Computer(TEXT_M11XR1, 0x187c, 0x0514, M11XR1()),
-        TEXT_M11XR2: Computer(TEXT_M11XR2, 0x187c, 0x0515, M11XR2()),
-        TEXT_M11XR3: Computer(TEXT_M11XR3, 0x187c, 0x0522, M11XR3()),
-        TEXT_M11XR25: Computer(TEXT_M11XR25, 0x187c, 0x0516, M11XR25()),
-        TEXT_ALIENWARE13: Computer(TEXT_ALIENWARE13, 0x187c, 0x0527, Alienware13()),
-        TEXT_ALIENWARE13R3: Computer(TEXT_ALIENWARE13R3, 0x187c, 0x0529, Alienware13R3()),
-
-        # M14XR2 is differenciated from M14XR1 by reading
-        TEXT_M14XR1: Computer(TEXT_M14XR1, 0x187c, 0x0521, M14XR1()),
-        # the device information. > Gaming' take a look to Engine.py
-        TEXT_M14XR2: Computer(TEXT_M14XR2, 0x187c, 0x0521, M14XR2()),
-        TEXT_M14XR3: Computer(TEXT_M14XR3, 0x187c, 0x0525, M14XR3()),
-
-        TEXT_M15XAREA51: Computer(TEXT_M15XAREA51, 0x187c, 0x0511, M15XArea51()),
-        TEXT_ALIENWARE15: Computer(TEXT_ALIENWARE15, 0x187c, 0x0528, Alienware15()),
-        TEXT_ALIENWARE15R3: Computer(TEXT_ALIENWARE15R3, 0x187c, 0x0530, Alienware15R3()),
-
-        TEXT_M17X: Computer(TEXT_M17X, 0x187c, 0x0524, M17X()),
-        TEXT_M17XR2: Computer(TEXT_M17XR2, 0x187c, 0x0512, M17XR2()),
-        TEXT_M17XR3: Computer(TEXT_M17XR3, 0x187c, 0x0520, M17XR3()),
-
-        TEXT_M18XRX: Computer(TEXT_M18XRX, 0x187c, 0x0523, M18XRX()),
-        TEXT_M18XR2: Computer(TEXT_M18XR2, 0x187c, 0x0518, M18XR2()),
+    # *The hex number is the id_product
+    #
+    computers_list = {
+        TEXT_M11XR1: Computer(TEXT_M11XR1, VENDOR_ID, 0x0514, M11XR1()),
+        TEXT_M11XR2: Computer(TEXT_M11XR2, VENDOR_ID, 0x0515, M11XR2()),
+        TEXT_M11XR3: Computer(TEXT_M11XR3, VENDOR_ID, 0x0522, M11XR3()),
+        TEXT_M11XR25: Computer(TEXT_M11XR25, VENDOR_ID, 0x0516, M11XR25()),
+        TEXT_ALIENWARE13: Computer(TEXT_ALIENWARE13, VENDOR_ID, 0x0527, Alienware13()),
+        TEXT_ALIENWARE13R3: Computer(TEXT_ALIENWARE13R3, VENDOR_ID, 0x0529, Alienware13R3()),
+        TEXT_M14XR1: Computer(TEXT_M14XR1, VENDOR_ID, 0x0521, M14XR1()),
+        TEXT_M14XR2: Computer(TEXT_M14XR2, VENDOR_ID, 0x0521, M14XR2()), # The M14XR2 is differenciated from M14XR1 by reading
+        TEXT_M14XR3: Computer(TEXT_M14XR3, VENDOR_ID, 0x0525, M14XR3()), # the device information. 'Gaming' take a look to Engine.py
+        TEXT_M15XAREA51: Computer(TEXT_M15XAREA51, VENDOR_ID, 0x0511, M15XArea51()),
+        TEXT_ALIENWARE15: Computer(TEXT_ALIENWARE15, VENDOR_ID, 0x0528, Alienware15()),
+        TEXT_ALIENWARE15R3: Computer(TEXT_ALIENWARE15R3, VENDOR_ID, 0x0530, Alienware15R3()),
+        TEXT_M17X: Computer(TEXT_M17X, VENDOR_ID, 0x0524, M17X()),
+        TEXT_M17XR2: Computer(TEXT_M17XR2, VENDOR_ID, 0x0512, M17XR2()),
+        TEXT_M17XR3: Computer(TEXT_M17XR3, VENDOR_ID, 0x0520, M17XR3()),
+        TEXT_M18XRX: Computer(TEXT_M18XRX, VENDOR_ID, 0x0523, M18XRX()),
+        TEXT_M18XR2: Computer(TEXT_M18XR2, VENDOR_ID, 0x0518, M18XR2()),
     }

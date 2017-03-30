@@ -50,7 +50,7 @@ class Daemon:
     def __init__(self, loop_self):
 
         self._driver = Driver()
-        if self._driver.not_found:
+        if not self._driver.has_device():
             print("Warning: The computer is not supported")
             exit(1)
 
@@ -96,9 +96,9 @@ class Daemon:
 
         self._lights_state = True
 
-        self._controller.Set_Loop_Conf(
+        self._controller.set_loop_conf(
             False, self._computer.BLOCK_LOAD_ON_BOOT)
-        self._controller.Add_Speed_Conf(self._theme.speed)
+        self._controller.add_speed_conf(self._theme.speed)
 
         try:  # Patch (#12)
             os.utime(self._theme.path, None)
@@ -120,7 +120,7 @@ class Daemon:
         for key in sorted(self._theme.area.keys()):
             area = self._theme.area[key]
             for zone in area:
-                self._controller.Add_Loop_Conf(zone.regionId,
+                self._controller.add_loop_conf(zone.regionId,
                                                zone.mode,
                                                zone.color1,
                                                zone.color2)
@@ -128,7 +128,7 @@ class Daemon:
             self._controller.End_Loop_Conf()
 
         self._controller.End_Transfert_Conf()
-        self._controller.Write_Conf()
+        self._controller.write_conf()
 
     def _indicator_send_code(self, val):
         if self._indicator_pyro:
@@ -215,7 +215,7 @@ class Daemon:
                 'zones_to_keep_alive', '')
 
             if keep_alive_zones == '':
-                self._controller.Set_Loop_Conf(
+                self._controller.set_loop_conf(
                     False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
                 self._controller.Reset(self._computer.RESET_ALL_LIGHTS_OFF)
             else:
@@ -224,21 +224,21 @@ class Daemon:
                 """
                     This hack, it will set black as color to all the lights that should be turned off
                 """
-                self._controller.Set_Loop_Conf(
+                self._controller.set_loop_conf(
                     False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
-                self._controller.Add_Speed_Conf(1)
+                self._controller.add_speed_conf(1)
 
                 for key in sorted(self._theme.area.keys()):
                     if key not in keep_alive_zones:
                         area = self._theme.area[key]
                         for zone in area:
-                            self._controller.Add_Loop_Conf(
+                            self._controller.add_loop_conf(
                                 zone.regionId, 'fixed', '#000000', '#000000')
 
                         self._controller.End_Loop_Conf()
 
                 self._controller.End_Transfert_Conf()
-                self._controller.Write_Conf()
+                self._controller.write_conf()
 
             self._lights_state = False
             self._indicator_send_code(150)
@@ -290,20 +290,20 @@ class Daemon:
             return
 
         self._lights_state = True
-        self._controller.Set_Loop_Conf(
+        self._controller.set_loop_conf(
             False, self._computer.BLOCK_LOAD_ON_BOOT)
-        self._controller.Add_Speed_Conf(speed)
+        self._controller.add_speed_conf(speed)
 
         for zone in self._computer.regions.keys():
             for i in range(len(colors1)):
 
-                self._controller.Add_Loop_Conf(
+                self._controller.add_loop_conf(
                     self._computer.regions[zone].regionId, mode, colors1[i], colors2[i])
 
             self._controller.End_Loop_Conf()
 
         self._controller.End_Transfert_Conf()
-        self._controller.Write_Conf()
+        self._controller.write_conf()
 
     """
         Bindings for the graphical interphase
@@ -315,8 +315,8 @@ class Daemon:
 
     @Pyro4.expose
     def get_computer_info(self):
-        return (self._computer.name, self._driver.vendorId,
-                self._driver.productId, str(self._driver.dev))
+        return (self._computer.name, self._driver.vendor_id,
+                self._driver.product_id, str(self._driver.dev))
 
     @Pyro4.expose
     def modify_lights_state(self, bool):
