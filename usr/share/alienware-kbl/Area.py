@@ -18,44 +18,6 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-class AreaIDS:
-
-    def __init__(self):
-
-        self.POWER_BUTTON_ID = 'PB'
-        self.POWER_BUTTON_EYES_ID = 'PBE'
-
-        self.ALIEN_LOGO_ID = 'AL'
-        self.ALIEN_HEAD_ID = 'AH'
-        self.ALIEN_OUTER_LID_ID = 'OI'
-
-        self.LEFT_SPEAKER_ID = 'LS'
-        self.RIGHT_SPEAKER_ID = 'RS'
-
-        self.LEFT_KEYBOARD_ID = 'LK'
-        self.LEFT_CENTER_KEYBOARD_ID = 'LCK'
-        self.RIGHT_CENTER_KEYBOARD_ID = 'RCK'
-        self.RIGHT_KEYBOARD_ID = 'RK'
-        self.KEYBOARD_ID = 'KB'
-
-        self.MEDIA_BAR_ID = 'MB'
-        self.TOUCH_PAD_ID = 'TP'
-        self.LIGHT_PIPE_ID = 'LP'
-        self.TACTX_ID = 'TX'
-
-        self.HARD_DISK_DRIVE_ID = 'HDD'
-        self.WIFI_ID = 'WF'
-        self.CAPS_LOCK_ID = 'CL'
-
-        self.BOOT_ID = 'BT'
-
-        self.ALIEN_FX_DEFAULT_POWER_MODE = ''
-        self.ON_BATTERY_ID = 'BAT'
-        self.CHARGING_ID = 'CH'
-        self.AC_POWER_ID = 'AC'
-        self.STANDBY_ID = 'SB'
-
-
 class AreaData(list):
 
     def __init__(self, name, description, id=0x01):

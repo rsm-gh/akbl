@@ -29,6 +29,7 @@ INSTANCES_DIC = {}
 
 
 def LOAD_profiles(computer, theme_path):
+
     global INSTANCES_DIC
     INSTANCES_DIC = {}
 
@@ -81,6 +82,7 @@ def GET_last_configuration():
 class Theme:
 
     def __init__(self, computer):
+
         self.name = ''
         self.computer = computer
         self.speed = 65280
@@ -138,7 +140,7 @@ class Theme:
         area_found, color1, color2, mode, = False, False, False, False
 
         imported_areas = []
-        supported_areas_ids = self.computer.regions.keys()
+        supported_areas_ids = self.computer.keys()
 
         # Parse the configuration file
         #
@@ -232,7 +234,7 @@ class Theme:
         except Exception as e:
             self.speed = 1
 
-            print("Warning: Configuration.py Error setting the speed.")
+            print("Warning: error setting the speed.")
             print(format_exc())
 
     def modify_zone(self, zone, column, color1, color2, mode):

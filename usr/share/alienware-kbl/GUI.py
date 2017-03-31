@@ -254,10 +254,8 @@ class GUI(Gtk.Window):
         for glade_object in glade_object_names:
             setattr(self, glade_object, builder.get_object(glade_object))
 
-        self.colorbutton_1_block.set_color(
-            Gdk.Color(red=1, green=65535, blue=1))
-        self.colorbutton_2_block.set_color(
-            Gdk.Color(red=65535, green=1, blue=1))
+        self.colorbutton_1_block.set_color(Gdk.Color(red=1, green=65535, blue=1))
+        self.colorbutton_2_block.set_color(Gdk.Color(red=65535, green=1, blue=1))
 
         """
             Add the accel groups
@@ -298,8 +296,7 @@ class GUI(Gtk.Window):
             Ask to the user if he wants to import its global configuration
             (this is a support for older versions of alienware-kbl)
         """
-        if (
-            not os.path.exists(
+        if (not os.path.exists(
                 self._paths.CONFIGURATION_PATH) and os.path.exists(
                 self._paths.BACKUP_CONFIG)) or (
                 not os.path.exists(
@@ -340,10 +337,14 @@ class GUI(Gtk.Window):
             Program Variables / Diver / Controller
         """
         if getuser() == 'root':
-            self.driver = Driver()
-            self.testing_driver = Driver()
+            print('DEBUG GUI: Starting as `root`')
+            self._driver = Driver()
+            self._testing_driver = Driver()
+            print('DEBUG GUI: Driver loaded', self._driver)
 
-        if not AKBL_DAEMON and self.driver.has_device():
+        """
+        if not AKBL_DAEMON and self._driver.has_device():
+            print('DEBUG: starting without daemon and the with driver device')
             self.label_computername.set_label('')
             self.color_chooser_widget.hide()
             self.box_profile_buttons.hide()
@@ -352,40 +353,37 @@ class GUI(Gtk.Window):
             self.combobox_profiles.set_sensitive(False)
             self.scrolledwindow_no_computer.show_all()
 
-            # Try to get the keyboard data to append to the Computer Data
-            # window
+            # Try to get the computer usb data to append to the `Computer Data` window
             data_info = DATA_INFO
             try:
                 lines = os.popen('''lsusb''').readlines()
                 for line in lines:
-                    if 'Alienware' in line:  # this could bug if there is any other device called Alienware.
+                    if 'Alienware' in line:  # This could bug if there is any other device called Alienware.
                         line = line.split(' ')
-                        data_info = os.popen(
-                            '''lsusb -D /dev/bus/usb/{}/{}'''.format(line[1], line[3][:-1])).read()
-
+                        data_info = os.popen('''lsusb -D /dev/bus/usb/{}/{}'''.format(line[1], line[3][:-1])).read()
             except Exception as e:
                 data_info = DATA_INFO_ERROR + e
                 self.textbuffer_computer_data.set_text(data_info)
         
         elif getuser() == 'root':
-            self.controller = Controller(self.driver)
-            self.computer = self.driver.computer
-
+        """
+        if True:
+            self._controller = Controller(self._driver)
+            print('DEBUG GUI: Controller loaded', self._controller)
+        """
         else:
             computer_name = AKBLConnection._command('get_computer_name')
-            self.computer = getattr(Computers, computer_name)()
+            self._driver.computer = getattr(Computers, computer_name)()
+        """
 
         self.apply_configuration = False
         self.thread_zones = True
         self.queue_zones = []
-        self.ccp = CCParser(
-            self._paths.CONFIGURATION_PATH,
-            'GUI Configuration')
+        self.ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Configuration')
 
         #   Load a configuration
         #
-        Theme.LOAD_profiles(
-            self.computer, self._paths.PROFILES_PATH)
+        Theme.LOAD_profiles(self._driver.computer, self._paths.PROFILES_PATH)
         self.POPULATE_liststore_profiles()
 
         """
@@ -393,14 +391,14 @@ class GUI(Gtk.Window):
         """
 
         self.label_computername.set_label(
-            '{} - {}'.format(getuser(), self.computer.name))
+            '{} - {}'.format(getuser(), self._driver.computer.name))
 
         if getuser() == 'root':
             computer_data = (
-                self.computer.name,
-                self.driver.vendor_id,
-                self.driver.product_id,
-                self.driver.dev)
+                self._driver.computer.name,
+                self._driver.vendor_id,
+                self._driver.product_id,
+                self._driver.dev)
         else:
             computer_data = AKBLConnection._command('get_computer_info')
 
@@ -552,7 +550,7 @@ class GUI(Gtk.Window):
             os.remove(self.theme.path)
 
         if len(Theme.INSTANCES_DIC.keys()) == 0:
-            Theme.CREATE_default_profile(self.computer)
+            Theme.CREATE_default_profile(self._driver.computer)
 
         Gdk.threads_enter()
         self.POPULATE_liststore_profiles()
@@ -662,28 +660,28 @@ class GUI(Gtk.Window):
                 keep_alive_zones = self.get_zones_to_keep_alive()
 
                 if keep_alive_zones == []:
-                    self.controller.set_loop_conf(
-                        state, self.driver.computer.BLOCK_LOAD_ON_BOOT)
-                    self.controller.Reset(self.computer.RESET_ALL_LIGHTS_OFF)
+                    self._controller.set_loop_conf(
+                        state, self._driver.computer.BLOCK_LOAD_ON_BOOT)
+                    self._controller.Reset(self._driver.computer.RESET_ALL_LIGHTS_OFF)
                 else:
                     """
                         This hack, it will set black as color to all the lights that should be turned off
                     """
-                    self.controller.set_loop_conf(
-                        False, self.driver.computer.BLOCK_LOAD_ON_BOOT)
-                    self.controller.add_speed_conf(1)
+                    self._controller.set_loop_conf(
+                        False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
+                    self._controller.add_speed_conf(1)
 
                     for key in sorted(self.theme.get_areas().keys()):
                         if key not in keep_alive_zones:
                             area = self.theme.get_areas()[key]
                             for zone in area:
-                                self.controller.add_loop_conf(
+                                self._controller.add_loop_conf(
                                     zone.regionId, 'fixed', '#000000', '#000000')
 
-                            self.controller.End_Loop_Conf()
+                            self._controller.End_Loop_Conf()
 
-                    self.controller.End_Transfert_Conf()
-                    self.controller.Write_Conf()
+                    self._controller.End_Transfert_Conf()
+                    self._controller.Write_Conf()
 
             if AKBL_DAEMON:
                 AKBLConnection._command('modify_lights_state', False)
@@ -749,7 +747,7 @@ class GUI(Gtk.Window):
         #   Test
         #
         self.testing_controller.set_loop_conf(
-            False, self.testing_driver.computer.BLOCK_LOAD_ON_BOOT)
+            False, self._testing_driver.computer.BLOCK_LOAD_ON_BOOT)
         self.testing_controller.add_speed_conf(speed * 256)
         self.testing_controller.add_loop_conf(zone_block, 
                                               zone_mode,
@@ -786,22 +784,22 @@ class GUI(Gtk.Window):
             if AKBL_DAEMON:
                 AKBLConnection._command('modify_lights_state', True)
 
-            self.controller.set_loop_conf(
-                False, self.driver.computer.BLOCK_LOAD_ON_BOOT)
-            self.controller.add_speed_conf(self.theme.speed)
+            self._controller.set_loop_conf(
+                False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
+            self._controller.add_speed_conf(self.theme.speed)
 
             for key in sorted(self.theme.get_areas().keys()):
                 area = self.theme.get_areas()[key]
                 for zone in area:
-                    self.controller.add_loop_conf(zone.regionId,
+                    self._controller.add_loop_conf(zone.regionId,
                                                   zone.get_mode(),
                                                   zone.get_left_color(),
                                                   zone.get_right_color())
 
-                self.controller.End_Loop_Conf()
+                self._controller.End_Loop_Conf()
 
-            self.controller.End_Transfert_Conf()
-            self.controller.Write_Conf()
+            self._controller.End_Transfert_Conf()
+            self._controller.Write_Conf()
 
         Gdk.threads_enter()
         self.label_user_message.set_text('')
@@ -873,8 +871,8 @@ class GUI(Gtk.Window):
         
         
         new_zone = ZoneWidget(
-            left_color=self.computer.default_color,
-            right_color=self.computer.default_color,
+            left_color=self._driver.computer.default_color,
+            right_color=self._driver.computer.default_color,
             mode='fixed',
             column=column,
             colorchooser_dialog=self.color_chooser_dialog,
@@ -953,7 +951,7 @@ class GUI(Gtk.Window):
                 return
 
             shutil.copy(file_path, new_path)
-            Theme.LOAD_profile(self.computer, new_path)
+            Theme.LOAD_profile(self._driver.computer, new_path)
             self.POPULATE_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, widget=None, data=None):
@@ -1095,16 +1093,16 @@ class GUI(Gtk.Window):
                 vendor = int(self.entry_id_vendor.get_text())
                 product = int(self.entry_id_product.get_text())
 
-            device = self.testing_driver.FindDevice(
+            device = self._testing_driver.FindDevice(
                 id_vendor=vendor, id_product=product)
 
             if device:
-                self.testing_controller = Controller(self.testing_driver)
+                self.testing_controller = Controller(self._testing_driver)
 
                 for i in range(30):
                     method = self.grid_common_blocks.get_child_at(
                         0, i).get_text()
-                    value = getattr(self.testing_driver.computer, method)
+                    value = getattr(self._testing_driver.computer, method)
 
                     self.grid_common_blocks.get_child_at(
                         2, i).set_text(hex(value))
@@ -1149,7 +1147,7 @@ class GUI(Gtk.Window):
                 text = self.grid_common_blocks.get_child_at(0, i).get_text()
                 entry = self.grid_common_blocks.get_child_at(1, i)
                 new_value = entry.get_text()
-                old_value = getattr(self.testing_driver.computer, text)
+                old_value = getattr(self._testing_driver.computer, text)
                 try:
                     old_value = int(old_value, 16)
                 except:
@@ -1171,7 +1169,7 @@ class GUI(Gtk.Window):
 
                 if submit:
                     if new_value != old_value:
-                        setattr(self.testing_driver.computer, text, new_value)
+                        setattr(self._testing_driver.computer, text, new_value)
                         gtk_append_text_to_buffer(
                             self.textbuffer_block_testing, TEXT_VALUE_CHANGED.format(
                                 text, new_value, hex(new_value)))
@@ -1198,7 +1196,7 @@ class GUI(Gtk.Window):
     def on_button_block_testing_lights_off_clicked(self, button, data=None):
         try:
             self.testing_controller.Reset(
-                self.testing_driver.computer.RESET_ALL_LIGHTS_OFF)
+                self._testing_driver.computer.RESET_ALL_LIGHTS_OFF)
             gtk_append_text_to_buffer(
                 self.textbuffer_block_testing,
                 '\n' + TEXT_BLOCK_LIGHTS_OFF + '\n')

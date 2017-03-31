@@ -26,7 +26,6 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 # Local imports
 from Paths import Paths
-import Configuration
 
 
 class AlienwareKBL:

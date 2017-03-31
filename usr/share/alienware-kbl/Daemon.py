@@ -26,7 +26,7 @@ from common import getuser
 from CCParser import CCParser
 
 # local imports
-import Configuration
+import Theme
 from Engine import *
 from Paths import Paths
 from Texts import *
@@ -49,19 +49,19 @@ class Daemon:
 
     def __init__(self, loop_self):
 
-        self._driver = Driver()
-        if not self._driver.has_device():
-            print("Warning: The computer is not supported")
+        driver = Driver()
+        if not driver.has_device():
+            print("Daemon: The computer is not supported.")
             exit(1)
+        self._controller = Controller(driver)
+        print('DEBUG Daemon: Controller loaded', self._controller)
 
         self.loop_self = loop_self
 
         # Get the user that the daemon should use
         #
         self._paths = Paths()
-        _global_ccp = CCParser(
-            self._paths.GLOBAL_CONFIG,
-            'Global alienware-kbl Configuration')
+        _global_ccp = CCParser(self._paths.GLOBAL_CONFIG, 'Global alienware-kbl Theme')
         self._user = _global_ccp.get_str_defval('boot_user', 'root')
 
         # Check if the user of the configuration file exists
@@ -80,15 +80,8 @@ class Daemon:
 
         # Initialize the daemon
         #
-        self._ccp = CCParser(
-            self._paths.CONFIGURATION_PATH,
-            'GUI Configuration')
-
-        self._controller = Controller(self._driver)
-
+        self._ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Theme')
         self._indicator_pyro = False
-        self._computer = self._driver.computer
-
         self.reload_configurations(self._user)
         self.set_lights(self._user, self._ccp.get_bool_defval('boot', True))
 
@@ -97,7 +90,7 @@ class Daemon:
         self._lights_state = True
 
         self._controller.set_loop_conf(
-            False, self._computer.BLOCK_LOAD_ON_BOOT)
+            False, self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
         self._controller.add_speed_conf(self._theme.speed)
 
         try:  # Patch (#12)
@@ -111,7 +104,7 @@ class Daemon:
         try:
             self._indicator_send_code(100)
             self._indicator_pyro.load_profiles(
-                list(Configuration.profiles.keys()),
+                list(Theme.profiles.keys()),
                 self.profile_name,
                 self._lights_state)
         except Exception as e:
@@ -152,17 +145,17 @@ class Daemon:
             self._user = user
             self._paths = Paths(user)
 
-        Configuration.LOAD_profiles(self._computer, self._paths.PROFILES_PATH)
+        Theme.LOAD_profiles(self._controller.driver.computer, self._paths.PROFILES_PATH)
 
         if set_default:
-            _, self.profile_name = Configuration.GET_last_configuration()
-            self._theme = Configuration.profiles[self.profile_name]
+            _, self.profile_name = Theme.GET_last_configuration()
+            self._theme = Theme.profiles[self.profile_name]
 
         if self._indicator_pyro and indicator:
             try:
                 self._indicator_pyro.load_profiles(
                     list(
-                        Configuration.profiles.keys()),
+                        Theme.profiles.keys()),
                     self.profile_name,
                     self._lights_state)
             except Exception as e:
@@ -185,8 +178,8 @@ class Daemon:
 
         self.reload_configurations(user, False, False)
 
-        if profile in Configuration.profiles.keys():
-            self._theme = Configuration.profiles[profile]
+        if profile in Theme.profiles.keys():
+            self._theme = Theme.profiles[profile]
             self.profile_name = profile
             self._iluminate_keyboard()
             self._iluminate_keyboard()
@@ -216,8 +209,8 @@ class Daemon:
 
             if keep_alive_zones == '':
                 self._controller.set_loop_conf(
-                    False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
-                self._controller.Reset(self._computer.RESET_ALL_LIGHTS_OFF)
+                    False, self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
+                self._controller.Reset(self._controller.driver.computer.RESET_ALL_LIGHTS_OFF)
             else:
                 keep_alive_zones = keep_alive_zones.split('|')
 
@@ -225,7 +218,7 @@ class Daemon:
                     This hack, it will set black as color to all the lights that should be turned off
                 """
                 self._controller.set_loop_conf(
-                    False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
+                    False, self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
                 self._controller.add_speed_conf(1)
 
                 for key in sorted(self._theme.area.keys()):
@@ -291,14 +284,14 @@ class Daemon:
 
         self._lights_state = True
         self._controller.set_loop_conf(
-            False, self._computer.BLOCK_LOAD_ON_BOOT)
+            False, self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
         self._controller.add_speed_conf(speed)
 
-        for zone in self._computer.regions.keys():
+        for zone in self._controller.driver.computer.regions.keys():
             for i in range(len(colors1)):
 
                 self._controller.add_loop_conf(
-                    self._computer.regions[zone].regionId, mode, colors1[i], colors2[i])
+                    self._controller.driver.computer.regions[zone].regionId, mode, colors1[i], colors2[i])
 
             self._controller.End_Loop_Conf()
 
@@ -311,12 +304,14 @@ class Daemon:
 
     @Pyro4.expose
     def get_computer_name(self):
-        return self._driver.computer.name
+        return self._controller.driver.computer.name
 
     @Pyro4.expose
     def get_computer_info(self):
-        return (self._computer.name, self._driver.vendor_id,
-                self._driver.product_id, str(self._driver.dev))
+        return (self._controller.driver.computer.name, 
+                self._controller.driver.vendor_id,
+                self._controller.driver.product_id, 
+                str(self._controller.driver.dev))
 
     @Pyro4.expose
     def modify_lights_state(self, bool):

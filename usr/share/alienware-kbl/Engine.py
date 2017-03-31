@@ -26,12 +26,13 @@ from copy import copy
 from traceback import format_exc
 
 # local imports
-from Computers import AllComputers, CommonConf
+from Computers import Computer
 
 
-class Driver(AllComputers):
+class Driver():
 
     def __init__(self):
+        
         # Define I/O Reqquest types
         self.SEND_REQUEST_TYPE = 0x21
         self.SEND_REQUEST = 0x09
@@ -45,6 +46,8 @@ class Driver(AllComputers):
         self.computer = None
         self._device = None
         self._device_found = False
+        
+        self.find_device()
 
     def has_device(self):
         if self._device is None:
@@ -65,10 +68,7 @@ class Driver(AllComputers):
                 print(format_exc())
 
                 if device is not None:
-                    self.computer_name = 'Block Testing'
-                    self.vendor_id = id_vendor
-                    self.product_id = id_product
-                    self.computer = CommonConf()
+                    self.computer = Computer()
                     self._device = device
                     self.take_over()
                     return
@@ -79,17 +79,16 @@ class Driver(AllComputers):
                 idProduct=self.computers_list[computer_name].product_id)
 
             if device is not None:
-
-                # This hack was made to differenciate the M14XR1 from the M14XR2R2
-                if computer == 'M14XR1' and 'Gaming' in str(dev):
-                    computer = 'M14XR2'
-
-                self.computer_name = computer
-                self.computer = self.computers_list[computer_name].computer
-                self.vendor_id = self.computers_list[computer_name].vendor_id
-                self.product_id = self.computers_list[computer_name].product_id
                 self._device = device
                 self.take_over()
+                print('DEBUG Driver: device loaded\n', device)
+                
+                # This hack was made to differenciate the M14XR1 from the M14XR2R2
+                if computer_name == 'M14XR1' and 'Gaming' in str(device):
+                    computer_name = 'M14XR2'
+
+                self.computer = self.computers_list[computer_name].name
+                print('DEBUG Driver: Computer loaded', self.computer)
                 return
 
     def write_device(self, MSG):
