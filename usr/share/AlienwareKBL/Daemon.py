@@ -100,26 +100,26 @@ class Daemon:
                     self._theme.path))
             print(format_exc())
 
-        try:
             self._indicator_send_code(100)
-            self._indicator_pyro.load_profiles(
-                list(Theme.profiles.keys()),
-                self.profile_name,
-                self._lights_state)
-        except Exception as e:
-            print(format_exc())
+            if self._indicator_pyro:
+                try:
+                    self._indicator_pyro.load_profiles(
+                        list(Theme.profiles.keys()),
+                        self.profile_name,
+                        self._lights_state)
+                except Exception as e:
+                    print(format_exc())
 
-        for key in sorted(self._theme.area.keys()):
-            area = self._theme.area[key]
-            for zone in area:
-                self._controller.add_loop_conf(zone.regionId,
-                                               zone.mode,
-                                               zone.color1,
-                                               zone.color2)
+        for region_name in self._theme.computer.get_suported_regions_names():
+            area = self._theme.get_area_by_name(region_name)
+            for zone_data in area:
+                self._controller.add_loop_conf(zone_data.region_id,
+                                               zone_data.mode,
+                                               zone_data.left_color,
+                                               zone_data.right_color)
 
-            self._controller.End_Loop_Conf()
-
-        self._controller.End_Transfert_Conf()
+            self._controller.constructor.end_loop()
+        self._controller.constructor.end_transfer()
         self._controller.write_conf()
 
     def _indicator_send_code(self, val):

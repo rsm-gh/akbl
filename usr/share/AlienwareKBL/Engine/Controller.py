@@ -56,15 +56,9 @@ class Controller:
         else:
             print('Warning: wrong mode `{}` on `add_loop_conf` of `Controller`.'.format(mode))
 
-    def end_loop_conf(self):
-        self.constructor.end_loop()
-
-    def end_transfer_conf(self):
-        self.constructor.end_transfer()
-
     def write_conf(self):
         self.wait_for_ok()
-        self.driver.write_device(self.request)
+        self.driver.write_device(self.constructor)
 
     def set_color(self, area, color, save=False, Apply=False, block=0x01):
 

@@ -26,19 +26,19 @@ class Request:
         self.packet = packet
 
 
-class Constructor:
+class Constructor(list):
 
     def __init__(self, driver, save=False, block=0x01):
         self.raz()
         self.computer = driver.computer
-        self.void = [self.computer.FILL_BYTE] * self.computer.DATA_LENGTH
         self.Id = 0x01
-        self.save = save
         self.block = block
-        self.requests = []
+        
+        self._save = save
+        self._void = [self.computer.FILL_BYTE] * self.computer.DATA_LENGTH
 
     def save(self, end=False):
-        if self.requests:
+        if self:
             if not end:
                 self.set_save_block(self.block)
             else:
@@ -52,17 +52,17 @@ class Constructor:
 
     def set_speed(self, speed=0xc800):
         self.save()
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         legend = "set_speed =  {}".format(speed)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_SPEED
-        cmd[3] = int(Speed / 256)
-        cmd[4] = int(Speed - (Speed / 256) * 256)
-        self.requests.append(Request(legend, cmd))
+        cmd[3] = int(speed / 256)
+        cmd[4] = int(speed - (speed / 256) * 256)
+        self.append(Request(legend, cmd))
 
     def set_blink_color(self, area, color):
         self.save()
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         legend = "set_blink_color `{}` on area `{}`".format(color, area)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_BLINK_COLOR
@@ -72,11 +72,11 @@ class Constructor:
         cmd[5] = area[2]
         cmd[6] = left_color[0]
         cmd[7] = left_color[1]
-        self.requests.append(Request(legend, cmd))
+        self.append(Request(legend, cmd))
 
     def set_color_morph(self, area, left_color, right_color):
         self.save()
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         color = left_color[1] + right_color[0]
         legend = '''set_color_morph:
             left_color: `{}`
@@ -94,9 +94,9 @@ class Constructor:
         cmd[7] = color
         cmd[8] = right_color[1]
 
-        self.requests.append(Request(legend, cmd))
+        self.append(Request(legend, cmd))
 
-    def parse_areas(self, areas):  # gotta check the power button to understand it ...
+    def parse_areas(self, areas):  # gotta check the power button to understand it ..
         """
             This method will parse an area to a list of three values.
 
@@ -138,7 +138,7 @@ class Constructor:
     def set_color(self, Area, left_color, hex_id=0x01):
 
         self.save()
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         legend = "Set left_color"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_COLOR
@@ -149,24 +149,24 @@ class Constructor:
         cmd[6] = left_color[0]
         cmd[7] = left_color[1]
 
-        self.requests.append(Request(legend, cmd))
+        self.append(Request(legend, cmd))
 
     def set_save_block(self, block):
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         legend = "save block: {}".format(block)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SAVE_NEXT
         cmd[2] = block
 
-        self.requests.append(Request(legend, cmd))
+        self.append(Request(legend, cmd))
 
     def set_save(self):
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         legend = "Set save"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SAVE
 
-        self.requests.append(Request(legend, cmd))
+        self.append(Request(legend, cmd))
 
     def convert_color(self, color):
         color = color.replace('#', '')
@@ -179,22 +179,22 @@ class Constructor:
         return c
 
     def get_color_status(self):
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         legend = "get_color_status"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_GET_STATUS
 
-        self.requests.append(Request(legend, cmd))
+        self.append(Request(legend, cmd))
 
     def reset_all(self):
         self.save()
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         legend = "reset_all"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_RESET
         cmd[2] = self.computer.RESET_ALL_LIGHTS_ON
 
-        self.requests.append(Request(legend, cmd))
+        self.append(Request(legend, cmd))
 
     def reset(self, command):
         if command in [self.computer.RESET_ALL_LIGHTS_ON,
@@ -203,35 +203,36 @@ class Constructor:
                        self.computer.RESET_SLEEP_LIGHTS_ON]:
 
             self.save()
-            cmd = copy(self.void)
+            cmd = copy(self._void)
             legend = "reset"
             cmd[0] = self.computer.START_BYTE
             cmd[1] = self.computer.COMMAND_RESET
             cmd[2] = command
 
-            self.requests.append(Request(legend, cmd))
+            self.append(Request(legend, cmd))
         else:
             print("Engine > Constructor error: WRONG RESET COMMAND")
 
     def end_loop(self):
         self.save()
-        cmd = copy(self.void)
+        cmd = copy(self._void)
         legend = "end_loop"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_LOOP_BLOCK_END
 
         self.Id += 0x01
-        self.requests.append(Request(legend, cmd))
+        self.append(Request(legend, cmd))
 
     def end_transfer(self):
         self.save(end=True)
-        if not self.save:
-            cmd = copy(self.void)
+        if not self._save:
+            cmd = copy(self._void)
             legend = "end_transfert"
             cmd[0] = self.computer.START_BYTE
             cmd[1] = self.computer.COMMAND_TRANSMIT_EXECUTE
 
-            self.requests.append(Request(legend, cmd))
+            self.append(Request(legend, cmd))
 
     def raz(self):
-        self.requests = []
+        for request in self:
+            self.pop(request)

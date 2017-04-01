@@ -22,7 +22,7 @@ class ZoneData:
 
     def __init__(self, left_color, right_color, mode, region_id=None):
 
-        self.regionId = region_id
+        self.region_id = region_id
         self._mode = ''
         self._left_color = []
         self._right_color = []

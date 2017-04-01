@@ -110,6 +110,9 @@ class Theme:
     def get_areas(self):
         return self._area_instances_dic
 
+    def get_area_by_name(self, area_name):
+        return self._area_instances_dic[area_name]
+
     def add_area(self, area_data):
         if not area_data.name in self._area_instances_dic.keys():
             self._area_instances_dic[area_data.name] = area_data
