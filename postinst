@@ -17,8 +17,8 @@
 
 echo "Enabling and starting systemd..."
 if [ -f /bin/systemctl ]; then
-	systemctl enable alienware-kbl
-	systemctl start alienware-kbl
+    systemctl enable alienware-kbl
+    systemctl start alienware-kbl
 fi
 
 echo "Linking the python bindings..."
@@ -27,22 +27,22 @@ if [ ! -d /usr/lib/python3 ]; then
 fi
 
 if [ -d /usr/lib/python3 ]; then
-    ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3/AlienwareKBL.py
+    ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/python3/AKBL.py
     echo "Python3 linked."
 fi
 
 if [ -d /usr/lib/python3.4 ]; then
-    ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3.4/AlienwareKBL.py
+    ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/python3.4/AKBL.py
     echo "Python3.4 linked."
 fi
 
 if [ -d /usr/lib/python3.5 ]; then
-    ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3.5/AlienwareKBL.py
+    ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/python3.5/AKBL.py
     echo "Python3.5 linked."
 fi
 
 if [ -d /usr/lib/python3.6 ]; then
-    ln -s /usr/share/alienware-kbl/Bindings.py /usr/lib/python3.6/AlienwareKBL.py
+    ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/python3.6/AKBL.py
     echo "Python3.6 linked."
 fi
 

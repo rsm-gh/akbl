@@ -18,18 +18,19 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-from Texts import *
-from Region import Region
+
+# Local imports
+from texts import *
+from Engine.Region import Region
 
 class Computer:
 
     def __init__(self):
 
-        self.default_color = '0000FF'
-        self.default_mode = 'fixed'
-        self.regions = {}
-
+        self.DEFAULT_COLOR = '0000FF'
+        self.DEFAULT_MODE = 'fixed'
         self.NAME = 'Common Configuration'
+        self.REGIONS = []
         self.VENDOR_ID = 0x187c
         self.PRODUCT_ID = None
         self.SUPPORTED_COMMANDS = 15
@@ -67,7 +68,14 @@ class Computer:
         self.BLOCK_BAT_POWER = 0x08
         self.BLOCK_BATT_CRITICAL = 0x09
 
+    def get_suported_regions_names(self):
+        return [region.name for region in self.REGIONS]
 
+    def get_region_by_name(self, region_name):
+        
+        for region in self.REGIONS:
+            if region_name == region.name:
+                return region
 
 class M11XR1(Computer):
 
@@ -85,56 +93,58 @@ class M11XR1(Computer):
         self.REGION_POWER_BUTTON = 0x6000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.regions = {
+        self.REGIONS = [
 
-            TEXT_AREA_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_KEYBOARD_ID, 
                 TEXT_DESCRIPTION_KEYBOARD, 
                 self.REGION_KEYBOARD, 
                 self.SUPPORTED_COMMANDS, 
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_SPEAKER_ID,
                 TEXT_DESCRIPTION_RIGHT_SPEAKER,
                 self.REGION_RIGHT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_SPEAKER_ID,
                 TEXT_DESCRIPTION_LEFT_SPEAKER,
                 self.REGION_LEFT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
                 
-            TEXT_AREA_ALIENWARE_LOGO_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_LOGO_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
                 self.REGION_ALIENWARE_NAME,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_MEDIA_BAR_ID : Region(
+            Region(
                 TEXT_AREA_MEDIA_BAR_ID,
                 TEXT_DESCRIPTION_MEDIA_BAR,
                 self.REGION_MEDIA_BAR,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_ID,
                 TEXT_DESCRIPTION_POWER_BUTTON,
                 self.REGION_POWER_BUTTON,
                 2,
                 False, True, False,
-                self.default_color)
-        }
+                self.DEFAULT_COLOR)
+        ]
+        
+        self.REGIONS.sort(key=lambda region: region.description)
 
 
 class M11XR2(M11XR1):
@@ -179,103 +189,106 @@ class M14XR1(Computer):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.regions = {
-            TEXT_AREA_RIGHT_KEYBOARD_ID : Region(
+        self.REGIONS = [
+
+            Region(
                 TEXT_AREA_RIGHT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_KEYBOARD,
                 self.REGION_RIGHT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
     
-            TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
                 self.REGION_RIGHT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_KEYBOARD,
                 self.REGION_LEFT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
                 self.REGION_LEFT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_SPEAKER_ID,
                 TEXT_DESCRIPTION_RIGHT_SPEAKER,
                 self.REGION_RIGHT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_SPEAKER_ID,
                 TEXT_DESCRIPTION_LEFT_SPEAKER,
                 self.REGION_LEFT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_HEAD_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_HEAD_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
                 self.REGION_ALIENWARE_HEAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_LOGO_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_LOGO_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
                 self.REGION_ALIENWARE_NAME,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_TOUCH_PAD_ID : Region(
+            Region(
                 TEXT_AREA_TOUCH_PAD_ID,
                 TEXT_DESCRIPTION_TOUCHPAD,
                 self.REGION_TOUCH_PAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_MEDIA_BAR_ID : Region(
+            Region(
                 TEXT_AREA_MEDIA_BAR_ID,
                 TEXT_DESCRIPTION_MEDIA_BAR,
                 self.REGION_MEDIA_BAR,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_EYES_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_EYES_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_POWERBUTTON_EYES,
                 self.REGION_POWER_BUTTON_EYES,
                 1,
                 False, False, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_ID,
                 TEXT_DESCRIPTION_POWER_BUTTON,
                 self.REGION_POWER_BUTTON,
                 2,
                 True, True, True,
-                self.default_color)
-        }
+                self.DEFAULT_COLOR)
+        ]
+        
+        self.REGIONS.sort(key=lambda region: region.description)
 
 
 class Alienware13(Computer):
@@ -296,87 +309,90 @@ class Alienware13(Computer):
         self.REGION_HARD_DISK_DRIVE = 0x0200
         self.REGION_CAPS_LOCK = 0x80
 
-        self.regions = {
-            TEXT_AREA_HARD_DISK_DRIVE_ID : Region(
+        self.REGIONS = [
+
+            Region(
                 TEXT_AREA_HARD_DISK_DRIVE_ID,
                 TEXT_DESCRIPTION_HDD,
                 self.REGION_HARD_DISK_DRIVE,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
                 self.REGION_RIGHT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_CAPS_LOCK_ID : Region(
+            Region(
                 TEXT_AREA_CAPS_LOCK_ID,
                 TEXT_DESCRIPTION_CAPS_LOCK,
                 self.REGION_CAPS_LOCK,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_KEYBOARD,
                 self.REGION_RIGHT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
                 self.REGION_RIGHT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_KEYBOARD,
                 self.REGION_LEFT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
                 self.REGION_LEFT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_HEAD_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_HEAD_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
                 self.REGION_ALIENWARE_HEAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_LOGO_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_LOGO_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
                 self.REGION_ALIENWARE_NAME,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_OUTER_LID_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_OUTER_LID_ID,
                 TEXT_DESCRIPTION_OUTER_LID,
                 self.REGION_OUTER_LID,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
-        }
+                self.DEFAULT_COLOR),
+        ]
+        
+        self.REGIONS.sort(key=lambda region: region.description)
 
 
 class Alienware13R3(Alienware13):
@@ -422,63 +438,66 @@ class M15XArea51(Computer):
         self.REGION_POWER_BUTTON = 0x008000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
-        self.regions = {
-            TEXT_AREA_LIGHT_PIPE_ID : Region(
+        self.REGIONS = [
+
+            Region(
                 TEXT_AREA_LIGHT_PIPE_ID,
                 TEXT_DESCRIPTION_LIGHT_PIPE,
                 self.REGION_LIGHTPIPE,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_KEYBOARD_ID,
                 TEXT_DESCRIPTION_KEYBOARD,
                 self.REGION_KEY_BOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_HEAD_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_HEAD_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
                 self.REGION_ALIENWARE_HEAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_LOGO_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_LOGO_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
                 self.REGION_ALIENWARE_LOGO,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_TOUCH_PAD_ID : Region(
+            Region(
                 TEXT_AREA_TOUCH_PAD_ID,
                 TEXT_DESCRIPTION_TOUCHPAD,
                 self.REGION_TOUCH_PAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_MEDIA_BAR_ID : Region(
+            Region(
                 TEXT_AREA_MEDIA_BAR_ID,
                 TEXT_DESCRIPTION_MEDIA_BAR,
                 self.REGION_TOUCH_PANEL,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_ID,
                 TEXT_DESCRIPTION_POWER_BUTTON,
                 self.REGION_POWER_BUTTON,
                 1,
                 False, False, True,
-                self.default_color)
-        }
+                self.DEFAULT_COLOR)
+        ]
+        
+        self.REGIONS.sort(key=lambda region: region.description)
 
 
 class Alienware15(Computer):
@@ -504,111 +523,114 @@ class Alienware15(Computer):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         # 0x1800 primitive speaker-both
 
-        self.regions = {
-            TEXT_AREA_TACTX_ID : Region(
+        self.REGIONS = [
+
+            Region(
                 TEXT_AREA_TACTX_ID,
                 TEXT_DESCRIPTION_TACTX,
                 self.REGION_TACTX,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_KEYBOARD,
                 self.REGION_RIGHT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
                 self.REGION_RIGHT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_KEYBOARD,
                 self.REGION_LEFT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
                 self.REGION_LEFT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_SPEAKER_ID,
                 TEXT_DESCRIPTION_RIGHT_SPEAKER,
                 self.REGION_RIGHT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_SPEAKER_ID,
                 TEXT_DESCRIPTION_LEFT_SPEAKER,
                 self.REGION_LEFT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_HEAD_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_HEAD_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
                 self.REGION_ALIENWARE_HEAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_LOGO_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_LOGO_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
                 self.REGION_ALIENWARE_NAME,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_TOUCH_PAD_ID : Region(
+            Region(
                 TEXT_AREA_TOUCH_PAD_ID,
                 TEXT_DESCRIPTION_TOUCHPAD,
                 self.REGION_TOUCH_PAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_MEDIA_BAR_ID : Region(
+            Region(
                 TEXT_AREA_MEDIA_BAR_ID,
                 TEXT_DESCRIPTION_MEDIA_BAR,
                 self.REGION_MEDIA_BAR,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_EYES_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_EYES_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_POWERBUTTON_EYES,
                 self.REGION_POWER_BUTTON_EYES,
                 1,
                 False, False, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_ID,
                 TEXT_DESCRIPTION_POWER_BUTTON,
                 self.REGION_POWER_BUTTON,
                 2,
                 True, True, True,
-                self.default_color)
-        }
+                self.DEFAULT_COLOR)
+        ]
+        
+        self.REGIONS.sort(key=lambda region: region.description)
 
 
 class Alienware15R3(Alienware15):
@@ -640,103 +662,106 @@ class M17X(Computer):
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
 
-        self.regions = {
-            TEXT_AREA_RIGHT_KEYBOARD_ID : Region(
+        self.REGIONS = [
+
+            Region(
                 TEXT_AREA_RIGHT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_KEYBOARD,
                 self.REGION_RIGHT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
                 self.REGION_RIGHT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_KEYBOARD,
                 self.REGION_LEFT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
                 self.REGION_LEFT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_SPEAKER_ID,
                 TEXT_DESCRIPTION_RIGHT_SPEAKER,
                 self.REGION_RIGHT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_SPEAKER_ID,
                 TEXT_DESCRIPTION_LEFT_SPEAKER,
                 self.REGION_LEFT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_HEAD_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_HEAD_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
                 self.REGION_ALIENWARE_HEAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_LOGO_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_LOGO_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
                 self.REGION_ALIENWARE_NAME,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_TOUCH_PAD_ID : Region(
+            Region(
                 TEXT_AREA_TOUCH_PAD_ID,
                 TEXT_DESCRIPTION_TOUCHPAD,
                 self.REGION_TOUCH_PAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_MEDIA_BAR_ID : Region(
+            Region(
                 TEXT_AREA_MEDIA_BAR_ID,
                 TEXT_DESCRIPTION_MEDIA_BAR,
                 self.REGION_MEDIA_BAR,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_EYES_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_EYES_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_POWERBUTTON_EYES,
                 self.REGION_POWER_BUTTON_EYES,
                 1,
                 False, False, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_ID,
                 TEXT_DESCRIPTION_POWER_BUTTON,
                 self.REGION_POWER_BUTTON,
                 2,
                 True, True, True,
-                self.default_color)
-        }
+                self.DEFAULT_COLOR)
+        ]
+        
+        self.REGIONS.sort(key=lambda region: region.description)
 
 
 class M17XR2(Computer):
@@ -760,104 +785,106 @@ class M17XR2(Computer):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
+        self.REGIONS = [
 
-        self.regions = {
-            TEXT_AREA_RIGHT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_KEYBOARD,
                 self.REGION_RIGHT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
                 self.REGION_RIGHT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_KEYBOARD,
                 self.REGION_LEFT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
                 self.REGION_LEFT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_SPEAKER_ID,
                 TEXT_DESCRIPTION_RIGHT_SPEAKER,
                 self.REGION_RIGHT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_SPEAKER_ID,
                 TEXT_DESCRIPTION_LEFT_SPEAKER,
                 self.REGION_LEFT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_HEAD_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_HEAD_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
                 self.REGION_ALIENWARE_HEAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_LOGO_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_LOGO_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
                 self.REGION_ALIENWARE_NAME,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_TOUCH_PAD_ID : Region(
+            Region(
                 TEXT_AREA_TOUCH_PAD_ID,
                 TEXT_DESCRIPTION_TOUCHPAD,
                 self.REGION_TOUCH_PAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_MEDIA_BAR_ID : Region(
+            Region(
                 TEXT_AREA_MEDIA_BAR_ID,
                 TEXT_DESCRIPTION_MEDIA_BAR,
                 self.REGION_MEDIA_BAR,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_EYES_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_EYES_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_POWERBUTTON_EYES,
                 self.REGION_POWER_BUTTON_EYES,
                 1,
                 False, False, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_ID,
                 TEXT_DESCRIPTION_POWER_BUTTON,
                 self.REGION_POWER_BUTTON,
                 2,
                 True, True, True,
-                self.default_color)
-        }
+                self.DEFAULT_COLOR)
+        ]
+        
+        self.REGIONS.sort(key=lambda region: region.description)
 
 
 class M17XR3(M17X):
@@ -889,104 +916,106 @@ class M18XR2(Computer):
         self.REGION_POWER_BUTTON_EYES = 0x4000
         self.REGION_ALL_BUT_POWER = 0x0f9fff
 
+        self.REGIONS = [
 
-        self.regions = {
-            TEXT_AREA_RIGHT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_KEYBOARD,
                 self.REGION_RIGHT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
                 self.REGION_RIGHT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_KEYBOARD,
                 self.REGION_LEFT_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_CENTER_KEYBOARD_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_CENTER_KEYBOARD_ID,
                 TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
                 self.REGION_LEFT_CENTER_KEYBOARD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_RIGHT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_RIGHT_SPEAKER_ID,
                 TEXT_DESCRIPTION_RIGHT_SPEAKER,
                 self.REGION_RIGHT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_LEFT_SPEAKER_ID : Region(
+            Region(
                 TEXT_AREA_LEFT_SPEAKER_ID,
                 TEXT_DESCRIPTION_LEFT_SPEAKER,
                 self.REGION_LEFT_SPEAKER,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_HEAD_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_HEAD_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
                 self.REGION_ALIENWARE_HEAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_ALIENWARE_LOGO_ID : Region(
+            Region(
                 TEXT_AREA_ALIENWARE_LOGO_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
                 self.REGION_ALIENWARE_NAME,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_TOUCH_PAD_ID : Region(
+            Region(
                 TEXT_AREA_TOUCH_PAD_ID,
                 TEXT_DESCRIPTION_TOUCHPAD,
                 self.REGION_TOUCH_PAD,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_MEDIA_BAR_ID : Region(
+            Region(
                 TEXT_AREA_MEDIA_BAR_ID,
                 TEXT_DESCRIPTION_MEDIA_BAR,
                 self.REGION_MEDIA_BAR,
                 self.SUPPORTED_COMMANDS,
                 True, True, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_EYES_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_EYES_ID,
                 TEXT_DESCRIPTION_ALIENWAREWARE_POWERBUTTON_EYES,
                 self.REGION_POWER_BUTTON_EYES,
                 1,
                 False, False, True,
-                self.default_color),
+                self.DEFAULT_COLOR),
 
-            TEXT_AREA_POWER_BUTTON_ID : Region(
+            Region(
                 TEXT_AREA_POWER_BUTTON_ID,
                 TEXT_DESCRIPTION_POWER_BUTTON,
                 self.REGION_POWER_BUTTON,
                 2,
                 True, True, True,
-                self.default_color)
-        }
+                self.DEFAULT_COLOR)
+        ]
+        
+        self.REGIONS.sort(key=lambda region: region.description)
 
 
 class M18XRX(M18XR2):
@@ -997,32 +1026,35 @@ class M18XRX(M18XR2):
         self.PRODUCT_ID = 0x0523
 
 
-COMPUTERS_LIST = {
-    TEXT_M11XR1:M11XR1(),
-    TEXT_M11XR2:M11XR2(),
-    TEXT_M11XR3:M11XR3(),
-    TEXT_M11XR25:M11XR25(),
-    TEXT_ALIENWAREWARE13:Alienware13(),
-    TEXT_ALIENWAREWARE13R3:Alienware13R3(),
-    TEXT_M14XR1:M14XR1(),
-    TEXT_M14XR2:M14XR2(),
-    TEXT_M14XR3:M14XR3(),
-    TEXT_M15XAREA51:M15XArea51(),
-    TEXT_ALIENWAREWARE15:Alienware15(),
-    TEXT_ALIENWAREWARE15R3:Alienware15R3(),
-    TEXT_M17X:M17X(),
-    TEXT_M17XR2:M17XR2(),
-    TEXT_M17XR3:M17XR3(),
-    TEXT_M18XR2:M18XR2(),
-    TEXT_M18XRX:M18XRX(),
-}
+AVAILABLE_COMPUTERS = [ 
+    M11XR1(),
+    M11XR2(),
+    M11XR3(),
+    M11XR25(),
+    Alienware13(),
+    Alienware13R3(),
+    M14XR1(),
+    M14XR2(),
+    M14XR3(),
+    M15XArea51(),
+    Alienware15(),
+    Alienware15R3(),
+    M17X(),
+    M17XR2(),
+    M17XR3(),
+    M18XR2(),
+    M18XRX(),
+]
 
+AVAILABLE_COMPUTERS.sort(key= lambda computer: computer.NAME)
 
 
 if __name__ == '__main__':
     
-    for computer_name, computer in COMPUTERS_LIST.items():
-        print(computer_name, 'product_id: ', computer.PRODUCT_ID)
-        for region_id, region_object in computer.regions.items():
-            print('\t{}\t{}'.format(region_id, region_object.description))
+    
+    for computer in AVAILABLE_COMPUTERS:
+        print(computer.NAME, 'product_id: ', computer.PRODUCT_ID)
+        print('\n{}\n'.format(computer.get_suported_regions_names()))
+        for region in computer.REGIONS:
+            print('\t{}\t{}'.format(region.name, region.description))
         print('\n')

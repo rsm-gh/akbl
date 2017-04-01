@@ -17,16 +17,19 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 import os
+import sys
 from traceback import format_exc
 
 # Local imports
-from Paths import *
-from Computers import *
-from Area import AreaData
-from Zone import ZoneData
+from .Paths import Paths
+sys.path.append("../")
+from Engine.Area import AreaData
+from Engine.Zone import ZoneData
 
 INSTANCES_DIC = {}
 
+def get_theme_by_name(name):
+    return INSTANCES_DIC[name]
 
 def LOAD_profiles(computer, theme_path):
 
@@ -137,10 +140,10 @@ class Theme:
         with open(path, encoding='utf-8', mode='rt') as f:
             lines = f.readlines()
 
-        area_found, color1, color2, mode, = False, False, False, False
+        area_found, left_color, right_color, mode, = False, False, False, False
 
         imported_areas = []
-        supported_areas_ids = self.computer.keys()
+        supported_region_names = self.computer.get_suported_regions_names()
 
         # Parse the configuration file
         #
@@ -170,10 +173,10 @@ class Theme:
                     elif var_name == 'area':
                         area_id = var_arg
 
-                        if area_id in supported_areas_ids:
+                        if area_id in supported_region_names:
                             area_found=True
                             imported_areas.append(area_id)
-                            region_object = self.computer.regions[area_id]
+                            region_object = self.computer.get_region_by_name(area_id)
                             area = AreaData(name=region_object.name, description=region_object.description)
                             self.add_area(area)
                         else:
@@ -189,19 +192,19 @@ class Theme:
                     elif var_name in ('color2','right_color'):
                         color2 = var_arg
 
-                    if area_found and color1 and color2 and mode:
+                    if area_found and left_color and right_color and mode:
                         zone_data=ZoneData(region_id=region_object.regionId,
                                            mode=mode,
-                                           color1=color1,
-                                           color2=color2)
+                                           left_color=left_color,
+                                           right_color=right_color)
 
                         area.add_zone_data(zone_data)
 
-                        color1, color2, mode = False, False, False
+                        left_color, right_color, mode = False, False, False
 
         # Add areas in case they be missing
         #
-        for area_id in supported_areas_ids:
+        for area_id in supported_region_names:
             if area_id not in imported_areas:
 
                 region_object = self.computer.regions[area_id]
@@ -237,7 +240,7 @@ class Theme:
             print("Warning: error setting the speed.")
             print(format_exc())
 
-    def modify_zone(self, zone, column, color1, color2, mode):
+    def modify_zone(self, zone, column, left_color, right_color, mode):
         zone_data = self._area_instances_dic[zone.name][column]
         zone_data.color1 = color1
         zone_data.color2 = color2

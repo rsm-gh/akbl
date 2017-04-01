@@ -20,15 +20,15 @@
 # alienware-kbl doesn't includes anymore python-usb.
 # this will prevent users from using the old python-usb
 #
-if [ -d /usr/share/alienware-kbl/usb ]; then
-    rm -rf /usr/share/alienware-kbl/usb
+if [ -d /usr/share/AlienwareKBL/usb ]; then
+    rm -rf /usr/share/AlienwareKBL/usb
 fi
 
 echo "Saving possible configuration files from older versions..."
 #
 #  Move the profiles from /usr/share/ to /etc/   (in case of upgrading an older version of akbl)
 #
-if [ -d /usr/share/alienware-kbl/Profiles ]; then
+if [ -d /usr/share/AlienwareKBL/Profiles ]; then
 
     if ! [ -d /etc/alienware-kbl ]; then
         mkdir /etc/alienware-kbl
@@ -38,8 +38,8 @@ if [ -d /usr/share/alienware-kbl/Profiles ]; then
         mkdir /etc/alienware-kbl/profiles
     fi
 
-    cp -r /usr/share/alienware-kbl/Profiles /etc/alienware-kbl/profiles
-    rm -rf /usr/share/alienware-kbl/Profiles
+    cp -r /usr/share/AlienwareKBL/Profiles /etc/alienware-kbl/profiles
+    rm -rf /usr/share/AlienwareKBL/Profiles
     
     echo "Profiles saved."
 fi
@@ -47,14 +47,14 @@ fi
 #
 #  Move the configuration file to /etc/         (in case of upgrading an older version of akbl)
 #
-if [ -f /usr/share/alienware-kbl/config ]; then
+if [ -f /usr/share/AlienwareKBL/config ]; then
 
     if ! [ -d /etc/alienware-kbl ]; then
         mkdir /etc/alienware-kbl
     fi
 
-    cp /usr/share/alienware-kbl/config /etc/alienware-kbl/alienware-kbl.ini
-    rm -f /usr/share/alienware-kbl/config
+    cp /usr/share/AlienwareKBL/config /etc/alienware-kbl/alienware-kbl.ini
+    rm -f /usr/share/AlienwareKBL/config
     
     echo "Configuration saved."
 fi

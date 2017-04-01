@@ -22,15 +22,15 @@ import os
 import pwd
 from traceback import format_exc
 from time import time, sleep
-from common import getuser
-from CCParser import CCParser
 
-# local imports
-import Theme
-from Engine import *
-from Paths import Paths
-from Texts import *
-
+# Local imports
+from texts import *
+from utils import getuser
+from Engine.Controller import Controller
+from Engine.Driver import Driver
+from Configuration import Theme
+from Configuration.Paths import Paths
+from Configuration.CCParser import CCParser
 
 class ConnectDaemon:
 
@@ -89,9 +89,8 @@ class Daemon:
 
         self._lights_state = True
 
-        self._controller.set_loop_conf(
-            False, self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
-        self._controller.add_speed_conf(self._theme.speed)
+        self._controller.set_loop_conf(save=False, block=self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
+        self._controller.constructor.set_speed(self._theme.speed)
 
         try:  # Patch (#12)
             os.utime(self._theme.path, None)
@@ -149,13 +148,12 @@ class Daemon:
 
         if set_default:
             _, self.profile_name = Theme.GET_last_configuration()
-            self._theme = Theme.profiles[self.profile_name]
+            self._theme = Theme.get_theme_by_name(self.profile_name)
 
         if self._indicator_pyro and indicator:
             try:
                 self._indicator_pyro.load_profiles(
-                    list(
-                        Theme.profiles.keys()),
+                    list(Theme.profiles.keys()),
                     self.profile_name,
                     self._lights_state)
             except Exception as e:
@@ -242,16 +240,16 @@ class Daemon:
             self._iluminate_keyboard()
 
     @Pyro4.expose
-    def set_colors(self, mode, speed, colors1, colors2=None):
+    def set_colors(self, mode, speed, left_colors, right_colors=None):
         """
             Change the colors and the mode of the keyboard.
 
             + The available modes are: 'fixed', 'morph', 'blink'
-                'fixed' and 'blink' only takes colors1
+                'fixed' and 'blink' only takes left_colors
 
             + Speed must be an integer. 1 =< speed =< 256
 
-            + colors1 and colors2 can be a single hex color or a list.
+            + left_colors and right_colors can be a single hex color or a list.
               If both arguments are used, both arguments must have
               the same number of items.
         """
@@ -269,16 +267,16 @@ class Daemon:
 
         speed = speed * 256
 
-        if not isinstance(colors1, list):
-            colors1 = [colors1]
+        if not isinstance(left_colors, list):
+            left_colors = [left_colors]
 
-        if colors2 is None:
-            colors2 = colors1
+        if right_colors is None:
+            right_colors = left_colors
 
-        if not isinstance(colors2, list):
-            colors2 = [colors2]
+        if not isinstance(right_colors, list):
+            right_colors = [right_colors]
 
-        if len(colors1) != len(colors2):
+        if len(left_colors) != len(right_colors):
             print("Warning: The colors list do not have the same lenght")
             return
 
@@ -288,10 +286,10 @@ class Daemon:
         self._controller.add_speed_conf(speed)
 
         for zone in self._controller.driver.computer.regions.keys():
-            for i in range(len(colors1)):
+            for i in range(len(left_colors)):
 
                 self._controller.add_loop_conf(
-                    self._controller.driver.computer.regions[zone].regionId, mode, colors1[i], colors2[i])
+                    self._controller.driver.computer.regions[zone].regionId, mode, left_colors[i], right_colors[i])
 
             self._controller.End_Loop_Conf()
 

@@ -17,8 +17,11 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 import os
-from common import getuser
+import sys
 from shutil import rmtree
+
+sys.path.append("../")
+from utils import getuser
 
 class Paths:
 
@@ -42,8 +45,8 @@ class Paths:
             use some commad like './setup; chown rsm -R *', and I actually install it
             for making the tests.
         """
-        self.GLADE_FILE = '/usr/share/alienware-kbl/GUI.glade'
-        self.IMAGES = '/usr/share/alienware-kbl/images/'
+        self.GLADE_FILE = '/usr/share/AlienwareKBL/GUI/GUI.glade'
+        self.IMAGES = '/usr/share/AlienwareKBL/GUI/images/'
 
         self.SMALL_ICON = self.IMAGES + 'icon.png'
         self.MEDIUM_ICON = self.IMAGES + 'icon-m.png'

@@ -31,9 +31,38 @@ chmod a+x ./remove ./prerm ./preinst ./postinst
 # they are removed in case they've been forgotten
 # in the source code.
 #
-if [ -d $DIR/usr/share/alienware-kbl/__pycache__ ]; then
-	rm -rf $DIR/usr/share/alienware-kbl/__pycache__
+if [ -d $DIR/usr/share/AlienwareKBL/__pycache__ ]; then
+    rm -rf $DIR/usr/share/AlienwareKBL/__pycache__
 fi
+
+#
+# `/usr/share/AlienwareKBL` has been moved to `/usr/share/ALienwareKBL`,
+# this will delete old versions.
+#
+if [ -d $DIR/usr/share/alienware-kbl ]; then
+    rm -rf $DIR/usr/share/alienware-kbl
+fi
+
+#
+# The python bindings have been named from `AlienwareKBL` to `AKBL`,
+# this will delete the old versions.
+#
+if [ -f /usr/lib/python3/AlienwareKBL.py ]; then
+    rm -f /usr/lib/python3/AlienwareKBL.py
+fi 
+
+if [ -f /usr/lib/python3.4/AlienwareKBL.py ]; then
+    rm -f /usr/lib/python3.4/AlienwareKBL.py
+fi 
+
+if [ -f /usr/lib/python3.5/AlienwareKBL.py ]; then
+    rm -f /usr/lib/python3.5/AlienwareKBL.py
+fi 
+
+if [ -f /usr/lib/python3.6/AlienwareKBL.py ]; then
+    rm -f /usr/lib/python3.6/AlienwareKBL.py
+fi 
+
 
 #
 # Save the user configuration files
@@ -61,13 +90,13 @@ echo "Changing the files permissions and ownership..."
 chmod u=rwx,go=rx /usr/bin/alienware-kbl
 chown root:root -R /usr/bin/alienware-kbl
 
-chown root:root -R /usr/share/alienware-kbl
-chmod -R u=rwx,go=rx /usr/share/alienware-kbl/
-chmod u=rw,go=r /usr/share/alienware-kbl/images/*
+chown root:root -R /usr/share/AlienwareKBL
+chmod -R u=rwx,go=rx /usr/share/AlienwareKBL/
+chmod u=rw,go=r /usr/share/AlienwareKBL/images/*
 
-chown root:root -R /usr/share/alienware-kbl
-chmod -R u=rwx,go=rx /usr/share/doc/alienware-kbl
-chmod u=rw,go=r /usr/share/doc/alienware-kbl/*
+chown root:root -R /usr/share/AlienwareKBL
+chmod -R u=rwx,go=rx /usr/share/doc/AlienwareKBL
+chmod u=rw,go=r /usr/share/doc/AlienwareKBL/*
 
 chown root:root -R /usr/lib/systemd/system/alienware-kbl.service
 chmod u=rw,go=r /usr/lib/systemd/system/alienware-kbl.service

@@ -18,31 +18,31 @@
 
 echo "Disabling the systemd daemon..."
 if [ -f /bin/systemctl ]; then
-	systemctl stop alienware-kbl
-	systemctl disable alienware-kbl
+    systemctl stop alienware-kbl
+    systemctl disable alienware-kbl
 fi
 
 echo "Removing the links to the python bindings..."
 if [ -f /usr/lib/python3/AlienwareKBL.py ]; then
-	rm -f /usr/lib/python3/AlienwareKBL.py
+    rm -f /usr/lib/python3/AlienwareKBL.py
 fi 
 
 if [ -f /usr/lib/python3.4/AlienwareKBL.py ]; then
-	rm -f /usr/lib/python3.4/AlienwareKBL.py
+    rm -f /usr/lib/python3.4/AlienwareKBL.py
 fi 
 
 if [ -f /usr/lib/python3.5/AlienwareKBL.py ]; then
-	rm -f /usr/lib/python3.5/AlienwareKBL.py
+    rm -f /usr/lib/python3.5/AlienwareKBL.py
 fi 
 
 if [ -f /usr/lib/python3.6/AlienwareKBL.py ]; then
-	rm -f /usr/lib/python3.6/AlienwareKBL.py
+    rm -f /usr/lib/python3.6/AlienwareKBL.py
 fi 
 
 #
 # Is this for Debian packages? Maybe when removing the software, if this directory is not
-# removed, apt denies to uninstall the software? what's the reason of this line?
+# removed `apt` denies to uninstall the software? what's the reason of this line?
 #
-if [ -d /usr/share/alienware-kbl/__pycache__ ]; then
-	rm -rf /usr/share/alienware-kbl/__pycache__
+if [ -d /usr/share/AlienwareKBL/__pycache__ ]; then
+    rm -rf /usr/share/AlienwareKBL/__pycache__
 fi 

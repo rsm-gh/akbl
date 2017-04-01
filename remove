@@ -29,23 +29,23 @@ cd $DIR
 echo "Removing files and directories.."
 
 if [ -f /usr/lib/systemd/system/alienware-kbl.service ]; then
-	rm -rf /usr/lib/systemd/system/alienware-kbl.service
+    rm -rf /usr/lib/systemd/system/alienware-kbl.service
 fi
 
-if [ -d /usr/share/alienware-kbl ]; then
-	rm -rf /usr/share/alienware-kbl
+if [ -d /usr/share/AlienwareKBL ]; then
+    rm -rf /usr/share/AlienwareKBL
 fi
 
 if [ -d /usr/share/doc/alienware-kbl ]; then
-	rm -rf /usr/share/doc/alienware-kbl
+    rm -rf /usr/share/doc/alienware-kbl
 fi
 
 if [ -f /usr/share/applications/alienware-kbl.desktop ]; then
-	rm -f /usr/share/applications/alienware-kbl.desktop
+    rm -f /usr/share/applications/alienware-kbl.desktop
 fi
 
 if [ -f /usr/bin/alienware-kbl ]; then
-	rm -f /usr/bin/alienware-kbl
+    rm -f /usr/bin/alienware-kbl
 fi
 
 echo -e "\e[00;32mAlienware-KBL has been removed.\e[00m"
