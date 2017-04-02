@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2016-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -26,29 +26,11 @@ if [ ! -d /usr/lib/python3 ]; then
     mkdir /usr/lib/python3
 fi
 
-if [ -d /usr/lib/python3 ]; then
-    ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/python3/AKBL.py
-    echo "Python3 linked."
-fi
+python_versions=( "python3" "python3.4" "python3.5" "python3.6")
 
-if [ -d /usr/lib/python3.4 ]; then
-    ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/python3.4/AKBL.py
-    echo "Python3.4 linked."
-fi
-
-if [ -d /usr/lib/python3.5 ]; then
-    ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/python3.5/AKBL.py
-    echo "Python3.5 linked."
-fi
-
-if [ -d /usr/lib/python3.6 ]; then
-    ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/python3.6/AKBL.py
-    echo "Python3.6 linked."
-fi
-
-
-
-
-
-
-
+for python_version in "${python_versions[@]}"; do
+    if [ -d /usr/lib/$python_version ]; then
+        ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/$python_version/AKBL.py
+        echo "Python3 linked."
+    fi
+done

@@ -18,25 +18,26 @@
 
 import os
 import sys
+from copy import copy
 from traceback import format_exc
 
 # Local imports
 from .Paths import Paths
 sys.path.append("../")
-from Engine.Area import AreaData
-from Engine.Zone import ZoneData
+from Engine.Area import Area
+from Engine.Zone import Zone
 
-INSTANCES_DIC = {}
+AVAILABLE_THEMES = {}
 
 def get_theme_by_name(name):
-    return INSTANCES_DIC[name]
+    return AVAILABLE_THEMES[name]
 
 def LOAD_profiles(computer, theme_path):
 
-    global INSTANCES_DIC
-    INSTANCES_DIC = {}
+    global AVAILABLE_THEMES
+    AVAILABLE_THEMES = {}
 
-    # Load the existing INSTANCES_DIC
+    # Load the existing AVAILABLE_THEMES
     #
     if not os.path.exists(theme_path):
         os.mkdir(theme_path)
@@ -49,7 +50,7 @@ def LOAD_profiles(computer, theme_path):
 
     # Add the default profile
     #
-    if len(INSTANCES_DIC.keys()) <= 0:
+    if len(AVAILABLE_THEMES.keys()) <= 0:
         CREATE_default_profile(computer, theme_path)
 
 
@@ -70,9 +71,9 @@ def GET_last_configuration():
     profile_numb = 0
     profile_name = None
 
-    for num, key in enumerate(sorted(INSTANCES_DIC.keys())):
+    for num, key in enumerate(sorted(AVAILABLE_THEMES.keys())):
 
-        profile = INSTANCES_DIC[key]
+        profile = AVAILABLE_THEMES[key]
         profile.update_time()
 
         if max is None or profile.time > max:
@@ -87,52 +88,57 @@ class Theme:
     def __init__(self, computer):
 
         self.name = ''
-        self.computer = computer
-        self.speed = 65280
         self.time = None
-        self._area_instances_dic = {}
+        
+        self._speed = 65280
+        self._areas = {}
+        self._computer = copy(computer)
 
     def create_profile(self, name, path, speed=False):
         self.name = name
         self.set_speed(speed)
         self.path = path
 
-        for area in self.computer.regions.values():
-            zone_data = ZoneData(region_id=area.regionId,
-                                 mode=self.computer.default_mode,
-                                 left_color=self.computer.default_color,
-                                 right_color=self.computer.default_color)
-            area.add_zone_data(zone_data)
+        for region in self._computer.get_regions():
+            
+            area = Area()
+            area.init_from_region(region)
+            
+            zone = Zone(mode=self.computer.DEFAULT_MODE, 
+                        left_color=self._computer.DEFAULT_COLOR, 
+                        right_color=self._computer.DEFAULT_COLOR)
+                                 
+            area.add_zone(zone)
             self.add_area(area)
 
-        INSTANCES_DIC[self.name] = self
+        AVAILABLE_THEMES[self.name] = self
 
-    def get_areas(self):
-        return self._area_instances_dic
+    def get_regions(self):
+        return self._areas
 
-    def get_area_by_name(self, area_name):
-        return self._area_instances_dic[area_name]
+    def get_region_by_name(self, area_name):
+        return self._areas[area_name]
 
-    def add_area(self, area_data):
-        if not area_data.name in self._area_instances_dic.keys():
-            self._area_instances_dic[area_data.name] = area_data
+    def add_area(self, area):
+        if not area.name in self._areas.keys():
+            self._areas[area.name] = area
         else:
-            print("Warning: Duplicated area `{}`, `{}`".format(area_data.name, self._area_instances_dic.keys()))
+            print("Warning: Duplicated area `{}`, `{}`".format(area.name, self._areas.keys()))
 
     def save(self):
         with open(self.path, encoding='utf-8', mode='wt') as f:
             f.write('name={0}\n'.format(self.name))
-            f.write('computer={0}\n'.format(self.computer.name))
-            f.write('speed={0}\n\n\n'.format(self.speed))
+            f.write('computer={0}\n'.format(self._computer.name))
+            f.write('speed={0}\n\n\n'.format(self._speed))
 
-            for key in sorted(self._area_instances_dic.keys()):
-                area = self._area_instances_dic[key]
+            for key in sorted(self._areas.keys()):
+                area = self._areas[key]
 
                 f.write('area={0}\n'.format(area.name))
-                for zone_data in area:
-                    f.write('mode={0}\n'.format(zone_data.get_mode()))
-                    f.write('left_color={0}\n'.format(zone_data.get_left_color()))
-                    f.write('right_color={0}\n'.format(zone_data.get_right_color()))
+                for zone in area:
+                    f.write('mode={0}\n'.format(zone.get_mode()))
+                    f.write('left_color={0}\n'.format(zone.get_left_color()))
+                    f.write('right_color={0}\n'.format(zone.get_right_color()))
                 f.write('\n')
 
         self.update_time()
@@ -146,7 +152,7 @@ class Theme:
         area_found, left_color, right_color, mode, = False, False, False, False
 
         imported_areas = []
-        supported_region_names = self.computer.get_suported_regions_names()
+        supported_region_names = self._computer.get_supported_regions_names()
 
         # Parse the configuration file
         #
@@ -174,17 +180,18 @@ class Theme:
                         self.set_speed(var_arg)
 
                     elif var_name == 'area':
-                        area_id = var_arg
+                        area_name = var_arg
 
-                        if area_id in supported_region_names:
+                        if area_name in supported_region_names:
                             area_found=True
-                            imported_areas.append(area_id)
-                            region_object = self.computer.get_region_by_name(area_id)
-                            area = AreaData(name=region_object.name, description=region_object.description)
+                            imported_areas.append(area_name)
+                            region = self._computer.get_region_by_name(area_name)
+                            area = Area()
+                            area.init_from_region(region)                            
                             self.add_area(area)
                         else:
                             area_found=False
-                            print("Warning: area name `{}` not listed on computer regions.".format(area_id))
+                            print("Warning: area name `{}` not listed on computer regions.".format(area_name))
 
                     elif var_name in ('type','mode'):
                         mode = var_arg
@@ -196,28 +203,25 @@ class Theme:
                         color2 = var_arg
 
                     if area_found and left_color and right_color and mode:
-                        zone_data=ZoneData(region_id=region_object.regionId,
-                                           mode=mode,
-                                           left_color=left_color,
-                                           right_color=right_color)
-
-                        area.add_zone_data(zone_data)
+                        
+                        zone=Zone(mode=mode, left_color=left_color, right_color=right_color)
+                        area.add_zone(zone)
 
                         left_color, right_color, mode = False, False, False
 
         # Add areas in case they be missing
         #
-        for area_id in supported_region_names:
-            if area_id not in imported_areas:
+        for area_name in supported_region_names:
+            if area_name not in imported_areas:
 
-                region_object = self.computer.regions[area_id]
-                area = AreaData(name=region_object.name, description=region_object.description)
+                region_object = self._computer.regions[area_name]
+                area = Area(name=region_object.name, description=region_object.description)
 
-                zone_data = ZoneData(region_object.regionId,
-                                     self.computer.default_mode,
-                                     self.computer.default_color,
-                                     self.computer.default_color)
-                area.add_zone_data(zone_data)
+                zone = Zone(region_object.region_id,
+                                     self._computer.default_mode,
+                                     self._computer.default_color,
+                                     self._computer.default_color)
+                area.add_zone(zone)
 
                 self.add_area(area)
                 print("Warning: missing area `{}` at the theme `{}`.".format(area_name, self.name))
@@ -225,34 +229,37 @@ class Theme:
         #
         # Add the configuration
         #
-        INSTANCES_DIC[self.name] = self
+        AVAILABLE_THEMES[self.name] = self
+
+    def get_speed(self):
+        return self._speed
 
     def set_speed(self, speed):
         try:
             speed = int(speed)
             if speed >= 256 * 255:
-                self.speed = 256 * 255
+                self._speed = 256 * 255
             elif speed <= 256:
-                self.speed = 256
+                self._speed = 256
             else:
-                self.speed = speed
+                self._speed = speed
 
         except Exception as e:
-            self.speed = 1
+            self._speed = 1
 
             print("Warning: error setting the speed.")
             print(format_exc())
 
     def modify_zone(self, zone, column, left_color, right_color, mode):
-        zone_data = self._area_instances_dic[zone.name][column]
-        zone_data.color1 = color1
-        zone_data.color2 = color2
-        zone_data.mode = mode
+        zone = self._areas[zone.name][column]
+        zone.color1 = color1
+        zone.color2 = color2
+        zone.mode = mode
 
-    def delete_zone(self, zone_data, column):
+    def delete_zone(self, zone, column):
         try:
-            area_data = self._area_instances_dic[zone_data.name]
-            area_data.remove_zone(column)
+            area = self._areas[zone.name]
+            area.remove_zone(column)
 
         except Exception as e:
             print('Warning: column `{}`'.format(column))

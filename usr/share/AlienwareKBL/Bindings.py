@@ -21,14 +21,14 @@ import os
 import sys
 import Pyro4
 import getpass
+from traceback import format_exc
 
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 # Local imports
-from Paths import Paths
+from Configuration.Paths import Paths
 
 
-class AlienwareKBL:
+class AKBL:
 
     def __init__(self):
         self._address = False
@@ -44,11 +44,7 @@ class AlienwareKBL:
             returned. Otherwise ir will return True if it succeed
             or False if there was a problem
         """
-        if command in (
-            'set_profile',
-            'set_lights',
-            'switch_lights',
-                'reload_configurations'):
+        if command in ('set_profile', 'set_lights', 'switch_lights', 'reload_configurations'):
             args = [self._user] + list(args)
 
         if not self._address:
@@ -87,8 +83,8 @@ class AlienwareKBL:
                 return True
 
             except Exception as e:
-                print(
-                    "If the daemon is off ignore the following error:\n {}".format(e))
+                print("DEBUG Bindings: Conecting `Pyro4`, \n{}\n".format(format_exc()))
+
                 self._address = False
                 self._pyro = False
                 return False

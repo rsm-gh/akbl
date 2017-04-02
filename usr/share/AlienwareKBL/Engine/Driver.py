@@ -126,5 +126,5 @@ class Driver():
             try:
                 self._device.set_configuration()
             except Exception as e:
-                raise DeviceNotFound("Can't set the configuration. Error: {}".format(e))
+                print(format_exc())
                 sys.exit(1)

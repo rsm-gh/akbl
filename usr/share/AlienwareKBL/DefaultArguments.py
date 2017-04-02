@@ -18,17 +18,20 @@
 
 import sys
 import os
-from common import getuser
+import pwd
 
-# local imports
-from Paths import Paths
+from AKBL import AKBL
+
+# Local imports
+from utils import getuser
+from Configuration.Paths import Paths
+from Configuration.CCParser import CCParser
+from texts import TEXT_ERROR_DAEMON_OFF, TEXT_HELP, TEXT_LICENSE, TEXT_NON_LINUX_USER, TEXT_WRONG_ARGUMENT
+
+AKBLConnection = AKBL()
 PATHS = Paths()
-from Texts import *
-
 
 def send_command(command, *args):
-    AKBLConnection = AlienwareKBL()
-
     if not os.path.exists(PATHS.SYSTEMCTL_PATH) or not AKBLConnection.ping():
         print(TEXT_ERROR_DAEMON_OFF)
     else:
@@ -36,7 +39,6 @@ def send_command(command, *args):
 
 
 if __name__ == '__main__':
-    import pwd
 
     total = len(sys.argv)
 
@@ -50,10 +52,7 @@ if __name__ == '__main__':
             print(TEXT_LICENSE)
 
         elif arg in ('--set-boot-user', '--get-boot-user'):
-            from CCParser import CCParser
-            ccp = CCParser(
-                PATHS.GLOBAL_CONFIG,
-                'Global alienware-kbl Configuration')
+            ccp = CCParser(PATHS.GLOBAL_CONFIG, 'Global alienware-kbl Configuration')
 
             if arg == '--set-boot-user':
                 if getuser() == 'root':
@@ -73,36 +72,21 @@ if __name__ == '__main__':
             else:
                 print(ccp.get_str_defval('boot_user', 'root'))
 
+        elif arg == '--daemon-is-on':
+            print(AKBLConnection.ping())
+
+        elif arg in ('--off', '--on', '--change', '--set-profile') and not AKBLConnection.ping():
+            print(TEXT_ERROR_DAEMON_OFF)
+
+        elif arg == '--off':
+            send_command('set_lights', False)
+        elif arg == '--on':
+            send_command('set_lights', True)
+        elif arg == '--change':
+            send_command('switch_lights')
+        elif arg == '--set-profile':
+            send_command('set_profile', sys.argv[2])
         else:
-            try:
-                # This exception is used when pyro
-                # is not installed.
-                from AlienwareKBL import AlienwareKBL
-
-                AKBLConnection = AlienwareKBL()
-
-                if AKBLConnection.ping():
-                    AKBL_DAEMON = True
-                else:
-                    AKBL_DAEMON = False
-            except:
-                AKBL_DAEMON = False
-
-            if arg == '--daemon-is-on':
-                print(AKBL_DAEMON)
-
-            elif arg in ('--off', '--on', '--change', '--set-profile') and not AKBL_DAEMON:
-                print(TEXT_ERROR_DAEMON_OFF)
-
-            elif arg == '--off':
-                send_command('set_lights', False)
-            elif arg == '--on':
-                send_command('set_lights', True)
-            elif arg == '--change':
-                send_command('switch_lights')
-            elif arg == '--set-profile':
-                send_command('set_profile', sys.argv[2])
-            else:
-                print(TEXT_WRONG_ARGUMENT)
+            print(TEXT_WRONG_ARGUMENT)
     else:
         print(TEXT_WRONG_ARGUMENT)

@@ -53,6 +53,7 @@ class Daemon:
         if not driver.has_device():
             print("Daemon: The computer is not supported.")
             exit(1)
+        self._computer = driver.computer
         self._controller = Controller(driver)
         print('DEBUG Daemon: Controller loaded', self._controller)
 
@@ -87,40 +88,38 @@ class Daemon:
 
     def _iluminate_keyboard(self):
 
+        os.utime(self._theme.path, None)  # This is to recognize the last theme that has been used.
         self._lights_state = True
 
-        self._controller.set_loop_conf(save=False, block=self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
-        self._controller.constructor.set_speed(self._theme.speed)
-
-        try:  # Patch (#12)
-            os.utime(self._theme.path, None)
-        except Exception as e:
-            print(
-                '''Warning: It was not possible to `os.utime` the theme's path: \n{}'''.format(
-                    self._theme.path))
-            print(format_exc())
-
+        # Update the indicator
+        #
+        if self._indicator_pyro:
             self._indicator_send_code(100)
-            if self._indicator_pyro:
-                try:
-                    self._indicator_pyro.load_profiles(
-                        list(Theme.profiles.keys()),
-                        self.profile_name,
-                        self._lights_state)
-                except Exception as e:
-                    print(format_exc())
+            try:
+                self._indicator_pyro.load_profiles(
+                    list(Theme.profiles.keys()),
+                    self.profile_name,
+                    self._lights_state)
+            except Exception as e:
+                print(format_exc())
 
-        for region_name in self._theme.computer.get_suported_regions_names():
-            area = self._theme.get_area_by_name(region_name)
-            for zone_data in area:
-                self._controller.add_loop_conf(zone_data.region_id,
-                                               zone_data.mode,
-                                               zone_data.left_color,
-                                               zone_data.right_color)
+        # Iluminate the computer lights
+        #
+        self._controller.start_loop(save=False, block=self._computer.get_power_block())
+        self._controller.set_speed(self._theme.get_speed())
+        
+        for region_name in self._computer.get_supported_regions_names():
+            area = self._theme.get_region_by_name(region_name)
+            for zone in area:
+                self._controller.add_loop(zone.get_region_id(),
+                                          zone.get_mode(),
+                                          zone.get_left_color(),
+                                          zone._get_right_color())
 
-            self._controller.constructor.end_loop()
-        self._controller.constructor.end_transfer()
-        self._controller.write_conf()
+            self._controller.end_loop()
+
+        self._controller.end_transfer()
+        self._controller.write()
 
     def _indicator_send_code(self, val):
         if self._indicator_pyro:
@@ -144,7 +143,7 @@ class Daemon:
             self._user = user
             self._paths = Paths(user)
 
-        Theme.LOAD_profiles(self._controller.driver.computer, self._paths.PROFILES_PATH)
+        Theme.LOAD_profiles(self._computer, self._paths.PROFILES_PATH)
 
         if set_default:
             _, self.profile_name = Theme.GET_last_configuration()
@@ -196,40 +195,36 @@ class Daemon:
     @Pyro4.expose
     def set_lights(self, user, state):
         """
-            Turn the lights on or off.
-
-            + 'state' can be a boolean or a string
+            Turn the lights on or off, 'state' can be a boolean or a string
         """
         if state in (False, 'False', 'false'):
 
-            keep_alive_zones = self._ccp.get_str_defval(
-                'zones_to_keep_alive', '')
+            keep_alive_zones = self._ccp.get_str_defval('zones_to_keep_alive', '')
 
             if keep_alive_zones == '':
-                self._controller.set_loop_conf(
-                    False, self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
-                self._controller.Reset(self._controller.driver.computer.RESET_ALL_LIGHTS_OFF)
+                self._controller.start_loop(save=False, block=self._computer.get_power_block())
+                self._controller.reset(self._computer.RESET_ALL_LIGHTS_OFF)
             else:
                 keep_alive_zones = keep_alive_zones.split('|')
 
                 """
                     This hack, it will set black as color to all the lights that should be turned off
                 """
-                self._controller.set_loop_conf(
-                    False, self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
+                self._controller.start_loop(
+                    False, self._computer.BLOCK_LOAD_ON_BOOT)
                 self._controller.add_speed_conf(1)
 
                 for key in sorted(self._theme.area.keys()):
                     if key not in keep_alive_zones:
                         area = self._theme.area[key]
                         for zone in area:
-                            self._controller.add_loop_conf(
-                                zone.regionId, 'fixed', '#000000', '#000000')
+                            self._controller.add_loop(
+                                zone.region_id, 'fixed', '#000000', '#000000')
 
-                        self._controller.End_Loop_Conf()
+                        self._controller.end_loop()
 
-                self._controller.End_Transfert_Conf()
-                self._controller.write_conf()
+                self._controller.end_transfer()
+                self._controller.write()
 
             self._lights_state = False
             self._indicator_send_code(150)
@@ -281,20 +276,23 @@ class Daemon:
             return
 
         self._lights_state = True
-        self._controller.set_loop_conf(
-            False, self._controller.driver.computer.BLOCK_LOAD_ON_BOOT)
+        self._controller.start_loop(
+            False, self._computer.BLOCK_LOAD_ON_BOOT)
         self._controller.add_speed_conf(speed)
 
-        for zone in self._controller.driver.computer.regions.keys():
+        for zone in self._computer.regions.keys():
             for i in range(len(left_colors)):
 
-                self._controller.add_loop_conf(
-                    self._controller.driver.computer.regions[zone].regionId, mode, left_colors[i], right_colors[i])
+                self._controller.add_loop(
+                    self._computer.regions[zone].region_id, 
+                    mode, 
+                    left_colors[i], 
+                    right_colors[i])
 
-            self._controller.End_Loop_Conf()
+            self._controller.end_loop()
 
-        self._controller.End_Transfert_Conf()
-        self._controller.write_conf()
+        self._controller.end_transfer()
+        self._controller.write()
 
     """
         Bindings for the graphical interphase
@@ -302,13 +300,13 @@ class Daemon:
 
     @Pyro4.expose
     def get_computer_name(self):
-        return self._controller.driver.computer.name
+        return self._computer.NAME
 
     @Pyro4.expose
     def get_computer_info(self):
-        return (self._controller.driver.computer.name, 
-                self._controller.driver.vendor_id,
-                self._controller.driver.product_id, 
+        return (self._computer.NAME, 
+                self._computer.VENDOR_ID,
+                self._computer.PRODUCT_ID, 
                 str(self._controller.driver.dev))
 
     @Pyro4.expose

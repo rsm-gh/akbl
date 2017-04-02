@@ -22,15 +22,18 @@ from copy import copy
 class Request:
 
     def __init__(self, legend, packet):
+
         self.legend = legend
         self.packet = packet
+        
+        #print("DEBUG Request: {}\n\t{}".format(legend, packet))
 
 
 class Constructor(list):
 
-    def __init__(self, driver, save=False, block=0x01):
+    def __init__(self, computer, save=False, block=0x01):
         self.raz()
-        self.computer = driver.computer
+        self.computer = computer
         self.Id = 0x01
         self.block = block
         
@@ -119,7 +122,7 @@ class Constructor(list):
         if isinstance(areas, dict):
             for key in areas:
                 print(key)
-                area += self.computer.regions[key].regionId
+                area += self.computer.regions[key].region_id
 
         elif isinstance(areas, int):
             area = areas
@@ -135,7 +138,7 @@ class Constructor(list):
 
         return ret
 
-    def set_color(self, Area, left_color, hex_id=0x01):
+    def set_fixed_color(self, area, left_color, hex_id=0x01):
 
         self.save()
         cmd = copy(self._void)
@@ -143,9 +146,9 @@ class Constructor(list):
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_COLOR
         cmd[2] = self.hex_id
-        cmd[3] = Area[0]
-        cmd[4] = Area[1]
-        cmd[5] = Area[2]
+        cmd[3] = area[0]
+        cmd[4] = area[1]
+        cmd[5] = area[2]
         cmd[6] = left_color[0]
         cmd[7] = left_color[1]
 

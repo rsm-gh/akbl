@@ -17,27 +17,37 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+from Configuration.Computers import Region
 
-class AreaData(list):
+class Area(Region):
+    
+    def __init__(self):
+        super().__init__()
+        self._default_zone_hex_id = 0x01
+        self._current_zone_hex_id = self._default_zone_hex_id
 
-    def __init__(self, name, description, id=0x01):
-
-        self.name = name
-        self.description = description
-        self.id = id
+    def init_from_region(self, region):
+        self.name = region.name
+        self.description = region.description
+        self.hex_id = region.hex_id
+        self.can_light = region.can_light
+        self.can_blink = region.can_blink
+        self.can_morph = region.can_morph
+        self.max_commands = region.max_commands
 
     def get_number_of_zones(self):
         return len(self)
 
-    def add_zone_data(self, zone_data):
-        zone_data.set_region_id(self.id)
-        self.append(zone_data)
-        self.id += 1
+    def add_zone(self, zone):
+        zone.set_hex_id(self._current_zone_hex_id)
+        self.append(zone)
+        self._current_zone_hex_id += 1
 
-    def remove_zone(self, column):
-        object = self[column]
-        self.remove(object)
-        self.id = 0x01
+    def remove_zone(self, column_index):
+        zone = self[column_index]
+        self.remove(zone)
+        self._current_zone_hex_id = self._default_zone_hex_id
         for zone in self:
-            zone.id = self.id
-            self.id += 1
+            zone.set_hex_id(self._current_zone_hex_id)
+            self._current_zone_hex_id += 1
+

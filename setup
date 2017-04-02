@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael AT senties-martinelli DOT com>
+#  Copyright (C) 2016-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -27,17 +27,15 @@ fi
 chmod a+x ./remove ./prerm ./preinst ./postinst
 
 #
-# These files shouldn't be shiped with the package,
-# they are removed in case they've been forgotten
-# in the source code.
+# Remove undesired files/folders that could be left
+# from the development.
 #
-if [ -d $DIR/usr/share/AlienwareKBL/__pycache__ ]; then
-    rm -rf $DIR/usr/share/AlienwareKBL/__pycache__
-fi
+find . -name *~ -exec rm -rf {} \;
+find . -name __pycache__ -type d -exec rm -rf {} \;
 
 #
-# `/usr/share/AlienwareKBL` has been moved to `/usr/share/ALienwareKBL`,
-# this will delete old versions.
+# `/usr/share/AlienwareKBL` has been renamed to `/usr/share/ALienwareKBL`,
+# this will the delete old version.
 #
 if [ -d $DIR/usr/share/alienware-kbl ]; then
     rm -rf $DIR/usr/share/alienware-kbl
@@ -47,25 +45,16 @@ fi
 # The python bindings have been named from `AlienwareKBL` to `AKBL`,
 # this will delete the old versions.
 #
-if [ -f /usr/lib/python3/AlienwareKBL.py ]; then
-    rm -f /usr/lib/python3/AlienwareKBL.py
-fi 
+python_versions=( "python3" "python3.4" "python3.5" "python3.6")
 
-if [ -f /usr/lib/python3.4/AlienwareKBL.py ]; then
-    rm -f /usr/lib/python3.4/AlienwareKBL.py
-fi 
-
-if [ -f /usr/lib/python3.5/AlienwareKBL.py ]; then
-    rm -f /usr/lib/python3.5/AlienwareKBL.py
-fi 
-
-if [ -f /usr/lib/python3.6/AlienwareKBL.py ]; then
-    rm -f /usr/lib/python3.6/AlienwareKBL.py
-fi 
-
+for python_version in "${python_versions[@]}"; do
+    if [ -f /usr/lib/$python_version/AlienwareKBL.py ]; then
+        rm -f /usr/lib/$python_version/AlienwareKBL.py
+    fi
+done
 
 #
-# Save the user configuration files
+# Save the user themes files
 #
 ./preinst
 
@@ -92,7 +81,7 @@ chown root:root -R /usr/bin/alienware-kbl
 
 chown root:root -R /usr/share/AlienwareKBL
 chmod -R u=rwx,go=rx /usr/share/AlienwareKBL/
-chmod u=rw,go=r /usr/share/AlienwareKBL/images/*
+#chmod u=rw,go=r /usr/share/AlienwareKBL/images/*
 
 chown root:root -R /usr/share/AlienwareKBL
 chmod -R u=rwx,go=rx /usr/share/doc/AlienwareKBL

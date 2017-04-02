@@ -18,18 +18,24 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-class ZoneData:
+class Zone:
 
-    def __init__(self, left_color, right_color, mode, region_id=None):
+    def __init__(self, left_color, right_color, mode, hex_id=0x01):
 
-        self.region_id = region_id
         self._mode = ''
         self._left_color = []
         self._right_color = []
         self._middle_color = []
+        self._hex_id = hex_id
+
+    def set_hex_id(self, hex_id):
+        self._hex_id = hex_id
 
     def set_region_id(self, value):
-        self.regionId = value
+        self.region_id = value
+
+    def get_region_id(self):
+        return self._region_id
 
     def get_mode(self):
         return self._mode
@@ -64,4 +70,4 @@ class ZoneData:
         elif mode == 'blink':
             self._mode = 'blink'
         else:
-            print('Warning: wrong `mode` on `set_mode` of ZoneData.')
+            print('Warning: wrong `mode` on `set_mode` of Zone.')
