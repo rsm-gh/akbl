@@ -34,7 +34,7 @@ class Constructor(list):
     def __init__(self, computer, save=False, block=0x01):
         self.raz()
         self.computer = computer
-        self.Id = 0x01
+        self.hex_id = 0x01
         self.block = block
         
         self._save = save
@@ -63,21 +63,37 @@ class Constructor(list):
         cmd[4] = int(speed - (speed / 256) * 256)
         self.append(Request(legend, cmd))
 
-    def set_blink_color(self, area, color):
+    def set_fixed_color(self, parsed_area_hex_id, left_color):
+
         self.save()
         cmd = copy(self._void)
-        legend = "set_blink_color `{}` on area `{}`".format(color, area)
+        legend = "Set left_color"
+        cmd[0] = self.computer.START_BYTE
+        cmd[1] = self.computer.COMMAND_SET_COLOR
+        cmd[2] = self.hex_id
+        cmd[3] = parsed_area_hex_id[0]
+        cmd[4] = parsed_area_hex_id[1]
+        cmd[5] = parsed_area_hex_id[2]
+        cmd[6] = left_color[0]
+        cmd[7] = left_color[1]
+
+        self.append(Request(legend, cmd))
+
+    def set_blink_color(self, parsed_area_hex_id, color):
+        self.save()
+        cmd = copy(self._void)
+        legend = "set_blink_color `{}` on parsed_area_hex_id `{}`".format(color, parsed_area_hex_id)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_BLINK_COLOR
-        cmd[2] = self.Id
-        cmd[3] = area[0]
-        cmd[4] = area[1]
-        cmd[5] = area[2]
+        cmd[2] = self.hex_id
+        cmd[3] = parsed_area_hex_id[0]
+        cmd[4] = parsed_area_hex_id[1]
+        cmd[5] = parsed_area_hex_id[2]
         cmd[6] = left_color[0]
         cmd[7] = left_color[1]
         self.append(Request(legend, cmd))
 
-    def set_color_morph(self, area, left_color, right_color):
+    def set_color_morph(self, parsed_area_hex_id, left_color, right_color):
         self.save()
         cmd = copy(self._void)
         color = left_color[1] + right_color[0]
@@ -85,14 +101,14 @@ class Constructor(list):
             left_color: `{}`
             right_color: `{}`
             color: `{}`
-            area: `{}`
-            '''.format(left_color, right_color, color, area)
+            parsed_area_hex_id: `{}`
+            '''.format(left_color, right_color, color, parsed_area_hex_id)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_MORPH_COLOR
-        cmd[2] = self.Id
-        cmd[3] = area[0]
-        cmd[4] = area[1]
-        cmd[5] = area[2]
+        cmd[2] = self.hex_id
+        cmd[3] = parsed_area_hex_id[0]
+        cmd[4] = parsed_area_hex_id[1]
+        cmd[5] = parsed_area_hex_id[2]
         cmd[6] = left_color[0]
         cmd[7] = color
         cmd[8] = right_color[1]
@@ -137,22 +153,6 @@ class Constructor(list):
         ret[2] = area - ret[0] * 65536 - ret[1] * 256  # Same but remove the first 4 digit
 
         return ret
-
-    def set_fixed_color(self, area, left_color, hex_id=0x01):
-
-        self.save()
-        cmd = copy(self._void)
-        legend = "Set left_color"
-        cmd[0] = self.computer.START_BYTE
-        cmd[1] = self.computer.COMMAND_SET_COLOR
-        cmd[2] = self.hex_id
-        cmd[3] = area[0]
-        cmd[4] = area[1]
-        cmd[5] = area[2]
-        cmd[6] = left_color[0]
-        cmd[7] = left_color[1]
-
-        self.append(Request(legend, cmd))
 
     def set_save_block(self, block):
         cmd = copy(self._void)
@@ -223,7 +223,7 @@ class Constructor(list):
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_LOOP_BLOCK_END
 
-        self.Id += 0x01
+        self.hex_id += 0x01
         self.append(Request(legend, cmd))
 
     def end_transfer(self):

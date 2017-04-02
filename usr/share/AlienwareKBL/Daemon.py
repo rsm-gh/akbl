@@ -108,13 +108,12 @@ class Daemon:
         self._controller.start_loop(save=False, block=self._computer.get_power_block())
         self._controller.set_speed(self._theme.get_speed())
         
-        for region_name in self._computer.get_supported_regions_names():
-            area = self._theme.get_region_by_name(region_name)
-            for zone in area:
-                self._controller.add_loop(zone.get_region_id(),
+        for area in self._theme.get_areas():
+            for zone in area.get_zones():
+                self._controller.add_loop(zone.get_hex_id(),
                                           zone.get_mode(),
                                           zone.get_left_color(),
-                                          zone._get_right_color())
+                                          zone.get_right_color())
 
             self._controller.end_loop()
 
@@ -218,8 +217,7 @@ class Daemon:
                     if key not in keep_alive_zones:
                         area = self._theme.area[key]
                         for zone in area:
-                            self._controller.add_loop(
-                                zone.region_id, 'fixed', '#000000', '#000000')
+                            self._controller.add_loop(zone.get_hex_id(), 'fixed', '#000000', '#000000')
 
                         self._controller.end_loop()
 

@@ -104,7 +104,7 @@ class Theme:
             area = Area()
             area.init_from_region(region)
             
-            zone = Zone(mode=self.computer.DEFAULT_MODE, 
+            zone = Zone(mode=self._computer.DEFAULT_MODE, 
                         left_color=self._computer.DEFAULT_COLOR, 
                         right_color=self._computer.DEFAULT_COLOR)
                                  
@@ -113,22 +113,22 @@ class Theme:
 
         AVAILABLE_THEMES[self.name] = self
 
-    def get_regions(self):
-        return self._areas
+    def get_areas(self):
+        return [area for area in self._areas.values()]
 
-    def get_region_by_name(self, area_name):
+    def get_area_by_name(self, area_name):
         return self._areas[area_name]
 
     def add_area(self, area):
         if not area.name in self._areas.keys():
             self._areas[area.name] = area
         else:
-            print("Warning: Duplicated area `{}`, `{}`".format(area.name, self._areas.keys()))
+            print("Warning Theme: Duplicated area `{}`, `{}`".format(area.name, self._areas.keys()))
 
     def save(self):
         with open(self.path, encoding='utf-8', mode='wt') as f:
             f.write('name={0}\n'.format(self.name))
-            f.write('computer={0}\n'.format(self._computer.name))
+            f.write('computer={0}\n'.format(self._computer.NAME))
             f.write('speed={0}\n\n\n'.format(self._speed))
 
             for key in sorted(self._areas.keys()):
@@ -191,10 +191,15 @@ class Theme:
                             self.add_area(area)
                         else:
                             area_found=False
-                            print("Warning: area name `{}` not listed on computer regions.".format(area_name))
+                            print("Warning Theme: area name `{}` not listed on computer regions.".format(area_name))
 
                     elif var_name in ('type','mode'):
                         mode = var_arg
+                        if mode not in ('fixed', 'morph', 'blink'):
+                            mode = self._computer.DEFAULT_MODE
+                            print('Warning Theme: wrong mode=`{}` when importing theme. Using default mode.')
+                        
+                        
 
                     elif var_name in ('color','color1','left_color'):
                         color1 = var_arg
@@ -214,17 +219,16 @@ class Theme:
         for area_name in supported_region_names:
             if area_name not in imported_areas:
 
-                region_object = self._computer.regions[area_name]
-                area = Area(name=region_object.name, description=region_object.description)
+                region = self._computer.get_region_by_name(area_name)
+                area = Area()
+                area.init_from_region(region)
 
-                zone = Zone(region_object.region_id,
-                                     self._computer.default_mode,
-                                     self._computer.default_color,
-                                     self._computer.default_color)
+                zone = Zone(mode=self._computer.DEFAULT_MODE, 
+                            left_color=self._computer.DEFAULT_COLOR, 
+                            right_color=self._computer.DEFAULT_COLOR)
                 area.add_zone(zone)
-
                 self.add_area(area)
-                print("Warning: missing area `{}` at the theme `{}`.".format(area_name, self.name))
+                print("Warning Theme: missing area `{}` on theme `{}`.".format(area_name, self.name))
 
         #
         # Add the configuration
@@ -247,7 +251,7 @@ class Theme:
         except Exception as e:
             self._speed = 1
 
-            print("Warning: error setting the speed.")
+            print("Warning Theme: error setting the speed.")
             print(format_exc())
 
     def modify_zone(self, zone, column, left_color, right_color, mode):
@@ -262,7 +266,7 @@ class Theme:
             area.remove_zone(column)
 
         except Exception as e:
-            print('Warning: column `{}`'.format(column))
+            print('Warning Theme: column `{}`'.format(column))
             print(format_exc())
 
     def update_time(self):

@@ -22,7 +22,7 @@
 # Local imports
 from texts import *
 
-class Region(list):
+class Region:
 
     def __init__(self, name=None, description=None, hex_id=None, max_commands=0, can_blink=False, can_morph=False, can_light=False):
 

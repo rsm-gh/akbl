@@ -31,11 +31,11 @@ class Zone:
     def set_hex_id(self, hex_id):
         self._hex_id = hex_id
 
-    def set_region_id(self, value):
-        self.region_id = value
+    def set_hex_id(self, value):
+        self.hex_id = value
 
-    def get_region_id(self):
-        return self._region_id
+    def get_hex_id(self):
+        return self._hex_id
 
     def get_mode(self):
         return self._mode

@@ -25,10 +25,12 @@ class Controller:
         self._driver = driver
         self._constructor = None
 
-    def add_loop(self, area, mode, left_color, right_color=None):
+    def add_loop(self, area_hex_id, mode, left_color, right_color=None):
 
-        if not isinstance(area, list):
-            area = self._constructor.parse_areas(area)
+        if not isinstance(area_hex_id, list):
+            parsed_area_hex_id = self._constructor.parse_areas(area_hex_id)
+        else:
+            parsed_area_hex_id = area_hex_id
 
         if not isinstance(left_color, list):
             left_color = self._constructor.convert_color(left_color)
@@ -37,13 +39,13 @@ class Controller:
             right_color = self._constructor.convert_color(right_color)
 
         if mode == 'fixed':
-            self._constructor.set_fixed_color(area, left_color)
+            self._constructor.set_fixed_color(parsed_area_hex_id, left_color)
         elif mode == 'blink':
-            self._constructor.set_blink_color(area, left_color)
+            self._constructor.set_blink_color(parsed_area_hex_id, left_color)
         elif mode == 'morph' and right_color:
-            self._constructor.set_color_morph(area, left_color, right_color)
+            self._constructor.set_color_morph(parsed_area_hex_id, left_color, right_color)
         else:
-            print('Warning: wrong mode `{}` on `add_loop` of `Controller`.'.format(mode))
+            print('ERROR Controller: wrong mode `{}` on `add_loop`.'.format(mode))
 
         print('''
 DEBUG Controller: `add_loop` 
