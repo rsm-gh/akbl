@@ -4,6 +4,7 @@ This branch is the future of alienware-kbl, I'm currently trying to:
 + Remove redundant code
 + Add comments
 + Respect the PEP8
++ Improve the debug/warning/error system
 
 + The `block testing window` will be separated from the GUI.
 + The GUI will no longer use the root account.

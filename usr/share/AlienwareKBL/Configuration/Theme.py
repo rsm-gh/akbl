@@ -24,6 +24,7 @@ from traceback import format_exc
 # Local imports
 from .Paths import Paths
 sys.path.append("../")
+from utils import print_warning, print_debug
 from Engine.Area import Area
 from Engine.Zone import Zone
 
@@ -90,9 +91,12 @@ class Theme:
         self.name = ''
         self.time = None
         
-        self._speed = 65280
         self._areas = {}
         self._computer = copy(computer)
+        self._speed = self._computer.DEFAULT_SPEED
+
+        #print_debug(self._computer)
+
 
     def create_profile(self, name, path, speed=False):
         self.name = name
@@ -123,7 +127,7 @@ class Theme:
         if not area.name in self._areas.keys():
             self._areas[area.name] = area
         else:
-            print("Warning Theme: Duplicated area `{}`, `{}`".format(area.name, self._areas.keys()))
+            print_warning("Duplicated area `{}`, `{}`".format(area.name, self._areas.keys()))
 
     def save(self):
         with open(self.path, encoding='utf-8', mode='wt') as f:
@@ -145,6 +149,8 @@ class Theme:
 
     def load(self, path):
 
+        print_debug('loading theme from path=`{}`'.format(path))
+
         lines = []
         with open(path, encoding='utf-8', mode='rt') as f:
             lines = f.readlines()
@@ -153,6 +159,7 @@ class Theme:
 
         imported_areas = []
         supported_region_names = self._computer.get_supported_regions_names()
+        print_debug('supported_region_names=`{}`'.format(supported_region_names))
 
         # Parse the configuration file
         #
@@ -191,24 +198,24 @@ class Theme:
                             self.add_area(area)
                         else:
                             area_found=False
-                            print("Warning Theme: area name `{}` not listed on computer regions.".format(area_name))
+                            print_warning("area.name `{}` not listed on computer regions names".format(area_name))
 
-                    elif var_name in ('type','mode'):
+                    elif var_name in ('type','mode'):  # `type`is to give support to old themes
                         mode = var_arg
                         if mode not in ('fixed', 'morph', 'blink'):
-                            mode = self._computer.DEFAULT_MODE
-                            print('Warning Theme: wrong mode=`{}` when importing theme. Using default mode.')
-                        
-                        
+                            default_mode = self._computer.DEFAULT_MODE
+                            print_warning('wrong mode=`{}` when importing theme. Using default mode=`{}`'.format(mode, default_mode))
+                            mode = default_mode
 
-                    elif var_name in ('color','color1','left_color'):
+                    elif var_name in ('color','color1','left_color'):  # `color` & `color1`are to give support to old themes
                         color1 = var_arg
 
-                    elif var_name in ('color2','right_color'):
+                    elif var_name in ('color2','right_color'):  # `color2` is to give support to old themes
                         color2 = var_arg
 
                     if area_found and left_color and right_color and mode:
-                        
+
+                        print_debug('adding Zone to Area, mode=`{}`, left_color=`{}`, right_color=`{}`'.format(mode, left_color, right_color))
                         zone=Zone(mode=mode, left_color=left_color, right_color=right_color)
                         area.add_zone(zone)
 
@@ -228,7 +235,9 @@ class Theme:
                             right_color=self._computer.DEFAULT_COLOR)
                 area.add_zone(zone)
                 self.add_area(area)
-                print("Warning Theme: missing area `{}` on theme `{}`.".format(area_name, self.name))
+                print_warning("missing area.name=`{}` on theme=`{}`".format(area_name, self.name))
+                print_debug('adding Zone to the missing Area, mode=`{}`, left_color=`{}`, right_color=`{}`'.format(zone.get_mode(), zone.get_left_color(), zone.get_right_color()))
+
 
         #
         # Add the configuration
@@ -239,20 +248,15 @@ class Theme:
         return self._speed
 
     def set_speed(self, speed):
-        try:
-            speed = int(speed)
-            if speed >= 256 * 255:
-                self._speed = 256 * 255
-            elif speed <= 256:
-                self._speed = 256
-            else:
-                self._speed = speed
 
-        except Exception as e:
-            self._speed = 1
+        speed = int(speed)
+        if speed >= 256 * 255:
+            self._speed = 256 * 255
+        elif speed <= 256:
+            self._speed = 256
+        else:
+            print_warning('Wrong speed=`{}`'.format(speed))
 
-            print("Warning Theme: error setting the speed.")
-            print(format_exc())
 
     def modify_zone(self, zone, column, left_color, right_color, mode):
         zone = self._areas[zone.name][column]
@@ -266,7 +270,7 @@ class Theme:
             area.remove_zone(column)
 
         except Exception as e:
-            print('Warning Theme: column `{}`'.format(column))
+            print_warning('column `{}`'.format(column))
             print(format_exc())
 
     def update_time(self):

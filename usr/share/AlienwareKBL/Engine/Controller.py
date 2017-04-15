@@ -18,6 +18,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 from Engine.Constructor import Constructor
+from utils import print_debug, print_error, hex_to_rgb
 
 class Controller:
 
@@ -33,10 +34,10 @@ class Controller:
             parsed_area_hex_id = area_hex_id
 
         if not isinstance(left_color, list):
-            left_color = self._constructor.convert_color(left_color)
+            left_color = hex_to_rgb(left_color)
 
         if right_color is not None and not isinstance(right_color, list):
-            right_color = self._constructor.convert_color(right_color)
+            right_color = hex_to_rgb(right_color)
 
         if mode == 'fixed':
             self._constructor.set_fixed_color(parsed_area_hex_id, left_color)
@@ -45,14 +46,9 @@ class Controller:
         elif mode == 'morph' and right_color:
             self._constructor.set_color_morph(parsed_area_hex_id, left_color, right_color)
         else:
-            print('ERROR Controller: wrong mode `{}` on `add_loop`.'.format(mode))
+            print_error('wrong mode=`{}`'.format(mode))
 
-        print('''
-DEBUG Controller: `add_loop` 
-    area=`{}`, 
-    mode=`{}`, 
-    left_color=`{}`, 
-    right_color=`{}`'''.format(area, mode, left_color, right_color))
+        #print_debug('''area=`{}`, mode=`{}`, left_color=`{}`, right_color=`{}`.'''.format(area_hex_id, mode, left_color, right_color))
 
 
     def set_speed(self, speed):
@@ -66,12 +62,12 @@ DEBUG Controller: `add_loop`
 
     def start_loop(self, save, block):
         self._constructor = Constructor(self._driver.computer, save, block)
-        print('DEBUG Controller: Constructor loaded', self._constructor)
+        print_debug(self._constructor)
 
     def write(self):
         # Wait until is OK to write.
         #
-        print('DEBUG Controller: Waiting for OK')
+        print_debug('Waiting for OK..')
         self._driver.take_over()
         self.get_state()
         constructor = Constructor(self._driver.computer)
@@ -84,7 +80,7 @@ DEBUG Controller: `add_loop`
             self._driver.write_device(constructor)
         # Write
         #
-        print('DEBUG Controller: Writing the constructor...')
+        print_debug('Writing the constructor..')
         self._driver.write_device(self._constructor)
 
     def get_state(self):

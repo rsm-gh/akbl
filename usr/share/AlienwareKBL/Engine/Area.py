@@ -18,6 +18,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 from Configuration.Computers import Region
+from utils import print_debug
 
 class Area(Region):
     
@@ -44,7 +45,7 @@ class Area(Region):
         return len(self._zones)
 
     def add_zone(self, zone):
-        print('DEBUG Area: Zone added `{}` mode={}'.format(zone, zone.get_mode()))
+        #print_debug('Zone.mode=`{}`'.format(zone.get_mode()))
         zone.set_hex_id(self._current_zone_hex_id)
         self._zones.append(zone)
         self._current_zone_hex_id += 1

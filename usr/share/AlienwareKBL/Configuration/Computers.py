@@ -34,6 +34,9 @@ class Region:
         self.can_morph = can_morph
         self.max_commands = max_commands
 
+    def __str__(self):
+        
+        return ', '.join(['{}=`{}`'.format(attribute, value) for attribute, value in self.__dict__.items()])
 
 class Computer:
 
@@ -41,6 +44,8 @@ class Computer:
 
         self.DEFAULT_COLOR = '0000FF'
         self.DEFAULT_MODE = 'fixed'
+        self.DEFAULT_SPEED = 65280
+        
         self.NAME = 'Common Configuration'
         self._REGIONS = []
         self.VENDOR_ID = 0x187c
@@ -81,6 +86,13 @@ class Computer:
         self.BLOCK_BATT_CRITICAL = 0x09
         
         self._power_block = self.BLOCK_LOAD_ON_BOOT
+
+    def __str__(self):
+        
+        attributes = '\n\t'.join(['{}=`{}`'.format(attribute, value) for attribute, value in self.__dict__.items() if not attribute.startswith('_')])
+        regions = '\n\tRegions:\n\t\t'+'\n\t\t'.join([str(region) for region in self._REGIONS])
+    
+        return attributes+regions
 
     def get_power_block(self):
         return self._power_block

@@ -22,6 +22,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 import cairo
 from Paths import Paths
+from utils import hex_to_rgb, normalize_rgb, middle_rgb_color
+
 
 _IMAGES_PATH = Paths().IMAGES
 
@@ -46,20 +48,6 @@ _BUTTONS_IMAGE_PATTERN_WITH_DELETE = ['cross_on',
                                       'morph_off',
                                       'blink_off']
 
-
-def normalize_rgb(rgb_color):
-    """
-        Check and convert if necessary the values of the RGB colors.
-        They must be <= 1.0
-    """
-
-    if all(value <= 1.0 for value in rgb_color):
-        return rgb_color
-
-    for index, value  in enumerate(rgb_color):
-        rgb_color[index] = value / 255.0
-
-    return rgb_color
 
 
 def rgb_from_rgba_gobject(gdk3_rgba_object):
@@ -383,31 +371,6 @@ class ZoneWidget(Gtk.Frame):
     def get_right_color(self):
         return self._right_color
 
-
-def middle_rgb_color(rgb_color1, rgb_color2):
-    """
-        Return the middle RGB from two RGB colors.
-        Useful for creating gradients !
-    """
-    return [((rgb_color1[0] + rgb_color2[0]) / 2.0),
-            ((rgb_color1[1] + rgb_color2[1]) / 2.0),
-            ((rgb_color1[2] + rgb_color2[2]) / 2.0)]
-
-
-def hex_to_rgb(hex_string):
-    """
-        Convert hex color hex_strings to an RGB list.
-        Ex:  `0000FF` to `[0, 0, 255]`
-    """
-
-    if hex_string.startswith('#'):
-        hex_string = hex_string.lstrip('#')
-
-    hex_lenght = len(hex_string)
-    red, green, blue = tuple(int(hex_string[i:i + hex_lenght // 3], 16)
-                             for i in range(0, hex_lenght, hex_lenght // 3))
-
-    return [red, green, blue]
 
 if __name__ == '__main__':
 

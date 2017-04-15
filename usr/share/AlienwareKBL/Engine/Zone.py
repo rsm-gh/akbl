@@ -17,6 +17,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+from utils import print_warning, hex_to_rgb, normalize_rgb, middle_rgb_color
 
 class Zone:
 
@@ -27,6 +28,11 @@ class Zone:
         self._right_color = []
         self._middle_color = []
         self._hex_id = hex_id
+
+        self.set_mode(mode)
+        self.set_color(left_color, 'left')
+        self.set_color(right_color, 'right')
+
 
     def set_hex_id(self, hex_id):
         self._hex_id = hex_id
@@ -56,7 +62,7 @@ class Zone:
         elif side == 'right':
             self._right_color = normalize_rgb(color)
         else:
-            print("Warning: wrong `side` on `set_color`", side)
+            print_warning("wrong side=`{}`", side)
 
         if self._left_color and self._right_color:
             self._middle_color = middle_rgb_color(self._left_color, self._right_color)
@@ -70,4 +76,4 @@ class Zone:
         elif mode == 'blink':
             self._mode = 'blink'
         else:
-            print('Warning: wrong `mode` on `set_mode` of Zone.')
+            print_warning('wrong mode=`{}`'.format(mode))

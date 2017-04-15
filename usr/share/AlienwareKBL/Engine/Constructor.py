@@ -18,15 +18,16 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 from copy import copy
+from utils import print_error, print_debug, middle_rgb_color
 
 class Request:
 
     def __init__(self, legend, packet):
 
         self.legend = legend
-        self.packet = packet
+        self.packet = packet  #[int(item) for item in packet]
         
-        #print("DEBUG Request: {}\n\t{}".format(legend, packet))
+        #print_debug("{}=`{}`".format(legend, packet))
 
 
 class Constructor(list):
@@ -39,6 +40,11 @@ class Constructor(list):
         
         self._save = save
         self._void = [self.computer.FILL_BYTE] * self.computer.DATA_LENGTH
+
+    def __str__(self):
+        
+        return "Constructor: computer.NAME=`{}`, hex_id=`{}`, block=`{}`, _save=`{}`, _void=`{}`".format(self.computer.NAME, self.hex_id, self.block, self._save, self._void)
+        
 
     def save(self, end=False):
         if self:
@@ -56,7 +62,7 @@ class Constructor(list):
     def set_speed(self, speed=0xc800):
         self.save()
         cmd = copy(self._void)
-        legend = "set_speed =  {}".format(speed)
+        legend = "set_speed, speed=`{}`.".format(speed)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_SPEED
         cmd[3] = int(speed / 256)
@@ -67,51 +73,46 @@ class Constructor(list):
 
         self.save()
         cmd = copy(self._void)
-        legend = "Set left_color"
+        legend = "set_fixed_color"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_COLOR
         cmd[2] = self.hex_id
         cmd[3] = parsed_area_hex_id[0]
         cmd[4] = parsed_area_hex_id[1]
         cmd[5] = parsed_area_hex_id[2]
-        cmd[6] = left_color[0]
-        cmd[7] = left_color[1]
+        cmd[6] = int(left_color[0])
+        cmd[7] = int(left_color[1])
 
         self.append(Request(legend, cmd))
 
     def set_blink_color(self, parsed_area_hex_id, color):
         self.save()
         cmd = copy(self._void)
-        legend = "set_blink_color `{}` on parsed_area_hex_id `{}`".format(color, parsed_area_hex_id)
+        legend = "set_blink_color, parsed_area_hex_id=`{}`, color=`{}`.".format(color, parsed_area_hex_id)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_BLINK_COLOR
         cmd[2] = self.hex_id
         cmd[3] = parsed_area_hex_id[0]
         cmd[4] = parsed_area_hex_id[1]
         cmd[5] = parsed_area_hex_id[2]
-        cmd[6] = left_color[0]
-        cmd[7] = left_color[1]
+        cmd[6] = int(left_color[0])
+        cmd[7] = int(left_color[1])
         self.append(Request(legend, cmd))
 
     def set_color_morph(self, parsed_area_hex_id, left_color, right_color):
         self.save()
         cmd = copy(self._void)
         color = left_color[1] + right_color[0]
-        legend = '''set_color_morph:
-            left_color: `{}`
-            right_color: `{}`
-            color: `{}`
-            parsed_area_hex_id: `{}`
-            '''.format(left_color, right_color, color, parsed_area_hex_id)
+        legend = '''set_color_morph: left_color=`{}`, right_color=`{}`, color=`{}`, parsed_area_hex_id=`{}`.'''.format(left_color, right_color, color, parsed_area_hex_id)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_MORPH_COLOR
         cmd[2] = self.hex_id
         cmd[3] = parsed_area_hex_id[0]
         cmd[4] = parsed_area_hex_id[1]
         cmd[5] = parsed_area_hex_id[2]
-        cmd[6] = left_color[0]
-        cmd[7] = color
-        cmd[8] = right_color[1]
+        cmd[6] = int(left_color[0])
+        cmd[7] = int(middle_rgb_color(left_color, right_color))
+        cmd[8] = int(right_color[1])
 
         self.append(Request(legend, cmd))
 
@@ -156,7 +157,7 @@ class Constructor(list):
 
     def set_save_block(self, block):
         cmd = copy(self._void)
-        legend = "save block: {}".format(block)
+        legend = "set_save_block, block=`{}`".format(block)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SAVE_NEXT
         cmd[2] = block
@@ -165,12 +166,13 @@ class Constructor(list):
 
     def set_save(self):
         cmd = copy(self._void)
-        legend = "Set save"
+        legend = "set_save"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SAVE
 
         self.append(Request(legend, cmd))
 
+    """
     def convert_color(self, color):
         color = color.replace('#', '')
         r = int(color[0:2], 16) // 16
@@ -180,6 +182,7 @@ class Constructor(list):
         c[0] = r * 16 + g  # if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
         c[1] = b * 16
         return c
+    """
 
     def get_color_status(self):
         cmd = copy(self._void)
@@ -214,7 +217,7 @@ class Constructor(list):
 
             self.append(Request(legend, cmd))
         else:
-            print("Engine > Constructor error: WRONG RESET COMMAND")
+            print_error("Wrong command=`{}`".format(command))
 
     def end_loop(self):
         self.save()

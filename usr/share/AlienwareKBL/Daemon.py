@@ -25,7 +25,7 @@ from time import time, sleep
 
 # Local imports
 from texts import *
-from utils import getuser
+from utils import getuser, print_warning, print_debug
 from Engine.Controller import Controller
 from Engine.Driver import Driver
 from Configuration import Theme
@@ -51,11 +51,11 @@ class Daemon:
 
         driver = Driver()
         if not driver.has_device():
-            print("Daemon: The computer is not supported.")
+            print_warning("The computer is not supported")
             exit(1)
         self._computer = driver.computer
         self._controller = Controller(driver)
-        print('DEBUG Daemon: Controller loaded', self._controller)
+        print_debug('Controller loaded: {}'.format(self._controller))
 
         self.loop_self = loop_self
 
@@ -71,10 +71,7 @@ class Daemon:
             pwd.getpwnam(self._user)
         except:
             user = getuser()
-            print(
-                'Warning: The `{}` of the configuration file does not exist, it has been replaced by `{}`.'.format(
-                    self._user,
-                    user))
+            print_warning('The `{}` of the configuration file does not exist, it has been replaced by `{}`'.format(self._user, user))
             self._user = user
 
         self._paths = Paths(self._user)
@@ -194,7 +191,7 @@ class Daemon:
     @Pyro4.expose
     def set_lights(self, user, state):
         """
-            Turn the lights on or off, 'state' can be a boolean or a string
+            Turn the lights on or off, 'state' can be a boolean or a string.
         """
         if state in (False, 'False', 'false'):
 
@@ -207,7 +204,7 @@ class Daemon:
                 keep_alive_zones = keep_alive_zones.split('|')
 
                 """
-                    This hack, it will set black as color to all the lights that should be turned off
+                    This hack, it will set black as color to all the lights that should be turned off.
                 """
                 self._controller.start_loop(
                     False, self._computer.BLOCK_LOAD_ON_BOOT)
@@ -248,10 +245,10 @@ class Daemon:
         """
 
         if mode not in ('fixed', 'morph', 'blink'):
-            print("Warning: Wrong mode", mode)
+            print("Warning Daemon: Wrong mode", mode)
             return
         elif not isinstance(speed, int):
-            print("Warning: Speed must be an integer")
+            print("Warning Daemon: Speed must be an integer.")
             return
         elif speed >= 256:
             speed = 255
@@ -270,7 +267,7 @@ class Daemon:
             right_colors = [right_colors]
 
         if len(left_colors) != len(right_colors):
-            print("Warning: The colors list do not have the same lenght")
+            print_warning("The colors list do not have the same lenght")
             return
 
         self._lights_state = True
@@ -337,7 +334,7 @@ class Daemon:
             self._indicator_pyro = Pyro4.Proxy(str(uri))
             self.reload_configurations(self._user)
         except Exception as e:
-            print("Warning: Indicator failed its initialization")
+            print_warning("Failed initialization")
             print(format_exc())
             self._indicator_pyro = False
 

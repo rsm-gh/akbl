@@ -28,7 +28,7 @@ from traceback import format_exc
 from Engine.Constructor import Constructor
 sys.path.append("../")
 from Configuration.Computers import Computer, AVAILABLE_COMPUTERS, M14XR1, M14XR2
-
+from utils import print_debug
 
 class Driver():
 
@@ -80,17 +80,20 @@ class Driver():
             if device is not None:
                 self._device = device
                 self.take_over()
-                print('DEBUG Driver: device loaded\n', device)
+                print_debug('device loaded:\n{}'.format(device))
                 
                 # This hack was made to differenciate the M14XR1 from the M14XR2R2
                 if isinstance(computer, M14XR1) and 'Gaming' in str(device):
                     computer = M14XR2()
 
                 self.computer = computer
-                print('DEBUG Driver: Computer loaded', self.computer)
+                print_debug('computer loaded:\n\t{}'.format(self.computer))
                 return
 
     def write_device(self, MSG):
+        
+        print_debug('\n\t'.join(['packet=`{}`\t{}'.format(request.packet, request.legend) for request in MSG]))
+        
         if len(MSG[0].packet) == self.computer.DATA_LENGTH:
             for msg in MSG:
                 time.sleep(0.02)
@@ -106,7 +109,7 @@ class Driver():
                 self.SEND_REQUEST,
                 self.SEND_VALUE,
                 self.SEND_INDEX,
-                MSG)
+                msg.packet)
 
     def read_device(self, msg):
         msg = self._device.ctrl_transfer(
