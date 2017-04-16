@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C)  2014-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #                 2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -18,16 +18,60 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 from copy import copy
-from utils import print_error, print_debug, middle_rgb_color
 
-class Request:
+# local imports
+from utils import print_error, print_debug, hex_to_rgb
+from Engine.Request import Request
 
-    def __init__(self, legend, packet):
+def parse_area_hex_id(area_hex_id):  
+    """
+        This method will parse an area_hex_id to a list of three values:
 
-        self.legend = legend
-        self.packet = packet  #[int(item) for item in packet]
+        0x80    -> [0x0, 0x0, 0x80]
+        0x100   -> [0x0, 0x1, 0x0]
+        0x2     -> [0x0, 0x0, 0x2]
+        0x1     -> [0x0, 0x0, 0x1]
+        0x20    -> [0x0, 0x0, 0x20]
+        0x1c00  -> [0x0, 0x1c, 0x0]
+        0x4     -> [0x0, 0x0, 0x4]
+        0x8     -> [0x0, 0x0, 0x8]
+        0x40    -> [0x0, 0x0, 0x40]
+        0x200   -> [0x0, 0x2, 0x0]
         
-        #print_debug("{}=`{}`".format(legend, packet))
+        AlienFX MSG: gotta check the power button to understand it ..
+    """
+    parsed_area_hex_id = [0, 0, 0]
+    parsed_area_hex_id[0] = area_hex_id // 65536  # pyALienFX: takes the two first digit
+    parsed_area_hex_id[1] = area_hex_id // 256 - parsed_area_hex_id[0] * 256  # pyALienFX: takes the four first digit and remove the two first digit
+    parsed_area_hex_id[2] = area_hex_id - parsed_area_hex_id[0] * 65536 - parsed_area_hex_id[1] * 256  # pyALienFX: same but remove the first 4 digit
+
+    return parsed_area_hex_id
+
+def adapt_left_color(color):
+
+    if isinstance(color, str):
+        color = hex_to_rgb(color)
+
+    r,g,b = color
+
+    adapted_left_color = [0, 0]
+    adapted_left_color[0] = int(r * 16 + g)  # pyALienFX: if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
+    adapted_left_color[1] = int(b * 16)
+
+    return adapted_left_color
+
+def adapt_right_color(color):
+    
+    if isinstance(color, str):
+        color = hex_to_rgb(color)
+
+    r,g,b = color
+    
+    adapted_right_color = [0, 0]
+    adapted_right_color[0] = int(r)  # pyAlienFX: if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
+    adapted_right_color[1] = int(g * 16 + b)
+
+    return adapted_right_color
 
 
 class Constructor(list):
@@ -35,21 +79,21 @@ class Constructor(list):
     def __init__(self, computer, save=False, block=0x01):
         self.raz()
         self.computer = computer
-        self.hex_id = 0x01
-        self.block = block
-        
+
+        self._block = block        
+        self._hex_id = 1
         self._save = save
         self._void = [self.computer.FILL_BYTE] * self.computer.DATA_LENGTH
 
     def __str__(self):
         
-        return "Constructor: computer.NAME=`{}`, hex_id=`{}`, block=`{}`, _save=`{}`, _void=`{}`".format(self.computer.NAME, self.hex_id, self.block, self._save, self._void)
+        return "Constructor: computer.NAME={}, hex_id={}, block={}, _save={}, _void={}".format(self.computer.NAME, self._hex_id, self._block, self._save, self._void)
         
 
     def save(self, end=False):
-        if self:
+        if self._save:
             if not end:
-                self.set_save_block(self.block)
+                self.set_save_block(self._block)
             else:
                 self.set_save()
 
@@ -61,103 +105,84 @@ class Constructor(list):
 
     def set_speed(self, speed=0xc800):
         self.save()
+        legend = "set_speed, speed={}".format(speed)
+        
         cmd = copy(self._void)
-        legend = "set_speed, speed=`{}`.".format(speed)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_SPEED
         cmd[3] = int(speed / 256)
         cmd[4] = int(speed - (speed / 256) * 256)
+        
         self.append(Request(legend, cmd))
 
-    def set_fixed_color(self, parsed_area_hex_id, left_color):
+    def set_fixed_color(self, area_hex_id, color):
+    
+        parsed_area_hex_id = parse_area_hex_id(area_hex_id)
+        adapted_left_color = adapt_left_color(color)
 
         self.save()
-        cmd = copy(self._void)
         legend = "set_fixed_color"
+        
+        cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_COLOR
-        cmd[2] = self.hex_id
+        cmd[2] = self._hex_id
         cmd[3] = parsed_area_hex_id[0]
         cmd[4] = parsed_area_hex_id[1]
         cmd[5] = parsed_area_hex_id[2]
-        cmd[6] = int(left_color[0])
-        cmd[7] = int(left_color[1])
+        cmd[6] = adapted_left_color[0]
+        cmd[7] = adapted_left_color[1]
 
         self.append(Request(legend, cmd))
 
-    def set_blink_color(self, parsed_area_hex_id, color):
+    def set_blink_color(self, area_hex_id, color):
+        
+        parsed_area_hex_id = parse_area_hex_id(area_hex_id)
+        adapted_color = adapt_left_color(color)
+        
         self.save()
+        legend = "set_blink_color, parsed_area_hex_id={}, color={}.".format(color, parsed_area_hex_id)
+        
         cmd = copy(self._void)
-        legend = "set_blink_color, parsed_area_hex_id=`{}`, color=`{}`.".format(color, parsed_area_hex_id)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_BLINK_COLOR
-        cmd[2] = self.hex_id
+        cmd[2] = self._hex_id
         cmd[3] = parsed_area_hex_id[0]
         cmd[4] = parsed_area_hex_id[1]
         cmd[5] = parsed_area_hex_id[2]
-        cmd[6] = int(left_color[0])
-        cmd[7] = int(left_color[1])
+        cmd[6] = adapted_color[0]
+        cmd[7] = adapted_color[1]
+
         self.append(Request(legend, cmd))
 
-    def set_color_morph(self, parsed_area_hex_id, left_color, right_color):
+    def set_color_morph(self, area_hex_id, left_color, right_color):
+        
+        parsed_area_hex_id = parse_area_hex_id(area_hex_id)
+        adapted_left_color = adapt_left_color(left_color)
+        adapted_right_color = adapt_right_color(right_color)
+        
         self.save()
-        cmd = copy(self._void)
         color = left_color[1] + right_color[0]
-        legend = '''set_color_morph: left_color=`{}`, right_color=`{}`, color=`{}`, parsed_area_hex_id=`{}`.'''.format(left_color, right_color, color, parsed_area_hex_id)
+        legend = '''set_color_morph: left_color={}, right_color={}, color={}, parsed_area_hex_id={}.'''.format(left_color, right_color, color, parsed_area_hex_id)
+
+        cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_MORPH_COLOR
-        cmd[2] = self.hex_id
+        cmd[2] = self._hex_id
         cmd[3] = parsed_area_hex_id[0]
         cmd[4] = parsed_area_hex_id[1]
         cmd[5] = parsed_area_hex_id[2]
-        cmd[6] = int(left_color[0])
-        cmd[7] = int(middle_rgb_color(left_color, right_color))
-        cmd[8] = int(right_color[1])
+        cmd[6] = adapted_left_color[0]
+        cmd[7] = adapted_left_color[0] + adapted_right_color[1]
+        cmd[8] = adapted_right_color[1]
 
         self.append(Request(legend, cmd))
 
-    def parse_areas(self, areas):  # gotta check the power button to understand it ..
-        """
-            This method will parse an area to a list of three values.
-
-            area = 0x000000
-
-            0x80    -> [0x0, 0x0, 0x80]
-            0x100   -> [0x0, 0x1, 0x0]
-            0x2     -> [0x0, 0x0, 0x2]
-            0x1     -> [0x0, 0x0, 0x1]
-            0x20    -> [0x0, 0x0, 0x20]
-            0x1c00  -> [0x0, 0x1c, 0x0]
-            0x4     -> [0x0, 0x0, 0x4]
-            0x8     -> [0x0, 0x0, 0x8]
-            0x40    -> [0x0, 0x0, 0x40]
-            0x200   -> [0x0, 0x2, 0x0]
-        """
-
-        ret = [0x00, 0x00, 0x00]
-
-        if isinstance(areas, dict):
-            for key in areas:
-                print(key)
-                area += self.computer.regions[key].region_id
-
-        elif isinstance(areas, int):
-            area = areas
-
-        elif isinstance(areas, str):
-            area = int(areas, 16)
-
-        # Takes the two first digit
-        ret[0] = area // 65536
-        # Takes the four first digit and remove the two first digit
-        ret[1] = area // 256 - ret[0] * 256
-        ret[2] = area - ret[0] * 65536 - ret[1] * 256  # Same but remove the first 4 digit
-
-        return ret
-
     def set_save_block(self, block):
+
+        legend = "set_save_block, block={}".format(block)
+
         cmd = copy(self._void)
-        legend = "set_save_block, block=`{}`".format(block)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SAVE_NEXT
         cmd[2] = block
@@ -165,75 +190,67 @@ class Constructor(list):
         self.append(Request(legend, cmd))
 
     def set_save(self):
-        cmd = copy(self._void)
+        
         legend = "set_save"
+
+        cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SAVE
 
         self.append(Request(legend, cmd))
 
-    """
-    def convert_color(self, color):
-        color = color.replace('#', '')
-        r = int(color[0:2], 16) // 16
-        g = int(color[2:4], 16) // 16
-        b = int(color[4:6], 16) // 16
-        c = [0x00, 0x00]
-        c[0] = r * 16 + g  # if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
-        c[1] = b * 16
-        return c
-    """
+    def get_status(self):
 
-    def get_color_status(self):
+        legend = "get_status"
+
         cmd = copy(self._void)
-        legend = "get_color_status"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_GET_STATUS
 
         self.append(Request(legend, cmd))
 
-    def reset_all(self):
+    def reset(self, command=None):
+        
+        if command is None:
+            command = self.computer.RESET_ALL_LIGHTS_ON
+            
+        if command == self.computer.RESET_ALL_LIGHTS_ON:
+            legend = "reset, command=RESET_ALL_LIGHTS_ON"
+        elif command == self.computer.RESET_ALL_LIGHTS_OFF:
+            legend = "reset, command=RESET_ALL_LIGHTS_OFF"
+        elif command == self.computer.RESET_TOUCH_CONTROLS:
+            legend = "reset, command=RESET_TOUCH_CONTROLS"
+        else:
+            legend = "reset, command=UNKNOWN COMMAND !!"
+            print_error("Wrong command={}".format(command))
+        
+
         self.save()
+
         cmd = copy(self._void)
-        legend = "reset_all"
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_RESET
-        cmd[2] = self.computer.RESET_ALL_LIGHTS_ON
+        cmd[2] = command
 
         self.append(Request(legend, cmd))
 
-    def reset(self, command):
-        if command in [self.computer.RESET_ALL_LIGHTS_ON,
-                       self.computer.RESET_ALL_LIGHTS_OFF,
-                       self.computer.RESET_TOUCH_CONTROLS,
-                       self.computer.RESET_SLEEP_LIGHTS_ON]:
-
-            self.save()
-            cmd = copy(self._void)
-            legend = "reset"
-            cmd[0] = self.computer.START_BYTE
-            cmd[1] = self.computer.COMMAND_RESET
-            cmd[2] = command
-
-            self.append(Request(legend, cmd))
-        else:
-            print_error("Wrong command=`{}`".format(command))
-
     def end_loop(self):
         self.save()
-        cmd = copy(self._void)
         legend = "end_loop"
+
+        cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_LOOP_BLOCK_END
 
-        self.hex_id += 0x01
+        self._hex_id += 0x01
         self.append(Request(legend, cmd))
 
     def end_transfer(self):
         self.save(end=True)
         if not self._save:
+            legend = "end_transfer"
+            
             cmd = copy(self._void)
-            legend = "end_transfert"
             cmd[0] = self.computer.START_BYTE
             cmd[1] = self.computer.COMMAND_TRANSMIT_EXECUTE
 

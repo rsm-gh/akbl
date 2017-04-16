@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C)  2014-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #                 2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -55,61 +55,55 @@ class Driver():
             return False
         return True
 
-    def find_device(self, id_vendor=False, id_product=False):
+    def find_device(self):
         """
-            Look for all the devices listed in the `Computers.py` file.
+            Look for all the devices listed at the `Computers.py` file.
             If a computer is finded, the device is loaded as well as 
-            all the parameters of the computer.
+            all its parameters.
         """
-
-        if id_vendor and id_product:
-            try:
-                device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
-            except Exception as e:
-                print(format_exc())
-
-                if device is not None:
-                    self.computer = Computer()
-                    self._device = device
-                    self.take_over()
-                    return
 
         for computer in AVAILABLE_COMPUTERS:
+
             device = usb.core.find(idVendor=computer.VENDOR_ID, idProduct=computer.PRODUCT_ID)
 
             if device is not None:
                 self._device = device
                 self.take_over()
-                print_debug('device loaded:\n{}'.format(device))
+                print_debug(device)
                 
                 # This hack was made to differenciate the M14XR1 from the M14XR2R2
                 if isinstance(computer, M14XR1) and 'Gaming' in str(device):
                     computer = M14XR2()
 
                 self.computer = computer
-                print_debug('computer loaded:\n\t{}'.format(self.computer))
-                return
+                print_debug(self.computer)
 
-    def write_device(self, MSG):
+
+    def load_device(self, id_vendor, id_product):
+        """
+            Load a device from given'ids and then if success load
+            the global computer configuration. This is used at the block_testing_window
+            for testing new computers.
+        """
+
+        device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
+
+        if device is not None:
+            self._device = device
+            self.take_over()
+            print_debug('device loaded:\n{}'.format(device))
+            self.computer = Computer()
+
+
+    def write_constructor(self, constructor):
         
-        print_debug('\n\t'.join(['packet=`{}`\t{}'.format(request.packet, request.legend) for request in MSG]))
+        print_debug()
         
-        if len(MSG[0].packet) == self.computer.DATA_LENGTH:
-            for msg in MSG:
-                time.sleep(0.02)
-                self._device.ctrl_transfer(
-                    self.SEND_REQUEST_TYPE,
-                    self.SEND_REQUEST,
-                    self.SEND_VALUE,
-                    self.SEND_INDEX,
-                    msg.packet)
-        else:
-            self._device.ctrl_transfer(
-                self.SEND_REQUEST_TYPE,
-                self.SEND_REQUEST,
-                self.SEND_VALUE,
-                self.SEND_INDEX,
-                msg.packet)
+        for request in constructor:
+            self._device.ctrl_transfer(self.SEND_REQUEST_TYPE, self.SEND_REQUEST, self.SEND_VALUE, self.SEND_INDEX, request.packet)
+                
+            print(request)
+            time.sleep(0.02)
 
     def read_device(self, msg):
         msg = self._device.ctrl_transfer(
@@ -118,6 +112,8 @@ class Driver():
             self.READ_VALUE, 
             self.READ_INDEX, 
             len(msg[0].packet))
+
+        print_debug("msg={}".format(msg))
 
         return msg
 

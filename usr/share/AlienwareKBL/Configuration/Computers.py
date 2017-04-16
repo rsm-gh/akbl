@@ -36,7 +36,7 @@ class Region:
 
     def __str__(self):
         
-        return ', '.join(['{}=`{}`'.format(attribute, value) for attribute, value in self.__dict__.items()])
+        return ', '.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items()])
 
 class Computer:
 
@@ -48,49 +48,49 @@ class Computer:
         
         self.NAME = 'Common Configuration'
         self._REGIONS = []
-        self.VENDOR_ID = 0x187c
+        self.VENDOR_ID = 6268
         self.PRODUCT_ID = None
         self.SUPPORTED_COMMANDS = 15
         self.DATA_LENGTH = 9
-        self.START_BYTE = 0x02
-        self.FILL_BYTE = 0x00
+        self.START_BYTE = 2
+        self.FILL_BYTE = 0
 
-        self.STATE_BUSY = 0x11
-        self.STATE_READY = 0x10
-        self.STATE_UNKNOWN_COMMAND = 0x12
+        self.STATE_BUSY = 17
+        self.STATE_READY = 16
+        self.STATE_UNKNOWN_COMMAND = 18
 
-        self.COMMAND_END_STORAGE = 0x00
-        self.COMMAND_SET_MORPH_COLOR = 0x01
-        self.COMMAND_SET_BLINK_COLOR = 0x02
-        self.COMMAND_SET_COLOR = 0x03
-        self.COMMAND_LOOP_BLOCK_END = 0x04
-        self.COMMAND_TRANSMIT_EXECUTE = 0x05
-        self.COMMAND_GET_STATUS = 0x06
-        self.COMMAND_RESET = 0x07
-        self.COMMAND_SAVE_NEXT = 0x08
-        self.COMMAND_SAVE = 0x09
-        self.COMMAND_BATTERY_STATE = 0x0F
-        self.COMMAND_SET_SPEED = 0x0E
+        self.COMMAND_END_STORAGE = 0
+        self.COMMAND_SET_MORPH_COLOR = 1
+        self.COMMAND_SET_BLINK_COLOR = 2
+        self.COMMAND_SET_COLOR = 3
+        self.COMMAND_LOOP_BLOCK_END = 4
+        self.COMMAND_TRANSMIT_EXECUTE = 5
+        self.COMMAND_GET_STATUS = 6
+        self.COMMAND_RESET = 7
+        self.COMMAND_SAVE_NEXT = 8
+        self.COMMAND_SAVE = 9
+        self.COMMAND_BATTERY_STATE = 15
+        self.COMMAND_SET_SPEED = 14
 
-        self.RESET_TOUCH_CONTROLS = 0x01
-        self.RESET_SLEEP_LIGHTS_ON = 0x02
-        self.RESET_ALL_LIGHTS_OFF = 0x03
-        self.RESET_ALL_LIGHTS_ON = 0x04
+        self.RESET_TOUCH_CONTROLS = 1
+        self.RESET_SLEEP_LIGHTS_ON = 2
+        self.RESET_ALL_LIGHTS_OFF = 3
+        self.RESET_ALL_LIGHTS_ON = 4
 
-        self.BLOCK_LOAD_ON_BOOT = 0x01
-        self.BLOCK_STANDBY = 0x02
-        self.BLOCK_AC_POWER = 0x05
-        self.BLOCK_CHARGING = 0x06
-        self.BLOCK_BATT_SLEEPING = 0x07
-        self.BLOCK_BAT_POWER = 0x08
-        self.BLOCK_BATT_CRITICAL = 0x09
+        self.BLOCK_LOAD_ON_BOOT = 1
+        self.BLOCK_STANDBY = 2
+        self.BLOCK_AC_POWER = 5
+        self.BLOCK_CHARGING = 6
+        self.BLOCK_BATT_SLEEPING = 7
+        self.BLOCK_BAT_POWER = 8
+        self.BLOCK_BATT_CRITICAL = 9
         
         self._power_block = self.BLOCK_LOAD_ON_BOOT
 
     def __str__(self):
         
-        attributes = '\n\t'.join(['{}=`{}`'.format(attribute, value) for attribute, value in self.__dict__.items() if not attribute.startswith('_')])
-        regions = '\n\tRegions:\n\t\t'+'\n\t\t'.join([str(region) for region in self._REGIONS])
+        attributes = '\n'.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items() if not attribute.startswith('_')])
+        regions = '\n***Regions***\n'+'\n'.join([str(region) for region in self._REGIONS])
     
         return attributes+regions
 
