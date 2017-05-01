@@ -63,6 +63,8 @@ Usage:
  *If no option is introduced the graphical interface is launched.
 ```
 
+![General Diagram](https://github.com/rsm-gh/alienware-kbl/blob/new-version/usr/share/doc/AlienwareKBL/Programming/general%20diagram.png)
+
 ## Installation instructions
 
 1. Download the [stable branch](https://github.com/rsm-gh/alienware-kbl/archive/stable.zip)
