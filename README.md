@@ -1,3 +1,9 @@
+
+
+I'm currently working in a [much more better version of the code](https://github.com/rsm-gh/alienware-kbl/tree/new-version) that will be my last contribution to this projet. The reason of making such version is to help future developers to understand the code and make modifications ;}
+
+I'm sorry about this but I started working and I spend enought time coding, I'll also have planed to get a new laptop.
+
 **Index:**
 
 * [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
