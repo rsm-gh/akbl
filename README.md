@@ -5,7 +5,7 @@
 For me this branch is the future of `alienware-kbl`. A really cool branch with lots of new code ideas and implementations.
 It makes me feel sad to suddendly stopped coding outside of my job.
 
-As GPL3 & GNU-Linux software philosofy, you're free to download, modify and share the code so go ahead ! I added as much as information as I could so anyone be able of moving the project to a new step ;}
+You're free to download, modify and share the code, I added as much as information as possible so anyone be able of moving the project to the new step :)
 
 My only petition for some one taking the code is that the project be renamed so people can find out that it is a new project. I actually refuse to use the Mozilla license so if you want to thank me, respecting my philosofphy is the best way.
 
