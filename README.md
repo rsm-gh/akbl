@@ -17,22 +17,21 @@ I actually refuse to use the Mozilla so if you want to thank me for the code, re
 # How to use and develop this branch?
 
 1. Install the dependencies:
-* Debian based distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
-
-    Note: `python3-pyro4` shall be `>= 4.47`, this is why it must be installed trought `python-pip`.
-
-* ArchLinux: `pacman -S systemd gksu gtk3 libappindicator-gtk3 python python-cairo python-gobject python-pyusb python-pyro python-pip` and also use `pip install serpent`.
+  * Debian based distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
+  Note: `python3-pyro4` shall be `>= 4.47`, this is why it must be installed trought `python-pip`.
+  
+  * ArchLinux: `pacman -S systemd gksu gtk3 libappindicator-gtk3 python python-cairo python-gobject python-pyusb python-pyro python-pip` and also use `pip install serpent`.
 
 2. Download the branch.
 
 3. Open two terminals, one as root and one as normal user.
 
 4. Under the root terminal:
-  1) Change the working directory to the one of the project: `cd alienware-kbl`.
-  
-  2) Everytime that you want to test your implementations use the following command: `./setup && systemd stop alienware-kbl && alienware-kbl --start-daemon`.
-  
-  3) Under the normal user terminal execute some daemon command. Ex: `alienware-kbl --off`, `alienware-kbl --on`.
+    1. Change the working directory to the one of the project: `cd alienware-kbl`.
+    
+    2. Everytime that you want to test your implementations use the following command: `./setup && systemd stop alienware-kbl && alienware-kbl --start-daemon`.
+    
+    3. Under the normal user terminal execute some daemon command. Ex: `alienware-kbl --off`, `alienware-kbl --on`.
   
   You will be then able of testing and debuging the daemon since this is the first step to make the whole program work.
 
