@@ -1,4 +1,6 @@
-Alienware-KBL is not anymore under development. You can either use the [functional stable branch](https://github.com/rsm-gh/alienware-kbl/tree/stable), or finish this branch and create a new project.
+**Alienware-KBL is not anymore under development. You can either use the [functional stable branch](https://github.com/rsm-gh/alienware-kbl/tree/stable), or finish this branch and create a new project.**
+
+# About
 
 For me this branch is the future of `alienware-kbl`. A really cool branch with lots of new code ideas and implementations.
 It makes me feel sad to suddendly stopped coding outside of my job.
@@ -51,7 +53,7 @@ I actually refuse to use the Mozilla so if you want to thank me for the code, re
           because the pyro communication system will probably fail or choose only one daemon to speak.
 
 
-# General Diagram
+# The new software diagram
 
 ![General Diagram](https://github.com/rsm-gh/alienware-kbl/blob/new-version/usr/share/doc/AlienwareKBL/Programming/general%20diagram.png)
 
@@ -64,15 +66,14 @@ This branch is the future of alienware-kbl, the goals are to:
     * gksu will be removed as dependence
 
 
-# What are the main changes if we compare this version to the stable one?
+# What are the main changes if we compare this version to the stable branch?
 
 + The code was simplified and organized, even some good PEP8 rules went added.
 + The debug/warning/error system was improved.
 + The GUI doesn't use anymore the root account.
 
-Why these changes are so important? Even if I was the only developper
-I consider the software as a community project and everyone should be able of understanding it so it can be enhanced.
-Also having a clear and non-redundant code enhances the performances  and makes it a much better software.
+This changes are so important because `alienware-kbl` is as a community project and everyone should be able of understanding it so it can be enhanced.
+Also having a clear and non-redundant code enhances the performances and makes it a much better software!
 
 # What is missing to implement?
 
@@ -84,11 +85,10 @@ Also having a clear and non-redundant code enhances the performances  and makes
   Concerning this window, I made it work and it was functional. You can read more about it at the F.A.Q.
 
 # Optional known bugs/features that would be nice to fix:
-
-  + Directly load the daemon from a root session without using the libusb patch.
-  + Concerning the GUI:
-    + Fix the power button.
-    + Add the different blocks (On save, On boot, On battery). For this you can take a look in to the pyAlienFX project.
++ Directly load the daemon from a root session without using the libusb patch.
++ Concerning the GUI:
+  + Fix the power button.
+  + Add the different blocks (On save, On boot, On battery). For this you can take a look in to the pyAlienFX project.
   
 # What else?
 
