@@ -7,7 +7,7 @@ It makes me feel sad to suddendly stop the project, but I stopped coding outside
 
 You're free to download, modify and share the code, I added as much as information as possible so anyone be able of moving the project to the new step :)
 
-My only petition for some one taking the code is that the project be renamed so people can find out that it is a new project. I actually refuse to use the Mozilla license so if you want to thank me, respecting my philosofphy is the best way.
+My only petition is that your project be renamed so people can find figure out that it is a new project. I actually refuse to use the Mozilla license so if you want to thank me, respecting my philosofphy is the best way ;)
 
 
 # How to use and develop this branch?
