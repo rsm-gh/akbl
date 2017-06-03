@@ -34,15 +34,15 @@ My only petition is that your project be renamed so people can find figure out t
   **Bonnus** reason and explanation of the previous commands:
   
   `./setup` is used to install the software. This is necessary for the develop part because:
-  + The daemon must be launched as root.
-  + Some paths point to `/usr/share/`.
-  + The daemon must be launched from the ` alienware-kbl ` bash script since it is necessary to add an USB patch export (I never found how to do this from python).
-  
-  `systemd stop alienware-kbl && alienware-kbl --start-daemon` is used to load the daemon on the current terminal
+   + The daemon must be launched as root.
+   + Some paths point to `/usr/share/`.
+   + The daemon must be launched from the ` alienware-kbl ` bash script since it is necessary to add an USB patch export (I never found how to do this from python).
   
-  `systemd stop alienware-kbl` stops the daemon after the installation (because by default the installation loads the daemon and enables it at boot)
+  `systemd stop alienware-kbl && alienware-kbl --start-daemon` is used to load the daemon on the current terminal.
   
-  `alienware-kbl --start-daemon` launches the daemon at the current terminal. Note that it is not advisable to run two daemon instances because the pyro communication system will probably fail or choose only one daemon to speak.
+   + `systemd stop alienware-kbl` stops the daemon after the installation (because by default the installation loads the daemon and enables it at boot).
+  
+  + `alienware-kbl --start-daemon` launches the daemon at the current terminal. Note that it is not advisable to run two daemon instances because the pyro communication system will probably fail or choose only one daemon to speak.
 
 
 # The new software diagram
