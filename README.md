@@ -1,4 +1,4 @@
-**Alienware-KBL is not anymore under development. You can either use the [functional stable branch](https://github.com/rsm-gh/alienware-kbl/tree/stable), or finish this branch and create a new project.**
+**Alienware-KBL is not anymore under development. You can either use the [functional stable branch](https://github.com/rsm-gh/alienware-kbl/tree/stable) or continue this branch and create a new project.**
 
 # About
 
