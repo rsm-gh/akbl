@@ -1,169 +1,97 @@
-This branch is the future of alienware-kbl, the goals are to:
+Alienware-KBL is not anymore under development. You can either use the [functional stable branch](https://github.com/rsm-gh/alienware-kbl/tree/stable), or finish this branch and create a new project.
 
-+ Simplify & organize the code (also add some PEP8 rules)
-+ Remove redundant code
-+ Add comments
-+ Improve the debug/warning/error system
+For me this branch is the future of `alienware-kbl`. A really cool branch with lots of new code ideas and implementations.
+It makes me feel sad to suddendly stopped coding outside of my job.
 
-+ The `block testing window` will be separated from the GUI.
-+ The GUI will no longer use the root account.
-    * The Daemon will be mandatory for using the GUI
-    * gksu will be removed as dependence
+As GPL3 & GNU-Linux software philosofy, you're free to download, modify and share the code so go ahead !
+
+I added as much as information as I could so anyone be able of moving the project to a new step ;}
 
 
-
-/!\ THE CODE IS CURRENTLY UN-STABLE AND SHOULD NOT BE USED /!\
-
-
+My only petition for some one taking my code is that the project be renamed so people can find out that it is a new project.
+I actually refuse to use the Mozilla so if you want to thank me for the code, respecting my philosofphy is a nice way :)
 
 
-**Index:**
-
-* [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
-* [Installation instructions](https://github.com/rsm-gh/alienware-kbl#how-to-install)
-* [Supported computers](https://github.com/rsm-gh/alienware-kbl#supported-computers)
-* [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
-* [License](https://github.com/rsm-gh/alienware-kbl#license)
-* [Credits](https://github.com/rsm-gh/alienware-kbl#credits)
+# How to use and develop this branch?
 
 
-## Introduction
+1. Install the dependencies:
+* Debian based distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
 
-Alienware-KBL is a software to control the lights of alienware computers under GNU/Linux systems. These are its main features:
+    Note: `python3-pyro4` shall be `>= 4.47`, this is why it must be installed trought `python-pip`.
 
-* **A graphical interface**:  
-![gui](https://cloud.githubusercontent.com/assets/11134652/24292992/f16cd1f6-108f-11e7-9257-650b34197d84.png)
+* ArchLinux: `pacman -S systemd gksu gtk3 libappindicator-gtk3 python python-cairo python-gobject python-pyusb python-pyro python-pip` and also use `pip install serpent`.
 
-* **A system-try indicator**:  
-![indicator](https://cloud.githubusercontent.com/assets/11134652/24293017/0c107260-1090-11e7-8c57-ef52c8f9854a.png)
+2. Download the branch.
 
-* [Python Bindings](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Bindings)
+3. Open two terminals, one as root and one as normal user.
 
-* **Default commands**:
-```
-Usage:
+4. Under the root terminal:
 
-    alienware-kbl <option>
+    1) Change the working directory to the one of the project: `cd alienware-kbl`
 
- Options:
-        
-    --change                          Changes the computer lights on/off.
-    --on                              Turns on the computer lights.
-    --off                             Turns off the computer lights.
-    --set-profile <profile_name>      Turns on the selected profile.
-    
-    --get-boot-user                   Get the user that is started by the daemon.
-    --set-boot-user <user_name>       Set the user that is started by the daemon.
-    
-    --start-indicator                 Start the indicator.
-    
-    -h, -help                         Display this dialog.
-    -l, --license                     Display the license.
-    
- *If no option is introduced the graphical interface is launched.
-```
+    2) Everytime that you want to test your implementations use the following command: `./setup && systemd stop alienware-kbl && alienware-kbl --start-daemon`.
+   
+    3) Under the normal user terminal execute some daemon command. Ex: `alienware-kbl --off`, `alienware-kbl --on`
+   
+    You will be then able of testing and debuging the daemon since this is the first step to make the whole program work.
+
+    **Bonnus** reason and explanation of the previous commands:
+
+      ` ./setup ` is used to install the software. This is necessary for the develop part because:
+      + The daemon must be launched as root.
+      + Some paths point to `/usr/share/`.
+      + The daemon must be launched from the ` alienware-kbl ` bash script since it is necessary to add an USB patch export (I never found how to do this from python).
+      ` systemd stop alienware-kbl && alienware-kbl --start-daemon ` is used to load the daemon on the current terminal.
+
+        ` systemd stop alienware-kbl ` stops the daemon after the installation
+        (because by default the installation loads the daemon and enables it at boot)
+
+          ` alienware-kbl --start-daemon ` launches the daemon at the current terminal. Note that it is not advisable to run two daemon instances
+          because the pyro communication system will probably fail or choose only one daemon to speak.
+
+
+# General Diagram
 
 ![General Diagram](https://github.com/rsm-gh/alienware-kbl/blob/new-version/usr/share/doc/AlienwareKBL/Programming/general%20diagram.png)
 
-## Installation instructions
 
-1. Download the [stable branch](https://github.com/rsm-gh/alienware-kbl/archive/stable.zip)
-2. Install the dependencies:
- * Debian Based Distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
- 
-    Note: `python3-pyro4` shall be `>= 4.47`, this is why it must be installed trought `python-pip`. 
- 
- * ArchLinux: `pacman -S systemd gksu gtk3 libappindicator-gtk3 python python-cairo python-gobject python-pyusb python-pyro python-pip` and also use `pip install serpent`.
- 
-3. Execute the setup file
+This branch is the future of alienware-kbl, the goals are to:
 
-## Supported computers
-
-*If your computer is not supported look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).  
-*The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.  
-
-|Symbol | Meaning                                  |
-|-------|------------------------------------------|
-|:)     | Eveything works good (confirmed)         |
-|:?     | Eveything works good (not confirmed)     |
-|:S     | It works, but with some problems         |
-|:/     | Configuration missing / untested computer|
-
-|Computer       |Status  |Comment|
-|---------------|--------|-------|
-|Area 51-R1     |:?      ||
-|Area 51-R2     |:?      ||
-|Area 51-ALX-R1 |:/      ||
-|Aurora-R1      |:/      ||
-|Aurora-R2      |:/      ||
-|Aurora-R3      |:/      ||
-|Aurora-R4      |:/      ||
-|Aurora ALX-R1  |:/      ||
-|M11X-R1        |:?      ||
-|M11X-R2        |:?      ||
-|M11X-R3        |:?      ||
-|M11X-R25       |:?      ||
-|M13X           |:/      ||
-|M14X-R1        |:)      ||
-|M14X-R2        |:)      ||
-|M14X-R3        |:?      ||
-|M15X-R1        |:?      ||
-|M15X-R2        |:?      ||
-|Alienware 13   |:)      ||
-|Alienware 13-R2|:/      ||
-|Alienware 13-R3|:S      ||
-|Alienware 15   |:)      ||
-|Alienware 15-R2|:/      ||
-|Alienware 15-R3|:S      ||
-|M17X           |:)      ||
-|M17X-R1        |:/      ||
-|M17X-R2        |:/      ||
-|M17X-R3        |:)      ||
-|M17X-R4        |:/      ||
-|M17X-R5        |:/      ||
-|M18X-R1        |:/      ||
-|M18X-R2        |:)      ||
-|M18X-R3        |:/      ||
-|M18X-RX        |:S      |It may be an R1 or R2|
-
-## [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
-
-Please look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.) before asking questions and submiting bugs !
-
-## License
-
-The code is licensed [GPL3](./usr/share/doc/alienware-kbl/GPL3) and the artwork [CC-BY-4.0](./usr/share/doc/alienware-kbl/CC-BY-4.0), for more details look at the [copyright file](./usr/share/doc/alienware-kbl/copyright). 
-
-## Credits
-
-The software has been developed with the contributions of many GNU/Linux users and hackers, it does not belong to any corporation and it shouldn't be confused with a formal projet !
-
-Alienware-KBL is based on [pyAlienFX](https://github.com/Xqua/pyAlienFX) 1.02, which had a strong influence from AlienFX Lite. These are the main credits and contributors:
++ The `block testing window` will be separated from the GUI.
++ The GUI will no longer use the root account.
+    * The Daemon will be mandatory for using the GUI
+    * gksu will be removed as dependence
 
 
-**Alienware-KBL**
+# What are the main changes if we compare this version to the stable one?
 
-* Rafael Senties Martinelli
-* Amalia Angeli (ArtWork)
++ The code was simplified and organized, even some good PEP8 rules went added.
++ The debug/warning/error system was improved.
++ The GUI doesn't use anymore the root account.
 
-**PyALienFX**
+Why these changes are so important? Even if I was the only developper
+I consider the software as a community project and everyone should be able of understanding it so it can be enhanced.
+Also having a clear and non-redundant code enhances the performances  and makes it a much better software.
 
-* Ledjfou125
-* LightHash
-* Corp
-* Niai
+# What is missing to implement?
 
-**AlienFX Lite**
+1) Find out why `alienware-kbl -off` & `alienware-kbl --on` is not working.
+2) (Optional) Finish the block testing window:
+  This window was made as a friendly inferface so developers be able to play & test the alienware bus system with `python-usb`.
+  Because `python-usb` will require root permission, this window shall be taken off the GUI and even be developed as a separate software from `alienware-kbl`.
 
-* Wattos
+  Concerning this window, I made it work and it was functional. You can read more about it at the F.A.Q.
 
-Beside the main code of the software, some users have contributed to the support the configuration of their computer, these are some of the names:
+# Optional known bugs/features that would be nice to fix:
 
-* Alienware 13 by Francesco Rosa
-* M11XR1 by aehs29
-* M11XR2 by iferlive
-* M14XR1 by LightHash
-* M14XR3 by nshp
-* Alienware 15 by trollsid
-* M17XR3 by Niai
-* M18XR2 by SuperTool
+  + Directly load the daemon from a root session without using the libusb patch.
+  + Concerning the GUI:
+    + Fix the power button.
+    + Add the different blocks (On save, On boot, On battery). For this you can take a look in to the pyAlienFX project.
+  
+# What else?
+
+That's all the information. I wish you a happy hacking ;}
+
+
