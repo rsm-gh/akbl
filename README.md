@@ -49,15 +49,6 @@ My only petition is that your project be renamed so people can find figure out t
 
 ![General Diagram](https://github.com/rsm-gh/alienware-kbl/blob/new-version/usr/share/doc/AlienwareKBL/Programming/general%20diagram.png)
 
-
-This branch is the future of alienware-kbl, the goals are to:
-
-+ The `block testing window` will be separated from the GUI.
-+ The GUI will no longer use the root account.
-    * The Daemon will be mandatory for using the GUI
-    * gksu will be removed as dependence
-
-
 # What are the main changes if we compare this version to the stable branch?
 
 + The code was simplified and organized, even some good PEP8 rules went added.
