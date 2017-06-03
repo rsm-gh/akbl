@@ -38,7 +38,7 @@ My only petition is that your project be renamed so people can find figure out t
    + Some paths point to `/usr/share/`.
    + The daemon must be launched from the ` alienware-kbl ` bash script since it is necessary to add an USB patch export (I never found how to do this from python).
   
-  `systemd stop alienware-kbl && alienware-kbl --start-daemon` is used to load the daemon on the current terminal.
+  `systemd stop alienware-kbl && alienware-kbl --start-daemon` is used to load the daemon on the current terminal:
   
    + `systemd stop alienware-kbl` stops the daemon after the installation (because by default the installation loads the daemon and enables it at boot).
   
