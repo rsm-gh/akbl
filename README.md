@@ -72,9 +72,3 @@ Also having a clear and non-redundant code enhances the performances and makes i
 + Concerning the GUI:
   + Fix the power button.
   + Add the different blocks (On save, On boot, On battery). For this you can take a look in to the pyAlienFX project.
-  
-# What else?
-
-That's all the information. I wish you a happy hacking ;}
-
-
