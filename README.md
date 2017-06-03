@@ -3,7 +3,7 @@
 # About
 
 For me this branch is the future of `alienware-kbl`. A really cool branch with lots of new code ideas and implementations.
-It makes me feel sad to suddendly stopped coding outside of my job.
+It makes me feel sad to suddendly stop the project, but I stopped coding outside of my job.
 
 You're free to download, modify and share the code, I added as much as information as possible so anyone be able of moving the project to the new step :)
 
