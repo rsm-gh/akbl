@@ -27,7 +27,7 @@ My only petition is that your project be renamed so people can find figure out t
     
     2. Everytime that you want to test your implementations use the following command: `./setup && systemd stop alienware-kbl && alienware-kbl --start-daemon`.
     
-    3. Under the normal user terminal execute some daemon command. Ex: `alienware-kbl --off`, `alienware-kbl --on`.
+5. Under the normal user terminal execute some daemon command, ex: `alienware-kbl --off`, `alienware-kbl --on`.
   
   You will be then able of testing and debuging the daemon since this is the first step to make the whole program work.
 
