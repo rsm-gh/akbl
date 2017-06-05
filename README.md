@@ -60,7 +60,7 @@ Also having a clear and non-redundant code enhances the performances and makes i
 
 # What is missing to implement?
 
-1) Find out why `alienware-kbl -off` & `alienware-kbl --on` is not working.
+1) Find out why `alienware-kbl -off` & `alienware-kbl --on` are not working.
 2) (Optional) Finish the block testing window:
   This window was made as a friendly inferface so developers be able to play & test the alienware bus system with `python-usb`.
   Because `python-usb` will require root permission, this window shall be taken off the GUI and even be developed as a separate software from `alienware-kbl`.
