@@ -54,40 +54,40 @@ install -d /usr/share/AlienwareKBL
 install -D $DIR/usr/share/AlienwareKBL/* /usr/share/AlienwareKBL
 
 	install -d /usr/share/AlienwareKBL/Configuration
-	install -D $DIR/usr/share/AlienwareKBL/Configuration/* /usr/share/Configuration
+	install -D $DIR/usr/share/AlienwareKBL/Configuration/* /usr/share/AlienwareKBL/Configuration
 
 	install -d /usr/share/AlienwareKBL/Engine
-	install -D $DIR/usr/share/AlienwareKBL/Engine/* /usr/share/Engine
+	install -D $DIR/usr/share/AlienwareKBL/Engine/* /usr/share/AlienwareKBL/Engine
 
 	install -d /usr/share/AlienwareKBL/GUI
-	install -D $DIR/usr/share/AlienwareKBL/GUI/* /usr/share/GUI
+	install -D $DIR/usr/share/AlienwareKBL/GUI/* /usr/share/AlienwareKBL/GUI
 
 		install -d /usr/share/AlienwareKBL/GUI/images
-		install -D $DIR/usr/share/AlienwareKBL/GUI/images/* /usr/share/GUI/images
+		install -D $DIR/usr/share/AlienwareKBL/GUI/images/* /usr/share/AlienwareKBL/GUI/images
 
 		install -d /usr/share/AlienwareKBL/GUI/ZoneWidget
-		install -D $DIR/usr/share/AlienwareKBL/GUI/ZoneWidget/* /usr/share/GUI/ZoneWidget
+		install -D $DIR/usr/share/AlienwareKBL/GUI/ZoneWidget/* /usr/share/AlienwareKBL/GUI/ZoneWidget
 
 	install -d /usr/share/AlienwareKBL/Indicator
-	install -D $DIR/usr/share/AlienwareKBL/Indicator/* /usr/share/Indicator
+	install -D $DIR/usr/share/AlienwareKBL/Indicator/* /usr/share/AlienwareKBL/Indicator
 
 		install -d /usr/share/AlienwareKBL/Indicator/images
-		install -D $DIR/usr/share/AlienwareKBL/Indicator/images/* /usr/share/Indicator/images
+		install -D $DIR/usr/share/AlienwareKBL/Indicator/images/* /usr/share/AlienwareKBL/Indicator/images
 
 install -d /usr/share/applications
 install -D $DIR/usr/share/applications/* /usr/share/applications
 
-install -d /usr/share/doc/alienware-kbl
-install -D $DIR/usr/share/doc/alienware-kbl/* /usr/share/doc/alienware-kbl
+install -d /usr/share/doc/AlienwareKBL
+install -D $DIR/usr/share/doc/AlienwareKBL/* /usr/share/doc/AlienwareKBL
 
-	install -d "/usr/share/doc/alienware-kbl/Images Preview"
-	install -D "$DIR/usr/share/doc/alienware-kbl/Images Preview/*" "/usr/share/doc/alienware-kbl/Images Preview"
+	install -d "/usr/share/doc/AlienwareKBL/Images Preview"
+	install -D "$DIR/usr/share/doc/AlienwareKBL/Images Preview/*" "/usr/share/doc/AlienwareKBL/Images Preview"
 
-	install -d /usr/share/doc/alienware-kbl/Licenses
-	install -D $DIR/usr/share/doc/alienware-kbl/Licenses/* /usr/share/doc/alienware-kbl/Licenses
+	install -d /usr/share/doc/AlienwareKBL/Licenses
+	install -D $DIR/usr/share/doc/AlienwareKBL/Licenses/* /usr/share/doc/AlienwareKBL/Licenses
 
-	install -d /usr/share/doc/alienware-kbl/Programming
-	install -D $DIR/usr/share/doc/alienware-kbl/Programming/* /usr/share/doc/alienware-kbl/Programming
+	install -d /usr/share/doc/AlienwareKBL/Programming
+	install -D $DIR/usr/share/doc/AlienwareKBL/Programming/* /usr/share/doc/AlienwareKBL/Programming
 
 #
 # Executing the post-installation script
