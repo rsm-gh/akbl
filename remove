@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael AT senties-martinelli DOT com>
+#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -17,7 +17,7 @@
 
 
 if [ "$EUID" -ne 0 ]
-  then echo "Please run as root."
+  then echo "The script must be run as root."
   exit
 fi
 
@@ -48,4 +48,6 @@ if [ -f /usr/bin/alienware-kbl ]; then
 	rm -f /usr/bin/alienware-kbl
 fi
 
-echo -e "\e[00;32mAlienware-KBL has been removed.\e[00m"
+if [ $1 != "-s" ]; then
+	echo -e "\e[00;32mAlienware-KBL has been removed.\e[00m"
+fi

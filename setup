@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael AT senties-martinelli DOT com>
+#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,16 +15,15 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd $DIR
-
 
 if [ "$EUID" -ne 0 ]
   then echo "The script must be run as root."
   exit
 fi
 
-chmod a+x ./remove ./prerm ./preinst ./postinst
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR
+chmod a+x ./remove ./prerm ./postinst
 
 #
 # These files shouldn't be shiped with the package,
@@ -38,38 +37,35 @@ fi
 #
 # Remove previous versions
 #
-echo -e "\e[00;32mTo ensure a clean installation, the previous version will be fully removed..\e[00m"
-./remove
-echo -e "\e[00;32mThe installation will continue..\e[00m"
+echo -e "\e[00;32mTo ensure a clean installation any previous version will be fully removed..\e[00m"
+./remove -s
 
 #
 # Start the installation
 #
-echo "Copying the software files..."
-cp -ar $DIR/usr/. /usr/
+echo -e "\e[00;32mCopying the software files (the message 'ommiting directory' is normal)...\e[00m"
+install -d /usr/share/alienware-kbl
+install -D $DIR/usr/share/alienware-kbl/* /usr/share/alienware-kbl
+
+install -d /usr/share/alienware-kbl/images
+install -D $DIR/usr/share/alienware-kbl/images/* /usr/share/alienware-kbl/images
+
+install -d /usr/share/applications
+install -D $DIR/usr/share/applications/* /usr/share/applications
+
+install -d /usr/share/doc/alienware-kbl
+install -D $DIR/usr/share/doc/alienware-kbl/* /usr/share/doc/alienware-kbl
+
+install -d /usr/bin
+install -D $DIR/usr/bin/* /usr/bin
+
+install -d /usr/lib/systemd/system
+install -D $DIR/usr/lib/systemd/system/* /usr/lib/systemd/system
 
 #
-# Is changing the permissions after coping the files, a security flaw? I guess so.
-# I actually had to do this, because after coping the files, some didn't had the right permission..
+# Executing the post-installation script
 #
-echo "Changing the files permissions and ownership..."
-chmod u=rwx,go=rx /usr/bin/alienware-kbl
-chown root:root -R /usr/bin/alienware-kbl
-
-chown root:root -R /usr/share/alienware-kbl
-chmod -R u=rwx,go=rx /usr/share/alienware-kbl/
-chmod u=rw,go=r /usr/share/alienware-kbl/images/*
-
-chown root:root -R /usr/share/alienware-kbl
-chmod -R u=rwx,go=rx /usr/share/doc/alienware-kbl
-chmod u=rw,go=r /usr/share/doc/alienware-kbl/*
-
-chown root:root -R /usr/lib/systemd/system/alienware-kbl.service
-chmod u=rw,go=r /usr/lib/systemd/system/alienware-kbl.service
-
-#
-# Post installation
-#
+echo -e "\e[00;32mExecuting the post-installation...\e[00m"
 ./postinst
 
-echo -e "\e[00;32mAlienware-KBL is installed, enjoy the software !\e[00m"
+echo -e "\e[00;32mAlienware-KBL is installed, enjoy it !\e[00m"
