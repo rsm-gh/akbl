@@ -1,16 +1,5 @@
-**Alienware-KBL is not anymore under development. You can either use the [functional stable branch](https://github.com/rsm-gh/alienware-kbl/tree/stable) or continue this branch and create a new project.**
 
-# About
-
-For me this branch is the future of `alienware-kbl`. A really cool branch with lots of new code ideas and implementations.
-It makes me feel sad to suddendly stop the project, but I stopped coding outside of my job.
-
-You're free to download, modify and share the code, I added as much as information as possible so anyone be able of moving the project to the new step :)
-
-My only petition is that your project be renamed so people can find figure out that it is a new project. I actually refuse to use the Mozilla license so if you want to thank me, respecting my philosofphy is the best way ;)
-
-
-# How to use and develop this branch?
+# How to use and develop alienware-kbl?
 
 1. Install the dependencies:
   * Debian based distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
