@@ -1,6 +1,4 @@
 
-**Alienware-KBL is not anymore under development**
-
 **Index:**
 
 * [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
