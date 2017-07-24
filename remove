@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2016-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -17,7 +17,7 @@
 
 
 if [ "$EUID" -ne 0 ]
-  then echo "Please run as root."
+  then echo "The script must be run as root."
   exit
 fi
 
@@ -29,23 +29,25 @@ cd $DIR
 echo "Removing files and directories.."
 
 if [ -f /usr/lib/systemd/system/alienware-kbl.service ]; then
-    rm -rf /usr/lib/systemd/system/alienware-kbl.service
+	rm -rf /usr/lib/systemd/system/alienware-kbl.service
 fi
 
-if [ -d /usr/share/AlienwareKBL ]; then
-    rm -rf /usr/share/AlienwareKBL
+if [ -d /usr/share/alienware-kbl ]; then
+	rm -rf /usr/share/alienware-kbl
 fi
 
 if [ -d /usr/share/doc/alienware-kbl ]; then
-    rm -rf /usr/share/doc/alienware-kbl
+	rm -rf /usr/share/doc/alienware-kbl
 fi
 
 if [ -f /usr/share/applications/alienware-kbl.desktop ]; then
-    rm -f /usr/share/applications/alienware-kbl.desktop
+	rm -f /usr/share/applications/alienware-kbl.desktop
 fi
 
 if [ -f /usr/bin/alienware-kbl ]; then
-    rm -f /usr/bin/alienware-kbl
+	rm -f /usr/bin/alienware-kbl
 fi
 
-echo -e "\e[00;32mAlienware-KBL has been removed.\e[00m"
+if [ $1 != "-s" ]; then
+	echo -e "\e[00;32mAlienware-KBL has been removed.\e[00m"
+fi
