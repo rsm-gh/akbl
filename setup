@@ -36,11 +36,6 @@ if [ -d $DIR/usr/share/alienware-kbl/__pycache__ ]; then
 fi
 
 #
-# Save the user configuration files
-#
-./preinst
-
-#
 # Remove previous versions
 #
 echo -e "\e[00;32mTo ensure a clean installation, the previous version will be fully removed..\e[00m"
