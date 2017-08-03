@@ -1,4 +1,7 @@
 
+**If you have programming skills better took a look to the [new-version](https://github.com/rsm-gh/alienware-kbl/tree/new-version) branch.**
+
+
 **Index:**
 
 * [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
