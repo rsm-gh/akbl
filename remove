@@ -48,6 +48,6 @@ if [ -f /usr/bin/alienware-kbl ]; then
 	rm -f /usr/bin/alienware-kbl
 fi
 
-if [ $1 != "-s" ]; then
+if [ "$1" != "-s" ]; then
 	echo -e "\e[00;32mAlienware-KBL has been removed.\e[00m"
 fi
