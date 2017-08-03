@@ -1,5 +1,5 @@
 
-**If you have programming skills better took a look to the [new-version](https://github.com/rsm-gh/alienware-kbl/tree/new-version) branch.**
+**If you have programming skills better take a look to the [new-version](https://github.com/rsm-gh/alienware-kbl/tree/new-version) branch.**
 
 
 **Index:**
