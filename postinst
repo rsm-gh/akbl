@@ -15,10 +15,13 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-echo "Enabling and starting systemd..."
+
 if [ -f /bin/systemctl ]; then
+	echo "Enabling and starting systemd..."
     systemctl enable alienware-kbl
     systemctl start alienware-kbl
+else
+	echo -e "\e[00;31m Warning: systemd seems to be missing. Alienware-KBL will not work.\e[00m"
 fi
 
 echo "Linking the python bindings..."
@@ -26,7 +29,7 @@ if [ ! -d /usr/lib/python3 ]; then
     mkdir /usr/lib/python3
 fi
 
-python_versions=( "python3" "python3.4" "python3.5" "python3.6")
+python_versions=("python3" "python3.4" "python3.5" "python3.6")
 
 for python_version in "${python_versions[@]}"; do
     if [ -d /usr/lib/$python_version ]; then

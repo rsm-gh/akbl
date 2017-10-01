@@ -16,15 +16,15 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-echo "Disabling the systemd daemon..."
 if [ -f /bin/systemctl ]; then
+	echo "Disabling the systemd daemon..."
     systemctl stop alienware-kbl
     systemctl disable alienware-kbl
 fi
 
 echo "Removing the links to the python bindings..."
 
-python_versions=( "python3" "python3.4" "python3.5" "python3.6")
+python_versions=("python3" "python3.4" "python3.5" "python3.6")
 
 for python_version in "${python_versions[@]}"; do
     if [ -f /usr/lib/$python_version/AKBL.py ]; then
