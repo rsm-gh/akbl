@@ -22,13 +22,13 @@ import sys
 import Pyro4
 import getpass
 from traceback import format_exc
-
+from utils import print_error
 
 # Local imports
 from Configuration.Paths import Paths
 
 
-class AKBL:
+class Bindings:
 
     def __init__(self):
         self._address = False
@@ -39,10 +39,9 @@ class AKBL:
 
     def _command(self, command, *args):
         """
-            Send a command to the daemon. It the command
-            returns something (list, string, dict) it will be
-            returned. Otherwise ir will return True if it succeed
-            or False if there was a problem
+            Send a command to the daemon and return a tuple containing (boolean, response).
+            The boolean indicates weather the command was succesfull or not, and the response
+            contains the information returned by the command.
         """
         if command in ('set_profile', 'set_lights', 'switch_lights', 'reload_configurations'):
             args = [self._user] + list(args)
@@ -53,17 +52,13 @@ class AKBL:
         if self._address:
             try:
                 response = getattr(self._pyro, command)(*args)
-
-                if response is not None:
-                    return response
-
-                return True
+                return (True, response)
 
             except Exception as e:
-                print(e)
-                return False
+                print_error("Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)), format_exc()))
+                return (False, None)
         else:
-            return False
+            return (False, "The daemon seems to be off")
 
     def reload_address(self):
         """
@@ -83,7 +78,7 @@ class AKBL:
                 return True
 
             except Exception as e:
-                print("DEBUG Bindings: Conecting `Pyro4`, \n{}\n".format(format_exc()))
+                print_error(format_exc())
 
                 self._address = False
                 self._pyro = False
@@ -175,13 +170,8 @@ if __name__ == '__main__':
 
     import time
 
-    AKBLConnection = AlienwareKBL()
+    AKBLConnection = Bindings()
 
-    lights_test = True
-    profiles_test = True
-    colors_test = True
-    speed_test = True
-    colors_multiple_test = True
 
     if not AKBLConnection.ping():
         print("The conection with the daemon is off")
@@ -196,6 +186,13 @@ if __name__ == '__main__':
             really need to do this in your code!
         """
 
+        lights_test = True
+        profiles_test = True
+        colors_test = True
+        speed_test = True
+        colors_multiple_test = True
+
+
         if lights_test:
             print('lights off', AKBLConnection.set_lights(False))
             time.sleep(2)
@@ -205,10 +202,7 @@ if __name__ == '__main__':
 
         if profiles_test:
             for profile_name in AKBLConnection.get_profile_names():
-                print(
-                    'set profile:',
-                    profile_name,
-                    AKBLConnection.set_profile(profile_name))
+                print('set profile:', profile_name, AKBLConnection.set_profile(profile_name))
                 time.sleep(5)
 
         color1 = '#F7F200'

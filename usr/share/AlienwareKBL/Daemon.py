@@ -25,7 +25,7 @@ from time import time, sleep
 
 # Local imports
 from texts import *
-from utils import getuser, print_warning, print_debug
+from utils import getuser, print_warning, print_debug, print_error
 from Engine.Controller import Controller
 from Engine.Driver import Driver
 from Configuration import Theme
@@ -98,7 +98,7 @@ class Daemon:
                     self.profile_name,
                     self._lights_state)
             except Exception as e:
-                print(format_exc())
+                print_error(format_exc())
 
         # Iluminate the computer lights
         #
@@ -122,7 +122,7 @@ class Daemon:
             try:
                 self._indicator_pyro.set_code(val)
             except Exception as e:
-                print(format_exc())
+                print_error(format_exc())
 
     """
         General Bindings
@@ -148,16 +148,15 @@ class Daemon:
         if self._indicator_pyro and indicator:
             try:
                 self._indicator_pyro.load_profiles(
-                    list(Theme.profiles.keys()),
+                    list(Theme.AVAILABLE_THEMES.keys()),
                     self.profile_name,
                     self._lights_state)
             except Exception as e:
-                print(format_exc())
+                print_error(format_exc())
 
     """
         Bindings for the users
     """
-
     @Pyro4.expose
     def set_profile(self, user, profile):
         """
@@ -171,8 +170,8 @@ class Daemon:
 
         self.reload_configurations(user, False, False)
 
-        if profile in Theme.profiles.keys():
-            self._theme = Theme.profiles[profile]
+        if profile in Theme.AVAILABLE_THEMES.keys():
+            self._theme = Theme.AVAILABLE_THEMES[profile]
             self.profile_name = profile
             self._iluminate_keyboard()
             self._iluminate_keyboard()
@@ -245,10 +244,10 @@ class Daemon:
         """
 
         if mode not in ('fixed', 'morph', 'blink'):
-            print("Warning Daemon: Wrong mode", mode)
+            print_warning("Wrong mode" + str(mode))
             return
         elif not isinstance(speed, int):
-            print("Warning Daemon: Speed must be an integer.")
+            print_warning("Speed must be an integer." + str(speed))
             return
         elif speed >= 256:
             speed = 255
@@ -267,23 +266,40 @@ class Daemon:
             right_colors = [right_colors]
 
         if len(left_colors) != len(right_colors):
-            print_warning("The colors list do not have the same lenght")
+            print_warning("The colors list do not have the same lenght.")
             return
 
         self._lights_state = True
-        self._controller.start_loop(
-            False, self._computer.BLOCK_LOAD_ON_BOOT)
-        self._controller.add_speed_conf(speed)
+        self._controller.start_loop(False, self._computer.BLOCK_LOAD_ON_BOOT)
+        self._controller.set_speed(speed)
 
-        for zone in self._computer.regions.keys():
+        print_warning("speed set")
+
+
+        for region in self._computer.get_regions():
+            
             for i in range(len(left_colors)):
-
-                self._controller.add_loop(
-                    self._computer.regions[zone].region_id, 
-                    mode, 
-                    left_colors[i], 
-                    right_colors[i])
-
+                                
+                if i + 1 > region.max_commands:
+                    print_warning("The number of maximum commands for the region={} have been exeed. The loop was stopped at {}.".format(region.name, i+1))
+                    break
+                
+                if mode == 'blink':
+                    if not region.can_blink:
+                        self._controller.add_loop(region.hex_id, 'fixed', left_colors[i], right_colors[i])
+                        print_warning("The mode=blink is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
+                    else:
+                        self._controller.add_loop(region.hex_id, 'morph', left_colors[i], right_colors[i])
+                        
+                elif mode == 'morph':
+                    if not region.can_morph:
+                        self._controller.add_loop(region.hex_id, 'fixed', left_colors[i], right_colors[i])
+                        print_warning("The mode=morph is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
+                    else:
+                        self._controller.add_loop(region.hex_id, 'morph', left_colors[i], right_colors[i])
+                else:
+                    self._controller.add_loop(region.hex_id, 'fixed', left_colors[i], right_colors[i])
+                    
             self._controller.end_loop()
 
         self._controller.end_transfer()
@@ -292,7 +308,7 @@ class Daemon:
     """
         Bindings for the graphical interphase
     """
-
+    
     @Pyro4.expose
     def get_computer_name(self):
         return self._computer.NAME

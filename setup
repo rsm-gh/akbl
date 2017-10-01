@@ -44,7 +44,7 @@ echo -e "\e[00;32mTo ensure a clean installation any previous version will be fu
 # Start the installation
 #
 
-echo -e "\e[00;32mCopying the software files (the message 'ommiting directory' is normal)...\e[00m"
+echo -e "\e[00;32mCopying the software files (the message 'omiting directory *' is normal)...\e[00m"
 
 # Documentation
 

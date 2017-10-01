@@ -81,7 +81,7 @@ def print_warning(message):
     module_name = _parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
     
-    print('{}WARNING from `{}` on method `{}`:\n{}{}'.format(_LIGHT_YELLOW, module_name, method_name, _RESET, message))
+    print('{}WARNING from `{}` on method `{}`:{}\n{}\n\n'.format(_LIGHT_YELLOW, module_name, method_name, _RESET, str(message).strip()))
 
 def print_debug(message=None):
 
@@ -90,9 +90,9 @@ def print_debug(message=None):
     method_name = isp1[3]
     
     if message is None:
-        print('{}DEBUG from `{}` on method `{}`{}:'.format(_CYAN, module_name, method_name, _RESET))
+        print('{}DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN, module_name, method_name, _RESET))
     else:
-        print('{}DEBUG from `{}` on method `{}`{}:\n{}'.format(_CYAN, module_name, method_name, _RESET, message))
+        print('{}DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN, module_name, method_name, _RESET, str(message).strip()))
 
 
 def print_error(message):
@@ -101,14 +101,14 @@ def print_error(message):
     module_name = _parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
     
-    print('{}ERROR from `{}` on method `{}`:\n {}'.format(_RED, module_name, method_name, _RESET, message))
+    print('{}ERROR from `{}` on method `{}`{}:\n{}\n\n'.format(_RED, module_name, method_name, _RESET, str(message).strip()))
 
 
 if __name__ == '__main__':
     
     def test():
-        print_warning('testing warning')
-        print_debug('testing debug')
+        print_warning('this is a warning!')
+        print_debug('this is a debug message!')
         print_error('this is an error!')
 
 
