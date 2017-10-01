@@ -95,9 +95,6 @@ class Theme:
         self._computer = copy(computer)
         self._speed = self._computer.DEFAULT_SPEED
 
-        #print_debug(self._computer)
-
-
     def create_profile(self, name, path, speed=False):
         self.name = name
         self.set_speed(speed)
@@ -208,10 +205,10 @@ class Theme:
                             mode = default_mode
 
                     elif var_name in ('color','color1','left_color'):  # `color` & `color1`are to give support to old themes
-                        color1 = var_arg
+                        left_color = var_arg
 
                     elif var_name in ('color2','right_color'):  # `color2` is to give support to old themes
-                        color2 = var_arg
+                        right_color = var_arg
 
                     if area_found and left_color and right_color and mode:
 

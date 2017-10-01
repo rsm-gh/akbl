@@ -28,7 +28,7 @@ from traceback import format_exc
 from Engine.Constructor import Constructor
 sys.path.append("../")
 from Configuration.Computers import Computer, AVAILABLE_COMPUTERS, M14XR1, M14XR2
-from utils import print_debug
+from utils import print_debug, print_error
 
 class Driver():
 
@@ -57,7 +57,7 @@ class Driver():
 
     def find_device(self):
         """
-            Look for all the devices listed at the `Computers.py` file.
+            Look for all the devices listed in the `Computers.py` file.
             If a computer is finded, the device is loaded as well as 
             all its parameters.
         """
@@ -97,12 +97,10 @@ class Driver():
 
     def write_constructor(self, constructor):
         
-        print_debug()
+        print_debug('\n'.join(str(request) for request in constructor))
         
         for request in constructor:
             self._device.ctrl_transfer(self.SEND_REQUEST_TYPE, self.SEND_REQUEST, self.SEND_VALUE, self.SEND_INDEX, request.packet)
-                
-            print(request)
             time.sleep(0.02)
 
     def read_device(self, msg):
@@ -125,5 +123,5 @@ class Driver():
             try:
                 self._device.set_configuration()
             except Exception as e:
-                print(format_exc())
+                print_error(format_exc())
                 sys.exit(1)

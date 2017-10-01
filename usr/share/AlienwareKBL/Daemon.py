@@ -81,7 +81,11 @@ class Daemon:
         self._ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Theme')
         self._indicator_pyro = False
         self.reload_configurations(self._user)
-        self.set_lights(self._user, self._ccp.get_bool_defval('boot', True))
+        #self.set_lights(self._user, self._ccp.get_bool_defval('boot', True))
+        
+        print_warning("DEBUGING LIGHTS ON")
+        self.set_lights(self._user, True)
+
 
     def _iluminate_keyboard(self):
 
@@ -102,19 +106,18 @@ class Daemon:
 
         # Iluminate the computer lights
         #
-        self._controller.start_loop(save=False, block=self._computer.get_power_block())
+        self._controller.start_config(save=False, block=self._computer.get_power_block())
+        self._controller.reset_all_lights(self._computer.RESET_ALL_LIGHTS_ON)
         self._controller.set_speed(self._theme.get_speed())
         
         for area in self._theme.get_areas():
             for zone in area.get_zones():
-                self._controller.add_loop(zone.get_hex_id(),
-                                          zone.get_mode(),
-                                          zone.get_left_color(),
-                                          zone.get_right_color())
-
-            self._controller.end_loop()
-
-        self._controller.end_transfer()
+                
+                print(zone.get_hex_id(), zone.get_mode(), zone.get_left_color(), zone.get_right_color())
+                self._controller.add_line(zone.get_hex_id(), zone.get_mode(), zone.get_left_color(), zone.get_right_color())
+            self._controller.end_line()
+        self._controller.end_config()
+        
         self._controller.write()
 
     def _indicator_send_code(self, val):
@@ -197,15 +200,15 @@ class Daemon:
             keep_alive_zones = self._ccp.get_str_defval('zones_to_keep_alive', '')
 
             if keep_alive_zones == '':
-                self._controller.start_loop(save=False, block=self._computer.get_power_block())
-                self._controller.reset(self._computer.RESET_ALL_LIGHTS_OFF)
+                self._controller.start_config(save=False, block=self._computer.get_power_block())
+                self._controller.reset_all_lights(self._computer.RESET_ALL_LIGHTS_OFF)
             else:
                 keep_alive_zones = keep_alive_zones.split('|')
 
                 """
                     This hack, it will set black as color to all the lights that should be turned off.
                 """
-                self._controller.start_loop(
+                self._controller.start_config(
                     False, self._computer.BLOCK_LOAD_ON_BOOT)
                 self._controller.add_speed_conf(1)
 
@@ -213,11 +216,11 @@ class Daemon:
                     if key not in keep_alive_zones:
                         area = self._theme.area[key]
                         for zone in area:
-                            self._controller.add_loop(zone.get_hex_id(), 'fixed', '#000000', '#000000')
+                            self._controller.add_line(zone.get_hex_id(), 'fixed', '#000000', '#000000')
 
-                        self._controller.end_loop()
+                        self._controller.end_line()
 
-                self._controller.end_transfer()
+                self._controller.end_config()
                 self._controller.write()
 
             self._lights_state = False
@@ -270,7 +273,7 @@ class Daemon:
             return
 
         self._lights_state = True
-        self._controller.start_loop(False, self._computer.BLOCK_LOAD_ON_BOOT)
+        self._controller.start_config(False, self._computer.BLOCK_LOAD_ON_BOOT)
         self._controller.set_speed(speed)
 
         print_warning("speed set")
@@ -286,23 +289,23 @@ class Daemon:
                 
                 if mode == 'blink':
                     if not region.can_blink:
-                        self._controller.add_loop(region.hex_id, 'fixed', left_colors[i], right_colors[i])
+                        self._controller.add_line(region.hex_id, 'fixed', left_colors[i], right_colors[i])
                         print_warning("The mode=blink is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
                     else:
-                        self._controller.add_loop(region.hex_id, 'morph', left_colors[i], right_colors[i])
+                        self._controller.add_line(region.hex_id, 'morph', left_colors[i], right_colors[i])
                         
                 elif mode == 'morph':
                     if not region.can_morph:
-                        self._controller.add_loop(region.hex_id, 'fixed', left_colors[i], right_colors[i])
+                        self._controller.add_line(region.hex_id, 'fixed', left_colors[i], right_colors[i])
                         print_warning("The mode=morph is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
                     else:
-                        self._controller.add_loop(region.hex_id, 'morph', left_colors[i], right_colors[i])
+                        self._controller.add_line(region.hex_id, 'morph', left_colors[i], right_colors[i])
                 else:
-                    self._controller.add_loop(region.hex_id, 'fixed', left_colors[i], right_colors[i])
+                    self._controller.add_line(region.hex_id, 'fixed', left_colors[i], right_colors[i])
                     
-            self._controller.end_loop()
+            self._controller.end_line()
 
-        self._controller.end_transfer()
+        self._controller.end_config()
         self._controller.write()
 
     """

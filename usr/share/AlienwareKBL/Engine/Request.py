@@ -25,8 +25,6 @@ class Request:
 
         self.legend = legend
         self.packet = packet  #[int(item) for item in packet]
-        
-        #print_debug("{}=`{}`".format(legend, packet))
 
     def __str__(self):
         return 'Request: packet={}\tlegend={}'.format(self.packet, self.legend)

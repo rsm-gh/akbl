@@ -77,7 +77,7 @@ def adapt_right_color(color):
 class Constructor(list):
 
     def __init__(self, computer, save=False, block=0x01):
-        self.raz()
+
         self.computer = computer
 
         self._block = block        
@@ -86,10 +86,8 @@ class Constructor(list):
         self._void = [self.computer.FILL_BYTE] * self.computer.DATA_LENGTH
 
     def __str__(self):
-        
         return "Constructor: computer.NAME={}, hex_id={}, block={}, _save={}, _void={}".format(self.computer.NAME, self._hex_id, self._block, self._save, self._void)
         
-
     def save(self, end=False):
         if self._save:
             if not end:
@@ -234,9 +232,9 @@ class Constructor(list):
 
         self.append(Request(legend, cmd))
 
-    def end_loop(self):
+    def end_line(self):
         self.save()
-        legend = "end_loop"
+        legend = "end_line"
 
         cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
@@ -245,17 +243,13 @@ class Constructor(list):
         self._hex_id += 0x01
         self.append(Request(legend, cmd))
 
-    def end_transfer(self):
+    def end_config(self):
         self.save(end=True)
         if not self._save:
-            legend = "end_transfer"
+            legend = "end_config"
             
             cmd = copy(self._void)
             cmd[0] = self.computer.START_BYTE
             cmd[1] = self.computer.COMMAND_TRANSMIT_EXECUTE
 
             self.append(Request(legend, cmd))
-
-    def raz(self):
-        for request in self:
-            self.pop(request)

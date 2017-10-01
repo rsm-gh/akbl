@@ -201,19 +201,19 @@ class M14XR1(Computer):
         self.NAME = TEXT_M14XR1
         self.PRODUCT_ID = 0x0521
 
-        self.REGION_RIGHT_KEYBOARD = 0x0008
-        self.REGION_RIGHT_CENTER_KEYBOARD = 0x0004
-        self.REGION_LEFT_KEYBOARD = 0x0001
-        self.REGION_LEFT_CENTER_KEYBOARD = 0x0002
-        self.REGION_RIGHT_SPEAKER = 0x0040
-        self.REGION_LEFT_SPEAKER = 0x0020
-        self.REGION_ALIENWARE_HEAD = 0x0080
-        self.REGION_ALIENWARE_NAME = 0x0100
-        self.REGION_TOUCH_PAD = 0x0200
-        self.REGION_MEDIA_BAR = 0x1c00
-        self.REGION_POWER_BUTTON = 0x2000
-        self.REGION_POWER_BUTTON_EYES = 0x4000
-        self.REGION_ALL_BUT_POWER = 0x0f9fff
+        self.REGION_RIGHT_KEYBOARD = 8
+        self.REGION_RIGHT_CENTER_KEYBOARD = 4
+        self.REGION_LEFT_KEYBOARD = 1
+        self.REGION_LEFT_CENTER_KEYBOARD = 2
+        self.REGION_RIGHT_SPEAKER = 64
+        self.REGION_LEFT_SPEAKER = 32
+        self.REGION_ALIENWARE_HEAD = 128
+        self.REGION_ALIENWARE_NAME = 256
+        self.REGION_TOUCH_PAD = 512
+        self.REGION_MEDIA_BAR = 7168
+        self.REGION_POWER_BUTTON = 8192
+        self.REGION_POWER_BUTTON_EYES = 16348
+        self.REGION_ALL_BUT_POWER = 1023999
 
         self._REGIONS = [
 

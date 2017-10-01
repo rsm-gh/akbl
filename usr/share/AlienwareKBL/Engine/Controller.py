@@ -27,7 +27,14 @@ class Controller:
         self._driver = driver
         self._constructor = None
 
-    def add_loop(self, area_hex_id, mode, left_color, right_color=None):
+    def set_speed(self, speed):
+        self._constructor.set_speed(speed)
+
+    def start_config(self, save, block):
+        self._constructor = Constructor(self._driver.computer, save, block)
+        self._constructor.reset(self._driver.computer.RESET_ALL_LIGHTS_ON)
+
+    def add_line(self, area_hex_id, mode, left_color, right_color=None):
 
         if mode == 'fixed':
             self._constructor.set_fixed_color(area_hex_id, left_color)
@@ -35,48 +42,37 @@ class Controller:
             self._constructor.set_blink_color(area_hex_id, left_color)
         elif mode == 'morph':
             if right_color is None:
-                print_warning('trying to set morph mode without `right_color`')
+                print_warning('trying to set `morph` mode without a `right_color`.The `fixed` mode will be used instead.')
+                self._constructor.set_fixed_color(area_hex_id, left_color)
             else:
                 self._constructor.set_color_morph(area_hex_id, left_color, right_color)
         else:
             print_warning('wrong mode=`{}`'.format(mode))
 
-        #print_debug('''area=`{}`, mode=`{}`, left_color=`{}`, right_color=`{}`.'''.format(area_hex_id, mode, left_color, right_color))
+        #print('''area=`{}`, mode=`{}`, left_color=`{}`, right_color=`{}`.'''.format(area_hex_id, mode, left_color, right_color))
 
+    def end_line(self):
+        self._constructor.end_line()
 
-    def set_speed(self, speed):
-        self._constructor.set_speed(speed)
-            
-    def end_transfer(self):
-        self._constructor.end_transfer()
-
-    def end_loop(self):
-        self._constructor.end_loop()
-
-    def start_loop(self, save, block):
-        self._constructor = Constructor(self._driver.computer, save, block)
-        print_debug(self._constructor)
+    def end_config(self):
+        self._constructor.end_config()
 
     def write(self):
+
         # Wait until is OK to write.
         #
-        print_debug('Waiting for OK..')
-        self._driver.take_over()
-        self.get_state()
         constructor = Constructor(self._driver.computer)
+        constructor.get_status()
         constructor.reset()
-        self._driver.write_constructor(constructor)
-        while not self.get_state():
-            constructor.raz()
-            constructor.get_status()
-            constructor.reset()
+
+        while not self.device_is_ready():
             self._driver.write_constructor(constructor)
-        # Write
+
+        # Write the current constructor
         #
-        print_debug('Writing the constructor..')
         self._driver.write_constructor(self._constructor)
 
-    def get_state(self):
+    def device_is_ready(self):
         self._driver.take_over()
         constructor = Constructor(self._driver.computer)
         constructor.get_status()
@@ -84,20 +80,16 @@ class Controller:
         msg = self._driver.read_device(constructor)
         return msg[0] == self._driver.computer.STATE_READY
 
-    def reset(self, res_cmd):
+    def reset_all_lights(self, res_cmd):
         self._driver.take_over()
         constructor = Constructor(self._driver.computer)
+        constructor.get_status()
+        constructor.reset(res_cmd)
+        
         while True:
-            constructor.get_status()
             self._driver.write_constructor(constructor)
             msg = self._driver.read_device(constructor)
             if msg[0] == self._driver.computer.STATE_READY:
                 break
-            constructor.raz()
-            constructor.get_status()
-            constructor.reset(res_cmd)
-            self._driver.write_constructor(constructor)
-            msg = self._driver.read_device(constructor)
-            if msg[0] == self._driver.computer.STATE_READY:
-                break
+                
         return True

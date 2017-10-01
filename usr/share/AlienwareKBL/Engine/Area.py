@@ -25,14 +25,15 @@ class Area(Region):
     def __init__(self):
         super().__init__()
         
-        self._zones = []
-        self._default_zone_hex_id = 0x01
+        self._default_zone_hex_id = 1
         self._current_zone_hex_id = self._default_zone_hex_id
+        self._zones = []
 
     def init_from_region(self, region):
         self.name = region.name
         self.description = region.description
         self.hex_id = region.hex_id
+        self._default_zone_hex_id = self.hex_id
         self.can_light = region.can_light
         self.can_blink = region.can_blink
         self.can_morph = region.can_morph
@@ -49,6 +50,7 @@ class Area(Region):
         zone.set_hex_id(self._current_zone_hex_id)
         self._zones.append(zone)
         self._current_zone_hex_id += 1
+        print(self._current_zone_hex_id)
 
     def remove_zone(self, column_index):
         zone = self._zones[column_index]
