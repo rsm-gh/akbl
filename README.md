@@ -1,5 +1,5 @@
 
-# How to use and develop alienware-kbl?
+# How to develop alienware-kbl?
 
 1. Install the dependencies:
   * Debian based distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
@@ -16,27 +16,27 @@
     
     2. Everytime that you want to test your implementations use the following command: `./setup && systemd stop alienware-kbl && alienware-kbl --start-daemon`.
     
-5. Under the normal user terminal execute some daemon command, ex: `alienware-kbl --off`, `alienware-kbl --on`.
-  
-  You will be then able of testing and debuging the daemon since this is the first step to make the whole program work.
+    If you made implementations to the Daemon you will be then able to see them if you execute them under `__init__`, and if that's not the case, well, use the addon that you want to test and you will see the debug messsages either in the Daemon terminal or in the addon terminal.
 
-  **Bonnus** reason and explanation of the previous commands:
+  **Bonnus:** reasons and explanation of the previous commands:
   
   `./setup` is used to install the software. This is necessary for the develop part because:
    + The daemon must be launched as root.
    + Some paths point to `/usr/share/`.
-   + The daemon must be launched from the ` alienware-kbl ` bash script since it is necessary to add an USB patch export (I never found how to do this from python).
+   + The daemon must be launched from the ` alienware-kbl ` bash script since it is necessary to use the USB patch.
+   + `systemd stop alienware-kbl && alienware-kbl --start-daemon` is used to load the daemon on the current terminal. `systemd stop alienware-kbl` stops the daemon started by the installation  and `alienware-kbl --start-daemon` starts the daemon in the current terminal. 
   
-  `systemd stop alienware-kbl && alienware-kbl --start-daemon` is used to load the daemon on the current terminal:
-  
-   + `systemd stop alienware-kbl` stops the daemon after the installation (because by default the installation loads the daemon and enables it at boot).
-  
-  + `alienware-kbl --start-daemon` launches the daemon at the current terminal. Note that it is not advisable to run two daemon instances because the pyro communication system will probably fail or choose only one daemon to speak.
+  Note that it is not advisable to run two daemon instances because the pyro communication system will probably fail or choose only one daemon to speak.
 
+# Development documentation
 
-# The new software diagram
+## General architecture
 
 ![General Diagram](https://github.com/rsm-gh/alienware-kbl/blob/new-version/usr/share/doc/AlienwareKBL/Programming/general%20diagram.png)
+
+
+I'm currently debugin the Daemon and the Bindings.
+
 
 # What are the main changes if we compare this version to the stable branch?
 
