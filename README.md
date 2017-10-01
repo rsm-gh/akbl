@@ -1,7 +1,4 @@
 
-**If you have programming skills better take a look to the [new-version](https://github.com/rsm-gh/alienware-kbl/tree/new-version) branch.**
-
-
 **Index:**
 
 * [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
@@ -23,7 +20,30 @@ Alienware-KBL is a software to control the lights of alienware computers under G
 ![indicator](https://cloud.githubusercontent.com/assets/11134652/24293017/0c107260-1090-11e7-8c57-ef52c8f9854a.png)
 
 * [Python Bindings](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Bindings)
-* [Default commands](https://github.com/rsm-gh/alienware-kbl/wiki/Default-Commands)
+
+* **Default commands**
+```
+Usage:
+
+    alienware-kbl <option>
+
+ Options:
+        
+    --change                          Changes the computer lights on/off.
+    --on                              Turns on the computer lights.
+    --off                             Turns off the computer lights.
+    --set-profile <profile_name>      Turns on the selected profile.
+    
+    --get-boot-user                   Get the user that is started by the daemon.
+    --set-boot-user <user_name>       Set the user that is started by the daemon.
+    
+    --start-indicator                 Start the indicator.
+    
+    -h, -help                         Display this dialog.
+    -l, --license                     Display the license.
+    
+ *If no option is introduced the graphical interface is launched.
+```
 	
 ## Installation instructions
 
@@ -39,52 +59,45 @@ Alienware-KBL is a software to control the lights of alienware computers under G
 
 ## Supported computers
 
-*If your computer is not supported look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).  
+***If your configuration is missing look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).**  
 *The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.  
 
-|Symbol | Meaning                                  |
-|-------|------------------------------------------|
-|:)     | Eveything works good (confirmed)         |
-|:?     | Eveything works good (not confirmed)     |
-|:S     | It works, but with some problems         |
-|:/     | Configuration missing / untested computer|
-
-|Computer       |Status  |Comment|
-|---------------|--------|-------|
-|Area 51-R1     |:?      ||
-|Area 51-R2     |:?      ||
-|Area 51-ALX-R1 |:/      ||
-|Aurora-R1      |:/      ||
-|Aurora-R2      |:/      ||
-|Aurora-R3      |:/      ||
-|Aurora-R4      |:/      ||
-|Aurora ALX-R1  |:/      ||
-|M11X-R1        |:?      ||
-|M11X-R2        |:?      ||
-|M11X-R3        |:?      ||
-|M11X-R25       |:?      ||
-|M13X           |:/      ||
-|M14X-R1        |:)      ||
-|M14X-R2        |:)      ||
-|M14X-R3        |:?      ||
-|M15X-R1        |:?      ||
-|M15X-R2        |:?      ||
-|Alienware 13   |:)      ||
-|Alienware 13-R2|:/      ||
-|Alienware 13-R3|:S      ||
-|Alienware 15   |:)      ||
-|Alienware 15-R2|:/      ||
-|Alienware 15-R3|:S      ||
-|M17X           |:)      ||
-|M17X-R1        |:/      ||
-|M17X-R2        |:/      ||
-|M17X-R3        |:)      ||
-|M17X-R4        |:/      ||
-|M17X-R5        |:/      ||
-|M18X-R1        |:/      ||
-|M18X-R2        |:)      ||
-|M18X-R3        |:/      ||
-|M18X-RX        |:S      |It may be an R1 or R2|
+|Computer       |Status / Comment|
+|---------------|----------------|
+|Area 51-R1     |Eveything works good     |
+|Area 51-R2     |Eveything works good     |
+|Area 51-ALX-R1 |Configuration missing    |
+|Aurora-R1      |Configuration missing    |
+|Aurora-R2      |Configuration missing    |
+|Aurora-R3      |Configuration missing    |
+|Aurora-R4      |Configuration missing    |
+|Aurora ALX-R1  |Configuration missing    |
+|M11X-R1        |Eveything should work good      |
+|M11X-R2        |Eveything works good            |
+|M11X-R3        |Eveything works good            |
+|M11X-R25       |Eveything works good            |
+|M13X           |Configuration missing           |
+|M14X-R1        |Eveything works good            |
+|M14X-R2        |Eveything works good            |
+|M14X-R3        |Eveything should work good      |
+|M15X-R1        |Eveything should work good      |
+|M15X-R2        |Eveything should work good      |
+|Alienware 13   |Eveything works good            |
+|Alienware 13-R2|Configuration missing           |
+|Alienware 13-R3|It works, but with some problems|
+|Alienware 15   |Eveything works good            |
+|Alienware 15-R2|Configuration missing           |
+|Alienware 15-R3|It works, but with some problems|
+|M17X           |Eveything works good            |
+|M17X-R1        |Configuration missing           |
+|M17X-R2        |Configuration missing           |
+|M17X-R3        |Eveything works good            |
+|M17X-R4        |Configuration missing           |
+|M17X-R5        |Configuration missing           |
+|M18X-R1        |Configuration missing           |
+|M18X-R2        |Eveything works good            |
+|M18X-R3        |Configuration missing           |
+|M18X-RX        |It works, but with some problems. It may be an R1 or R2|
 
 ## [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
 
@@ -92,7 +105,7 @@ Please look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
 
 ## License
 
-The code is licensed [GPL3](./usr/share/doc/alienware-kbl/GPL3) and the artwork [CC-BY-4.0](./usr/share/doc/alienware-kbl/CC-BY-4.0), for more details look at the [copyright file](./usr/share/doc/alienware-kbl/copyright). 
+The code is licensed [GPL3](./usr/share/doc/alienware-kbl/GPL3) and the artwork [CC-BY-4.0](./usr/share/doc/alienware-kbl/CC-BY-4.0). 
 
 ## Credits
 
