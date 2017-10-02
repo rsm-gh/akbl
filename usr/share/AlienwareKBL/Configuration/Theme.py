@@ -95,6 +95,23 @@ class Theme:
         self._computer = copy(computer)
         self._speed = self._computer.DEFAULT_SPEED
 
+    def __str__(self):
+        
+        areas_description=""
+        for area in sorted(self._areas.values(), key=lambda x: x.name):
+            areas_description+=str(area)
+        
+        theme_description='''
+name={}
+time={}
+speed={}
+computer-name={}
+areas:
+{}
+        '''.format(self.name, self.time, self._speed, self._computer.NAME, areas_description)
+        
+        return theme_description
+        
     def create_profile(self, name, path, speed=False):
         self.name = name
         self.set_speed(speed)
@@ -115,7 +132,7 @@ class Theme:
         AVAILABLE_THEMES[self.name] = self
 
     def get_areas(self):
-        return [area for area in self._areas.values()]
+        return [area for area in sorted(self._areas.values(), key=lambda x: x.name)]
 
     def get_area_by_name(self, area_name):
         return self._areas[area_name]
@@ -146,7 +163,7 @@ class Theme:
 
     def load(self, path):
 
-        print_debug('loading theme from path=`{}`'.format(path))
+        print_debug('path=`{}`'.format(path))
 
         lines = []
         with open(path, encoding='utf-8', mode='rt') as f:
@@ -156,7 +173,7 @@ class Theme:
 
         imported_areas = []
         supported_region_names = self._computer.get_supported_regions_names()
-        print_debug('supported_region_names=`{}`'.format(supported_region_names))
+        #print_debug('supported_region_names=`{}`'.format(supported_region_names))
 
         # Parse the configuration file
         #
@@ -211,8 +228,7 @@ class Theme:
                         right_color = var_arg
 
                     if area_found and left_color and right_color and mode:
-
-                        print_debug('adding Zone to Area, mode=`{}`, left_color=`{}`, right_color=`{}`'.format(mode, left_color, right_color))
+                        #print_debug('adding Zone to Area, mode=`{}`, left_color=`{}`, right_color=`{}`'.format(mode, left_color, right_color))
                         zone=Zone(mode=mode, left_color=left_color, right_color=right_color)
                         area.add_zone(zone)
 
@@ -235,6 +251,8 @@ class Theme:
                 print_warning("missing area.name=`{}` on theme=`{}`".format(area_name, self.name))
                 print_debug('adding Zone to the missing Area, mode=`{}`, left_color=`{}`, right_color=`{}`'.format(zone.get_mode(), zone.get_left_color(), zone.get_right_color()))
 
+
+        print_debug(self)
 
         #
         # Add the configuration

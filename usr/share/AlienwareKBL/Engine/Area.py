@@ -25,19 +25,42 @@ class Area(Region):
     def __init__(self):
         super().__init__()
         
-        self._default_zone_hex_id = 1
-        self._current_zone_hex_id = self._default_zone_hex_id
+        self._current_zone_hex_id = None
         self._zones = []
+
+    def __str__(self):
+        
+        zones_description=""
+        for zone in self._zones:
+            zones_description+=str(zone)
+        
+        area_description='''
+    name={}
+    description={}
+    hex_id={}
+    current_zone_hex_id={}
+    can_light={}
+    can_blink={}
+    can_morph={}
+    max_comands={}
+    zones:
+{}
+'''.format(self.name, self.description, self.hex_id, self._current_zone_hex_id, self.can_light, self.can_blink, self.can_morph, self.max_commands, zones_description)
+        
+        return area_description
+
 
     def init_from_region(self, region):
         self.name = region.name
         self.description = region.description
         self.hex_id = region.hex_id
-        self._default_zone_hex_id = self.hex_id
         self.can_light = region.can_light
         self.can_blink = region.can_blink
         self.can_morph = region.can_morph
         self.max_commands = region.max_commands
+        
+        self._current_zone_hex_id = self.hex_id
+        
 
     def get_zones(self):
         return self._zones
@@ -46,11 +69,9 @@ class Area(Region):
         return len(self._zones)
 
     def add_zone(self, zone):
-        #print_debug('Zone.mode=`{}`'.format(zone.get_mode()))
         zone.set_hex_id(self._current_zone_hex_id)
         self._zones.append(zone)
         self._current_zone_hex_id += 1
-        print(self._current_zone_hex_id)
 
     def remove_zone(self, column_index):
         zone = self._zones[column_index]

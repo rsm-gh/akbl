@@ -188,94 +188,55 @@ if __name__ == '__main__':
 
         lights_test = True
         profiles_test = True
-        colors_test = True
+        modes_test = True
         speed_test = True
         colors_multiple_test = True
 
-
         if lights_test:
-            print('lights off', AKBLConnection.set_lights(False))
+            print("Switching lights test")
+            print('\tlights off', AKBLConnection.set_lights(False))
             time.sleep(2)
-            print('lights on', AKBLConnection.set_lights(True))
+            print('\tlights on', AKBLConnection.set_lights(True))
             time.sleep(2)
-            print('switch lights', AKBLConnection.switch_lights())
+            print('\tswitch lights', AKBLConnection.switch_lights())
+            time.sleep(2)
+            print('\tswitch lights', AKBLConnection.switch_lights())
 
         if profiles_test:
+            print("Testing user profiles")
             for profile_name in AKBLConnection.get_profile_names():
-                print('set profile:', profile_name, AKBLConnection.set_profile(profile_name))
+                print('\tset profile:', profile_name, AKBLConnection.set_profile(profile_name))
                 time.sleep(5)
 
         color1 = '#F7F200'
-        color2 = '#0018FF'
+        color2 = '#F7F200'
 
-        if colors_test:
-            print(
-                'set_colors blink',
-                AKBLConnection.set_colors(
-                    'blink',
-                    100,
-                    color2))
+        if modes_test:
+            print("Modes test")
+            print('\tset_colors fixed', AKBLConnection.set_colors('fixed', 100, color1))            
             time.sleep(5)
-            print(
-                'set_colors fixed',
-                AKBLConnection.set_colors(
-                    'fixed',
-                    100,
-                    color1))
+            print('\tset_colors blink', AKBLConnection.set_colors('blink', 100, color1))
             time.sleep(5)
-            print(
-                'set_colors morph',
-                AKBLConnection.set_colors(
-                    'morph',
-                    100,
-                    color1,
-                    color2))
+            #print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
 
         if speed_test:
-            print(
-                'set_colors blink',
-                AKBLConnection.set_colors(
-                    'blink',
-                    1,
-                    color2))
+            print("Speed test on mode blink")
+            print('\tset_colors, speed=1', AKBLConnection.set_colors('blink',1,color2))
             time.sleep(5)
-            print(
-                'set_colors blink',
-                AKBLConnection.set_colors(
-                    'blink',
-                    100,
-                    color2))
+            print('\tset_colors speed=100', AKBLConnection.set_colors('blink',100,color2))
             time.sleep(5)
-            print(
-                'set_colors blink',
-                AKBLConnection.set_colors(
-                    'blink',
-                    256,
-                    color2))
+            print('\tset_colors speed=255', AKBLConnection.set_colors('blink',255,color2))
             time.sleep(5)
+
 
         if colors_multiple_test:
-            colors1 = '#0600FF'
-            colors2 = '#FF00E5'
+            print("Multiple colors test")
+            colors1 = ['#FF0000','#FFFF00','#3F33FF'] # red, yellow, #blue
+            colors2 = ['#FF00E5','#0018FF','#3F33FF']
 
-            print(
-                'set_colors multiple blink',
-                AKBLConnection.set_colors(
-                    'blink',
-                    100,
-                    colors2))
-            time.sleep(5)
-            print(
-                'set_colors multiple morph',
-                AKBLConnection.set_colors(
-                    'morph',
-                    100,
-                    colors1,
-                    colors2))
-            time.sleep(5)
-            print(
-                'set_colors mutlple fixed',
-                AKBLConnection.set_colors(
-                    'fixed',
-                    100,
-                    colors1))
+            print('\tset_colors multiple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
+            time.sleep(10)
+            print('\tset_colors multiple blink', AKBLConnection.set_colors('blink', 100, colors1))
+            time.sleep(10)
+            #print('set_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
+            #time.sleep(5)

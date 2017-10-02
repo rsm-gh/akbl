@@ -36,7 +36,17 @@ class Region:
 
     def __str__(self):
         
-        return ', '.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items()])
+        region_description='''
+    name={}
+    description={}
+    hex_id={}
+    can_light={}
+    can_blink={}
+    can_morph={}
+    max_comands={}
+'''.format(self.name, self.description, self.hex_id, self.can_light, self.can_blink, self.can_morph, self.max_commands)
+        
+        return region_description
 
 class Computer:
 
@@ -90,7 +100,7 @@ class Computer:
     def __str__(self):
         
         attributes = '\n'.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items() if not attribute.startswith('_')])
-        regions = '\n***Regions***\n'+'\n'.join([str(region) for region in self._REGIONS])
+        regions = '\nregions:\n'+'\n'.join([str(region) for region in self._REGIONS])
     
         return attributes+regions
 

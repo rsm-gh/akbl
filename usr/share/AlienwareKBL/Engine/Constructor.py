@@ -50,28 +50,36 @@ def parse_area_hex_id(area_hex_id):
 def adapt_left_color(color):
 
     if isinstance(color, str):
-        color = hex_to_rgb(color)
+        color = color.replace("#",'')
+    else:
+        # the color is an RGB, convert
+        # rgb to hex without the starting dash "#"
+        color = '%02x%02x%02x' % (color[0], color[1], color[2])
 
-    r,g,b = color
-
-    adapted_left_color = [0, 0]
-    adapted_left_color[0] = int(r * 16 + g)  # pyALienFX: if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
-    adapted_left_color[1] = int(b * 16)
-
-    return adapted_left_color
+    r = int(color[0:2], 16) // 16
+    g = int(color[2:4], 16) // 16
+    b = int(color[4:6], 16) // 16
+    c = [0x00, 0x00]
+    c[0] = r * 16 + g  # if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
+    c[1] = b * 16
+    return c
 
 def adapt_right_color(color):
     
     if isinstance(color, str):
-        color = hex_to_rgb(color)
-
-    r,g,b = color
+        color = color.replace("#",'')
+    else:
+        # the color is an RGB, convert
+        # rgb to hex without the starting dash "#"
+        color = '%02x%02x%02x' % (color[0], color[1], color[2])
     
-    adapted_right_color = [0, 0]
-    adapted_right_color[0] = int(r)  # pyAlienFX: if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
-    adapted_right_color[1] = int(g * 16 + b)
-
-    return adapted_right_color
+    r = int(color[0:2], 16) // 16
+    g = int(color[2:4], 16) // 16
+    b = int(color[4:6], 16) // 16
+    c = [0x00, 0x00]
+    c[0] = r  # if r = 0xf > r*16 = 0xf0 > and b = 0xc r*16 + b 0xfc
+    c[1] = g * 16 + b
+    return c
 
 
 class Constructor(list):
@@ -101,7 +109,7 @@ class Constructor(list):
             for j in i.packet:
                 packet += hex(int(j)) + ' '
 
-    def set_speed(self, speed=0xc800):
+    def set_speed(self, speed=51200):
         self.save()
         legend = "set_speed, speed={}".format(speed)
         
@@ -109,7 +117,6 @@ class Constructor(list):
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_SPEED
         cmd[3] = int(speed / 256)
-        cmd[4] = int(speed - (speed / 256) * 256)
         
         self.append(Request(legend, cmd))
 
@@ -119,8 +126,8 @@ class Constructor(list):
         adapted_left_color = adapt_left_color(color)
 
         self.save()
-        legend = "set_fixed_color"
-        
+        legend = '''set_fixed_color: left_color={}, parsed_area_hex_id={}.'''.format(color, parsed_area_hex_id)
+
         cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_COLOR
@@ -139,7 +146,7 @@ class Constructor(list):
         adapted_color = adapt_left_color(color)
         
         self.save()
-        legend = "set_blink_color, parsed_area_hex_id={}, color={}.".format(color, parsed_area_hex_id)
+        legend = "set_blink_color:color={}, parsed_area_hex_id={}.".format(color, parsed_area_hex_id)
         
         cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
@@ -160,8 +167,7 @@ class Constructor(list):
         adapted_right_color = adapt_right_color(right_color)
         
         self.save()
-        color = left_color[1] + right_color[0]
-        legend = '''set_color_morph: left_color={}, right_color={}, color={}, parsed_area_hex_id={}.'''.format(left_color, right_color, color, parsed_area_hex_id)
+        legend = '''set_morph_color: left_color={}, right_color={}, color={}, parsed_area_hex_id={}.'''.format(left_color, right_color, parsed_area_hex_id)
 
         cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
@@ -222,7 +228,6 @@ class Constructor(list):
             legend = "reset, command=UNKNOWN COMMAND !!"
             print_error("Wrong command={}".format(command))
         
-
         self.save()
 
         cmd = copy(self._void)

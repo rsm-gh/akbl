@@ -27,4 +27,7 @@ class Request:
         self.packet = packet  #[int(item) for item in packet]
 
     def __str__(self):
-        return 'Request: packet={}\tlegend={}'.format(self.packet, self.legend)
+        
+        formatted_package = "packet=["+'|'.join(str(item).rjust(3) for item in self.packet)+"]"
+        
+        return formatted_package+"\t legend={}".format(self.legend)

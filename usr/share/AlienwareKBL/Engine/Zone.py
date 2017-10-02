@@ -33,12 +33,20 @@ class Zone:
         self.set_color(left_color, 'left')
         self.set_color(right_color, 'right')
 
+    def __str__(self):
+        
+        zone_description='''
+        hex_id={}
+        mode={}
+        left_color={}
+        right_color={}
+        middle_color={}
+        '''.format(self._hex_id, self._mode, self._left_color, self._right_color, self._middle_color)
+        
+        return zone_description
 
     def set_hex_id(self, hex_id):
         self._hex_id = hex_id
-
-    def set_hex_id(self, value):
-        self.hex_id = value
 
     def get_hex_id(self):
         return self._hex_id
@@ -58,9 +66,9 @@ class Zone:
             color = hex_to_rgb(color)
 
         if side == 'left':
-            self._left_color = normalize_rgb(color)
+            self._left_color = color #normalize_rgb(color)
         elif side == 'right':
-            self._right_color = normalize_rgb(color)
+            self._right_color = color #normalize_rgb(color)
         else:
             print_warning("wrong side=`{}`", side)
 
