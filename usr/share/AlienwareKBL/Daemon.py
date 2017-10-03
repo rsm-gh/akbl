@@ -59,7 +59,7 @@ class Daemon:
 
         self.loop_self = loop_self
 
-        # Get the user that the daemon should use
+        # Get the user that the Daemon should use
         #
         self._paths = Paths()
         _global_ccp = CCParser(self._paths.GLOBAL_CONFIG, 'Global alienware-kbl Theme')
@@ -80,26 +80,16 @@ class Daemon:
         #
         self._ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Theme')
         self._indicator_pyro = False
+        
         self.reload_configurations(self._user)
         self.set_lights(self._user, self._ccp.get_bool_defval('boot', True))
         print_debug("Starting with the lights={} for the user={}".format(self._ccp.get_bool_defval('boot', True), self._user))
 
     def _iluminate_keyboard(self):
 
-        os.utime(self._theme.path, None)  # This is to recognize the last theme that has been used.
-        self._lights_state = True
-
-        # Update the indicator
+        # Find the last theme that has been used
         #
-        if self._indicator_pyro:
-            self._indicator_send_code(100)
-            try:
-                self._indicator_pyro.load_profiles(
-                    list(Theme.profiles.keys()),
-                    self.profile_name,
-                    self._lights_state)
-            except Exception as e:
-                print_error(format_exc())
+        os.utime(self._theme.path, None)
 
         # Iluminate the computer lights
         #
@@ -115,6 +105,19 @@ class Daemon:
         
         self._controller.write()
 
+        # Update the Indicator
+        #
+        if self._indicator_pyro:
+            self._indicator_send_code(100)
+            try:
+                self._indicator_pyro.load_profiles(list(Theme.profiles.keys()), self.profile_name, self._lights_state)
+            except Exception as e:
+                print_error(format_exc())
+
+        # Update the Daemon variables
+        #
+        self._lights_state = True
+
     def _indicator_send_code(self, val):
         if self._indicator_pyro:
             try:
@@ -125,7 +128,6 @@ class Daemon:
     """
         General Bindings
     """
-
     @Pyro4.expose
     def ping(self):
         pass
@@ -203,8 +205,7 @@ class Daemon:
                 """
                     This hack, it will set black as color to all the lights that should be turned off.
                 """
-                self._controller.start_config(
-                    False, self._computer.BLOCK_LOAD_ON_BOOT)
+                self._controller.start_config(False, self._computer.BLOCK_LOAD_ON_BOOT)
                 self._controller.add_speed_conf(1)
 
                 for key in sorted(self._theme.area.keys()):

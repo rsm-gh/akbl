@@ -96,13 +96,6 @@ class Constructor(list):
     def __str__(self):
         return "Constructor: computer.NAME={}, hex_id={}, block={}, _save={}, _void={}".format(self.computer.NAME, self._hex_id, self._block, self._save, self._void)
         
-    def save(self, end=False):
-        if self._save:
-            if not end:
-                self.set_save_block(self._block)
-            else:
-                self.set_save()
-
     def show_request(self):
         for i in self:
             packet = ''
@@ -110,7 +103,7 @@ class Constructor(list):
                 packet += hex(int(j)) + ' '
 
     def set_speed(self, speed=51200):
-        self.save()
+        
         legend = "set_speed, speed={}".format(speed)
         
         cmd = copy(self._void)
@@ -118,6 +111,7 @@ class Constructor(list):
         cmd[1] = self.computer.COMMAND_SET_SPEED
         cmd[3] = int(speed / 256)
         
+        self.save()
         self.append(Request(legend, cmd))
 
     def set_fixed_color(self, area_hex_id, color):
@@ -126,7 +120,7 @@ class Constructor(list):
         adapted_left_color = adapt_left_color(color)
 
         self.save()
-        legend = '''set_fixed_color: left_color={}, parsed_area_hex_id={}.'''.format(color, parsed_area_hex_id)
+        legend = '''set_fixed_color: left_color={}, hex_id={}, parsed_area_hex_id={}.'''.format(color, area_hex_id, parsed_area_hex_id)
 
         cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
@@ -146,7 +140,7 @@ class Constructor(list):
         adapted_color = adapt_left_color(color)
         
         self.save()
-        legend = "set_blink_color:color={}, parsed_area_hex_id={}.".format(color, parsed_area_hex_id)
+        legend = "set_blink_color:color={}, hex_id={}, parsed_area_hex_id={}.".format(color, area_hex_id, parsed_area_hex_id)
         
         cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
@@ -167,7 +161,7 @@ class Constructor(list):
         adapted_right_color = adapt_right_color(right_color)
         
         self.save()
-        legend = '''set_morph_color: left_color={}, right_color={}, color={}, parsed_area_hex_id={}.'''.format(left_color, right_color, parsed_area_hex_id)
+        legend = '''set_morph_color: left_color={}, right_color={}, hex_id={}, parsed_area_hex_id={}.'''.format(left_color, right_color, area_hex_id, parsed_area_hex_id)
 
         cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
@@ -179,27 +173,6 @@ class Constructor(list):
         cmd[6] = adapted_left_color[0]
         cmd[7] = adapted_left_color[0] + adapted_right_color[1]
         cmd[8] = adapted_right_color[1]
-
-        self.append(Request(legend, cmd))
-
-    def set_save_block(self, block):
-
-        legend = "set_save_block, block={}".format(block)
-
-        cmd = copy(self._void)
-        cmd[0] = self.computer.START_BYTE
-        cmd[1] = self.computer.COMMAND_SAVE_NEXT
-        cmd[2] = block
-
-        self.append(Request(legend, cmd))
-
-    def set_save(self):
-        
-        legend = "set_save"
-
-        cmd = copy(self._void)
-        cmd[0] = self.computer.START_BYTE
-        cmd[1] = self.computer.COMMAND_SAVE
 
         self.append(Request(legend, cmd))
 
@@ -249,12 +222,32 @@ class Constructor(list):
         self.append(Request(legend, cmd))
 
     def end_config(self):
-        self.save(end=True)
-        if not self._save:
-            legend = "end_config"
-            
+        self.save()
+        #if not self._save:
+        legend = "end_config"
+        
+        cmd = copy(self._void)
+        cmd[0] = self.computer.START_BYTE
+        cmd[1] = self.computer.COMMAND_TRANSMIT_EXECUTE
+
+        self.append(Request(legend, cmd))
+
+
+
+    def save(self, block=None):
+        if self._save:
             cmd = copy(self._void)
             cmd[0] = self.computer.START_BYTE
-            cmd[1] = self.computer.COMMAND_TRANSMIT_EXECUTE
+            
+            if block is not None:
+                legend = "save_block, block={}".format(block)
+                cmd[1] = self.computer.COMMAND_SAVE_NEXT
+                cmd[2] = block
 
-            self.append(Request(legend, cmd))
+                self.append(Request(legend, cmd))
+            else:
+                legend = "save_config"
+                cmd[0] = self.computer.START_BYTE
+                cmd[1] = self.computer.COMMAND_SAVE
+                self.append(Request(legend, cmd))                
+                

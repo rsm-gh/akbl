@@ -63,6 +63,7 @@ Usage:
     --set-boot-user <user_name>       Set the user that is started by the daemon.
 
     --start-indicator                 Start the indicator.
+    --start-daemon                    Start the daemon.
 
     -h, -help                         Display this dialog.
     -l, --license                     Display the license.

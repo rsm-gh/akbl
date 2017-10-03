@@ -201,6 +201,7 @@ if __name__ == '__main__':
             print('\tswitch lights', AKBLConnection.switch_lights())
             time.sleep(2)
             print('\tswitch lights', AKBLConnection.switch_lights())
+            time.sleep(2)
 
         if profiles_test:
             print("Testing user profiles")
@@ -217,7 +218,8 @@ if __name__ == '__main__':
             time.sleep(5)
             print('\tset_colors blink', AKBLConnection.set_colors('blink', 100, color1))
             time.sleep(5)
-            #print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
+            print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
+            time.sleep(5)
 
         if speed_test:
             print("Speed test on mode blink")
@@ -238,5 +240,5 @@ if __name__ == '__main__':
             time.sleep(10)
             print('\tset_colors multiple blink', AKBLConnection.set_colors('blink', 100, colors1))
             time.sleep(10)
-            #print('set_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
-            #time.sleep(5)
+            print('set_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
+            time.sleep(5)
