@@ -22,11 +22,11 @@ import sys
 import Pyro4
 import getpass
 from traceback import format_exc
-from utils import print_error
 
 # Local imports
+sys.path.insert(0, '/usr/share/AlienwareKBL')
+from utils import print_error
 from Configuration.Paths import Paths
-
 
 class Bindings:
 

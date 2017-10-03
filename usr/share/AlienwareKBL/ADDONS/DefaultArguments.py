@@ -20,15 +20,16 @@ import sys
 import os
 import pwd
 
-from AKBL import AKBL
+from AKBL import Bindings
 
 # Local imports
+sys.path.insert(0, '/usr/share/AlienwareKBL')
 from utils import getuser
+from texts import TEXT_ERROR_DAEMON_OFF, TEXT_HELP, TEXT_LICENSE, TEXT_NON_LINUX_USER, TEXT_WRONG_ARGUMENT
 from Configuration.Paths import Paths
 from Configuration.CCParser import CCParser
-from texts import TEXT_ERROR_DAEMON_OFF, TEXT_HELP, TEXT_LICENSE, TEXT_NON_LINUX_USER, TEXT_WRONG_ARGUMENT
 
-AKBLConnection = AKBL()
+AKBLConnection = Bindings()
 PATHS = Paths()
 
 def send_command(command, *args):
