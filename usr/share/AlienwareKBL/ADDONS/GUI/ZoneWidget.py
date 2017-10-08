@@ -27,7 +27,7 @@ from Configuration.Paths import Paths
 from utils import hex_to_rgb, normalize_rgb, middle_rgb_color, print_warning
 
 
-_IMAGES_PATH = Paths().ZONEWIDGET_IMAGES
+_IMAGES_PATH = Paths().IMAGES
 
 _LEFT_CLICK_ID = 1
 _RIGHT_CLICK_ID = 3
@@ -102,7 +102,7 @@ class ZoneWidget(Gtk.Frame):
 
     __gtype_name__ = 'Zone'
 
-    def __init__(self, left_color, right_color, mode, column, colorchooser_dialog, colorchooser_widget):
+    def __init__(self, left_color, right_color, mode, column, colorchooser_dialog, colorchooser_widget, zone=False):
 
         super().__init__()
 
@@ -129,7 +129,7 @@ class ZoneWidget(Gtk.Frame):
         #
         self._color_chooser_dialog = colorchooser_dialog
         self._color_chooser_widget = colorchooser_widget
-        self.zone = False
+        self.zone = zone
 
         self.set_color(left_color, 'left')
         self.set_color(right_color, 'right')

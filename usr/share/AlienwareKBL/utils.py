@@ -20,9 +20,14 @@ import os
 import pwd
 import inspect
 
+
+_DEBUG = True
+
 def getuser():
     return pwd.getpwuid(os.geteuid()).pw_name
 
+def rgb_to_hex(rgb):
+    return '#%02x%02x%02x' % (int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
 def hex_to_rgb(hex_string):
     """
@@ -85,14 +90,15 @@ def print_warning(message):
 
 def print_debug(message=None):
 
-    isp1=inspect.stack()[1]
-    module_name = _parse_module_name(inspect.getmodule(isp1[0]))
-    method_name = isp1[3]
-    
-    if message is None:
-        print('{}DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN, module_name, method_name, _RESET))
-    else:
-        print('{}DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN, module_name, method_name, _RESET, str(message).strip()))
+    if _DEBUG:
+        isp1=inspect.stack()[1]
+        module_name = _parse_module_name(inspect.getmodule(isp1[0]))
+        method_name = isp1[3]
+        
+        if message is None:
+            print('{}DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN, module_name, method_name, _RESET))
+        else:
+            print('{}DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN, module_name, method_name, _RESET, str(message).strip()))
 
 
 def print_error(message):

@@ -52,13 +52,14 @@ class Bindings:
         if self._address:
             try:
                 response = getattr(self._pyro, command)(*args)
-                return (True, response)
+                return response
 
             except Exception as e:
                 print_error("Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)), format_exc()))
-                return (False, None)
+                return False
         else:
-            return (False, "The daemon seems to be off")
+            print_warning("The daemon is off.")
+            return False
 
     def reload_address(self):
         """
@@ -185,7 +186,6 @@ if __name__ == '__main__':
             To check if the commands succeed. You don't
             really need to do this in your code!
         """
-
 
         lights_test = True
         profiles_test = True

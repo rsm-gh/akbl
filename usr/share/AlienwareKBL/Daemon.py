@@ -317,10 +317,7 @@ class Daemon:
 
     @Pyro4.expose
     def get_computer_info(self):
-        return (self._computer.NAME, 
-                self._computer.VENDOR_ID,
-                self._computer.PRODUCT_ID, 
-                str(self._controller.driver.dev))
+        return (self._computer.NAME, self._computer.VENDOR_ID, self._computer.PRODUCT_ID, str(self._controller._driver._device))
 
     @Pyro4.expose
     def modify_lights_state(self, bool):

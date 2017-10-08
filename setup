@@ -92,12 +92,6 @@ install -D $DIR/usr/share/AlienwareKBL/ADDONS/GUI/* /usr/share/AlienwareKBL/ADDO
 install -d /usr/share/AlienwareKBL/ADDONS/GUI/images
 install -D $DIR/usr/share/AlienwareKBL/ADDONS/GUI/images/* /usr/share/AlienwareKBL/ADDONS/GUI/images
 
-install -d /usr/share/AlienwareKBL/ADDONS/GUI/ZoneWidget
-install -D $DIR/usr/share/AlienwareKBL/ADDONS/GUI/ZoneWidget/* /usr/share/AlienwareKBL/ADDONS/GUI/ZoneWidget
-
-install -d /usr/share/AlienwareKBL/ADDONS/GUI/ZoneWidget/images
-install -D $DIR/usr/share/AlienwareKBL/ADDONS/GUI/ZoneWidget/images/* /usr/share/AlienwareKBL/ADDONS/GUI/ZoneWidget/images
-
 install -d /usr/share/AlienwareKBL/ADDONS/Indicator
 install -D $DIR/usr/share/AlienwareKBL/ADDONS/Indicator/* /usr/share/AlienwareKBL/ADDONS/Indicator
 

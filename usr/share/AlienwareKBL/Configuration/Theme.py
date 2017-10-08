@@ -26,7 +26,8 @@ from .Paths import Paths
 sys.path.append("/usr/share/AlienwareKBL")
 from Engine.Area import Area
 from Engine.Zone import Zone
-from utils import print_warning, print_debug
+from utils import print_warning, print_debug, rgb_to_hex
+
 
 AVAILABLE_THEMES = {}
 
@@ -149,14 +150,13 @@ areas:
             f.write('computer={0}\n'.format(self._computer.NAME))
             f.write('speed={0}\n\n\n'.format(self._speed))
 
-            for key in sorted(self._areas.keys()):
-                area = self._areas[key]
+            for area in sorted(self._areas.values(), key=lambda x: x.name):
 
                 f.write('area={0}\n'.format(area.name))
-                for zone in area:
+                for zone in area.get_zones():
                     f.write('mode={0}\n'.format(zone.get_mode()))
-                    f.write('left_color={0}\n'.format(zone.get_left_color()))
-                    f.write('right_color={0}\n'.format(zone.get_right_color()))
+                    f.write('left_color={0}\n'.format(rgb_to_hex(zone.get_left_color())))
+                    f.write('right_color={0}\n'.format(rgb_to_hex(zone.get_right_color())))
                 f.write('\n')
 
         self.update_time()
@@ -274,10 +274,11 @@ areas:
 
 
     def modify_zone(self, zone, column, left_color, right_color, mode):
-        zone = self._areas[zone.name][column]
-        zone.color1 = color1
-        zone.color2 = color2
-        zone.mode = mode
+
+        zone = self._areas[zone.name]._zones[column]
+        zone.set_color(left_color, 'left')
+        zone.set_color(right_color, 'right')
+        zone.set_mode(mode)
 
     def delete_zone(self, zone, column):
         try:

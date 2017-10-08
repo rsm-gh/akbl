@@ -20,8 +20,9 @@ import os
 import sys
 from shutil import rmtree
 
-sys.path.append("../")
+sys.path.append("/usr/share/AlienwareKBL")
 from utils import getuser
+
 
 class Paths:
 
@@ -31,10 +32,8 @@ class Paths:
             self.CONFIGURATION_PATH = '/root/.config/alienware-kbl.ini'
             self.PROFILES_PATH = '/root/.local/share/alienware-kbl/'
         else:
-            self.CONFIGURATION_PATH = '/home/{}/.config/alienware-kbl.ini'.format(
-                user)
-            self.PROFILES_PATH = '/home/{}/.local/share/alienware-kbl/'.format(
-                user)
+            self.CONFIGURATION_PATH = '/home/{}/.config/alienware-kbl.ini'.format(user)
+            self.PROFILES_PATH = '/home/{}/.local/share/alienware-kbl/'.format(user)
 
         self.DAEMON_PYRO_PATH = '/etc/alienware-kbl-daemon-adress'
         self.SYSTEMCTL_PATH = '/bin/systemctl'
@@ -47,8 +46,6 @@ class Paths:
         """
         self.GLADE_FILE = '/usr/share/AlienwareKBL/ADDONS/GUI/GUI.glade'
         self.IMAGES = '/usr/share/AlienwareKBL/ADDONS/GUI/images/'
-
-        self.ZONEWIDGET_IMAGES = '/usr/share/AlienwareKBL/ADDONS/GUI/ZoneWidget/images/'
 
         self.SMALL_ICON = self.IMAGES + 'icon.png'
         self.MEDIUM_ICON = self.IMAGES + 'icon-m.png'
