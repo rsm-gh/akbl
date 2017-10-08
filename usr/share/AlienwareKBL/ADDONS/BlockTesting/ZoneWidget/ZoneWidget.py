@@ -2,6 +2,7 @@
 #
 
 #  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#                           2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -24,10 +25,10 @@ import cairo
 import sys
 sys.path.append("/usr/share/AlienwareKBL")
 from Configuration.Paths import Paths
-from utils import hex_to_rgb, normalize_rgb, middle_rgb_color, print_warning
+from utils import hex_to_rgb, normalize_rgb, middle_rgb_color
 
 
-_IMAGES_PATH = Paths().ZONEWIDGET_IMAGES
+_IMAGES_PATH = Paths().IMAGES
 
 _LEFT_CLICK_ID = 1
 _RIGHT_CLICK_ID = 3
@@ -102,7 +103,12 @@ class ZoneWidget(Gtk.Frame):
 
     __gtype_name__ = 'Zone'
 
-    def __init__(self, left_color, right_color, mode, column, colorchooser_dialog, colorchooser_widget):
+    def __init__(
+            self,
+            zone_data,
+            column,
+            colorchooser_dialog,
+            colorchooser_widget):
 
         super().__init__()
 
@@ -112,6 +118,8 @@ class ZoneWidget(Gtk.Frame):
         self._right_color = []
         self._middle_color = []
         self._mode = ''
+
+        self._data = zone_data
 
         self._heigth = 100
         self._width = 90
@@ -184,7 +192,9 @@ class ZoneWidget(Gtk.Frame):
             if i == 4 and self._column <= 0:
                 pass
             else:
-                event_box.connect('button-press-event', self._on_command_button_click)
+                event_box.connect(
+                    'button-press-event',
+                    self._on_command_button_click)
 
             self._commands_buttons_box.pack_start(event_box, False, False, 0)
             self._commands_buttons_events.append(event_box)
@@ -215,7 +225,8 @@ class ZoneWidget(Gtk.Frame):
 
             if color:
 
-                if area_number == 1 or not self._commands_buttons_state[2]:  # morph
+                if area_number == 1 or not self._commands_buttons_state[
+                        2]:  # morph
                     self._left_color = color
                 else:
                     self._right_color = color
@@ -317,9 +328,12 @@ class ZoneWidget(Gtk.Frame):
 
         for children in self._commands_buttons_box.get_children():
             for child in children.get_children():
-                child.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
+                child.override_background_color(
+                    Gtk.StateType.NORMAL, Gdk.RGBA(
+                        color[0], color[1], color[2], 1))
 
-        self._commands_buttons_box.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
+        self._commands_buttons_box.override_background_color(
+            Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
 
     def set_column(self, column):
 
@@ -336,16 +350,16 @@ class ZoneWidget(Gtk.Frame):
     def set_mode(self, mode):
 
         if mode == 'fixed':
-            self._mode = 'fixed'
+            self._data.set_mode('fixed')
             self._on_command_button_click(self._commands_buttons_events[1], True)
         elif mode == 'morph':
-            self._mode = 'morph'
+            self._data.set_mode('morph')
             self._on_command_button_click(self._commands_buttons_events[2], True)
         elif mode == 'blink':
-            self._mode = 'blink' 
+            self._data.set_mode('blink')
             self._on_command_button_click(self._commands_buttons_events[3], True)
         else:
-            print_warning('wrong mode={}'.format(mode))
+            print('Warning: wrong `mode` on `set_mode` of `ZoneWidget`')
 
 
     def get_column(self):
@@ -360,18 +374,6 @@ class ZoneWidget(Gtk.Frame):
     def get_right_color(self):
         return self._right_color
 
-    def set_color(self, color, widget_zone):
-
-        if isinstance(color, str):
-            color = hex_to_rgb(color)
-
-        if widget_zone == 'left':
-            self._left_color = normalize_rgb(color)
-        else:
-            self._right_color = normalize_rgb(color)
-
-        if self._right_color:
-            self._middle_color = middle_rgb_color(self._left_color, self._right_color)
 
 if __name__ == '__main__':
 
@@ -393,7 +395,7 @@ if __name__ == '__main__':
     COLOR_CHOOSER_DIALOG = Gtk.ColorChooserDialog()
     COLOR_CHOOSER_DIALOG.set_transient_for(ROOT_WINDOW)
     COLOR_CHOOSER_WIDGET = Gtk.ColorChooserWidget()
-    #COLOR_CHOOSER_WIDGET.set_alignment(0.5, 0.5)
+    COLOR_CHOOSER_WIDGET.set_alignment(0.5, 0.5)
 
     def on_button_click(widget):
         """
@@ -424,7 +426,11 @@ if __name__ == '__main__':
                                 colorchooser_dialog=COLOR_CHOOSER_DIALOG,
                                 colorchooser_widget=COLOR_CHOOSER_WIDGET)
 
-        GRID.attach(child=FIXED_ZONE, left=0, top=row_index, width=1, height=1)
+        GRID.attach(child=FIXED_ZONE,
+                    left=0,
+                    top=row_index,
+                    width=1,
+                    height=1)
 
     BLINK_ZONE = ZoneWidget(left_color=[122, 255, 22],
                             right_color=[255, 34, 122],

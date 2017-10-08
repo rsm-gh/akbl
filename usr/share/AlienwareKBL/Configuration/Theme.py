@@ -23,10 +23,10 @@ from traceback import format_exc
 
 # Local imports
 from .Paths import Paths
-sys.path.append("../")
-from utils import print_warning, print_debug
+sys.path.append("/usr/share/AlienwareKBL")
 from Engine.Area import Area
 from Engine.Zone import Zone
+from utils import print_warning, print_debug
 
 AVAILABLE_THEMES = {}
 
@@ -265,9 +265,9 @@ areas:
     def set_speed(self, speed):
 
         speed = int(speed)
-        if speed >= 256 * 255:
-            self._speed = 256 * 255
-        elif speed <= 256:
+        if speed > 255:
+            self._speed = 255
+        elif speed <= 0:
             self._speed = 256
         else:
             print_warning('Wrong speed=`{}`'.format(speed))
@@ -285,8 +285,7 @@ areas:
             area.remove_zone(column)
 
         except Exception as e:
-            print_warning('column `{}`'.format(column))
-            print(format_exc())
+            print_warning('column `{}`\n{}'.format(column, format_exc()))
 
     def update_time(self):
         if os.path.exists(self.path):

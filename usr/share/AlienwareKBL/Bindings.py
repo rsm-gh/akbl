@@ -186,6 +186,7 @@ if __name__ == '__main__':
             really need to do this in your code!
         """
 
+
         lights_test = True
         profiles_test = True
         modes_test = True
@@ -210,7 +211,7 @@ if __name__ == '__main__':
                 time.sleep(5)
 
         color1 = '#F7F200'
-        color2 = '#F7F200'
+        color2 = '#ff0000'
 
         if modes_test:
             print("Modes test")
@@ -218,7 +219,7 @@ if __name__ == '__main__':
             time.sleep(5)
             print('\tset_colors blink', AKBLConnection.set_colors('blink', 100, color1))
             time.sleep(5)
-            print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
+            print('\tset_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
             time.sleep(5)
 
         if speed_test:

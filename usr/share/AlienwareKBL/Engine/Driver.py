@@ -25,8 +25,8 @@ import usb
 from traceback import format_exc
 
 # Local imports
+sys.path.append("/usr/share/AlienwareKBL")
 from Engine.Constructor import Constructor
-sys.path.append("../")
 from Configuration.Computers import Computer, AVAILABLE_COMPUTERS, M14XR1, M14XR2
 from utils import print_debug, print_error
 
@@ -35,14 +35,14 @@ class Driver():
     def __init__(self):
         
         # Define I/O Reqquest types
-        self.SEND_REQUEST_TYPE = 0x21
-        self.SEND_REQUEST = 0x09
-        self.SEND_VALUE = 0x202
-        self.SEND_INDEX = 0x00
-        self.READ_REQUEST_TYPE = 0xa1
-        self.READ_REQUEST = 0x01
-        self.READ_VALUE = 0x101
-        self.READ_INDEX = 0x0
+        self.SEND_REQUEST_TYPE = 33
+        self.SEND_REQUEST = 9
+        self.SEND_VALUE = 514
+        self.SEND_INDEX = 0
+        self.READ_REQUEST_TYPE = 161
+        self.READ_REQUEST = 1
+        self.READ_VALUE = 257
+        self.READ_INDEX = 0
 
         self.computer = None
         self._device = None
@@ -104,12 +104,7 @@ class Driver():
             time.sleep(0.02)
 
     def read_device(self, msg):
-        msg = self._device.ctrl_transfer(
-            self.READ_REQUEST_TYPE, 
-            self.READ_REQUEST, 
-            self.READ_VALUE, 
-            self.READ_INDEX, 
-            len(msg[0].packet))
+        msg = self._device.ctrl_transfer(self.READ_REQUEST_TYPE, self.READ_REQUEST, self.READ_VALUE, self.READ_INDEX, len(msg[0].packet))
 
         print_debug("msg={}".format(msg))
 

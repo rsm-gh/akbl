@@ -82,8 +82,8 @@ class Daemon:
         self._indicator_pyro = False
         
         self.reload_configurations(self._user)
-        self.set_lights(self._user, self._ccp.get_bool_defval('boot', True))
-        print_debug("Starting with the lights={} for the user={}".format(self._ccp.get_bool_defval('boot', True), self._user))
+        #self.set_lights(self._user, self._ccp.get_bool_defval('boot', True))
+        #print_debug("Starting with the lights={} for the user={}".format(self._ccp.get_bool_defval('boot', True), self._user))
 
     def _iluminate_keyboard(self):
 
@@ -255,8 +255,6 @@ class Daemon:
             print_warning("The speed argument must be >= 1.")
             return
 
-        speed = speed * 256
-
         if not isinstance(left_colors, list):
             left_colors = [left_colors]
 
@@ -273,49 +271,39 @@ class Daemon:
         print_warning("CREATING THE CONSTRUCTOR for mode="+mode)
         print(left_colors)
         print(right_colors)
-
+        print()
 
         self._lights_state = True
         self._controller.start_config(False, self._computer.BLOCK_LOAD_ON_BOOT)
         self._controller.set_speed(speed)
 
         for region in self._computer.get_regions():
-            
-            for i in range(len(left_colors)):
-                
-                print(range(len(left_colors)))
+            for i, (left_color, right_color) in enumerate(zip(left_colors, right_colors)):
                 
                 if i + 1 > region.max_commands:
                     print_warning("The number of maximum commands for the region={} have been exeed. The loop was stopped at {}.".format(region.name, i+1))
                     break
                 
-                print("LEFT COLOR="+left_colors[i])
-                print("RIGHT COLOR="+left_colors[i])
                 
                 if mode == 'blink':
                     if region.can_blink:
-                        self._controller.add_line(region.hex_id, 'blink', left_colors[i], right_colors[i])
+                        self._controller.add_line(region.hex_id, 'blink', left_color, right_color)
                     else:
-                        self._controller.add_line(region.hex_id, 'fixed', left_colors[i])
+                        self._controller.add_line(region.hex_id, 'fixed', left_color)
                         print_warning("The mode=blink is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
                         
                 elif mode == 'morph':
                     if region.can_morph:
-                       self._controller.add_line(region.hex_id, 'morph', left_colors[i], right_colors[i])
+                       self._controller.add_line(region.hex_id, 'morph', left_color, right_color)
                     else:
-                        self._controller.add_line(region.hex_id, 'fixed', left_colors[i])
+                        self._controller.add_line(region.hex_id, 'fixed', left_color)
                         print_warning("The mode=morph is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
                         
                 else:
-                    self._controller.add_line(region.hex_id, 'fixed', left_colors[i])
-                
-                
-                print("-- END LINE --")
+                    self._controller.add_line(region.hex_id, 'fixed', left_color)
                 
             self._controller.end_line()
 
-
-        print("-- end of submissions --")
         self._controller.end_config()
         self._controller.write()
 

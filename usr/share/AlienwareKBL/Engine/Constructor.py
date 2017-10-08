@@ -20,7 +20,7 @@
 from copy import copy
 
 # local imports
-from utils import print_error, print_debug, hex_to_rgb
+from utils import print_error, print_debug, print_warning, hex_to_rgb
 from Engine.Request import Request
 
 def parse_area_hex_id(area_hex_id):  
@@ -102,14 +102,19 @@ class Constructor(list):
             for j in i.packet:
                 packet += hex(int(j)) + ' '
 
-    def set_speed(self, speed=51200):
+    def set_speed(self, speed=255):
+        
+        if speed > 255:
+            speed = 255
+            print_warning("the speed can not be > 255, it will be set equal to 255.")
+        
         
         legend = "set_speed, speed={}".format(speed)
         
         cmd = copy(self._void)
         cmd[0] = self.computer.START_BYTE
         cmd[1] = self.computer.COMMAND_SET_SPEED
-        cmd[3] = int(speed / 256)
+        cmd[3] = int(speed)
         
         self.save()
         self.append(Request(legend, cmd))
@@ -171,7 +176,7 @@ class Constructor(list):
         cmd[4] = parsed_area_hex_id[1]
         cmd[5] = parsed_area_hex_id[2]
         cmd[6] = adapted_left_color[0]
-        cmd[7] = adapted_left_color[0] + adapted_right_color[1]
+        cmd[7] = adapted_left_color[1] + adapted_right_color[0]
         cmd[8] = adapted_right_color[1]
 
         self.append(Request(legend, cmd))

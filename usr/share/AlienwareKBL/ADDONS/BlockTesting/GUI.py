@@ -2,6 +2,7 @@
 #
 
 #  Copyright (C) 2014-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#                2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -33,9 +34,9 @@ from copy import deepcopy
 
 # local imports
 sys.path.append("/usr/share/AlienwareKBL")
+import Configuration.Theme
 from Configuration.CCParser import CCParser
 from Configuration.Paths import Paths
-import Configuration.Theme
 import Configuration.Computers
 
 from Engine import *
@@ -45,12 +46,24 @@ from utils import getuser
 
 from AKBL import Bindings
 
+AKBLConnection = Bindings()
+
+if not AKBLConnection.ping():
+    print_error("Failed to start the GUI because the daemon is off.")
+    exit(1)
+    
 
 def rgb_to_hex(rgb):
-    return '#%02x%02x%02x' % (int(rgb[0] * 255), int(rgb[1] * 255), int(rgb[2] * 255))
+    return '#%02x%02x%02x' % (int(rgb[0] * 255), 
+                              int(rgb[1] * 255), 
+                              int(rgb[2] * 255))
+
 
 def get_text_gtk_buffer(textbuffer):
-    return textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)
+    return textbuffer.get_text(
+        textbuffer.get_start_iter(),
+        textbuffer.get_end_iter(),
+        True)
 
 
 def gtk_append_text_to_buffer(textbuffer, text):
@@ -59,7 +72,12 @@ def gtk_append_text_to_buffer(textbuffer, text):
 
 def gtk_dialog_question(parent, text1, text2=None, icon=None):
 
-    dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, text1)
+    dialog = Gtk.MessageDialog(parent,
+                               Gtk.DialogFlags.MODAL,
+                               Gtk.MessageType.QUESTION,
+                               Gtk.ButtonsType.YES_NO,
+                               text1
+                               )
 
     if icon is not None:
         dialog.set_icon_from_file(icon)
@@ -79,7 +97,12 @@ def gtk_dialog_question(parent, text1, text2=None, icon=None):
 
 def gtk_dialog_info(parent, text1, text2=None, icon=None):
 
-    dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.INFO, Gtk.ButtonsType.CLOSE, text1)
+    dialog = Gtk.MessageDialog(parent,
+                               Gtk.DialogFlags.MODAL,
+                               Gtk.MessageType.INFO,
+                               Gtk.ButtonsType.CLOSE,
+                               text1,
+                               )
 
     if icon is not None:
         dialog.set_icon_from_file(icon)
@@ -91,12 +114,22 @@ def gtk_dialog_info(parent, text1, text2=None, icon=None):
     dialog.destroy()
 
 
-def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filters=[]):
+def gtk_file_chooser(
+        parent,
+        title='',
+        icon_path=None,
+        default_folder=None,
+        filters=[]):
 
-    window = Gtk.FileChooserDialog(title, parent, Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL,
-                                                                                 Gtk.ResponseType.CANCEL,
-                                                                                 Gtk.STOCK_OPEN,
-                                                                                 Gtk.ResponseType.OK))
+    window = Gtk.FileChooserDialog(
+        title,
+        parent,
+        Gtk.FileChooserAction.OPEN,
+        (Gtk.STOCK_CANCEL,
+         Gtk.ResponseType.CANCEL,
+         Gtk.STOCK_OPEN,
+         Gtk.ResponseType.OK,
+         ))
 
     window.set_default_response(Gtk.ResponseType.NONE)
     window.set_transient_for(parent)
@@ -166,37 +199,62 @@ class GUI(Gtk.Window):
 
         glade_object_names = (
             'window_root',
-                'label_computername',
-                'label_user_message',
-                'button_new_profile_create',
-                'menuitem_off_zones',
-                'checkbutton_autosave',
-                'checkbutton_boot_off',
-                'checkbutton_profile_buttons',
-                'checkbutton_delete_warning',
-                'checkbutton_static_colorchooser',
-                'color_chooser_dialog',
-                'color_chooser_widget',
-                'box_areas',
-                'entry_new_profile',
-                'liststore_profiles',
-                'tempobutton',
-                'box_profile_buttons',
-                'scrolledwindow_no_computer',
-                'combobox_profiles',
-                'liststore_modes',
-                'textbuffer_computer_data',
-                'menubar',
-                'menuitem_profile',
-                'menuitem_options',
+            'label_computername',
+            'label_user_message',
+            'button_new_profile_create',
+            'checkbutton_no_root',
+            'menuitem_off_zones',
+            'checkbutton_autosave',
+            'checkbutton_boot_off',
+            'checkbutton_profile_buttons',
+            'checkbutton_delete_warning',
+            'checkbutton_static_colorchooser',
+            'color_chooser_dialog',
+            'color_chooser_widget',
+            'box_areas',
+            'entry_new_profile',
+            'liststore_profiles',
+            'tempobutton',
+            'box_profile_buttons',
+            'scrolledwindow_no_computer',
+            'combobox_profiles',
+            'combobox_modes',
+            'liststore_modes',
+            'textbuffer_computer_data',
+            'menubar',
+            'menuitem_profile',
+            'menuitem_options',
+            'imagemenuitem_block_testing',
             'window_about',
             'window_new_profile',
             'window_colorselection',
             'window_computer_data',
+            'window_block_testing',
+            'grid_common_blocks',
+            'textbuffer_block_testing',
+            'label_block_hex_test',
+            'entry_block_testing',
+            'entry_id_vendor',
+            'entry_id_product',
+            'togglebutton_find_device',
+            'box_block_testing',
+            'spinbutton_block_speed',
+            'viewport_common_block',
+            'button_update_common_blocks',
+            'button_block_make_test',
+            'checkbutton_auto_turn_off',
+            'checkbutton_hex_format_when_finding',
+            'combobox_default_blocks',
+            'colorbutton_1_block',
+            'colorbutton_2_block',
+            'combobox_block_modes',
         )
 
         for glade_object in glade_object_names:
             setattr(self, glade_object, builder.get_object(glade_object))
+
+        self.colorbutton_1_block.set_color(Gdk.Color(red=1, green=65535, blue=1))
+        self.colorbutton_2_block.set_color(Gdk.Color(red=65535, green=1, blue=1))
 
         """
             Add the accel groups
@@ -220,30 +278,102 @@ class GUI(Gtk.Window):
                                                               Gdk.ModifierType.CONTROL_MASK, 
                                                               Gtk.AccelFlags.VISIBLE)
 
+        if getuser() != 'root':
+            self.imagemenuitem_block_testing.set_sensitive(False)
+
+        """
+            Option "on boot.."
+        """
+        _global_ccp = CCParser(
+            self._paths.GLOBAL_CONFIG,
+            'Global alienware-kbl Configuration')
+
+        if _global_ccp.get_str_defval('boot_user', 'root') != getuser():
+            self.checkbutton_boot_off.set_sensitive(False)
+
         """
             Ask to the user if he wants to import its global configuration
             (this is a support for older versions of alienware-kbl)
         """
-        if (not os.path.exists(self._paths.CONFIGURATION_PATH) and os.path.exists(self._paths.BACKUP_CONFIG)) or \
-           (not os.path.exists(self._paths.PROFILES_PATH) and os.path.exists(self._paths.BACKUP_PROFILES)):
+        if (not os.path.exists(
+                self._paths.CONFIGURATION_PATH) and os.path.exists(
+                self._paths.BACKUP_CONFIG)) or (
+                not os.path.exists(
+                    self._paths.PROFILES_PATH) and os.path.exists(
+                        self._paths.BACKUP_PROFILES)):
 
             self.window_root.hide()
 
-            if gtk_dialog_question(self.window_root, TEXT_COPY_CONFIG, icon=self._paths.SMALL_ICON):
+            if gtk_dialog_question(
+                    self.window_root,
+                    TEXT_COPY_CONFIG,
+                    icon=self._paths.SMALL_ICON):
                 from distutils.dir_util import copy_tree
 
-                if not os.path.exists(os.path.dirname(self._paths.CONFIGURATION_PATH)):
-                    print_warning('Adding the configuration {}'.format(self._paths.CONFIGURATION_PATH))
-                    os.makedirs(os.path.dirname(self._paths.CONFIGURATION_PATH))
+                if not os.path.exists(
+                    os.path.dirname(
+                        self._paths.CONFIGURATION_PATH)):
+                    print(
+                        'Warning: Adding the configuration',
+                        self._paths.CONFIGURATION_PATH)
+                    os.makedirs(
+                        os.path.dirname(
+                            self._paths.CONFIGURATION_PATH))
 
                 if not os.path.exists(self._paths.PROFILES_PATH):
                     os.makedirs(self._paths.PROFILES_PATH)
 
-                shutil.copyfile(self._paths.BACKUP_CONFIG, self._paths.CONFIGURATION_PATH)
-                copy_tree(self._paths.BACKUP_PROFILES, self._paths.PROFILES_PATH)
+                shutil.copyfile(
+                    self._paths.BACKUP_CONFIG,
+                    self._paths.CONFIGURATION_PATH)
+                copy_tree(
+                    self._paths.BACKUP_PROFILES,
+                    self._paths.PROFILES_PATH)
 
             self.window_root.show()
 
+        """
+            Program Variables / Diver / Controller
+        """
+        if getuser() == 'root':
+            print('DEBUG GUI: Starting as `root`')
+            self._driver = Driver()
+            self._testing_driver = Driver()
+            print('DEBUG GUI: Driver loaded', self._driver)
+
+        """
+        if not AKBL_DAEMON and self._driver.has_device():
+            print('DEBUG: starting without daemon and the with driver device')
+            self.label_computername.set_label('')
+            self.color_chooser_widget.hide()
+            self.box_profile_buttons.hide()
+            self.menuitem_profile.set_sensitive(False)
+            self.menuitem_options.set_sensitive(False)
+            self.combobox_profiles.set_sensitive(False)
+            self.scrolledwindow_no_computer.show_all()
+
+            # Try to get the computer usb data to append to the `Computer Data` window
+            data_info = DATA_INFO
+            try:
+                lines = os.popen('''lsusb''').readlines()
+                for line in lines:
+                    if 'Alienware' in line:  # This could bug if there is any other device called Alienware.
+                        line = line.split(' ')
+                        data_info = os.popen('''lsusb -D /dev/bus/usb/{}/{}'''.format(line[1], line[3][:-1])).read()
+            except Exception as e:
+                data_info = DATA_INFO_ERROR + e
+                self.textbuffer_computer_data.set_text(data_info)
+        
+        elif getuser() == 'root':
+        """
+        if True:
+            self._controller = Controller(self._driver)
+            print('DEBUG GUI: Controller loaded', self._controller)
+        """
+        else:
+            computer_name = AKBLConnection._command('get_computer_name')
+            self._driver.computer = getattr(Computers, computer_name)()
+        """
 
         self.apply_configuration = False
         self.thread_zones = True
@@ -259,25 +389,38 @@ class GUI(Gtk.Window):
             Extra GUI initialization
         """
 
-        self.label_computername.set_label('{} - {}'.format(getuser(), self._driver.computer.name))
+        self.label_computername.set_label(
+            '{} - {}'.format(getuser(), self._driver.computer.name))
 
-        computer_data = AKBLConnection._command('get_computer_info')
+        if getuser() == 'root':
+            computer_data = (
+                self._driver.computer.name,
+                self._driver.vendor_id,
+                self._driver.product_id,
+                self._driver.dev)
+        else:
+            computer_data = AKBLConnection._command('get_computer_info')
 
-        self.textbuffer_computer_data.set_text(TEXT_COMPUTER_DATA.format(*computer_data[0:5]))
+        self.textbuffer_computer_data.set_text(
+            TEXT_COMPUTER_DATA.format(*computer_data[0:5]))
 
         # Add the zones to turn off to the  "menuitem_off_zones"
         #
         self.menu_turn_off_zones = Gtk.Menu()
-        self.zones_and_descriptions_dict = dict((self.theme.get_areas()[zone].description, zone) for zone in self.theme.get_areas().keys())
-        active_configuration_zones = self.ccp.get_str_defval('zones_to_keep_alive', '').split('|')
+        self.zones_and_descriptions_dict = dict(
+            (self.theme.get_areas()[zone].description, zone) for zone in self.theme.get_areas().keys())
+        active_configuration_zones = self.ccp.get_str_defval(
+            'zones_to_keep_alive', '').split('|')
 
-        for description, zone in sorted(self.zones_and_descriptions_dict.items(), key=lambda x: x[0]):
+        for description, zone in sorted(
+                self.zones_and_descriptions_dict.items(), key=lambda x: x[0]):
             checkbox = Gtk.CheckMenuItem(label=description)
 
             if zone in active_configuration_zones:
                 checkbox.set_active(True)
 
-            checkbox.connect('activate', self.on_checkbox_turnoff_zones_checked)
+            checkbox.connect('activate',
+                             self.on_checkbox_turnoff_zones_checked)
 
             self.menu_turn_off_zones.append(checkbox)
 
@@ -285,10 +428,14 @@ class GUI(Gtk.Window):
 
         # Extra stuff
         #
-        self.checkbutton_autosave.set_active(self.ccp.get_bool_defval('auto_save', True))
-        self.checkbutton_profile_buttons.set_active(self.ccp.get_bool_defval('profile_buttons', False))
-        self.checkbutton_delete_warning.set_active(self.ccp.get_bool_defval('delete_warning', True))
-        self.checkbutton_static_colorchooser.set_active(self.ccp.get_bool_defval('static_chooser', False))
+        self.checkbutton_autosave.set_active(
+            self.ccp.get_bool_defval('auto_save', True))
+        self.checkbutton_profile_buttons.set_active(
+            self.ccp.get_bool_defval('profile_buttons', False))
+        self.checkbutton_delete_warning.set_active(
+            self.ccp.get_bool_defval('delete_warning', True))
+        self.checkbutton_static_colorchooser.set_active(
+            self.ccp.get_bool_defval('static_chooser', False))
 
         self.populate_box_areas()
 
@@ -301,6 +448,14 @@ class GUI(Gtk.Window):
             self.color_chooser_widget.hide()
 
         self.scrolledwindow_no_computer.hide()
+
+        # check for systemctl
+        '''
+        if self.ccp.get_bool_defval('systemd', True):
+            if not os.path.exists(self._paths.SYSTEMCTL_PATH):
+                gtk_dialog_info(self.window_root, TEXT_SYSTEMD)
+                self.ccp.write('systemd', False)
+        '''
 
         # Start the zones thread !
         #
@@ -348,7 +503,11 @@ class GUI(Gtk.Window):
                 if column_index == add_button_column:
                     add_button = Gtk.Button(label=TEXT_ADD)
                     add_button.set_alignment(0.5, 0.5)
-                    add_button.connect('button-press-event', self.on_button_add_zone_clicked, zone_data, box_area, column_index + 1)
+                    add_button.connect('button-press-event',
+                                        self.on_button_add_zone_clicked,
+                                        zone_data,
+                                        box_area,
+                                        column_index + 1)
                     box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
 
             self.box_areas.pack_start(child=box_area, expand=False, fill=False, padding=5)
@@ -396,7 +555,8 @@ class GUI(Gtk.Window):
         self.POPULATE_liststore_profiles()
         Gdk.threads_leave()
 
-        AKBLConnection._command('reload_configurations')
+        if AKBL_DAEMON:
+            AKBLConnection._command('reload_configurations')
 
         sleep(0.5)
 
@@ -406,7 +566,7 @@ class GUI(Gtk.Window):
 
     def THREAD_zones(self):
         """
-            This thread scans the grid zones in order to find color changes,
+            This thread scans the zones grid in order to find color changes,
             mode changes or deletions.
         """
         self.light_changes = False
@@ -453,7 +613,12 @@ class GUI(Gtk.Window):
 
                         button = Gtk.Button(label=TEXT_ADD)
                         button.set_alignment(0.5, 0.5)
-                        button.connect('button-press-event', self.on_button_add_zone_clicked, zone, box_area, column)
+                        button.connect(
+                            'button-press-event',
+                            self.on_button_add_zone_clicked,
+                            zone,
+                            box_area,
+                            column)
                         box_area.pack_start(button, False, False, 5)
 
                     elif isinstance(zone_widget, ZoneWidget) and zone_widget.color_updated:
@@ -487,7 +652,40 @@ class GUI(Gtk.Window):
         self.label_user_message.set_text(TEXT_SHUTTING_LIGHTS_OFF)
         Gdk.threads_leave()
 
-        AKBLConnection._command('set_lights', False)
+        if getuser() == 'root':
+
+            for state in (True, False):
+
+                keep_alive_zones = self.get_zones_to_keep_alive()
+
+                if keep_alive_zones == []:
+                    self._controller.set_loop_conf(
+                        state, self._driver.computer.BLOCK_LOAD_ON_BOOT)
+                    self._controller.Reset(self._driver.computer.RESET_ALL_LIGHTS_OFF)
+                else:
+                    """
+                        This hack, it will set black as color to all the lights that should be turned off
+                    """
+                    self._controller.set_loop_conf(
+                        False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
+                    self._controller.add_speed_conf(1)
+
+                    for key in sorted(self.theme.get_areas().keys()):
+                        if key not in keep_alive_zones:
+                            area = self.theme.get_areas()[key]
+                            for zone in area:
+                                self._controller.add_loop_conf(
+                                    zone.regionId, 'fixed', '#000000', '#000000')
+
+                            self._controller.End_Loop_Conf()
+
+                    self._controller.End_Transfert_Conf()
+                    self._controller.Write_Conf()
+
+            if AKBL_DAEMON:
+                AKBLConnection._command('modify_lights_state', False)
+        else:
+            AKBLConnection._command('set_lights', False)
 
         Gdk.threads_enter()
         self.label_user_message.set_text('')
@@ -505,7 +703,8 @@ class GUI(Gtk.Window):
         Theme.INSTANCES_DIC[clone.name] = clone
         self.POPULATE_liststore_profiles()
 
-        AKBLConnection._command('reload_configurations')
+        if AKBL_DAEMON:
+            AKBLConnection._command('reload_configurations')
 
     def ILUMINATE_keyboard_block(self):
 
@@ -536,13 +735,23 @@ class GUI(Gtk.Window):
         #
         gtk_append_text_to_buffer(
             self.textbuffer_block_testing,
-            TEXT_BLOCK_TEST.format(zone_block, hex(zone_block), zone_mode, speed, zone_left_color, zone_right_color))
+            TEXT_BLOCK_TEST.format(
+                zone_block,
+                hex(zone_block),
+                zone_mode,
+                speed,
+                zone_left_color,
+                zone_right_color))
 
         #   Test
         #
-        self.testing_controller.set_loop_conf(False, self._testing_driver.computer.BLOCK_LOAD_ON_BOOT)
-        self.testing_controller.add_speed_conf(speed)
-        self.testing_controller.add_loop_conf(zone_block, zone_mode, zone_left_color, zone_right_color)
+        self.testing_controller.set_loop_conf(
+            False, self._testing_driver.computer.BLOCK_LOAD_ON_BOOT)
+        self.testing_controller.add_speed_conf(speed * 256)
+        self.testing_controller.add_loop_conf(zone_block, 
+                                              zone_mode,
+                                              zone_left_color,
+                                              zone_right_color)
         self.testing_controller.End_Loop_Conf()
         self.testing_controller.End_Transfert_Conf()
         self.testing_controller.Write_Conf()
@@ -559,11 +768,37 @@ class GUI(Gtk.Window):
             # Patch (#12)
             os.utime(self.theme.path, None)
         except Exception as e:
-            print_error('It was not possible to os.utime the profile path: \n{}\n{}'.format(self.theme.path), format_exc())
+            print(
+                'Warning: It was not possible to os.utime the profile path: \n{}'.format(
+                    self.theme.path))
+            print(format_exc())
 
-        AKBLConnection._command('reload_configurations')
+        if AKBL_DAEMON:
+            AKBLConnection._command('reload_configurations')
 
-        AKBLConnection.set_lights(True)
+        if getuser() != 'root':
+            AKBLConnection.set_lights(True)
+
+        else:
+            if AKBL_DAEMON:
+                AKBLConnection._command('modify_lights_state', True)
+
+            self._controller.set_loop_conf(
+                False, self._driver.computer.BLOCK_LOAD_ON_BOOT)
+            self._controller.add_speed_conf(self.theme.speed)
+
+            for key in sorted(self.theme.get_areas().keys()):
+                area = self.theme.get_areas()[key]
+                for zone in area:
+                    self._controller.add_loop_conf(zone.regionId,
+                                                  zone.get_mode(),
+                                                  zone.get_left_color(),
+                                                  zone.get_right_color())
+
+                self._controller.End_Loop_Conf()
+
+            self._controller.End_Transfert_Conf()
+            self._controller.Write_Conf()
 
         Gdk.threads_enter()
         self.label_user_message.set_text('')
@@ -598,10 +833,14 @@ class GUI(Gtk.Window):
             self.ccp.write('static_chooser', False)
 
     def on_checkbox_turnoff_zones_checked(self, checkbox, data=None):
-        self.ccp.write('zones_to_keep_alive', '|'.join(self.get_zones_to_keep_alive()))
+        self.ccp.write(
+            'zones_to_keep_alive', '|'.join(
+                self.get_zones_to_keep_alive()))
 
     def on_checkbutton_delete_warning_activate(self, button, data=None):
-        self.ccp.write('delete_warning', self.checkbutton_delete_warning.get_active())
+        self.ccp.write(
+            'delete_warning',
+            self.checkbutton_delete_warning.get_active())
 
     def on_checkbutton_autosave_activate(self, button, data=None):
         self.ccp.write('auto_save', self.checkbutton_autosave.get_active())
@@ -629,6 +868,7 @@ class GUI(Gtk.Window):
             This button is not in glade, it is dynamically generated.
         """
         
+        
         new_zone = ZoneWidget(
             left_color=self._driver.computer.default_color,
             right_color=self._driver.computer.default_color,
@@ -642,7 +882,12 @@ class GUI(Gtk.Window):
         area_box.remove(button)
 
         new_button = Gtk.Button(label=TEXT_ADD)
-        new_button.connect('button-press-event', self.on_button_add_zone_clicked, area, area_box, column + 1)
+        new_button.connect(
+            'button-press-event',
+            self.on_button_add_zone_clicked,
+            area,
+            area_box,
+            column + 1)
 
         area_box.pack_start(child=new_zone, expand=False, fill=False, padding=5)
         area_box.pack_start(child=new_button, expand=False, fill=False, padding=5)
@@ -657,7 +902,7 @@ class GUI(Gtk.Window):
 
         value = 256 - value
 
-        self.theme.set_speed(value)
+        self.theme.set_speed(value * 256)
 
     def on_tempobutton_button_release_event(self, widget, data=None):
         if self.checkbutton_autosave.get_active():
@@ -700,7 +945,8 @@ class GUI(Gtk.Window):
         if file_path:
             new_path = self._paths.PROFILES_PATH + os.path.basename(file_path)
 
-            if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, TEXT_THEME_ALREADY_EXISTS):
+            if os.path.exists(new_path) and not gtk_dialog_question(
+                    self.window_root, TEXT_THEME_ALREADY_EXISTS):
                 return
 
             shutil.copy(file_path, new_path)
@@ -708,7 +954,9 @@ class GUI(Gtk.Window):
             self.POPULATE_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, widget=None, data=None):
-        folder_path = gtk_folder_chooser(parent=self.window_root, title=TEXT_CHOOSE_A_FOLDER_TO_EXPORT, icon_path=self._paths.SMALL_ICON)
+        folder_path = gtk_folder_chooser(parent=self.window_root,
+                                         title=TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
+                                         icon_path=self._paths.SMALL_ICON)
 
         if folder_path:
             new_path = '{}/{}.cfg'.format(folder_path, self.theme.name)
@@ -779,16 +1027,212 @@ class GUI(Gtk.Window):
         if self.color_chooser_widget.get_property('show-editor'):
             self.color_chooser_widget.set_property('show-editor', False)
 
+    """
+        BLOCK TESTING
+    """
+
+    def on_imagemenuitem_block_testing_activate(self, button, data=None):
+        #
+        #   Try to fill the vendor and product id
+        #
+        text = get_text_gtk_buffer(self.textbuffer_computer_data)
+
+        if 'Vendor ID' in text and 'Product ID:' in text:
+            # When the computer was recognized by the program
+            for line in text.split('\n'):
+                if 'Vendor ID' in line:
+                    line = line.split(':')
+                    self.entry_id_vendor.set_text(line[1].strip())
+                elif 'Product ID' in line:
+                    line = line.split(':')
+                    self.entry_id_product.set_text(line[1].strip())
+
+            self.checkbutton_hex_format_when_finding.set_active(False)
+
+        else:
+            # When the computer is not yet supported
+
+            if 'idVendor' and 'idProduct' in text:
+                for line in text.split('\n'):
+                    if 'idVendor' in line:
+                        line = line.split()
+                        self.entry_id_vendor.set_text(line[1])
+
+                    elif 'idProduct' in line:
+                        line = line.split()
+                        self.entry_id_product.set_text(line[1])
+
+        self.window_block_testing.show()
+        self.window_root.hide()
+
+    def on_entry_block_testing_changed(self, entry, data=None):
+        text = entry.get_text()
+        try:
+            value = int(text)
+
+            if value < 0:
+                self.label_block_hex_test.set_text('Non > 0')
+                self.button_block_make_test.set_sensitive(False)
+            else:
+                self.label_block_hex_test.set_text(hex(value))
+                self.button_block_make_test.set_sensitive(True)
+
+        except:
+            self.label_block_hex_test.set_text('Non Int')
+            self.button_block_make_test.set_sensitive(False)
+
+    def on_togglebutton_find_device_clicked(self, button, data=None):
+
+        if self.togglebutton_find_device.get_active():
+
+            if self.checkbutton_hex_format_when_finding.get_active():
+                vendor = int(self.entry_id_vendor.get_text(), 16)
+                product = int(self.entry_id_product.get_text(), 16)
+            else:
+                vendor = int(self.entry_id_vendor.get_text())
+                product = int(self.entry_id_product.get_text())
+
+            device = self._testing_driver.FindDevice(
+                id_vendor=vendor, id_product=product)
+
+            if device:
+                self.testing_controller = Controller(self._testing_driver)
+
+                for i in range(30):
+                    method = self.grid_common_blocks.get_child_at(
+                        0, i).get_text()
+                    value = getattr(self._testing_driver.computer, method)
+
+                    self.grid_common_blocks.get_child_at(
+                        2, i).set_text(hex(value))
+
+                    entry = Gtk.Entry()
+                    entry.set_text(str(value))
+
+                    self.grid_common_blocks.attach(entry, 1, i, 1, 1)
+
+                self.grid_common_blocks.show_all()
+
+                self.box_block_testing.set_sensitive(True)
+                self.entry_id_vendor.set_sensitive(False)
+                self.entry_id_product.set_sensitive(False)
+                gtk_append_text_to_buffer(
+                    self.textbuffer_block_testing,
+                    TEXT_DEVICE_FOUND.format(
+                        vendor,
+                        product))
+
+                self.combobox_default_blocks.set_active(0)
+
+            else:
+                self.box_block_testing.set_sensitive(False)
+                self.togglebutton_find_device.set_active(False)
+                self.entry_id_vendor.set_sensitive(True)
+                self.entry_id_product.set_sensitive(True)
+                gtk_append_text_to_buffer(
+                    self.textbuffer_block_testing,
+                    TEXT_DEVICE_NOT_FOUND.format(
+                        vendor,
+                        product))
+
+        else:
+            self.box_block_testing.set_sensitive(False)
+            self.entry_id_vendor.set_sensitive(True)
+            self.entry_id_product.set_sensitive(True)
+
+    def on_button_update_common_blocks_clicked(self, button, data=None):
+        try:
+            for i in range(30):
+                text = self.grid_common_blocks.get_child_at(0, i).get_text()
+                entry = self.grid_common_blocks.get_child_at(1, i)
+                new_value = entry.get_text()
+                old_value = getattr(self._testing_driver.computer, text)
+                try:
+                    old_value = int(old_value, 16)
+                except:
+                    pass
+
+                # Verify the value of the entry
+                #
+                submit = True
+                try:
+                    new_value = int(new_value)
+                except:
+                    gtk_append_text_to_buffer(
+                        self.textbuffer_block_testing,
+                        TEXT_NON_INTEGER.format(
+                            text,
+                            new_value))
+                    new_value = old_value
+                    submit = False
+
+                if submit:
+                    if new_value != old_value:
+                        setattr(self._testing_driver.computer, text, new_value)
+                        gtk_append_text_to_buffer(
+                            self.textbuffer_block_testing, TEXT_VALUE_CHANGED.format(
+                                text, new_value, hex(new_value)))
+                        self.grid_common_blocks.get_child_at(
+                            2, i).set_text(hex(int(new_value)))
+                else:
+                    entry.set_text(str(old_value))
+        except Exception as e:
+            gtk_append_text_to_buffer(
+                self.textbuffer_block_testing,
+                '\n' + format_exc() + '\n')
+
+    def on_button_block_make_test_clicked(self, button, data=None):
+        if self.checkbutton_auto_turn_off.get_active():
+            self.on_button_block_testing_lights_off_clicked(button)
+
+        try:
+            self.ILUMINATE_keyboard_block()
+        except Exception as e:
+            gtk_append_text_to_buffer(
+                self.textbuffer_block_testing,
+                '\n' + format_exc() + '\n')
+
+    def on_button_block_testing_lights_off_clicked(self, button, data=None):
+        try:
+            self.testing_controller.Reset(
+                self._testing_driver.computer.RESET_ALL_LIGHTS_OFF)
+            gtk_append_text_to_buffer(
+                self.textbuffer_block_testing,
+                '\n' + TEXT_BLOCK_LIGHTS_OFF + '\n')
+        except Exception as e:
+            gtk_append_text_to_buffer(
+                self.textbuffer_block_testing,
+                '\n' + format_exc())
+
+    def on_checkbutton_protect_common_blocks_clicked(
+            self, checkbutton, data=None):
+        if checkbutton.get_active():
+            self.viewport_common_block.set_sensitive(False)
+            self.button_update_common_blocks.set_sensitive(False)
+        else:
+            self.viewport_common_block.set_sensitive(True)
+            self.button_update_common_blocks.set_sensitive(True)
+
+    def on_combobox_default_blocks_changed(self, combobox, data=None):
+        index = combobox.get_active()
+        model = combobox.get_model()
+        value = model[index][0]
+
+        if value == -1:
+            self.entry_block_testing.set_sensitive(True)
+        else:
+            self.entry_block_testing.set_sensitive(False)
+            self.entry_block_testing.set_text(str(value))
+
+    def on_button_close_block_testing_clicked(self, button, data=None):
+        self.window_block_testing.hide()
+        self.window_root.show()
+
+
 if __name__ == '__main__':
 
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
-    AKBLConnection = Bindings()
-
-    if not AKBLConnection.ping():
-        print_error("Failed to start the GUI because the daemon is off.")
-        exit(1)
-        
     GObject.threads_init()
     Gdk.threads_init()
 

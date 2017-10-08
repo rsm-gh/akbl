@@ -45,8 +45,10 @@ class Paths:
             use some commad like './setup; chown rsm -R *', and I actually install it
             for making the tests.
         """
-        self.GLADE_FILE = '/usr/share/AlienwareKBL/GUI/GUI.glade'
-        self.IMAGES = '/usr/share/AlienwareKBL/GUI/images/'
+        self.GLADE_FILE = '/usr/share/AlienwareKBL/ADDONS/GUI/GUI.glade'
+        self.IMAGES = '/usr/share/AlienwareKBL/ADDONS/GUI/images/'
+
+        self.ZONEWIDGET_IMAGES = '/usr/share/AlienwareKBL/ADDONS/GUI/ZoneWidget/images/'
 
         self.SMALL_ICON = self.IMAGES + 'icon.png'
         self.MEDIUM_ICON = self.IMAGES + 'icon-m.png'
