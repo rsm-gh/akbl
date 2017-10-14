@@ -155,8 +155,8 @@ areas:
                 f.write('area={0}\n'.format(area.name))
                 for zone in area.get_zones():
                     f.write('mode={0}\n'.format(zone.get_mode()))
-                    f.write('left_color={0}\n'.format(rgb_to_hex(zone.get_left_color())))
-                    f.write('right_color={0}\n'.format(rgb_to_hex(zone.get_right_color())))
+                    f.write('left_color={0}\n'.format(rgb_to_hex(zone.get_left_color(), True)))
+                    f.write('right_color={0}\n'.format(rgb_to_hex(zone.get_right_color(), True)))
                 f.write('\n')
 
         self.update_time()

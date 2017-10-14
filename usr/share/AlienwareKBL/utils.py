@@ -26,7 +26,13 @@ _DEBUG = True
 def getuser():
     return pwd.getpwuid(os.geteuid()).pw_name
 
-def rgb_to_hex(rgb):
+def rgb_to_hex(rgb, multiply=False):
+    
+    if multiply:
+        rgb[0] = rgb[0] * 256
+        rgb[1] = rgb[1] * 256
+        rgb[2] = rgb[2] * 256
+    
     return '#%02x%02x%02x' % (int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
 def hex_to_rgb(hex_string):

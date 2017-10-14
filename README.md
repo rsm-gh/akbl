@@ -20,7 +20,7 @@ If you made implementations to the Daemon you will be then able to see them if y
 
   **Bonnus:** reasons and explanation of the previous commands:
   
-  `reset` is used to clear.
+  `reset` is used to clear the terminal.
   
   `./setup` is used to install the software. This is necessary for the develop part because:
    + The daemon must be launched as root.
@@ -36,10 +36,6 @@ If you made implementations to the Daemon you will be then able to see them if y
 ## General architecture
 
 ![General Diagram](https://github.com/rsm-gh/alienware-kbl/blob/new-version/usr/share/doc/AlienwareKBL/Programming/general%20diagram.png)
-
-
-**I'm currently debugin the Daemon and the Bindings.**
-
 
 # What are the main changes if we compare this version to the stable branch?
 
