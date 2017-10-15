@@ -33,7 +33,7 @@ from time import time, sleep
 from copy import deepcopy
 
 # local imports
-sys.path.append("/usr/share/AlienwareKBL")
+sys.path.insert(0, "/usr/share/AlienwareKBL")
 import Configuration.Theme as Theme
 import Configuration.Computers as Computer 
 from Configuration.CCParser import CCParser
@@ -45,6 +45,7 @@ from utils import getuser, rgb_to_hex
 from ZoneWidget import ZoneWidget
 from Bindings import Bindings
 
+os.chdir("/usr/share/AlienwareKBL") # this is important for the rest of the code.
 
 def get_text_gtk_buffer(textbuffer):
     return textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)
@@ -360,10 +361,7 @@ class GUI(Gtk.Window):
 
         if self.checkbutton_delete_warning.get_active():
             Gdk.threads_enter()
-            if not gtk_dialog_question(
-                    self.window_root,
-                    TEXT_CONFIRM_DELETE_CONFIGURATION,
-                    icon=self._paths.SMALL_ICON):
+            if not gtk_dialog_question(self.window_root, TEXT_CONFIRM_DELETE_CONFIGURATION, icon=self._paths.SMALL_ICON):
                 Gdk.threads_leave()
                 return
             Gdk.threads_leave()
@@ -463,8 +461,7 @@ class GUI(Gtk.Window):
                 Gdk.threads_leave()
 
                 if self.checkbutton_autosave.get_active():
-                    threading.Thread(
-                        target=self.SAVE_configuration_file).start()
+                    threading.Thread(target=self.SAVE_configuration_file).start()
                 self.light_changes = False
 
             sleep(0.1)
@@ -607,8 +604,7 @@ class GUI(Gtk.Window):
         value = 256 - value
 
         self.theme.set_speed(value)
-
-    def on_tempobutton_button_release_event(self, widget, data=None):
+        
         if self.checkbutton_autosave.get_active():
             threading.Thread(target=self.SAVE_configuration_file).start()
 

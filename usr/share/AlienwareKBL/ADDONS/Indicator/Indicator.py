@@ -27,14 +27,12 @@ import sys
 import threading
 import Pyro4
 from time import sleep
-from common import getuser
-
-from AlienwareKBL import AlienwareKBL
 
 # local imports
-from Paths import Paths
-from Texts import *
-
+sys.path.insert(0, "/usr/share/AlienwareKBL")
+from Bindings import Bindings
+from Configuration.Paths import Paths
+from texts import *
 
 def daemon_is_active():
     if AlienwareKBL.ping():
@@ -76,10 +74,9 @@ class Indicator:
         #
         self.indicator = appindicator.Indicator.new_with_path(
             'alienware-kbl-indicator',
-            self.paths.NO_DAEMON_ICON,
+            self.paths.INDICATOR_NO_DAEMON_ICON,
             appindicator.IndicatorCategory.APPLICATION_STATUS,
-            os.path.dirname(
-                os.path.realpath(__file__)))
+            os.path.dirname(os.path.realpath(__file__)))
 
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 
@@ -133,16 +130,16 @@ class Indicator:
 
             if val in (100, 150):
                 if val == 100:
-                    self.indicator.set_icon(self.paths.MEDIUM_ICON)
+                    self.indicator.set_icon(self.paths.INDICATOR_ON_ICON )
 
                 elif val == 150:
-                    self.indicator.set_icon(self.paths.LIGHTS_OFF_ICON)
+                    self.indicator.set_icon(self.paths.INDICATOR_OFF_ICON )
 
                 for children in self.menu.get_children():
                     children.set_sensitive(True)
 
             elif val == 666:
-                self.indicator.set_icon(self.paths.NO_DAEMON_ICON)
+                self.indicator.set_icon(self.paths.INDICATOR_NO_DAEMON_ICON)
                 self.switch_state.set_sensitive(False)
                 self.profiles_menu.set_sensitive(False)
 
@@ -185,11 +182,7 @@ class Indicator:
         AlienwareKBL.set_lights(True)
 
     def on_menuitem_gui(self, widget, data=None):
-        if getuser() == 'root' or daemon_is_active():
-            os.system('''setsid setsid /usr/share/alienware-kbl/GUI.py''')
-        else:
-            os.system(
-                '''setsid setsid gksu -m "Alienware-KBL" /usr/share/alienware-kbl/GUI.py''')
+        os.system('''setsid setsid alienware-kbl''')
 
     def on_menuitem_change(self, widget, data=None):
         AlienwareKBL.switch_lights()
@@ -204,6 +197,6 @@ if __name__ == '__main__':
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     GObject.threads_init()
     Gdk.threads_init()
-    AlienwareKBL = AlienwareKBL()
+    AlienwareKBL = Bindings()
     indicator = ConnectIndicator()
     Gtk.main()

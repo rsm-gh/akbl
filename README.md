@@ -36,19 +36,3 @@ If you made implementations to the Daemon you will be then able to see them if y
 ## General architecture
 
 ![General Diagram](https://github.com/rsm-gh/alienware-kbl/blob/new-version/usr/share/doc/AlienwareKBL/Programming/general%20diagram.png)
-
-# What are the main changes if we compare this version to the stable branch?
-
-+ The code was simplified and organized.
-+ The debug/warning/error system was highly improved.
-+ The GUI doesn't use anymore the root account.
-+ The Block Testing Window will be separated from the GUI.
-
-This changes are so important because `alienware-kbl` is as a community project and everyone should be able of understanding it so it can be enhanced.
-Also having a clear and non-redundant code enhances the performances and makes it a much better software!
-
-# Optional known bugs/features that I would like to fix/add:
-+ Directly load the daemon from a root session without using the libusb patch.
-+ Fix the power button.
-+ Add the different blocks (On save, On boot, On battery). For this you can take a look in to the pyAlienFX project.
-+ (Optional) Finish the block testing window. This window was made as a friendly inferface so developers be able to play & test the alienware bus system with `python-usb`. Because `python-usb` will require root permission, this window shall be taken off the GUI and even be developed as a separate software from `alienware-kbl`.

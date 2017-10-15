@@ -17,6 +17,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
+import sys
 import Pyro4
 import os
 import pwd
@@ -24,8 +25,9 @@ from traceback import format_exc
 from time import time, sleep
 
 # Local imports
+sys.path.insert(0, "/usr/share/AlienwareKBL")
 from texts import *
-from utils import getuser, print_warning, print_debug, print_error
+from utils import getuser, print_warning, print_debug, print_error, string_is_hex_color
 from Engine.Controller import Controller
 from Engine.Driver import Driver
 from Configuration import Theme
@@ -53,6 +55,7 @@ class Daemon:
         if not driver.has_device():
             print_warning("The computer is not supported")
             exit(1)
+            
         self._computer = driver.computer
         self._controller = Controller(driver)
         print_debug('Controller loaded: {}'.format(self._controller))
@@ -82,6 +85,8 @@ class Daemon:
         self._indicator_pyro = False
         
         self.reload_configurations(self._user)
+        self._lights_state = False
+        
         #self.set_lights(self._user, self._ccp.get_bool_defval('boot', True))
         #print_debug("Starting with the lights={} for the user={}".format(self._ccp.get_bool_defval('boot', True), self._user))
 
@@ -93,24 +98,33 @@ class Daemon:
 
         # Iluminate the computer lights
         #
-        self._controller.start_config(save=False, block=self._computer.get_power_block())
-        self._controller.reset_all_lights(self._computer.RESET_ALL_LIGHTS_ON)
-        self._controller.set_speed(self._theme.get_speed())
         
-        for area in self._theme.get_areas():
-            for zone in area.get_zones():
-                self._controller.add_line(zone.get_hex_id(), zone.get_mode(), zone.get_left_color(), zone.get_right_color())
-            self._controller.end_line()
-        self._controller.end_config()
-        
-        self._controller.write()
+        for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
+                            (True, self._computer.BLOCK_STANDBY),
+                            (True, self._computer.BLOCK_AC_POWER),
+                            (True, self._computer.BLOCK_CHARGING),
+                            (True, self._computer.BLOCK_BAT_POWER),
+                            (False, self._computer.BLOCK_LOAD_ON_BOOT)):
+                
+            self._controller.start_config(save=save, block=block)
+            self._controller.reset_all_lights(self._computer.RESET_ALL_LIGHTS_ON)
+            self._controller.set_speed(self._theme.get_speed())
+            
+            for area in self._theme.get_areas():
+                for zone in area.get_zones():
+                    print(zone.get_left_color(), zone.get_right_color())
+                    self._controller.add_line(zone.get_hex_id(), zone.get_mode(), zone.get_left_color(), zone.get_right_color())
+                self._controller.end_line()
+            self._controller.end_config()
+            
+            self._controller.write()
 
         # Update the Indicator
         #
         if self._indicator_pyro:
             self._indicator_send_code(100)
             try:
-                self._indicator_pyro.load_profiles(list(Theme.profiles.keys()), self.profile_name, self._lights_state)
+                self._indicator_pyro.load_profiles(Theme.AVAILABLE_THEMES.keys(), self._theme.name, self._lights_state)
             except Exception as e:
                 print_error(format_exc())
 
@@ -142,15 +156,12 @@ class Daemon:
         Theme.LOAD_profiles(self._computer, self._paths.PROFILES_PATH)
 
         if set_default:
-            _, self.profile_name = Theme.GET_last_configuration()
-            self._theme = Theme.get_theme_by_name(self.profile_name)
+            _, profile_name = Theme.GET_last_configuration()
+            self._theme = Theme.get_theme_by_name(profile_name)
 
         if self._indicator_pyro and indicator:
             try:
-                self._indicator_pyro.load_profiles(
-                    list(Theme.AVAILABLE_THEMES.keys()),
-                    self.profile_name,
-                    self._lights_state)
+                self._indicator_pyro.load_profiles(Theme.AVAILABLE_THEMES.keys(), self._theme.name, self._lights_state)
             except Exception as e:
                 print_error(format_exc())
 
@@ -172,8 +183,6 @@ class Daemon:
 
         if profile in Theme.AVAILABLE_THEMES.keys():
             self._theme = Theme.AVAILABLE_THEMES[profile]
-            self.profile_name = profile
-            self._iluminate_keyboard()
             self._iluminate_keyboard()
 
     @Pyro4.expose
@@ -205,19 +214,26 @@ class Daemon:
                 """
                     This hack, it will set black as color to all the lights that should be turned off.
                 """
-                self._controller.start_config(False, self._computer.BLOCK_LOAD_ON_BOOT)
-                self._controller.add_speed_conf(1)
+                for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
+                                    (True, self._computer.BLOCK_STANDBY),
+                                    (True, self._computer.BLOCK_AC_POWER),
+                                    (True, self._computer.BLOCK_CHARGING),
+                                    (True, self._computer.BLOCK_BAT_POWER),
+                                    (False, self._computer.BLOCK_LOAD_ON_BOOT)):
+                    
+                    self._controller.start_config(save, block)
+                    self._controller.add_speed_conf(1)
 
-                for key in sorted(self._theme.area.keys()):
-                    if key not in keep_alive_zones:
-                        area = self._theme.area[key]
-                        for zone in area:
-                            self._controller.add_line(zone.get_hex_id(), 'fixed', '#000000', '#000000')
+                    for key in sorted(self._theme.area.keys()):
+                        if key not in keep_alive_zones:
+                            area = self._theme.area[key]
+                            for zone in area:
+                                self._controller.add_line(zone.get_hex_id(), 'fixed', '#000000', '#000000')
 
-                        self._controller.end_line()
+                            self._controller.end_line()
 
-                self._controller.end_config()
-                self._controller.write()
+                    self._controller.end_config()
+                    self._controller.write()
 
             self._lights_state = False
             self._indicator_send_code(150)
@@ -237,9 +253,8 @@ class Daemon:
 
             + Speed must be an integer. 1 =< speed =< 256
 
-            + left_colors and right_colors can be a single hex color or a list.
-              If both arguments are used, both arguments must have
-              the same number of items.
+            + left_colors and right_colors can be a single hex color or a list of hex_colors.
+              If both arguments are used, they must have the same number of items.
         """
 
         if mode not in ('fixed', 'morph', 'blink'):
@@ -255,57 +270,65 @@ class Daemon:
             print_warning("The speed argument must be >= 1.")
             return
 
-        if not isinstance(left_colors, list):
+        if not isinstance(left_colors, list) and not isinstance(left_colors, tuple):
             left_colors = [left_colors]
 
         if right_colors is None:
             right_colors = left_colors
             
-        elif not isinstance(right_colors, list):
+        elif not isinstance(right_colors, list) and not isinstance(right_colors, tuple):
             right_colors = [right_colors]
 
         if len(left_colors) != len(right_colors):
             print_warning("The colors lists must have the same lenght.")
             return
+            
+        for color_list in (left_colors, right_colors):
+            for color in color_list:
+                if not string_is_hex_color(color):
+                    print_warning("The colors argument must only contain hex colors. The color={} is not valid.".format(color))
+                    return
 
-        print_warning("CREATING THE CONSTRUCTOR for mode="+mode)
-        print(left_colors)
-        print(right_colors)
-        print()
+        for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
+                            (True, self._computer.BLOCK_STANDBY),
+                            (True, self._computer.BLOCK_AC_POWER),
+                            (True, self._computer.BLOCK_CHARGING),
+                            (True, self._computer.BLOCK_BAT_POWER),
+                            (False, self._computer.BLOCK_LOAD_ON_BOOT)):
 
+            self._controller.start_config(save, block)
+            self._controller.set_speed(speed)
+
+            for region in self._computer.get_regions():
+                for i, (left_color, right_color) in enumerate(zip(left_colors, right_colors)):
+                    
+                    if i + 1 > region.max_commands:
+                        print_warning("The number of maximum commands for the region={} have been exeed. The loop was stopped at {}.".format(region.name, i+1))
+                        break
+                    
+                    if mode == 'blink':
+                        if region.can_blink:
+                            self._controller.add_line(region.hex_id, 'blink', left_color, right_color)
+                        else:
+                            self._controller.add_line(region.hex_id, 'fixed', left_color)
+                            print_warning("The mode=blink is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
+                            
+                    elif mode == 'morph':
+                        if region.can_morph:
+                           self._controller.add_line(region.hex_id, 'morph', left_color, right_color)
+                        else:
+                            self._controller.add_line(region.hex_id, 'fixed', left_color)
+                            print_warning("The mode=morph is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
+                            
+                    else:
+                        self._controller.add_line(region.hex_id, 'fixed', left_color)
+                    
+                self._controller.end_line()
+
+            self._controller.end_config()
+            self._controller.write()
+        
         self._lights_state = True
-        self._controller.start_config(False, self._computer.BLOCK_LOAD_ON_BOOT)
-        self._controller.set_speed(speed)
-
-        for region in self._computer.get_regions():
-            for i, (left_color, right_color) in enumerate(zip(left_colors, right_colors)):
-                
-                if i + 1 > region.max_commands:
-                    print_warning("The number of maximum commands for the region={} have been exeed. The loop was stopped at {}.".format(region.name, i+1))
-                    break
-                
-                
-                if mode == 'blink':
-                    if region.can_blink:
-                        self._controller.add_line(region.hex_id, 'blink', left_color, right_color)
-                    else:
-                        self._controller.add_line(region.hex_id, 'fixed', left_color)
-                        print_warning("The mode=blink is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
-                        
-                elif mode == 'morph':
-                    if region.can_morph:
-                       self._controller.add_line(region.hex_id, 'morph', left_color, right_color)
-                    else:
-                        self._controller.add_line(region.hex_id, 'fixed', left_color)
-                        print_warning("The mode=morph is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
-                        
-                else:
-                    self._controller.add_line(region.hex_id, 'fixed', left_color)
-                
-            self._controller.end_line()
-
-        self._controller.end_config()
-        self._controller.write()
 
     """
         Bindings for the graphical interphase

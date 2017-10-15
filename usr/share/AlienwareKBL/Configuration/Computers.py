@@ -19,7 +19,10 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
+import sys
+
 # Local imports
+sys.path.insert(0, "/usr/share/AlienwareKBL")
 from texts import *
 
 class Region:
@@ -52,9 +55,9 @@ class Computer:
 
     def __init__(self):
 
-        self.DEFAULT_COLOR = '0000FF'
+        self.DEFAULT_COLOR = '#0000FF'
         self.DEFAULT_MODE = 'fixed'
-        self.DEFAULT_SPEED = 65280
+        self.DEFAULT_SPEED = 255
         
         self.NAME = 'Common Configuration'
         self._REGIONS = []
@@ -117,7 +120,7 @@ class Computer:
         for region in self._REGIONS:
             if region_name == region.name:
                 return region
-            
+
 
 class M11XR1(Computer):
 

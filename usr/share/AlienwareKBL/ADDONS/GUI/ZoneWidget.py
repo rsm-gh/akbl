@@ -22,9 +22,9 @@ from gi.repository import Gtk, Gdk
 import cairo
 
 import sys
-sys.path.append("/usr/share/AlienwareKBL")
+sys.path.insert(0, "/usr/share/AlienwareKBL")
 from Configuration.Paths import Paths
-from utils import hex_to_rgb, normalize_rgb, middle_rgb_color, print_warning
+from utils import hex_to_rgb, middle_rgb_color, print_warning
 
 
 _IMAGES_PATH = Paths().IMAGES
@@ -50,7 +50,22 @@ _BUTTONS_IMAGE_PATTERN_WITH_DELETE = ['cross_on',
                                       'morph_off',
                                       'blink_off']
 
+def export_rgb(imported_rgb_color):
+    return [int(imported_rgb_color[0]*255), int(imported_rgb_color[1]*255), int(imported_rgb_color[2]*255)]
 
+def import_rgb(rgb_color):
+    """
+        Check and convert if necessary the values of the RGB colors.
+        They must be <= 1.0
+    """
+
+    if all(value <= 1.0 for value in rgb_color):
+        return rgb_color
+
+    for index, value  in enumerate(rgb_color):
+        rgb_color[index] = value / 255.0
+
+    return rgb_color
 
 def rgb_from_rgba_gobject(gdk3_rgba_object):
     """
@@ -277,11 +292,9 @@ class ZoneWidget(Gtk.Frame):
     def _get_command_button_image(self, index):
 
         if self._column == 0 or (self.zone and 'PB' in self.zone.name):
-            return Gtk.Image.new_from_file('{}{}.png'.format(_IMAGES_PATH, 
-                                                             _BUTTONS_IMAGE_PATTERN[index]))
+            return Gtk.Image.new_from_file('{}{}.png'.format(_IMAGES_PATH, _BUTTONS_IMAGE_PATTERN[index]))
 
-        return Gtk.Image.new_from_file('{}{}.png'.format(_IMAGES_PATH, 
-                                                         _BUTTONS_IMAGE_PATTERN_WITH_DELETE[index]))
+        return Gtk.Image.new_from_file('{}{}.png'.format(_IMAGES_PATH, _BUTTONS_IMAGE_PATTERN_WITH_DELETE[index]))
 
     def _create_gradient(self, widget, cr, area_number):
 
@@ -355,10 +368,10 @@ class ZoneWidget(Gtk.Frame):
         return self._mode
 
     def get_left_color(self):
-        return self._left_color
+        return export_rgb(self._left_color)
 
     def get_right_color(self):
-        return self._right_color
+        return export_rgb(self._right_color)
 
     def set_color(self, color, widget_zone):
 
@@ -366,9 +379,9 @@ class ZoneWidget(Gtk.Frame):
             color = hex_to_rgb(color)
 
         if widget_zone == 'left':
-            self._left_color = normalize_rgb(color)
+            self._left_color = import_rgb(color)
         else:
-            self._right_color = normalize_rgb(color)
+            self._right_color = import_rgb(color)
 
         if self._right_color:
             self._middle_color = middle_rgb_color(self._left_color, self._right_color)
@@ -393,7 +406,6 @@ if __name__ == '__main__':
     COLOR_CHOOSER_DIALOG = Gtk.ColorChooserDialog()
     COLOR_CHOOSER_DIALOG.set_transient_for(ROOT_WINDOW)
     COLOR_CHOOSER_WIDGET = Gtk.ColorChooserWidget()
-    #COLOR_CHOOSER_WIDGET.set_alignment(0.5, 0.5)
 
     def on_button_click(widget):
         """

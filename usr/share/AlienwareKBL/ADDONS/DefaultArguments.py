@@ -20,17 +20,19 @@ import sys
 import os
 import pwd
 
-from AKBL import Bindings
-
 # Local imports
-sys.path.insert(0, '/usr/share/AlienwareKBL')
+# local imports
+sys.path.append("/usr/share/AlienwareKBL")
+from Bindings import Bindings
 from utils import getuser
-from texts import TEXT_ERROR_DAEMON_OFF, TEXT_HELP, TEXT_LICENSE, TEXT_NON_LINUX_USER, TEXT_WRONG_ARGUMENT
+from texts import TEXT_ERROR_DAEMON_OFF, TEXT_HELP, TEXT_LICENSE, TEXT_WRONG_ARGUMENT
 from Configuration.Paths import Paths
 from Configuration.CCParser import CCParser
 
+
 AKBLConnection = Bindings()
 PATHS = Paths()
+
 
 def send_command(command, *args):
     if not os.path.exists(PATHS.SYSTEMCTL_PATH) or not AKBLConnection.ping():
@@ -38,54 +40,35 @@ def send_command(command, *args):
     else:
         AKBLConnection._command(command, *args)
 
-
 if __name__ == '__main__':
 
     total = len(sys.argv)
 
     if total >= 2:
-        arg = str(sys.argv[1])
+        arg1 = str(sys.argv[1])
 
-        if arg == '--help' or arg == '-h':
+        if arg1 == '--help' or arg1 == '-h':
             print(TEXT_HELP)
 
-        elif arg == '--license' or arg == '-l':
+        elif arg1 == '--license' or arg1 == '-l':
             print(TEXT_LICENSE)
 
-        elif arg in ('--set-boot-user', '--get-boot-user'):
-            ccp = CCParser(PATHS.GLOBAL_CONFIG, 'Global alienware-kbl Configuration')
-
-            if arg == '--set-boot-user':
-                if getuser() == 'root':
-
-                    boot_user = sys.argv[2]
-
-                    # Check if the user of the configuration file exists
-                    try:
-                        pwd.getpwnam(boot_user)
-                    except:
-                        print(TEXT_NON_LINUX_USER)
-                        exit()
-
-                    ccp.write('boot_user', boot_user)
-                else:
-                    print(TEXT_ONLY_ROOT)
-            else:
-                print(ccp.get_str_defval('boot_user', 'root'))
-
-        elif arg == '--daemon-is-on':
+        elif arg1 == '--daemon-is-on':
             print(AKBLConnection.ping())
 
-        elif arg in ('--off', '--on', '--change', '--set-profile') and not AKBLConnection.ping():
+        elif arg1 in ('--off', '--on', '--change', '--set-profile') and not AKBLConnection.ping():
             print(TEXT_ERROR_DAEMON_OFF)
 
-        elif arg == '--off':
+        elif arg1 == '--off':
             send_command('set_lights', False)
-        elif arg == '--on':
+        
+        elif arg1 == '--on':
             send_command('set_lights', True)
-        elif arg == '--change':
+        
+        elif arg1 == '--change':
             send_command('switch_lights')
-        elif arg == '--set-profile':
+            
+        elif arg1 == '--set-profile':
             send_command('set_profile', sys.argv[2])
         else:
             print(TEXT_WRONG_ARGUMENT)

@@ -57,14 +57,14 @@ Usage:
     --change                          Changes the computer lights on/off.
     --on                              Turns on the computer lights.
     --off                             Turns off the computer lights.
+    
     --set-profile <profile_name>      Turns on the selected profile.
-
-    --get-boot-user                   Get the user that is started by the daemon.
-    --set-boot-user <user_name>       Set the user that is started by the daemon.
-
+    
     --start-indicator                 Start the indicator.
+    
     --start-daemon                    Start the daemon.
-
+    --daemon-is-on                    Returns weather the daemon is running or not.
+    
     -h, -help                         Display this dialog.
     -l, --license                     Display the license.
 
@@ -121,9 +121,6 @@ TEXT_COMPUTER_DATA = '''
 '''
 
 TEXT_ONLY_ROOT = "This command can only be used by the root user."
-
-TEXT_NON_LINUX_USER = '''The user you wanted to add is not recognized by the system,
-it won't be added.'''
 
 TEXT_COMPUTER_NOT_FOUND = "Error: Computer Not Supported"
 

@@ -17,7 +17,10 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-from utils import print_warning, hex_to_rgb, normalize_rgb, middle_rgb_color
+import sys
+
+sys.path.insert(0, "/usr/share/AlienwareKBL")
+from utils import print_warning, hex_to_rgb, rgb_to_hex, middle_rgb_color
 
 class Zone:
 
@@ -41,7 +44,7 @@ class Zone:
         left_color={}
         right_color={}
         middle_color={}
-        '''.format(self._hex_id, self._mode, self._left_color, self._right_color, self._middle_color)
+        '''.format(self._hex_id, self._mode, rgb_to_hex(self._left_color), rgb_to_hex(self._right_color), rgb_to_hex(self._middle_color))
         
         return zone_description
 
@@ -62,13 +65,17 @@ class Zone:
 
     def set_color(self, color, side):
 
-        if isinstance(color, str):
+        if not isinstance(color, list):
             color = hex_to_rgb(color)
+            
+        if len(color) != 3:
+            print_warning("Wrong rgb={}, to side={} on hex_id={} and mode={}".format(color, side, self._hex_id, self._mode))
+            return
 
         if side == 'left':
-            self._left_color = color #normalize_rgb(color)
+            self._left_color = color
         elif side == 'right':
-            self._right_color = color #normalize_rgb(color)
+            self._right_color = color
         else:
             print_warning("wrong side=`{}`", side)
 

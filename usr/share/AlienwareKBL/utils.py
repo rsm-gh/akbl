@@ -16,23 +16,24 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+
 import os
 import pwd
 import inspect
-
-
-_DEBUG = True
+import re
 
 def getuser():
     return pwd.getpwuid(os.geteuid()).pw_name
 
-def rgb_to_hex(rgb, multiply=False):
+def string_is_hex_color(string):
     
-    if multiply:
-        rgb[0] = rgb[0] * 256
-        rgb[1] = rgb[1] * 256
-        rgb[2] = rgb[2] * 256
+    if isinstance(string, str) and re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', string):
+        return True
+        
+    return False
     
+
+def rgb_to_hex(rgb):
     return '#%02x%02x%02x' % (int(rgb[0]), int(rgb[1]), int(rgb[2]))
 
 def hex_to_rgb(hex_string):
@@ -49,22 +50,6 @@ def hex_to_rgb(hex_string):
                              for i in range(0, hex_lenght, hex_lenght // 3))
 
     return [red, green, blue]
-
-
-def normalize_rgb(rgb_color):
-    """
-        Check and convert if necessary the values of the RGB colors.
-        They must be <= 1.0
-    """
-
-    if all(value <= 1.0 for value in rgb_color):
-        return rgb_color
-
-    for index, value  in enumerate(rgb_color):
-        rgb_color[index] = value / 255.0
-
-    return rgb_color
-
 
 def middle_rgb_color(rgb_color1, rgb_color2):
     """
@@ -96,15 +81,14 @@ def print_warning(message):
 
 def print_debug(message=None):
 
-    if _DEBUG:
-        isp1=inspect.stack()[1]
-        module_name = _parse_module_name(inspect.getmodule(isp1[0]))
-        method_name = isp1[3]
-        
-        if message is None:
-            print('{}DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN, module_name, method_name, _RESET))
-        else:
-            print('{}DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN, module_name, method_name, _RESET, str(message).strip()))
+    isp1=inspect.stack()[1]
+    module_name = _parse_module_name(inspect.getmodule(isp1[0]))
+    method_name = isp1[3]
+    
+    if message is None:
+        print('{}DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN, module_name, method_name, _RESET))
+    else:
+        print('{}DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN, module_name, method_name, _RESET, str(message).strip()))
 
 
 def print_error(message):
@@ -122,6 +106,5 @@ if __name__ == '__main__':
         print_warning('this is a warning!')
         print_debug('this is a debug message!')
         print_error('this is an error!')
-
 
     test()

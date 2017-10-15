@@ -24,7 +24,7 @@ import getpass
 from traceback import format_exc
 
 # Local imports
-sys.path.insert(0, '/usr/share/AlienwareKBL')
+sys.path.insert(0, "/usr/share/AlienwareKBL")
 from utils import print_error
 from Configuration.Paths import Paths
 
@@ -177,7 +177,6 @@ if __name__ == '__main__':
     if not AKBLConnection.ping():
         print("The conection with the daemon is off")
     else:
-
         """
             Each command is called as:
 
@@ -234,8 +233,8 @@ if __name__ == '__main__':
 
         if colors_multiple_test:
             print("Multiple colors test")
-            colors1 = ['#FF0000','#FFFF00','#3F33FF'] # red, yellow, #blue
-            colors2 = ['#FF00E5','#0018FF','#3F33FF']
+            colors1 = ('#FF0000','#FFFF00','#3F33FF') # red, yellow, #blue
+            colors2 = ('#FF00E5','#0018FF','#3F33FF')
 
             print('\tset_colors multiple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
             time.sleep(10)

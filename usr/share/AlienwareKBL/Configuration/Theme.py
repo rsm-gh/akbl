@@ -22,11 +22,11 @@ from copy import copy
 from traceback import format_exc
 
 # Local imports
-from .Paths import Paths
-sys.path.append("/usr/share/AlienwareKBL")
+sys.path.insert(0, "/usr/share/AlienwareKBL")
+from Configuration.Paths import Paths
 from Engine.Area import Area
 from Engine.Zone import Zone
-from utils import print_warning, print_debug, rgb_to_hex
+from utils import print_warning, print_debug, rgb_to_hex, string_is_hex_color
 
 
 AVAILABLE_THEMES = {}
@@ -122,11 +122,9 @@ areas:
             
             area = Area()
             area.init_from_region(region)
-            
-            zone = Zone(mode=self._computer.DEFAULT_MODE, 
-                        left_color=self._computer.DEFAULT_COLOR, 
-                        right_color=self._computer.DEFAULT_COLOR)
-                                 
+
+            zone = Zone(mode=self._computer.DEFAULT_MODE, left_color=self._computer.DEFAULT_COLOR, right_color=self._computer.DEFAULT_COLOR)
+
             area.add_zone(zone)
             self.add_area(area)
 
@@ -155,8 +153,8 @@ areas:
                 f.write('area={0}\n'.format(area.name))
                 for zone in area.get_zones():
                     f.write('mode={0}\n'.format(zone.get_mode()))
-                    f.write('left_color={0}\n'.format(rgb_to_hex(zone.get_left_color(), True)))
-                    f.write('right_color={0}\n'.format(rgb_to_hex(zone.get_right_color(), True)))
+                    f.write('left_color={0}\n'.format(rgb_to_hex(zone.get_left_color())))
+                    f.write('right_color={0}\n'.format(rgb_to_hex(zone.get_right_color())))
                 f.write('\n')
 
         self.update_time()
@@ -222,13 +220,37 @@ areas:
                             mode = default_mode
 
                     elif var_name in ('color','color1','left_color'):  # `color` & `color1`are to give support to old themes
-                        left_color = var_arg
+                        
+                        if string_is_hex_color(var_arg):
+                            left_color = var_arg
+                        else:
+                            
+                            if area_found:
+                                area_name = area.name
+                            else:
+                                area_name = "?"
+                        
+                            print_warning("Wrong left hex_color={} for area={}, the default hex_color= will be used instead.".format(left_color, area_name, self._computer.DEFAULT_COLOR))
+                            left_color = self._computer.DEFAULT_COLOR
 
                     elif var_name in ('color2','right_color'):  # `color2` is to give support to old themes
-                        right_color = var_arg
+
+                        if string_is_hex_color(var_arg):
+                            right_color = var_arg
+                        else:
+ 
+                            if area_found:
+                                area_name = area.name
+                            else:
+                                area_name = "?"                           
+                            
+                            print_warning("Wrong left hex_color={} for area={}, the default hex_color={} will be used instead.".format(right_color, area_name, self._computer.DEFAULT_COLOR))
+                            right_color = self._computer.DEFAULT_COLOR
 
                     if area_found and left_color and right_color and mode:
+                        
                         #print_debug('adding Zone to Area, mode=`{}`, left_color=`{}`, right_color=`{}`'.format(mode, left_color, right_color))
+                        
                         zone=Zone(mode=mode, left_color=left_color, right_color=right_color)
                         area.add_zone(zone)
 
@@ -243,9 +265,7 @@ areas:
                 area = Area()
                 area.init_from_region(region)
 
-                zone = Zone(mode=self._computer.DEFAULT_MODE, 
-                            left_color=self._computer.DEFAULT_COLOR, 
-                            right_color=self._computer.DEFAULT_COLOR)
+                zone = Zone(mode=self._computer.DEFAULT_MODE, left_color=self._computer.DEFAULT_COLOR, right_color=self._computer.DEFAULT_COLOR)
                 area.add_zone(zone)
                 self.add_area(area)
                 print_warning("missing area.name=`{}` on theme=`{}`".format(area_name, self.name))
@@ -265,12 +285,11 @@ areas:
     def set_speed(self, speed):
 
         speed = int(speed)
-        if speed > 255:
-            self._speed = 255
-        elif speed <= 0:
-            self._speed = 256
+        
+        if speed > 255 or speed <= 0:
+            print_warning('Wrong speed={}, the speed must be >= 0 and < 256.'.format(speed))
         else:
-            print_warning('Wrong speed=`{}`'.format(speed))
+            self._speed = speed
 
 
     def modify_zone(self, zone, column, left_color, right_color, mode):

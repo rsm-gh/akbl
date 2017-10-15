@@ -20,7 +20,7 @@ import os
 import sys
 from shutil import rmtree
 
-sys.path.append("/usr/share/AlienwareKBL")
+sys.path.insert(0, "/usr/share/AlienwareKBL")
 from utils import getuser
 
 
@@ -49,8 +49,14 @@ class Paths:
 
         self.SMALL_ICON = self.IMAGES + 'icon.png'
         self.MEDIUM_ICON = self.IMAGES + 'icon-m.png'
-        self.NO_DAEMON_ICON = self.IMAGES + 'icon-m-no-daemon.png'
-        self.LIGHTS_OFF_ICON = self.IMAGES + 'icon-m-off.png'
+        
+        
+        "Indicator images"
+        
+        self.INDICATOR_IMAGES_DIR = '/usr/share/AlienwareKBL/ADDONS/Indicator/images/'
+        self.INDICATOR_ON_ICON = self.INDICATOR_IMAGES_DIR + 'icon-on.png'
+        self.INDICATOR_OFF_ICON = self.INDICATOR_IMAGES_DIR + 'icon-off.png'
+        self.INDICATOR_NO_DAEMON_ICON  = self.INDICATOR_IMAGES_DIR + 'icon-no-daemon.png'
 
         """
             This is to add support to older versions where the profiles and
@@ -71,9 +77,6 @@ class Paths:
             rmtree(self.CONFIGURATION_PATH)
         #
         #
-        for dir in (
-                os.path.dirname(
-                    self.CONFIGURATION_PATH),
-                self.PROFILES_PATH):
+        for dir in (os.path.dirname(self.CONFIGURATION_PATH), self.PROFILES_PATH):
             if not os.path.exists(dir):
                 os.makedirs(dir)

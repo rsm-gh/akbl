@@ -27,7 +27,7 @@ else
                 python3 /usr/share/AlienwareKBL/Daemon.py "$1"
             ;;
             --start-indicator)
-                setsid python3 /usr/share/AlienwareKBL/ADDONS/Indicator.py
+                setsid python3 /usr/share/AlienwareKBL/ADDONS/Indicator/Indicator.py
             ;;
             *)
                 python3 /usr/share/AlienwareKBL/ADDONS/DefaultArguments.py "$1"

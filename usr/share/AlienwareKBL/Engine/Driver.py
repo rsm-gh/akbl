@@ -25,7 +25,7 @@ import usb
 from traceback import format_exc
 
 # Local imports
-sys.path.append("/usr/share/AlienwareKBL")
+sys.path.insert(0, "/usr/share/AlienwareKBL")
 from Engine.Constructor import Constructor
 from Configuration.Computers import Computer, AVAILABLE_COMPUTERS, M14XR1, M14XR2
 from utils import print_debug, print_error
