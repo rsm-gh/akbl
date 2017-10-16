@@ -28,11 +28,10 @@ from time import time, sleep
 sys.path.insert(0, "/usr/share/AlienwareKBL")
 from texts import *
 from utils import getuser, print_warning, print_debug, print_error, string_is_hex_color
-from Engine.Controller import Controller
-from Engine.Driver import Driver
 from Configuration import Theme
 from Configuration.Paths import Paths
 from Configuration.CCParser import CCParser
+from Engine.Core.Controller import Controller
 
 class ConnectDaemon:
 
@@ -50,16 +49,16 @@ class ConnectDaemon:
 class Daemon:
 
     def __init__(self, loop_self):
-
-        driver = Driver()
-        if not driver.has_device():
-            print_warning("The computer is not supported")
+        
+        self._controller = Controller()
+        
+        computer = self._controller.get_computer()
+        
+        if computer is None:
             exit(1)
             
-        self._computer = driver.computer
-        self._controller = Controller(driver)
-        print_debug('Controller loaded: {}'.format(self._controller))
-
+        self._computer = computer
+        
         self.loop_self = loop_self
 
         # Get the user that the Daemon should use
@@ -99,6 +98,8 @@ class Daemon:
         # Iluminate the computer lights
         #
         
+        self._controller.erase_config()
+        
         for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
                             (True, self._computer.BLOCK_STANDBY),
                             (True, self._computer.BLOCK_AC_POWER),
@@ -106,18 +107,19 @@ class Daemon:
                             (True, self._computer.BLOCK_BAT_POWER),
                             (False, self._computer.BLOCK_LOAD_ON_BOOT)):
                 
-            self._controller.start_config(save=save, block=block)
-            self._controller.reset_all_lights(self._computer.RESET_ALL_LIGHTS_ON)
-            self._controller.set_speed(self._theme.get_speed())
+            self._controller.add_block_line(save=save, block=block)
+            self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)
+            self._controller.add_speed_line(self._theme.get_speed())
             
             for area in self._theme.get_areas():
                 for zone in area.get_zones():
-                    print(zone.get_left_color(), zone.get_right_color())
-                    self._controller.add_line(zone.get_hex_id(), zone.get_mode(), zone.get_left_color(), zone.get_right_color())
-                self._controller.end_line()
-            self._controller.end_config()
+                    self._controller.add_color_line(zone.get_hex_id(), zone.get_mode(), zone.get_left_color(), zone.get_right_color())
+                
+                self._controller.end_colors_line()
+                
+            self._controller.end_block_line()
             
-            self._controller.write()
+        self._controller.apply_config()
 
         # Update the Indicator
         #
@@ -206,14 +208,22 @@ class Daemon:
             keep_alive_zones = self._ccp.get_str_defval('zones_to_keep_alive', '')
 
             if keep_alive_zones == '':
-                self._controller.start_config(save=False, block=self._computer.get_power_block())
-                self._controller.reset_all_lights(self._computer.RESET_ALL_LIGHTS_OFF)
+                
+                self._controller.erase_config()
+                self._controller.add_block_line(save=True, block=self._computer.get_power_block())
+                self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_OFF)
+                self._controller.add_block_line(save=False, block=self._computer.get_power_block())
+                self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_OFF)
+                self._controller.apply_config()
             else:
                 keep_alive_zones = keep_alive_zones.split('|')
 
                 """
                     This hack, it will set black as color to all the lights that should be turned off.
                 """
+                
+                self._controller.erase_config()
+                
                 for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
                                     (True, self._computer.BLOCK_STANDBY),
                                     (True, self._computer.BLOCK_AC_POWER),
@@ -221,19 +231,21 @@ class Daemon:
                                     (True, self._computer.BLOCK_BAT_POWER),
                                     (False, self._computer.BLOCK_LOAD_ON_BOOT)):
                     
-                    self._controller.start_config(save, block)
-                    self._controller.add_speed_conf(1)
+                    self._controller.add_block_line(save, block)
+                    self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)
+                    self._controller.add_speed_line(1)
 
                     for key in sorted(self._theme.area.keys()):
                         if key not in keep_alive_zones:
                             area = self._theme.area[key]
                             for zone in area:
-                                self._controller.add_line(zone.get_hex_id(), 'fixed', '#000000', '#000000')
+                                self._controller.add_color_line(zone.get_hex_id(), 'fixed', '#000000', '#000000')
 
-                            self._controller.end_line()
+                            self._controller.end_colors_line()
 
-                    self._controller.end_config()
-                    self._controller.write()
+                    self._controller.end_block_line()
+                
+                self._controller.apply_config()
 
             self._lights_state = False
             self._indicator_send_code(150)
@@ -288,6 +300,9 @@ class Daemon:
                 if not string_is_hex_color(color):
                     print_warning("The colors argument must only contain hex colors. The color={} is not valid.".format(color))
                     return
+                    
+        
+        self._controller.erase_config()
 
         for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
                             (True, self._computer.BLOCK_STANDBY),
@@ -296,8 +311,9 @@ class Daemon:
                             (True, self._computer.BLOCK_BAT_POWER),
                             (False, self._computer.BLOCK_LOAD_ON_BOOT)):
 
-            self._controller.start_config(save, block)
-            self._controller.set_speed(speed)
+            self._controller.add_block_line(save, block)
+            self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)
+            self._controller.add_speed_line(speed)
 
             for region in self._computer.get_regions():
                 for i, (left_color, right_color) in enumerate(zip(left_colors, right_colors)):
@@ -308,25 +324,26 @@ class Daemon:
                     
                     if mode == 'blink':
                         if region.can_blink:
-                            self._controller.add_line(region.hex_id, 'blink', left_color, right_color)
+                            self._controller.add_color_line(region.hex_id, 'blink', left_color, right_color)
                         else:
-                            self._controller.add_line(region.hex_id, 'fixed', left_color)
+                            self._controller.add_color_line(region.hex_id, 'fixed', left_color)
                             print_warning("The mode=blink is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
                             
                     elif mode == 'morph':
                         if region.can_morph:
-                           self._controller.add_line(region.hex_id, 'morph', left_color, right_color)
+                           self._controller.add_color_line(region.hex_id, 'morph', left_color, right_color)
                         else:
-                            self._controller.add_line(region.hex_id, 'fixed', left_color)
+                            self._controller.add_color_line(region.hex_id, 'fixed', left_color)
                             print_warning("The mode=morph is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
                             
                     else:
-                        self._controller.add_line(region.hex_id, 'fixed', left_color)
+                        self._controller.add_color_line(region.hex_id, 'fixed', left_color)
                     
-                self._controller.end_line()
+                self._controller.end_colors_line()
 
-            self._controller.end_config()
-            self._controller.write()
+            self._controller.end_block_line()
+        
+        self._controller.apply_config()
         
         self._lights_state = True
 
@@ -340,7 +357,7 @@ class Daemon:
 
     @Pyro4.expose
     def get_computer_info(self):
-        return (self._computer.NAME, self._computer.VENDOR_ID, self._computer.PRODUCT_ID, str(self._controller._driver._device))
+        return (self._computer.NAME, self._computer.VENDOR_ID, self._computer.PRODUCT_ID, self._controller.get_device_information())
 
     @Pyro4.expose
     def modify_lights_state(self, bool):

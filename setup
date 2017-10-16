@@ -78,6 +78,9 @@ install -D $DIR/usr/share/AlienwareKBL/Configuration/* /usr/share/AlienwareKBL/C
 install -d /usr/share/AlienwareKBL/Engine
 install -D $DIR/usr/share/AlienwareKBL/Engine/* /usr/share/AlienwareKBL/Engine
 
+install -d /usr/share/AlienwareKBL/Engine/Core
+install -D $DIR/usr/share/AlienwareKBL/Engine/Core/* /usr/share/AlienwareKBL/Engine/Core
+
 # Addons
 
 install -d /usr/share/applications

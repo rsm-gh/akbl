@@ -26,9 +26,8 @@ from traceback import format_exc
 
 # Local imports
 sys.path.insert(0, "/usr/share/AlienwareKBL")
-from Engine.Constructor import Constructor
-from Configuration.Computers import Computer, AVAILABLE_COMPUTERS, M14XR1, M14XR2
 from utils import print_debug, print_error
+from Configuration.Computers import Computer, AVAILABLE_COMPUTERS, M14XR1, M14XR2
 
 class Driver():
 
@@ -46,6 +45,7 @@ class Driver():
 
         self.computer = None
         self._device = None
+        
         self._device_found = False
         
         self.find_device()
@@ -94,16 +94,16 @@ class Driver():
             print_debug('device loaded:\n{}'.format(device))
             self.computer = Computer()
 
-
     def write_constructor(self, constructor):
         
         print_debug('\n'.join(str(request) for request in constructor))
         
         for request in constructor:
             self._device.ctrl_transfer(self.SEND_REQUEST_TYPE, self.SEND_REQUEST, self.SEND_VALUE, self.SEND_INDEX, request.packet)
-            time.sleep(0.02)
+            time.sleep(0.01)
 
     def read_device(self, msg):
+        
         msg = self._device.ctrl_transfer(self.READ_REQUEST_TYPE, self.READ_REQUEST, self.READ_VALUE, self.READ_INDEX, len(msg[0].packet))
 
         print_debug("msg={}".format(msg))

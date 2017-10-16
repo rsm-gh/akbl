@@ -240,5 +240,5 @@ if __name__ == '__main__':
             time.sleep(10)
             print('\tset_colors multiple blink', AKBLConnection.set_colors('blink', 100, colors1))
             time.sleep(10)
-            print('set_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
+            print('\tset_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
             time.sleep(5)
