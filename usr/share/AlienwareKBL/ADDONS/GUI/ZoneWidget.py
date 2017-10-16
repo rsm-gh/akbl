@@ -335,15 +335,7 @@ class ZoneWidget(Gtk.Frame):
         self._commands_buttons_box.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
 
     def set_column(self, column):
-
         self._column = column
-
-        if self.zone:
-            if column % 2 == 0:
-                self.set_label(self.zone.description)
-            else:
-                self.set_label('')
-
         self._init_commands_box()
 
     def set_mode(self, mode):

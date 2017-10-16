@@ -59,6 +59,18 @@ class Daemon:
             
         self._computer = computer
         
+        
+        self._COMPUTER_SAVE_CONF = ((True, self._computer.BLOCK_LOAD_ON_BOOT),
+                                    (True, self._computer.BLOCK_STANDBY),
+                                    (True, self._computer.BLOCK_AC_POWER),
+                                    (True, self._computer.BLOCK_CHARGING),
+                                    (True, self._computer.BLOCK_BATT_SLEEPING),
+                                    (True, self._computer.BLOCK_BAT_POWER),
+                                    (True, self._computer.BLOCK_BATT_CRITICAL),
+                                    (False, self._computer.BLOCK_LOAD_ON_BOOT))
+        
+        
+        
         self.loop_self = loop_self
 
         # Get the user that the Daemon should use
@@ -86,8 +98,6 @@ class Daemon:
         self.reload_configurations(self._user)
         self._lights_state = False
         
-        #self.set_lights(self._user, self._ccp.get_bool_defval('boot', True))
-        #print_debug("Starting with the lights={} for the user={}".format(self._ccp.get_bool_defval('boot', True), self._user))
 
     def _iluminate_keyboard(self):
 
@@ -100,12 +110,7 @@ class Daemon:
         
         self._controller.erase_config()
         
-        for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
-                            (True, self._computer.BLOCK_STANDBY),
-                            (True, self._computer.BLOCK_AC_POWER),
-                            (True, self._computer.BLOCK_CHARGING),
-                            (True, self._computer.BLOCK_BAT_POWER),
-                            (False, self._computer.BLOCK_LOAD_ON_BOOT)):
+        for save, block in self._COMPUTER_SAVE_CONF:
                 
             self._controller.add_block_line(save=save, block=block)
             self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)
@@ -210,10 +215,11 @@ class Daemon:
             if keep_alive_zones == '':
                 
                 self._controller.erase_config()
-                self._controller.add_block_line(save=True, block=self._computer.get_power_block())
-                self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_OFF)
-                self._controller.add_block_line(save=False, block=self._computer.get_power_block())
-                self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_OFF)
+                
+                for save, block in self._COMPUTER_SAVE_CONF:
+                    self._controller.add_block_line(save, block)
+                    self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_OFF)
+                    
                 self._controller.apply_config()
             else:
                 keep_alive_zones = keep_alive_zones.split('|')
@@ -224,12 +230,7 @@ class Daemon:
                 
                 self._controller.erase_config()
                 
-                for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
-                                    (True, self._computer.BLOCK_STANDBY),
-                                    (True, self._computer.BLOCK_AC_POWER),
-                                    (True, self._computer.BLOCK_CHARGING),
-                                    (True, self._computer.BLOCK_BAT_POWER),
-                                    (False, self._computer.BLOCK_LOAD_ON_BOOT)):
+                for save, block in self._COMPUTER_SAVE_CONF:
                     
                     self._controller.add_block_line(save, block)
                     self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)
@@ -304,12 +305,7 @@ class Daemon:
         
         self._controller.erase_config()
 
-        for save, block in ((True, self._computer.BLOCK_LOAD_ON_BOOT),
-                            (True, self._computer.BLOCK_STANDBY),
-                            (True, self._computer.BLOCK_AC_POWER),
-                            (True, self._computer.BLOCK_CHARGING),
-                            (True, self._computer.BLOCK_BAT_POWER),
-                            (False, self._computer.BLOCK_LOAD_ON_BOOT)):
+        for save, block in self._COMPUTER_SAVE_CONF:
 
             self._controller.add_block_line(save, block)
             self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)

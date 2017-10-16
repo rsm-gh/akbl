@@ -98,7 +98,6 @@ class Computer:
         self.BLOCK_BAT_POWER = 8
         self.BLOCK_BATT_CRITICAL = 9
         
-        self._power_block = self.BLOCK_LOAD_ON_BOOT
 
     def __str__(self):
         

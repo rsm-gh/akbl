@@ -166,12 +166,12 @@ class GUI(Gtk.Window):
                 'button_new_profile_create',
                 'menuitem_off_zones',
                 'checkbutton_autosave',
-                'checkbutton_boot_off',
                 'checkbutton_profile_buttons',
                 'checkbutton_delete_warning',
                 'checkbutton_static_colorchooser',
                 'color_chooser_dialog',
                 'color_chooser_widget',
+                'box_area_labels',
                 'box_areas',
                 'entry_new_profile',
                 'liststore_profiles',
@@ -311,6 +311,9 @@ class GUI(Gtk.Window):
 
         # Empty the grid
         #
+        for area_label in self.box_area_labels.get_children():
+            self.box_area_labels.remove(area_label)
+        
         for box_area in self.box_areas.get_children():
             self.box_areas.remove(box_area)
 
@@ -318,6 +321,11 @@ class GUI(Gtk.Window):
         # Populate the `box_area`
         #
         for area in self.theme.get_areas():
+            
+            area_label = Gtk.Label()
+            area_label.set_text(area.description)
+            self.box_area_labels.pack_start(child=area_label, expand=False, fill=False, padding=5)
+            
             
             add_button_column = area.get_number_of_zones() - 1
             box_area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -552,9 +560,6 @@ class GUI(Gtk.Window):
     def on_checkbutton_autosave_activate(self, button, data=None):
         self.ccp.write('auto_save', self.checkbutton_autosave.get_active())
 
-    def on_checkbutton_boot_off_activate(self, button, data=None):
-        self.ccp.write('boot', self.checkbutton_boot_off.get_active())
-
     def on_checkbutton_profile_buttons_activate(self, button, data=None):
         if self.checkbutton_profile_buttons.get_active():
             self.box_profile_buttons.show()
@@ -576,8 +581,8 @@ class GUI(Gtk.Window):
         """
         
         new_zone = ZoneWidget(
-            left_color=self._driver.computer.default_color,
-            right_color=self._driver.computer.default_color,
+            left_color=self.computer.DEFAULT_COLOR,
+            right_color=self.computer.DEFAULT_COLOR,
             mode='fixed',
             column=column,
             colorchooser_dialog=self.color_chooser_dialog,
@@ -649,7 +654,7 @@ class GUI(Gtk.Window):
                 return
 
             shutil.copy(file_path, new_path)
-            Theme.LOAD_profile(self._driver.computer, new_path)
+            Theme.LOAD_profile(self.computer, new_path)
             self.POPULATE_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, widget=None, data=None):
