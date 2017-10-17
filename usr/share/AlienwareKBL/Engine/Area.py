@@ -79,7 +79,7 @@ class Area(Region):
     def remove_zone(self, column_index):
         zone = self._zones[column_index]
         self._zones.remove(zone)
-        self._current_zone_hex_id = self._default_zone_hex_id
+        self._current_zone_hex_id = self.hex_id
         for zone in self._zones:
             zone.set_hex_id(self._current_zone_hex_id)
             self._current_zone_hex_id += 1

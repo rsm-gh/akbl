@@ -292,20 +292,16 @@ areas:
             self._speed = speed
 
 
-    def modify_zone(self, zone, column, left_color, right_color, mode):
+    def modify_zone(self, area_name, column, left_color, right_color, mode):
 
-        zone = self._areas[zone.name]._zones[column]
+        zone = self._areas[area_name]._zones[column]
         zone.set_color(left_color, 'left')
         zone.set_color(right_color, 'right')
         zone.set_mode(mode)
 
-    def delete_zone(self, zone, column):
-        try:
-            area = self._areas[zone.name]
-            area.remove_zone(column)
-
-        except Exception as e:
-            print_warning('column `{}`\n{}'.format(column, format_exc()))
+    def delete_zone(self, area_name, column):
+        area = self._areas[area_name]
+        area.remove_zone(column)
 
     def update_time(self):
         if os.path.exists(self.path):

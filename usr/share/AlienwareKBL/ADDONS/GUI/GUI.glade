@@ -36,6 +36,11 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step_increment">1</property>
     <property name="page_increment">16</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment_verical_zone_scrolling">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -513,16 +518,9 @@ the following zones will stay on.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label_computername">
-                <property name="height_request">30</property>
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">center</property>
-                <property name="label" translatable="yes">label_computername</property>
-                <property name="ellipsize">middle</property>
-                <attributes>
-                  <attribute name="font-desc" value="Bitstream Charter Bold 14"/>
-                </attributes>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -619,6 +617,18 @@ the following zones will stay on.</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -713,12 +723,30 @@ the following zones will stay on.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkBox" id="box_area_labels">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
+                <property name="can_focus">True</property>
+                <property name="vadjustment">adjustment_verical_zone_scrolling</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkViewport">
+                    <property name="width_request">110</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                    <child>
+                      <object class="GtkBox" id="box_area_labels">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -728,9 +756,10 @@ the following zones will stay on.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow_configurator">
+              <object class="GtkScrolledWindow" id="scrolledwindow_zones">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="vadjustment">adjustment_verical_zone_scrolling</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkViewport" id="viewport1">
@@ -906,15 +935,16 @@ https://github.com/rsm-gh/alienware-kbl
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_root</property>
     <property name="program_name">Alienware-KBL</property>
-    <property name="copyright" translatable="yes">© 2011-2012 The pyAlienFX team
-© 2014-2017 Rafael Senties Martinelli &lt;rafael@senties-martinelli.com&gt;</property>
+    <property name="copyright" translatable="yes">© 2014-2017 Rafael Senties Martinelli &lt;rafael@senties-martinelli.com&gt;
+© 2011-2012 The pyAlienFX team
+</property>
     <property name="comments" translatable="yes">
 </property>
     <property name="website">https://github.com/rsm-gh/alienware-kbl</property>
     <property name="website_label" translatable="yes">Home</property>
     <property name="authors">
 Alienware-KBL:
-RSM &lt;rafael@senties-martinelli.com&gt;
+Rafael Senties Martinelli &lt;rafael@senties-martinelli.com&gt;
 
 PyALienFX:
 Ledjfou125 &lt;ledjfou125@gmail.com&gt;
@@ -939,9 +969,7 @@ And Special Thanks to:
 PyUSB http://sourceforge.net/apps/trac/pyusb/
 LibUSB http://www.libusb.org/ 
 </property>
-    <property name="artists">
-Amalia Angeli
-</property>
+    <property name="artists">Amalia Angeli</property>
     <property name="logo">images/icon-m.png</property>
     <property name="license_type">gpl-3-0</property>
     <child internal-child="vbox">

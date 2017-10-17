@@ -24,32 +24,7 @@ import sys
 # Local imports
 sys.path.insert(0, "/usr/share/AlienwareKBL")
 from texts import *
-
-class Region:
-
-    def __init__(self, name=None, description=None, hex_id=None, max_commands=0, can_blink=False, can_morph=False, can_light=False):
-
-        self.name = name
-        self.description = description
-        self.hex_id = hex_id
-        self.can_light = can_light
-        self.can_blink = can_blink
-        self.can_morph = can_morph
-        self.max_commands = max_commands
-
-    def __str__(self):
-        
-        region_description='''
-    name={}
-    description={}
-    hex_id={}
-    can_light={}
-    can_blink={}
-    can_morph={}
-    max_comands={}
-'''.format(self.name, self.description, self.hex_id, self.can_light, self.can_blink, self.can_morph, self.max_commands)
-        
-        return region_description
+from Configuration.Region import Region
 
 class Computer:
 

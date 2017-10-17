@@ -41,7 +41,7 @@ from Configuration.Paths import Paths
 
 from Engine import *
 from texts import *
-from utils import getuser, rgb_to_hex
+from utils import rgb_to_hex
 from ZoneWidget import ZoneWidget
 from Bindings import Bindings
 
@@ -161,7 +161,6 @@ class GUI(Gtk.Window):
 
         glade_object_names = (
             'window_root',
-                'label_computername',
                 'label_user_message',
                 'button_new_profile_create',
                 'menuitem_off_zones',
@@ -256,8 +255,6 @@ class GUI(Gtk.Window):
             Extra GUI initialization
         """
 
-        self.label_computername.set_label('{} - {}'.format(getuser(), self.computer.NAME))
-
         computer_data = AKBLConnection._command('get_computer_info')
 
         self.textbuffer_computer_data.set_text(TEXT_COMPUTER_DATA.format(*computer_data[0:5]))
@@ -287,7 +284,7 @@ class GUI(Gtk.Window):
         self.checkbutton_delete_warning.set_active(self.ccp.get_bool_defval('delete_warning', True))
         self.checkbutton_static_colorchooser.set_active(self.ccp.get_bool_defval('static_chooser', False))
 
-        self.populate_box_areas()
+        self.POPULATE_box_areas()
 
         self.window_root.show_all()
 
@@ -303,49 +300,54 @@ class GUI(Gtk.Window):
         #
         threading.Thread(target=self.THREAD_zones).start()
 
-    def get_zones_to_keep_alive(self):
+    def GET_zones_to_keep_alive(self):
         return [self.zones_and_descriptions_dict[checkbox.get_label()]
                 for checkbox in self.menu_turn_off_zones.get_children() if checkbox.get_active()]
 
-    def populate_box_areas(self):
-
-        # Empty the grid
-        #
+    def POPULATE_box_areas(self):
+        """
+            This will add all the Areas and Zones to the graphical interphase.
+        """
+        
+        # Empty the labels box
         for area_label in self.box_area_labels.get_children():
             self.box_area_labels.remove(area_label)
         
+        # Empty the grid
         for box_area in self.box_areas.get_children():
             self.box_areas.remove(box_area)
 
 
-        # Populate the `box_area`
+        # Populate the labels box and the grid
         #
         for area in self.theme.get_areas():
             
             area_label = Gtk.Label()
             area_label.set_text(area.description)
-            self.box_area_labels.pack_start(child=area_label, expand=False, fill=False, padding=5)
-            
+            area_label.set_xalign(0)
+            area_label.set_size_request(width=100, height=112.5)
+            self.box_area_labels.pack_start(child=area_label, expand=False, fill=False, padding=0)
+            self.box_area_labels.show_all()
             
             add_button_column = area.get_number_of_zones() - 1
             box_area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
             for column_index, zone in enumerate(area.get_zones()):
 
-                zone_widget = ZoneWidget(left_color=zone.get_left_color(),
+                zone_widget = ZoneWidget(area_name=area.name,
+                                         left_color=zone.get_left_color(),
                                          right_color=zone.get_right_color(),
                                          mode=zone.get_mode(),
                                          column=column_index,
                                          colorchooser_dialog=self.color_chooser_dialog,
-                                         colorchooser_widget=self.color_chooser_widget,
-                                         zone=area)
+                                         colorchooser_widget=self.color_chooser_widget)
 
                 box_area.pack_start(child=zone_widget, expand=False, fill=False, padding=5)
 
                 if column_index == add_button_column:
                     add_button = Gtk.Button(label=TEXT_ADD)
                     add_button.set_alignment(0.5, 0.5)
-                    add_button.connect('button-press-event', self.on_button_add_zone_clicked, zone, box_area, column_index + 1)
+                    add_button.connect('button-press-event', self.on_button_add_zone_clicked, area, box_area, column_index + 1)
                     box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
 
             self.box_areas.pack_start(child=box_area, expand=False, fill=False, padding=5)
@@ -400,10 +402,10 @@ class GUI(Gtk.Window):
 
     def THREAD_zones(self):
         """
-            This thread scans the grid zones in order to find color changes,
+            This thread scans the zones box in order to find color changes,
             mode changes or deletions.
         """
-        self.light_changes = False
+        self._light_changes = False
 
         while self.thread_zones:
             # Get the update of the zones and delete them if requested
@@ -411,66 +413,69 @@ class GUI(Gtk.Window):
             for box_area in self.box_areas.get_children():
                 deleted = False
 
-                for zone_widget in box_area.get_children():
+                for selected_widget in box_area.get_children():
 
-                    # Delete from the GUI
                     #
-                    if isinstance(zone_widget, ZoneWidget) and zone_widget.get_mode() == 'delete':
+                    # Delete the zone from the GUI
+                    #
+                    if isinstance(selected_widget, ZoneWidget) and selected_widget.get_mode() == 'delete':
 
-                        self.light_changes = True
+                        self._light_changes = True
                         deleted = True
+                        area = self.theme.get_area_by_name(selected_widget.get_area_name())
 
-                        #zone = zone_widget.zone
-                        column = zone_widget.get_column()
+                        column = selected_widget.get_column()
 
-                        self.theme.delete_zone(zone, column)
+                        self.theme.delete_zone(selected_widget.get_area_name(), column)
 
                         after = False
                         for widget in box_area.get_children():
-                            if widget == zone_widget:
+                            if widget == selected_widget:
                                 after = True
 
                             if after and isinstance(widget, ZoneWidget):
+                                
                                 Gdk.threads_enter()
-                                column = widget.get_column()
+                                column = widget.get_column() # putting it here avoids a segmentation fault problem.
                                 widget.set_column(column - 1)
                                 Gdk.threads_leave()
 
                         Gdk.threads_enter()
-                        box_area.remove(zone_widget)
+                        box_area.remove(selected_widget)
                         Gdk.threads_leave()
 
-                    elif deleted and self.light_changes and isinstance(zone_widget, Gtk.Button):
+                    elif deleted and self._light_changes and isinstance(selected_widget, Gtk.Button):
                         Gdk.threads_enter()
-                        box_area.remove(zone_widget)
+                        box_area.remove(selected_widget)
                         Gdk.threads_leave()
 
                         button = Gtk.Button(label=TEXT_ADD)
                         button.set_alignment(0.5, 0.5)
-                        button.connect('button-press-event', self.on_button_add_zone_clicked, zone, box_area, column)
+                        button.connect('button-press-event', self.on_button_add_zone_clicked, area, box_area, column)
                         box_area.pack_start(button, False, False, 5)
 
-                    elif isinstance(zone_widget, ZoneWidget) and zone_widget.color_updated:
-                        # Update the configuration
+                    elif isinstance(selected_widget, ZoneWidget) and selected_widget.color_updated:
                         #
-                        self.theme.modify_zone(
-                            zone_widget.zone,
-                            zone_widget.get_column(),
-                            rgb_to_hex(zone_widget.get_left_color()),
-                            rgb_to_hex(zone_widget.get_right_color()),
-                            zone_widget.get_mode())
+                        # Update the theme
+                        #
+                        self.theme.modify_zone(area_name=selected_widget.get_area_name(),
+                                               column=selected_widget.get_column(),
+                                               left_color=rgb_to_hex(selected_widget.get_left_color()),
+                                               right_color=rgb_to_hex(selected_widget.get_right_color()),
+                                               mode=selected_widget.get_mode())
 
-                        zone_widget.color_updated = False
-                        self.light_changes = True
+                        selected_widget.color_updated = False
+                        self._light_changes = True
 
-            if self.light_changes:
+            if self._light_changes:
                 Gdk.threads_enter()
                 self.box_areas.show_all()
                 Gdk.threads_leave()
 
                 if self.checkbutton_autosave.get_active():
                     threading.Thread(target=self.SAVE_configuration_file).start()
-                self.light_changes = False
+                
+                self._light_changes = False
 
             sleep(0.1)
 
@@ -552,7 +557,7 @@ class GUI(Gtk.Window):
             self.ccp.write('static_chooser', False)
 
     def on_checkbox_turnoff_zones_checked(self, checkbox, data=None):
-        self.ccp.write('zones_to_keep_alive', '|'.join(self.get_zones_to_keep_alive()))
+        self.ccp.write('zones_to_keep_alive', '|'.join(self.GET_zones_to_keep_alive()))
 
     def on_checkbutton_delete_warning_activate(self, button, data=None):
         self.ccp.write('delete_warning', self.checkbutton_delete_warning.get_active())
@@ -580,25 +585,31 @@ class GUI(Gtk.Window):
             This button is not in glade, it is dynamically generated.
         """
         
-        new_zone = ZoneWidget(
-            left_color=self.computer.DEFAULT_COLOR,
-            right_color=self.computer.DEFAULT_COLOR,
-            mode='fixed',
-            column=column,
-            colorchooser_dialog=self.color_chooser_dialog,
-            colorchooser_widget=self.color_chooser_widget)
+        new_zone = ZoneWidget(area_name=area.name,
+                              left_color=self.computer.DEFAULT_COLOR,
+                              right_color=self.computer.DEFAULT_COLOR,
+                              mode='fixed',
+                              column=column,
+                              colorchooser_dialog=self.color_chooser_dialog,
+                              colorchooser_widget=self.color_chooser_widget)
 
-        #area.add_zone()
-
+        #
+        # Update the configuration
+        #
+        area.add_zone(new_zone)
         area_box.remove(button)
 
+        #
+        # Update the GUI
+        #
         new_button = Gtk.Button(label=TEXT_ADD)
         new_button.connect('button-press-event', self.on_button_add_zone_clicked, area, area_box, column + 1)
 
         area_box.pack_start(child=new_zone, expand=False, fill=False, padding=5)
         area_box.pack_start(child=new_button, expand=False, fill=False, padding=5)
 
-        self.light_changes = True
+        self._light_changes = True
+
 
     def on_tempobutton_value_changed(self, widget, value):
         if value < 1:
@@ -619,7 +630,7 @@ class GUI(Gtk.Window):
             model = widget.get_model()
             profile_name = model[tree_iter][0]
             self.theme = Theme.AVAILABLE_THEMES[profile_name]
-            self.populate_box_areas()
+            self.POPULATE_box_areas()
 
     def on_button_new_profile_create_clicked(self, button, data=None):
         self.NEW_profile()
@@ -728,6 +739,9 @@ class GUI(Gtk.Window):
     def on_colorchooserwidget2_button_press_event(self, button, data=None):
         if self.color_chooser_widget.get_property('show-editor'):
             self.color_chooser_widget.set_property('show-editor', False)
+
+    def on_scrolledwindow_zones_scroll_event(self, scroll, steps, direction):
+        print(scrolltype, horizontal)
 
 if __name__ == '__main__':
 

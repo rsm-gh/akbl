@@ -117,7 +117,7 @@ class ZoneWidget(Gtk.Frame):
 
     __gtype_name__ = 'Zone'
 
-    def __init__(self, left_color, right_color, mode, column, colorchooser_dialog, colorchooser_widget, zone=False):
+    def __init__(self, area_name, left_color, right_color, mode, column, colorchooser_dialog, colorchooser_widget, hex_id=1):
 
         super().__init__()
 
@@ -127,6 +127,9 @@ class ZoneWidget(Gtk.Frame):
         self._right_color = []
         self._middle_color = []
         self._mode = ''
+        
+        self._hex_id = ''
+        self._area_name = ''
 
         self._heigth = 100
         self._width = 90
@@ -144,7 +147,7 @@ class ZoneWidget(Gtk.Frame):
         #
         self._color_chooser_dialog = colorchooser_dialog
         self._color_chooser_widget = colorchooser_widget
-        self.zone = zone
+        self.zone = None
 
         self.set_color(left_color, 'left')
         self.set_color(right_color, 'right')
@@ -179,10 +182,12 @@ class ZoneWidget(Gtk.Frame):
         self.add(box)
         self.show_all()
 
-        #
+        # Extra initialization
         #
         self.set_column(column)
         self.set_mode(mode)
+        self.set_area_name(area_name)
+        self.set_hex_id(hex_id)
 
     def _init_commands_box(self):
 
@@ -291,7 +296,7 @@ class ZoneWidget(Gtk.Frame):
 
     def _get_command_button_image(self, index):
 
-        if self._column == 0 or (self.zone and 'PB' in self.zone.name):
+        if self._column == 0 or self._area_name in ('PB','PBE'):
             return Gtk.Image.new_from_file('{}{}.png'.format(_IMAGES_PATH, _BUTTONS_IMAGE_PATTERN[index]))
 
         return Gtk.Image.new_from_file('{}{}.png'.format(_IMAGES_PATH, _BUTTONS_IMAGE_PATTERN_WITH_DELETE[index]))
@@ -334,6 +339,12 @@ class ZoneWidget(Gtk.Frame):
 
         self._commands_buttons_box.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
 
+    def set_hex_id(self, hex_id):
+        self._hex_id = hex_id
+
+    def set_area_name(self, area_name):
+        self._area_name = area_name
+
     def set_column(self, column):
         self._column = column
         self._init_commands_box()
@@ -352,6 +363,11 @@ class ZoneWidget(Gtk.Frame):
         else:
             print_warning('wrong mode={}'.format(mode))
 
+    def get_hex_id(self):
+        return self._hex_id
+
+    def get_area_name(self):
+        return self._area_name
 
     def get_column(self):
         return self._column
@@ -421,7 +437,8 @@ if __name__ == '__main__':
     # Add the Zone objects to be tested
     #
     for row_index in range(2):
-        FIXED_ZONE = ZoneWidget(left_color='#020202',
+        FIXED_ZONE = ZoneWidget(area_name='PB',
+                                left_color='#020202',
                                 right_color=[255, 34, 122],
                                 mode='fixed',
                                 column=0,
@@ -430,7 +447,8 @@ if __name__ == '__main__':
 
         GRID.attach(child=FIXED_ZONE, left=0, top=row_index, width=1, height=1)
 
-    BLINK_ZONE = ZoneWidget(left_color=[122, 255, 22],
+    BLINK_ZONE = ZoneWidget(area_name='',
+                            left_color=[122, 255, 22],
                             right_color=[255, 34, 122],
                             mode='blink',
                             column=1,
@@ -439,7 +457,8 @@ if __name__ == '__main__':
 
     GRID.add(BLINK_ZONE)
 
-    MORPH_ZONE = ZoneWidget(left_color=[122, 255, 22],
+    MORPH_ZONE = ZoneWidget(area_name='',
+                            left_color=[122, 255, 22],
                             right_color=[255, 34, 122],
                             mode='morph',
                             column=2,

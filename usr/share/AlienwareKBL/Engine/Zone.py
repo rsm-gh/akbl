@@ -24,7 +24,7 @@ from utils import print_warning, hex_to_rgb, rgb_to_hex, middle_rgb_color
 
 class Zone:
 
-    def __init__(self, left_color, right_color, mode, hex_id=0x01):
+    def __init__(self, left_color, right_color, mode, hex_id=1):
 
         self._mode = ''
         self._left_color = []
