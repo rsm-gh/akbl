@@ -182,9 +182,7 @@ If you want to help the best you can do is submit bugs, <a href="https://github.
 
 ## Does it only works on GNU/Linux?
 
-Yep, I only support [Libre Software](https://en.wikipedia.org/wiki/Free_software) and that includes developing only for free operating systems. 
-
-Concerning my support, I currently use [ArchLinux](https://www.archlinux.org/) and while I'm not a fan of Ubuntu & derivatives, I try to give them support many people use them.
+Yep, I only support [Libre Software](https://en.wikipedia.org/wiki/Free_software) and that includes developing only for free operating systems. Concerning my support, I currently use [ArchLinux](https://www.archlinux.org/) and while I'm not a fan of Ubuntu & its derivatives I try to give them support because many people use them.
 
 ## My computer is not supported! What can I do?
 
