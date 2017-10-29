@@ -105,7 +105,7 @@ Usage:
 * [Is the software under development? How can I help?](https://github.com/rsm-gh/alienware-kbl#is-the-software-under-development-how-can-i-help)
 * [Does it only works on GNU/Linux?](https://github.com/rsm-gh/alienware-kbl#does-it-only-works-on-gnulinux)
 * [**My computer is not supported! What can I do?**](https://github.com/rsm-gh/alienware-kbl#my-computer-is-not-supported-what-can-i-do)
-* [How to use the block testing window?](https://github.com/rsm-gh/alienware-kbl/https://github.com/rsm-gh/alienware-kbl#how-to-use-the-block-testing-window-)          
+* [How to use the block testing window?](https://github.com/rsm-gh/alienware-kbl#how-to-use-the-block-testing-window-)          
 * [When I click the application icon nothing happens](https://github.com/rsm-gh/alienware-kbl#when-i-click-the-application-icon-nothing-happens)
 * [After making changes to a theme the changes are not applied](https://github.com/rsm-gh/alienware-kbl#after-making-changes-to-a-theme-the-changes-are-not-applied)
 * [The indicator, python bindings, commands and boot options don't work?](https://github.com/rsm-gh/alienware-kbl#the-indicator-python-bindings-commands-and-boot-options-dont-work)
