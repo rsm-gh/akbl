@@ -46,7 +46,7 @@ Usage:
 * **Python Bindings**
 
 The python bindings allow to easily change the computer lights by using other programs signals (Email, Weather, CPU Temperature, etc..). 
-For concrete examples of the bindings take a look to the [examples](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Binding-Examples).
+For concrete examples take a look to the [examples](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Binding-Examples).
 
 ```python
 class AlienwareKBL():
@@ -108,7 +108,7 @@ class AlienwareKBL():
 	    """
 ```	
 	
-## Installation instructions
+## Installation
 
 1. Download the [stable branch](https://github.com/rsm-gh/alienware-kbl/archive/stable.zip)
 2. Install the dependencies:
@@ -164,25 +164,18 @@ class AlienwareKBL():
 
 ## F.A.Q.
 
-* [Is the software under development? How can I help?](https://github.com/rsm-gh/alienware-kbl#is-the-software-under-development-how-can-i-help)
 * [Does it only works on GNU/Linux?](https://github.com/rsm-gh/alienware-kbl#does-it-only-works-on-gnulinux)
 * [**My computer is not supported! What can I do?**](https://github.com/rsm-gh/alienware-kbl#my-computer-is-not-supported-what-can-i-do)
 * [How to use the block testing window?](https://github.com/rsm-gh/alienware-kbl#how-to-use-the-block-testing-window-)          
-* [When I click the application icon nothing happens](https://github.com/rsm-gh/alienware-kbl#when-i-click-the-application-icon-nothing-happens)
-* [After making changes to a theme the changes are not applied](https://github.com/rsm-gh/alienware-kbl#after-making-changes-to-a-theme-the-changes-are-not-applied)
+* [After making changes to a theme their are not applied](https://github.com/rsm-gh/alienware-kbl#after-making-changes-to-a-theme-their-are-not-applied)
 * [The indicator, python bindings, commands and boot options don't work?](https://github.com/rsm-gh/alienware-kbl#the-indicator-python-bindings-commands-and-boot-options-dont-work)
 * [What's the function of the tempo button / clock icon / right-top corner button?](https://github.com/rsm-gh/alienware-kbl#whats-the-function-of-the-tempo-button--clock-icon--right-top-corner-button)
 * [When upgrading, the system try indicator indicates that the daemon is off](https://github.com/rsm-gh/alienware-kbl#when-upgrading-the-system-try-indicator-indicates-that-the-daemon-is-off)
 
-## Is the software under development? How can I help?
-
-I still maintaining the software but in reality it only changes when people submit bugs or request features. Except for one or two features that I would like to have, I consider that it is almost finished.
-
-If you want to help the best you can do is submit bugs, <a href="https://github.com/rsm-gh/alienware-kbl/wiki">code</a> or help me to add support for new computers!
-
 ## Does it only works on GNU/Linux?
 
-Yep, I only support [Libre Software](https://en.wikipedia.org/wiki/Free_software) and that includes developing only for free operating systems. Concerning my support, I currently use [ArchLinux](https://www.archlinux.org/) and while I'm not a fan of Ubuntu & its derivatives I try to give them support because many people use them.
+Yep, I only support [Libre Software](https://en.wikipedia.org/wiki/Free_software) and that includes developing only for free operating systems. 
+Concerning my support, I currently use [ArchLinux](https://www.archlinux.org/) and while I'm not a fan of Ubuntu and its derivatives I try to give them support because many people use them.
 
 ## My computer is not supported! What can I do?
 
@@ -212,7 +205,7 @@ Notes:
 
 ## How to use the block testing window ?
 
-**The block testing window does not exist anymore. Since October 29 2017 it went removed from the sable branch**
+**The block testing window does not exist anymore. Since October 29 2017 it went removed from the stable branch, I'll re-add it with the time.**
 
 1. Launch `alienware-kbl` as root.
 2. Open the window `Help > Block Testing`
@@ -238,12 +231,8 @@ Here is an example of the log:
 [Command]: Lights off
 [TEST]: block: 256	 hex: 0x100	 mode:blink	 speed:1	 color1:#00ff00	 color2: #00ff00 
 ```    
-            
-## When I click the application icon nothing happens
 
-It seems that some distributions have problems to launch the program with `gksu`. The simpler way of checking this to launch `alienware-kbl` as root. In any cases, if you have this problem I'll appreciate that you make a bug report!
-
-## After making changes to a theme the changes are not applied
+## After making changes to a theme their are not applied
 
 The software offers the possibility of using the graphical interface without root permission. When doing this, the themes need to be saved before applying them, if not the changes will not be visible.
 
