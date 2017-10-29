@@ -1,38 +1,138 @@
+**Index:**
 
-# How to develop alienware-kbl?
+* [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
+* [Installation instructions](https://github.com/rsm-gh/alienware-kbl#how-to-install)
+* [Supported computers](https://github.com/rsm-gh/alienware-kbl#supported-computers)
+* [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
+* [License](https://github.com/rsm-gh/alienware-kbl#license)
+* [Credits](https://github.com/rsm-gh/alienware-kbl#credits)
 
-1. Install the dependencies:
-  * Debian based distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
-  Note: `python3-pyro4` shall be `>= 4.47`, this is why it must be installed trought `python-pip`.
-  
-  * ArchLinux: `pacman -S systemd gksu gtk3 libappindicator-gtk3 python python-cairo python-gobject python-pyusb python-pyro python-pip` and also use `pip install serpent`.
 
-2. Download the branch.
+## Introduction
 
-3. Open two terminals, one as root and one as normal user.
+Alienware-KBL is a software to control the lights of alienware computers under GNU/Linux systems. These are its main features:
 
-4. Under the root terminal:
-    1. Change the working directory to the one of the project: `cd alienware-kbl`.
+* **A graphical interface**:  
+![gui](https://cloud.githubusercontent.com/assets/11134652/24292992/f16cd1f6-108f-11e7-9257-650b34197d84.png)
+
+* **A system-try indicator**:  
+![indicator](https://cloud.githubusercontent.com/assets/11134652/24293017/0c107260-1090-11e7-8c57-ef52c8f9854a.png)
+
+* [Python Bindings](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Bindings)
+
+* **Default commands**
+```
+Usage:
+
+    alienware-kbl <option>
+
+ Options:
+        
+    --change                          Changes the computer lights on/off.
+    --on                              Turns on the computer lights.
+    --off                             Turns off the computer lights.
+    --set-profile <profile_name>      Turns on the selected profile.
     
-Then everytime that you want to test your implementations use the following command: `reset && ./setup && systemd stop alienware-kbl && alienware-kbl --start-daemon`.
+    --get-boot-user                   Get the user that is started by the daemon.
+    --set-boot-user <user_name>       Set the user that is started by the daemon.
+    
+    --start-indicator                 Start the indicator.
+    
+    -h, -help                         Display this dialog.
+    -l, --license                     Display the license.
+    
+ *If no option is introduced the graphical interface is launched.
+```
+	
+## Installation instructions
 
-If you made implementations to the Daemon you will be then able to see them if you execute them under `__init__`, and if that's not the case, well, use the addon that you want to test and you will see the debug messsages either in the Daemon terminal or in the addon terminal.
+1. Download the [stable branch](https://github.com/rsm-gh/alienware-kbl/archive/stable.zip)
+2. Install the dependencies:
+ * Debian Based Distributions: `apt-get install systemd gksu libgtk-3-0 libgtk-3-dev gir1.2-appindicator3-0.1 gir1.2-appindicator3 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pip` and also use `pip3 install pyro`
+ 
+    Note: `python3-pyro4` shall be `>= 4.47`, this is why it must be installed trought `python-pip`. 
+ 
+ * ArchLinux: `pacman -S systemd gksu gtk3 libappindicator-gtk3 python python-cairo python-gobject python-pyusb python-pyro python-pip` and also use `pip install serpent`.
+ 
+3. Execute the setup file
 
-  **Bonnus:** reasons and explanation of the previous commands:
-  
-  `reset` is used to clear the terminal.
-  
-  `./setup` is used to install the software. This is necessary for the develop part because:
-   + The daemon must be launched as root.
-   + Some paths point to `/usr/share/`.
-   + The daemon must be launched from the ` alienware-kbl ` bash script since it is necessary to use the USB patch.
-  
-  `systemd stop alienware-kbl && alienware-kbl --start-daemon` is used to load the daemon in the current terminal. `systemd stop alienware-kbl` stops the daemon started by the installation  and `alienware-kbl --start-daemon` starts the daemon in the current terminal. 
-  
-  *It is not advisable to run multiple daemon instances because the pyro communication system will probably fail or choose only one daemon to speak.*
+## Supported computers
 
-# Development documentation
+***If your configuration is missing look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.#my-computer-is-not-supported-what-can-i-do).**  
+*The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.  
 
-## General architecture
+|Computer       |Status / Comment|
+|---------------|----------------|
+|Area 51-R1     |Eveything works good     |
+|Area 51-R2     |Eveything works good     |
+|Area 51-ALX-R1 |Configuration missing    |
+|Aurora-R1      |Configuration missing    |
+|Aurora-R2      |Configuration missing    |
+|Aurora-R3      |Configuration missing    |
+|Aurora-R4      |Configuration missing    |
+|Aurora ALX-R1  |Configuration missing    |
+|M11X-R1        |Eveything should work good      |
+|M11X-R2        |Eveything works good            |
+|M11X-R3        |Eveything works good            |
+|M11X-R25       |Eveything works good            |
+|M13X           |Configuration missing           |
+|M14X-R1        |Eveything works good            |
+|M14X-R2        |Eveything works good            |
+|M14X-R3        |Eveything should work good      |
+|M15X-R1        |Eveything should work good      |
+|M15X-R2        |Eveything should work good      |
+|Alienware 13   |Eveything works good            |
+|Alienware 13-R2|Configuration missing           |
+|Alienware 13-R3|It works, but with some problems|
+|Alienware 15   |Eveything works good            |
+|Alienware 15-R2|Configuration missing           |
+|Alienware 15-R3|It works, but with some problems|
+|M17X           |Eveything works good            |
+|M17X-R1        |Configuration missing           |
+|M17X-R2        |Configuration missing           |
+|M17X-R3        |Eveything works good            |
+|M17X-R4        |Configuration missing           |
+|M17X-R5        |Configuration missing           |
+|M18X-R1        |Configuration missing           |
+|M18X-R2        |Eveything works good            |
+|M18X-R3        |Configuration missing           |
+|M18X-RX        |It works, but with some problems. It may be an R1 or R2|
 
-![General Diagram](https://github.com/rsm-gh/alienware-kbl/blob/new-version/usr/share/doc/AlienwareKBL/Programming/general%20diagram.png)
+## [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.)
+
+Please look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl/wiki/F.A.Q.) before asking questions and submiting bugs !
+
+## License
+
+The code is licensed [GPL3](./usr/share/doc/alienware-kbl/GPL3) and the artwork [CC-BY-4.0](./usr/share/doc/alienware-kbl/CC-BY-4.0). 
+
+## Credits
+
+The software has been developed with the contributions of many GNU/Linux users and hackers, it does not belong to any corporation and it shouldn't be confused with a formal projet !
+
+**Alienware-KBL**
+
+* Rafael Senties Martinelli
+* Amalia Angeli (ArtWork)
+
+**PyALienFX**
+
+* Ledjfou125
+* LightHash
+* Corp
+* Niai
+
+**AlienFX Lite**
+
+* Wattos
+
+Beside the main code of the software, some users have contributed to make the software support the configuration of their computer, these are some of the names:
+
+* Alienware 13 by Francesco Rosa
+* M11XR1 by aehs29
+* M11XR2 by iferlive
+* M14XR1 by LightHash
+* M14XR3 by nshp
+* Alienware 15 by trollsid
+* M17XR3 by Niai
+* M18XR2 by SuperTool
