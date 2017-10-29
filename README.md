@@ -3,7 +3,7 @@
 * [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
 * [Installation instructions](https://github.com/rsm-gh/alienware-kbl#how-to-install)
 * [Supported computers](https://github.com/rsm-gh/alienware-kbl#supported-computers)
-* [F.A.Q.](https://github.com/rsm-gh/alienware-kbl)
+* [F.A.Q.](https://github.com/rsm-gh/alienware-kbl#faq)
 * [License](https://github.com/rsm-gh/alienware-kbl#license)
 * [Credits](https://github.com/rsm-gh/alienware-kbl#credits)
 
@@ -60,7 +60,7 @@ Usage:
 
 ## Supported computers
 
-***If your configuration is missing look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl#) for the [support procedure](https://github.com/rsm-gh/alienware-kbl#my-computer-is-not-supported-what-can-i-do).**  
+***If your configuration is missing look at the [F.A.Q.](https://github.com/rsm-gh/alienware-kbl#faq) for the [support procedure](https://github.com/rsm-gh/alienware-kbl#my-computer-is-not-supported-what-can-i-do).**  
 *The names & versions are taken from [this](https://en.wikipedia.org/wiki/Alienware) page of wikipedia.  
 
 |Computer       |Status / Comment|
@@ -102,22 +102,21 @@ Usage:
 
 ## F.A.Q.
 
-Content:
 * [Is the software under development? How can I help?](https://github.com/rsm-gh/alienware-kbl#is-the-software-under-development-how-can-i-help)
-* [Does it only works on GNU/Linux?](https://github.com/rsm-gh/alienware-kbl/https://github.com/rsm-gh/alienware-kbl#does-it-only-works-on-gnulinux)
+* [Does it only works on GNU/Linux?](https://github.com/rsm-gh/alienware-kbl#does-it-only-works-on-gnulinux)
 * [**My computer is not supported! What can I do?**](https://github.com/rsm-gh/alienware-kbl#my-computer-is-not-supported-what-can-i-do)
 * [How to use the block testing window?](https://github.com/rsm-gh/alienware-kbl/https://github.com/rsm-gh/alienware-kbl#how-to-use-the-block-testing-window-)          
 * [When I click the application icon nothing happens](https://github.com/rsm-gh/alienware-kbl#when-i-click-the-application-icon-nothing-happens)
 * [After making changes to a theme the changes are not applied](https://github.com/rsm-gh/alienware-kbl#after-making-changes-to-a-theme-the-changes-are-not-applied)
 * [The indicator, python bindings, commands and boot options don't work?](https://github.com/rsm-gh/alienware-kbl#the-indicator-python-bindings-commands-and-boot-options-dont-work)
 * [What's the function of the tempo button / clock icon / right-top corner button?](https://github.com/rsm-gh/alienware-kbl#whats-the-function-of-the-tempo-button--clock-icon--right-top-corner-button)
-* [When upgrading, the system try indicator indicates that the daemon is off](https://github.com/rsm-gh/alienware-kbl/https://github.com/rsm-gh/alienware-kblwhen-upgrading-the-system-try-indicator-indicates-that-the-daemon-is-off)
+* [When upgrading, the system try indicator indicates that the daemon is off](https://github.com/rsm-gh/alienware-kbl#when-upgrading-the-system-try-indicator-indicates-that-the-daemon-is-off)
 
 ## Is the software under development? How can I help?
 
 I still maintaining the software but in reality it only changes when people submit bugs or request features. Except for one or two features that I would like to have, I consider that it is almost finished.
 
-If you want to help the best you can do is submit bugs, code or help me to add support for new computers!
+If you want to help the best you can do is submit bugs, <a href="https://github.com/rsm-gh/alienware-kbl/wiki">code</a> or help me to add support for new computers!
 
 ## Does it only works on GNU/Linux?
 
