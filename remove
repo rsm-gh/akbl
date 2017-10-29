@@ -27,10 +27,19 @@ cd $DIR
 ./prerm
 
 echo "Removing files and directories.."
+# Remove the new version of Alienware-KBL
+#
 
-if [ -f /usr/lib/systemd/system/alienware-kbl.service ]; then
-	rm -rf /usr/lib/systemd/system/alienware-kbl.service
+if [ -d /usr/share/alienware-kbl ]; then
+	rm -rf /usr/share/AlienwareKBL
 fi
+
+if [ -d /usr/share/doc/alienware-kbl ]; then
+	rm -rf /usr/share/doc/AlienwareKBL
+fi
+
+# Remove the old version of Alienware-KBL
+#
 
 if [ -d /usr/share/alienware-kbl ]; then
 	rm -rf /usr/share/alienware-kbl
@@ -38,6 +47,13 @@ fi
 
 if [ -d /usr/share/doc/alienware-kbl ]; then
 	rm -rf /usr/share/doc/alienware-kbl
+fi
+
+# Remove common files of both versions
+#
+
+if [ -f /usr/lib/systemd/system/alienware-kbl.service ]; then
+	rm -rf /usr/lib/systemd/system/alienware-kbl.service
 fi
 
 if [ -f /usr/share/applications/alienware-kbl.desktop ]; then

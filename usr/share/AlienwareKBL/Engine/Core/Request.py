@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/usr/bin/python3
+#
 
-#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C)  2014-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#                 2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -16,18 +18,21 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-if [ -f /bin/systemctl ]; then
-	echo "Disabling the systemd daemon..."
-    systemctl stop alienware-kbl
-    systemctl disable alienware-kbl
-fi
+import sys
 
-echo "Removing the links to the python bindings..."
+# Local imports
+sys.path.insert(0, "/usr/share/AlienwareKBL")
+from utils import print_debug
 
-python_versions=("python3" "python3.4" "python3.5" "python3.6")
+class Request:
 
-for python_version in "${python_versions[@]}"; do
-    if [ -f /usr/lib/$python_version/AKBL.py ]; then
-        rm -f /usr/lib/$python_version/AKBL.py
-    fi 
-done
+    def __init__(self, legend, packet):
+
+        self.legend = legend
+        self.packet = packet  #[int(item) for item in packet]
+
+    def __str__(self):
+        
+        formatted_package = "packet=["+'|'.join(str(item).rjust(3) for item in self.packet)+"]"
+        
+        return formatted_package+"\t legend={}".format(self.legend)

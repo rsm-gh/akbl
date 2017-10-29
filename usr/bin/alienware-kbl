@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2016  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,34 +15,25 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-# Id really like to do this file with python but the LD_PRELOAD export is preventing me..
-
-
 ## This is the libusb patch. Some distributions like Debian wheezy does not need it. 
-export LD_PRELOAD=/usr/share/alienware-kbl/libusb-1.0.so.0
-
+export LD_PRELOAD=/usr/share/AlienwareKBL/libusb-1.0.so.0
 
 if [ -z "$1" ]; then
-    daemon_state=$(python3 /usr/share/alienware-kbl/DefaultArguments.py --daemon-is-on)
-    if [ "$daemon_state" == True ]; then
-        python3 /usr/share/alienware-kbl/GUI.py
-    else
-        gksu python3 /usr/share/alienware-kbl/GUI.py
-    fi
+    python3 /usr/share/AlienwareKBL/ADDONS/GUI/GUI.py
 else
     if [ -z "$2" ]; then
-        case "$1" in	
+        case "$1" in
             --start-daemon)
-                python3 /usr/share/alienware-kbl/Daemon.py "$1"
+                python3 /usr/share/AlienwareKBL/Daemon.py "$1"
             ;;
             --start-indicator)
-                setsid python3 /usr/share/alienware-kbl/Indicator.py
+                setsid python3 /usr/share/AlienwareKBL/ADDONS/Indicator/Indicator.py
             ;;
             *)
-                python3 /usr/share/alienware-kbl/DefaultArguments.py "$1"
+                python3 /usr/share/AlienwareKBL/ADDONS/DefaultArguments.py "$1"
             ;;
         esac
     else
-        python3 /usr/share/alienware-kbl/DefaultArguments.py "$1" "$2"
+        python3 /usr/share/AlienwareKBL/ADDONS/DefaultArguments.py "$1" "$2"
     fi
 fi
