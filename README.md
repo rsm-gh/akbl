@@ -1,4 +1,3 @@
-**Index:**
 
 * [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)
 * [Installation instructions](https://github.com/rsm-gh/alienware-kbl#how-to-install)
@@ -17,8 +16,6 @@ Alienware-KBL is a software to control the lights of alienware computers under G
 
 * **A system-try indicator**:  
 ![indicator](https://cloud.githubusercontent.com/assets/11134652/24293017/0c107260-1090-11e7-8c57-ef52c8f9854a.png)
-
-* [Python Bindings](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Bindings)
 
 * **Default commands**
 ```
@@ -45,6 +42,71 @@ Usage:
  *If no option is introduced the graphical interface is launched.
 
 ```
+	
+* **Python Bindings**
+
+The python bindings allow to easily change the computer lights by using other programs signals (Email, Weather, CPU Temperature, etc..). 
+For concrete examples of the bindings take a look to the [examples](https://github.com/rsm-gh/alienware-kbl/wiki/Python-Binding-Examples).
+
+```python
+class AlienwareKBL():
+		
+	def reload_address(self):
+	    """
+	        Try to make a connection with the Daemon.
+	        Returns True or False
+	    """
+	
+	def ping(self):
+	    """
+	        Check if the Daemon is connected.
+	        Returns True or False
+	    """ 
+	
+	def get_address(self):
+	    """
+	        Return the current URI of the Daemon.
+	    """
+	
+	def get_profile_names(self):
+	    """
+	        Return a list of the existing profile names.
+	    """
+	    
+	def set_profile(self, profile):
+	    """
+	        Set a profile from the existing profiles.
+	        
+	        + 'profile' is the profile name
+	    """
+	    
+	def switch_lights(self):
+	    """
+	        If the lights are on, put them off
+	        or if the lights are off put them on
+	    """
+	
+	def set_lights(self, state):
+	    """
+	        Turn the lights on or off.
+	        
+	        + 'state' can be a Boolean or a string
+	    """
+	    
+	def set_colors(self, mode, speed, colors1, colors2=None):
+	    """
+	        Change the colors and the mode of the keyboard.
+	        
+	        + The available modes are: 'fixed', 'morph', 'blink'
+	            'fixed' and 'blink' only takes `colors1`
+	            
+	        + Speed must be an integer: 1 =< speed =< 256
+	        
+	        + colors1 and colors2 can be a single hex color or a list.
+	          If both arguments are used, both arguments must have
+	          the same number of items.
+	    """
+```	
 	
 ## Installation instructions
 
