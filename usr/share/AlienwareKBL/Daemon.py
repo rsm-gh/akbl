@@ -61,14 +61,16 @@ class Daemon:
         
         
         self._COMPUTER_SAVE_CONF = ((True, self._computer.BLOCK_LOAD_ON_BOOT),
-                                    (True, self._computer.BLOCK_STANDBY),
-                                    (True, self._computer.BLOCK_AC_POWER),
-                                    (True, self._computer.BLOCK_CHARGING),
-                                    (True, self._computer.BLOCK_BATT_SLEEPING),
-                                    (True, self._computer.BLOCK_BAT_POWER),
-                                    (True, self._computer.BLOCK_BATT_CRITICAL),
+                                    #(True, self._computer.BLOCK_STANDBY),
+                                    #(True, self._computer.BLOCK_AC_POWER),
+                                    #(#True, self._computer.BLOCK_CHARGING),
+                                    #(True, self._computer.BLOCK_BATT_SLEEPING),
+                                    #(True, self._computer.BLOCK_BAT_POWER),
+                                    #(True, self._computer.BLOCK_BATT_CRITICAL),
                                     (False, self._computer.BLOCK_LOAD_ON_BOOT))
         
+        #self._COMPUTER_SAVE_CONF = ((True, self._computer.BLOCK_AC_POWER),
+                                    #(False, self._computer.BLOCK_AC_POWER))
         
         
         self.loop_self = loop_self
