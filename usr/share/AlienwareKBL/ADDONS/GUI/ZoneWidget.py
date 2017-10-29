@@ -24,11 +24,10 @@ import cairo
 import sys
 sys.path.insert(0, "/usr/share/AlienwareKBL")
 from Configuration.Paths import Paths
-from utils import hex_to_rgb, middle_rgb_color, print_warning
+from utils import middle_rgb_color, print_warning
 
 
 _IMAGES_PATH = Paths().IMAGES
-
 _LEFT_CLICK_ID = 1
 _RIGHT_CLICK_ID = 3
 
@@ -49,45 +48,6 @@ _BUTTONS_IMAGE_PATTERN_WITH_DELETE = ['cross_on',
                                       'fixed_off',
                                       'morph_off',
                                       'blink_off']
-
-def export_rgb(imported_rgb_color):
-    return [int(imported_rgb_color[0]*255), int(imported_rgb_color[1]*255), int(imported_rgb_color[2]*255)]
-
-def import_rgb(rgb_color):
-    """
-        Check and convert if necessary the values of the RGB colors.
-        They must be <= 1.0
-    """
-
-    if all(value <= 1.0 for value in rgb_color):
-        return rgb_color
-
-    for index, value  in enumerate(rgb_color):
-        rgb_color[index] = value / 255.0
-
-    return rgb_color
-
-def rgb_from_rgba_gobject(gdk3_rgba_object):
-    """
-        Return a list of the RGB values of an Gdk.RGBA object.
-        Ex: `Gdk.RGBA(red=0.937255, green=0.160784, blue=0.160784, alpha=1.000000)` to `[0.937255, 0.160784, 0.160784]`
-
-        I'd like to do this properly, with something like `[gdk3_rgba_object.red(), gdk3_rgba_object.green(), gdk3_rgba_object.blue()]`
-        but I didn't find the solution. Some doc at:
-
-            https://developer.gnome.org/gdk3/stable/gdk3-RGBA-Colors.html#gdk-rgba-to-string
-    """
-
-    rgb_list = []
-
-    gdk3_rgb_str_items = str(gdk3_rgba_object).split('=')
-    for item in gdk3_rgb_str_items:
-        if '.' in item:
-            for subitem in item.split(','):
-                if '(' not in subitem and ')' not in subitem and '.' in subitem:
-                    rgb_list.append(float(subitem))
-
-    return rgb_list
 
 
 class ZoneWidget(Gtk.Frame):
@@ -117,7 +77,7 @@ class ZoneWidget(Gtk.Frame):
 
     __gtype_name__ = 'Zone'
 
-    def __init__(self, area_name, left_color, right_color, mode, column, colorchooser_dialog, colorchooser_widget, hex_id=1):
+    def __init__(self, area_name, left_color, right_color, mode, column, colorchooser_widget, hex_id=1):
 
         super().__init__()
 
@@ -125,7 +85,6 @@ class ZoneWidget(Gtk.Frame):
         #
         self._left_color = []
         self._right_color = []
-        self._middle_color = []
         self._mode = ''
         
         self._hex_id = ''
@@ -145,7 +104,6 @@ class ZoneWidget(Gtk.Frame):
 
         # requested objects and variables
         #
-        self._color_chooser_dialog = colorchooser_dialog
         self._color_chooser_widget = colorchooser_widget
         self.zone = None
 
@@ -214,24 +172,9 @@ class ZoneWidget(Gtk.Frame):
 
     def _on_drawingarea_click(self, widget, event, area_number):
 
-        pressed_key_id = event.button
+        if event.button == _LEFT_CLICK_ID:
 
-        if pressed_key_id not in (_LEFT_CLICK_ID, _RIGHT_CLICK_ID):
-            return
-
-        elif pressed_key_id == _LEFT_CLICK_ID:
-
-            if not self._color_chooser_widget.get_property('visible'):
-                response = self._color_chooser_dialog.run()
-                if response == Gtk.ResponseType.OK:
-                    color = rgb_from_rgba_gobject(self._color_chooser_dialog.get_rgba())
-                else:
-                    color = False
-
-                self._color_chooser_dialog.hide()
-
-            else:
-                color = rgb_from_rgba_gobject(self._color_chooser_widget.get_rgba())
+            color = self._color_chooser_widget.get_rgba()
 
             if color:
 
@@ -240,24 +183,8 @@ class ZoneWidget(Gtk.Frame):
                 else:
                     self._right_color = color
 
-                self._middle_color = middle_rgb_color(self._left_color, self._right_color)
-                self.color_updated = True
                 self._create_gradient(widget, self.cr, 1)
-
-        elif pressed_key_id == _LEFT_CLICK_ID:
-
-            color = rgb_from_rgba_gobject(self._color_chooser_dialog.get_rgba())
-
-            if area_number == 1 or not self._commands_buttons_state[2]:  # morph
-                self._left_color = color
-            else:
-                self._right_color = color
-
-            self._middle_color = middle_rgb_color(self._left_color, self._right_color)
-
-            self._create_gradient(self._drawing_area1, self.cr, 1)
-            self.color_updated = True
-            self._create_gradient(self._drawing_area2, self.cr, 2)
+                self.color_updated = True
 
         self._update_commands_buttons_background()
 
@@ -306,19 +233,27 @@ class ZoneWidget(Gtk.Frame):
         self.cr = cr
 
         if self._commands_buttons_state[2]:  # morph
+            
+            middle_color=middle_rgb_color((self._left_color.red, self._left_color.green, self._left_color.blue),
+                                          (self._right_color.red, self._right_color.green, self._right_color.blue))
+            
+            middle_color = Gdk.RGBA(*middle_color)
+            
             if area_number == 1:
-                start = self._left_color
-                stop = self._middle_color
+                start_color = self._left_color
+                end_color = middle_color
             if area_number == 2:
-                start = self._middle_color
-                stop = self._right_color
+                start_color = middle_color
+                end_color = self._right_color
         else:
-            start, stop = self._left_color, self._left_color
+            start_color = self._left_color
+            end_color =  self._left_color
             self._update_commands_buttons_background()
 
+
         lg1 = cairo.LinearGradient(0.0, 0.0, self._width, 0)
-        lg1.add_color_stop_rgb(0, start[0], start[1], start[2])
-        lg1.add_color_stop_rgb(1, stop[0], stop[1], stop[2])
+        lg1.add_color_stop_rgb(0, start_color.red, start_color.green, start_color.blue)
+        lg1.add_color_stop_rgb(1, end_color.red, end_color.green, end_color.blue)
         self.cr.rectangle(0, 0, self._width, self._heigth)
         self.cr.set_source(lg1)
         self.cr.fill()
@@ -329,15 +264,15 @@ class ZoneWidget(Gtk.Frame):
     def _update_commands_buttons_background(self):
 
         if self._commands_buttons_state[2]:  # morph
-            color = self._right_color
+            gdk_color = self._right_color
         else:
-            color = self._left_color
+            gdk_color = self._left_color
 
         for children in self._commands_buttons_box.get_children():
             for child in children.get_children():
-                child.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
+                child.override_background_color(Gtk.StateType.NORMAL, gdk_color)
 
-        self._commands_buttons_box.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(color[0], color[1], color[2], 1))
+        self._commands_buttons_box.override_background_color(Gtk.StateType.NORMAL, gdk_color)
 
     def set_hex_id(self, hex_id):
         self._hex_id = hex_id
@@ -376,23 +311,22 @@ class ZoneWidget(Gtk.Frame):
         return self._mode
 
     def get_left_color(self):
-        return export_rgb(self._left_color)
+        return "#{0:02x}{1:02x}{2:02x}".format(int(self._left_color.red * 255),  int(self._left_color.green * 255),  int(self._left_color.blue * 255))
 
     def get_right_color(self):
-        return export_rgb(self._right_color)
+        return "#{0:02x}{1:02x}{2:02x}".format(int(self._right_color.red * 255),  int(self._right_color.green * 255),  int(self._right_color.blue * 255))
 
-    def set_color(self, color, widget_zone):
+    def set_color(self, hex_color, widget_zone):
 
-        if isinstance(color, str):
-            color = hex_to_rgb(color)
+        gdk_color = Gdk.RGBA()
+        if gdk_color.parse(hex_color):
 
-        if widget_zone == 'left':
-            self._left_color = import_rgb(color)
-        else:
-            self._right_color = import_rgb(color)
-
-        if self._right_color:
-            self._middle_color = middle_rgb_color(self._left_color, self._right_color)
+            if widget_zone == 'left':
+                self._left_color = gdk_color
+            elif widget_zone == 'right':
+                self._right_color = gdk_color
+            else:
+                print_warning('wrong zone name='.format(widget_zone))
 
 if __name__ == '__main__':
 
@@ -411,8 +345,6 @@ if __name__ == '__main__':
     SCROLLED_WINDOW = Gtk.ScrolledWindow()
     SCROLLED_WINDOW.add(VIEWPORT)
 
-    COLOR_CHOOSER_DIALOG = Gtk.ColorChooserDialog()
-    COLOR_CHOOSER_DIALOG.set_transient_for(ROOT_WINDOW)
     COLOR_CHOOSER_WIDGET = Gtk.ColorChooserWidget()
 
     def on_button_click(widget):
@@ -439,30 +371,27 @@ if __name__ == '__main__':
     for row_index in range(2):
         FIXED_ZONE = ZoneWidget(area_name='PB',
                                 left_color='#020202',
-                                right_color=[255, 34, 122],
+                                right_color='#020202',
                                 mode='fixed',
                                 column=0,
-                                colorchooser_dialog=COLOR_CHOOSER_DIALOG,
                                 colorchooser_widget=COLOR_CHOOSER_WIDGET)
 
         GRID.attach(child=FIXED_ZONE, left=0, top=row_index, width=1, height=1)
 
     BLINK_ZONE = ZoneWidget(area_name='',
-                            left_color=[122, 255, 22],
-                            right_color=[255, 34, 122],
+                            left_color='#020202',
+                            right_color='#020202',
                             mode='blink',
                             column=1,
-                            colorchooser_dialog=COLOR_CHOOSER_DIALOG,
                             colorchooser_widget=COLOR_CHOOSER_WIDGET)
 
     GRID.add(BLINK_ZONE)
 
     MORPH_ZONE = ZoneWidget(area_name='',
-                            left_color=[122, 255, 22],
-                            right_color=[255, 34, 122],
+                            left_color='#020202',
+                            right_color='#020202',
                             mode='morph',
                             column=2,
-                            colorchooser_dialog=COLOR_CHOOSER_DIALOG,
                             colorchooser_widget=COLOR_CHOOSER_WIDGET)
 
     GRID.add(MORPH_ZONE)

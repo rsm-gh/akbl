@@ -27,9 +27,8 @@ class Zone:
     def __init__(self, left_color, right_color, mode, hex_id=1):
 
         self._mode = ''
-        self._left_color = []
-        self._right_color = []
-        self._middle_color = []
+        self._left_color = ''
+        self._right_color = ''
         self._hex_id = hex_id
 
         self.set_mode(mode)
@@ -43,8 +42,7 @@ class Zone:
         mode={}
         left_color={}
         right_color={}
-        middle_color={}
-        '''.format(self._hex_id, self._mode, rgb_to_hex(self._left_color), rgb_to_hex(self._right_color), rgb_to_hex(self._middle_color))
+        '''.format(self._hex_id, self._mode, self._left_color, self._right_color)
         
         return zone_description
 
@@ -65,22 +63,12 @@ class Zone:
 
     def set_color(self, color, side):
 
-        if not isinstance(color, list):
-            color = hex_to_rgb(color)
-            
-        if len(color) != 3:
-            print_warning("Wrong rgb={}, to side={} on hex_id={} and mode={}".format(color, side, self._hex_id, self._mode))
-            return
-
         if side == 'left':
             self._left_color = color
         elif side == 'right':
             self._right_color = color
         else:
             print_warning("wrong side=`{}`", side)
-
-        if self._left_color and self._right_color:
-            self._middle_color = middle_rgb_color(self._left_color, self._right_color)
 
     def set_mode(self, mode):
 

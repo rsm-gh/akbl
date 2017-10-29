@@ -26,7 +26,7 @@ sys.path.insert(0, "/usr/share/AlienwareKBL")
 from Configuration.Paths import Paths
 from Engine.Area import Area
 from Engine.Zone import Zone
-from utils import print_warning, print_debug, rgb_to_hex, string_is_hex_color
+from utils import print_warning, print_debug, string_is_hex_color
 
 
 AVAILABLE_THEMES = {}
@@ -98,20 +98,30 @@ class Theme:
 
     def __str__(self):
         
-        areas_description=""
-        for area in sorted(self._areas.values(), key=lambda x: x.name):
-            areas_description+=str(area)
-        
-        theme_description='''
+        theme_text='''
+#############################################
+##### Alienware-KBL configuration theme #####
+#############################################
+
 name={}
-time={}
 speed={}
-computer-name={}
-areas:
-{}
-        '''.format(self.name, self.time, self._speed, self._computer.NAME, areas_description)
+\n'''.format(self.name, self._speed)
+            
+        for area in sorted(self._areas.values(), key=lambda x: x.name):
+            theme_text+='''
+********************************************
+area={}
+
+'''.format(area.name)
+            
+            for zone in area.get_zones():
+                theme_text+='''
+mode={}
+left_color={}
+right_color={}
+'''.format(zone.get_mode(), zone.get_left_color(), zone.get_right_color())
         
-        return theme_description
+        return theme_text
         
     def create_profile(self, name, path, speed=False):
         self.name = name
@@ -131,7 +141,7 @@ areas:
         AVAILABLE_THEMES[self.name] = self
 
     def get_areas(self):
-        return [area for area in sorted(self._areas.values(), key=lambda x: x.name)]
+        return (area for area in sorted(self._areas.values(), key=lambda x: x.name))
 
     def get_area_by_name(self, area_name):
         return self._areas[area_name]
@@ -143,19 +153,10 @@ areas:
             print_warning("Duplicated area `{}`, `{}`".format(area.name, self._areas.keys()))
 
     def save(self):
-        with open(self.path, encoding='utf-8', mode='wt') as f:
-            f.write('name={0}\n'.format(self.name))
-            f.write('computer={0}\n'.format(self._computer.NAME))
-            f.write('speed={0}\n\n\n'.format(self._speed))
-
-            for area in sorted(self._areas.values(), key=lambda x: x.name):
-
-                f.write('area={0}\n'.format(area.name))
-                for zone in area.get_zones():
-                    f.write('mode={0}\n'.format(zone.get_mode()))
-                    f.write('left_color={0}\n'.format(rgb_to_hex(zone.get_left_color())))
-                    f.write('right_color={0}\n'.format(rgb_to_hex(zone.get_right_color())))
-                f.write('\n')
+        
+        with open(self.path, encoding='utf-8', mode='w') as f:
+            f.write(self.__str__())
+            
 
         self.update_time()
 
@@ -293,7 +294,6 @@ areas:
 
 
     def modify_zone(self, area_name, column, left_color, right_color, mode):
-
         zone = self._areas[area_name]._zones[column]
         zone.set_color(left_color, 'left')
         zone.set_color(right_color, 'right')

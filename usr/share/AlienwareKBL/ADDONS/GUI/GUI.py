@@ -41,7 +41,6 @@ from Configuration.Paths import Paths
 
 from Engine import *
 from texts import *
-from utils import rgb_to_hex
 from ZoneWidget import ZoneWidget
 from Bindings import Bindings
 
@@ -167,8 +166,6 @@ class GUI(Gtk.Window):
                 'checkbutton_autosave',
                 'checkbutton_profile_buttons',
                 'checkbutton_delete_warning',
-                'checkbutton_static_colorchooser',
-                'color_chooser_dialog',
                 'color_chooser_widget',
                 'box_area_labels',
                 'box_areas',
@@ -282,7 +279,6 @@ class GUI(Gtk.Window):
         self.checkbutton_autosave.set_active(self.ccp.get_bool_defval('auto_save', True))
         self.checkbutton_profile_buttons.set_active(self.ccp.get_bool_defval('profile_buttons', False))
         self.checkbutton_delete_warning.set_active(self.ccp.get_bool_defval('delete_warning', True))
-        self.checkbutton_static_colorchooser.set_active(self.ccp.get_bool_defval('static_chooser', False))
 
         self.POPULATE_box_areas()
 
@@ -290,9 +286,6 @@ class GUI(Gtk.Window):
 
         if not self.checkbutton_profile_buttons.get_active():
             self.box_profile_buttons.hide()
-
-        if not self.checkbutton_static_colorchooser.get_active():
-            self.color_chooser_widget.hide()
 
         self.scrolledwindow_no_computer.hide()
 
@@ -339,7 +332,6 @@ class GUI(Gtk.Window):
                                          right_color=zone.get_right_color(),
                                          mode=zone.get_mode(),
                                          column=column_index,
-                                         colorchooser_dialog=self.color_chooser_dialog,
                                          colorchooser_widget=self.color_chooser_widget)
 
                 box_area.pack_start(child=zone_widget, expand=False, fill=False, padding=5)
@@ -460,8 +452,8 @@ class GUI(Gtk.Window):
                         #
                         self.theme.modify_zone(area_name=selected_widget.get_area_name(),
                                                column=selected_widget.get_column(),
-                                               left_color=rgb_to_hex(selected_widget.get_left_color()),
-                                               right_color=rgb_to_hex(selected_widget.get_right_color()),
+                                               left_color=selected_widget.get_left_color(),
+                                               right_color=selected_widget.get_right_color(),
                                                mode=selected_widget.get_mode())
 
                         selected_widget.color_updated = False
@@ -536,8 +528,6 @@ class GUI(Gtk.Window):
 
         self.theme.save()
 
-        sleep(0.5)
-
         Gdk.threads_enter()
         self.label_user_message.set_text('')
         Gdk.threads_leave()
@@ -547,14 +537,6 @@ class GUI(Gtk.Window):
 
     def on_button_computer_data_close_clicked(self, button, data=None):
         self.window_computer_data.hide()
-
-    def on_checkbutton_static_colorchooser_activate(self, button, data=None):
-        if self.checkbutton_static_colorchooser.get_active():
-            self.color_chooser_widget.show()
-            self.ccp.write('static_chooser', True)
-        else:
-            self.color_chooser_widget.hide()
-            self.ccp.write('static_chooser', False)
 
     def on_checkbox_turnoff_zones_checked(self, checkbox, data=None):
         self.ccp.write('zones_to_keep_alive', '|'.join(self.GET_zones_to_keep_alive()))
@@ -590,7 +572,6 @@ class GUI(Gtk.Window):
                               right_color=self.computer.DEFAULT_COLOR,
                               mode='fixed',
                               column=column,
-                              colorchooser_dialog=self.color_chooser_dialog,
                               colorchooser_widget=self.color_chooser_widget)
 
         #

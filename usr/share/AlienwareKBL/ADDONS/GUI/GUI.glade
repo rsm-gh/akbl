@@ -453,14 +453,6 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                           </object>
                         </child>
                         <child>
-                          <object class="GtkCheckMenuItem" id="checkbutton_static_colorchooser">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Static color chooser</property>
-                            <signal name="activate" handler="on_checkbutton_static_colorchooser_activate" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
                           <object class="GtkMenuItem" id="menuitem_off_zones">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -891,35 +883,6 @@ https://github.com/rsm-gh/alienware-kbl
       </object>
     </child>
     <child type="titlebar">
-      <placeholder/>
-    </child>
-  </object>
-  <object class="GtkColorChooserDialog" id="color_chooser_dialog">
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Color Selector</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">window_root</property>
-    <property name="rgba">rgb(255,255,255)</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="color_chooser_box">
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="color_chooser_buttons">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <child>
       <placeholder/>
     </child>
   </object>
