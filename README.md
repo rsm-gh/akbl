@@ -1,4 +1,3 @@
-
 **Index:**
 
 * [Introduction](https://github.com/rsm-gh/alienware-kbl#introduction)

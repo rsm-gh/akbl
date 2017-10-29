@@ -43,29 +43,6 @@ echo -e "\e[00;32mTo ensure a clean installation any previous version will be fu
 #
 # Start the installation
 #
-<<<<<<< HEAD
-echo -e "\e[00;32mCopying the software files (the message 'ommiting directory' is normal)...\e[00m"
-install -d /usr/share/alienware-kbl
-install -D $DIR/usr/share/alienware-kbl/* /usr/share/alienware-kbl
-
-install -d /usr/share/alienware-kbl/images
-install -D $DIR/usr/share/alienware-kbl/images/* /usr/share/alienware-kbl/images
-
-install -d /usr/share/applications
-install -D $DIR/usr/share/applications/* /usr/share/applications
-
-install -d /usr/share/doc/alienware-kbl
-install -D $DIR/usr/share/doc/alienware-kbl/* /usr/share/doc/alienware-kbl
-
-install -d /usr/bin
-install -D $DIR/usr/bin/* /usr/bin
-
-install -d /usr/lib/systemd/system
-install -D $DIR/usr/lib/systemd/system/* /usr/lib/systemd/system
-
-#
-# Executing the post-installation script
-=======
 
 echo -e "\e[00;32mCopying the software files (the message 'omiting directory *' is normal)...\e[00m"
 
@@ -127,13 +104,9 @@ install -D $DIR/usr/share/AlienwareKBL/ADDONS/Indicator/images/* /usr/share/Alie
 
 #
 # Execute the post-installation script
->>>>>>> new-version
 #
 echo -e "\e[00;32mExecuting the post-installation...\e[00m"
 ./postinst
 
 echo -e "\e[00;32mAlienware-KBL is installed, enjoy it !\e[00m"
-<<<<<<< HEAD
-=======
 
->>>>>>> new-version
