@@ -27,21 +27,23 @@ Usage:
     alienware-kbl <option>
 
  Options:
-        
+
     --change                          Changes the computer lights on/off.
     --on                              Turns on the computer lights.
     --off                             Turns off the computer lights.
-    --set-profile <profile_name>      Turns on the selected profile.
     
-    --get-boot-user                   Get the user that is started by the daemon.
-    --set-boot-user <user_name>       Set the user that is started by the daemon.
+    --set-profile <profile_name>      Turns on the selected profile.
     
     --start-indicator                 Start the indicator.
     
+    --start-daemon                    Start the daemon.
+    --daemon-is-on                    Returns weather the daemon is running or not.
+    
     -h, -help                         Display this dialog.
     -l, --license                     Display the license.
-    
+
  *If no option is introduced the graphical interface is launched.
+
 ```
 	
 ## Installation instructions
