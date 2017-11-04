@@ -60,7 +60,7 @@ class Daemon:
         self._computer = computer
         
         
-        self._COMPUTER_SAVE_CONF = ((True, self._computer.BLOCK_LOAD_ON_BOOT),
+        self._COMPUTER_BLOCKS_TO_SAVE = ((True, self._computer.BLOCK_LOAD_ON_BOOT),
                                     #(True, self._computer.BLOCK_STANDBY),
                                     #(True, self._computer.BLOCK_AC_POWER),
                                     #(#True, self._computer.BLOCK_CHARGING),
@@ -69,32 +69,14 @@ class Daemon:
                                     #(True, self._computer.BLOCK_BATT_CRITICAL),
                                     (False, self._computer.BLOCK_LOAD_ON_BOOT))
         
-        #self._COMPUTER_SAVE_CONF = ((True, self._computer.BLOCK_AC_POWER),
-                                    #(False, self._computer.BLOCK_AC_POWER))
-        
-        
         self.loop_self = loop_self
-
-        # Get the user that the Daemon should use
-        #
-        self._paths = Paths()
-        _global_ccp = CCParser(self._paths.GLOBAL_CONFIG, 'Global alienware-kbl Theme')
-        self._user = _global_ccp.get_str_defval('boot_user', 'root')
-
-        # Check if the user of the configuration file exists
-        #
-        try:
-            pwd.getpwnam(self._user)
-        except:
-            user = getuser()
-            print_warning('The `{}` of the configuration file does not exist, it has been replaced by `{}`'.format(self._user, user))
-            self._user = user
-
-        self._paths = Paths(self._user)
 
         # Initialize the daemon
         #
-        self._ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Theme')
+        self._user = 'root'
+        self._paths = Paths()
+        self._paths = Paths(self._user)
+        self._ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Configuration')
         self._indicator_pyro = False
         
         self.reload_configurations(self._user)
@@ -112,7 +94,7 @@ class Daemon:
         
         self._controller.erase_config()
         
-        for save, block in self._COMPUTER_SAVE_CONF:
+        for save, block in self._COMPUTER_BLOCKS_TO_SAVE:
                 
             self._controller.add_block_line(save=save, block=block)
             self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)
@@ -161,6 +143,7 @@ class Daemon:
         if user != self._user:
             self._user = user
             self._paths = Paths(user)
+            self._ccp.set_configuration_path(self._paths.CONFIGURATION_PATH)
 
         Theme.LOAD_profiles(self._computer, self._paths.PROFILES_PATH)
 
@@ -206,56 +189,63 @@ class Daemon:
             self.set_lights(user, True)
 
     @Pyro4.expose
-    def set_lights(self, user, state):
+    def set_lights(self, user_name, state):
         """
             Turn the lights on or off, 'state' can be a boolean or a string.
         """
+        if user_name != self._user:
+            self.reload_configurations(user_name)
+        
+        
+        print_warning(user_name)
+        
+        
         if state in (False, 'False', 'false'):
 
-            keep_alive_zones = self._ccp.get_str_defval('zones_to_keep_alive', '')
+            areas_to_keep_on = self._ccp.get_str_defval('areas_to_keep_on', '')
 
-            if keep_alive_zones == '':
+            print_warning("AREAS TO KEEP ON")
+            print_warning(areas_to_keep_on)
+
+
+            if areas_to_keep_on == '':
                 
                 self._controller.erase_config()
                 
-                for save, block in self._COMPUTER_SAVE_CONF:
+                for save, block in self._COMPUTER_BLOCKS_TO_SAVE:
                     self._controller.add_block_line(save, block)
                     self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_OFF)
                     
                 self._controller.apply_config()
             else:
-                keep_alive_zones = keep_alive_zones.split('|')
+                """
+                    To turn off the lights but let some areas on, instead of sending the command "all the lights off",
+                    some areas are set to black color.
+                """
+                
+                
+                areas_to_keep_on = areas_to_keep_on.split('|')
 
-                """
-                    This hack, it will set black as color to all the lights that should be turned off.
-                """
-                
+                print_warning(areas_to_keep_on)
+
                 self._controller.erase_config()
-                
-                for save, block in self._COMPUTER_SAVE_CONF:
+                for save, block in self._COMPUTER_BLOCKS_TO_SAVE:
                     
                     self._controller.add_block_line(save, block)
                     self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)
                     self._controller.add_speed_line(1)
 
-                    for key in sorted(self._theme.area.keys()):
-                        if key not in keep_alive_zones:
-                            area = self._theme.area[key]
-                            for zone in area:
+                    for area in self._theme.get_areas():
+                        if not area.name in areas_to_keep_on:
+                            for zone in area.get_zones():
                                 self._controller.add_color_line(zone.get_hex_id(), 'fixed', '#000000', '#000000')
-
                             self._controller.end_colors_line()
-
                     self._controller.end_block_line()
-                
                 self._controller.apply_config()
 
             self._lights_state = False
             self._indicator_send_code(150)
         else:
-            if user != self._user:
-                self.reload_configurations(user)
-
             self._iluminate_keyboard()
 
     @Pyro4.expose
@@ -307,7 +297,7 @@ class Daemon:
         
         self._controller.erase_config()
 
-        for save, block in self._COMPUTER_SAVE_CONF:
+        for save, block in self._COMPUTER_BLOCKS_TO_SAVE:
 
             self._controller.add_block_line(save, block)
             self._controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)

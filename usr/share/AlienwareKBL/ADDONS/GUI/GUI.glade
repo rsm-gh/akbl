@@ -453,12 +453,12 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                           </object>
                         </child>
                         <child>
-                          <object class="GtkMenuItem" id="menuitem_off_zones">
+                          <object class="GtkMenuItem" id="menuitem_off_areas">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes">When turning off the keyboard,
 the following zones will stay on.</property>
-                            <property name="label" translatable="yes">Zones to keep on</property>
+                            <property name="label" translatable="yes">Areas to keep on</property>
                             <property name="use_underline">True</property>
                           </object>
                         </child>

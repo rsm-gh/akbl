@@ -160,30 +160,28 @@ class GUI(Gtk.Window):
 
         glade_object_names = (
             'window_root',
-                'label_user_message',
-                'button_new_profile_create',
-                'menuitem_off_zones',
-                'checkbutton_autosave',
-                'checkbutton_profile_buttons',
-                'checkbutton_delete_warning',
+                'menubar',
+                    'menuitem_profile',
+                    'menuitem_options',
+                        'checkbutton_autosave',
+                        'checkbutton_profile_buttons',
+                        'checkbutton_delete_warning',
+                        'menuitem_off_areas',
+                    'liststore_profiles',
+                    'combobox_profiles',
+                    'tempobutton',
+                    'box_profile_buttons',
                 'color_chooser_widget',
                 'box_area_labels',
-                'box_areas',
-                'entry_new_profile',
-                'liststore_profiles',
-                'tempobutton',
-                'box_profile_buttons',
+                'box_areas',                
+                'label_user_message',
                 'scrolledwindow_no_computer',
-                'combobox_profiles',
-                'liststore_modes',
-                'textbuffer_computer_data',
-                'menubar',
-                'menuitem_profile',
-                'menuitem_options',
-            'window_about',
             'window_new_profile',
-            'window_colorselection',
-            'window_computer_data')
+                'entry_new_profile',
+                'button_new_profile_create',
+            'window_about',
+            'window_computer_data',
+                'textbuffer_computer_data')
 
         for glade_object in glade_object_names:
             setattr(self, glade_object, builder.get_object(glade_object))
@@ -256,23 +254,23 @@ class GUI(Gtk.Window):
 
         self.textbuffer_computer_data.set_text(TEXT_COMPUTER_DATA.format(*computer_data[0:5]))
 
-        # Add the zones to turn off to the  "menuitem_off_zones"
+        # Add the areas to the  "menuitem_off_areas"
         #
-        self.menu_turn_off_zones = Gtk.Menu()
-        self.zones_and_descriptions_dict = dict((area.description, area) for area in self.theme.get_areas())
-        active_configuration_zones = self.ccp.get_str_defval('zones_to_keep_alive', '').split('|')
+        self.menu_turn_off_areas = Gtk.Menu()
+        self.areas_description_dict = dict((area.description, area.name) for area in self.theme.get_areas())
+        active_configuration_areas = self.ccp.get_str_defval('areas_to_keep_on', '').split('|')
 
-        for description, zone in sorted(self.zones_and_descriptions_dict.items(), key=lambda x: x[0]):
+        for description, area in sorted(self.areas_description_dict.items(), key=lambda x: x[0]):
             checkbox = Gtk.CheckMenuItem(label=description)
 
-            if zone in active_configuration_zones:
+            if area in active_configuration_areas:
                 checkbox.set_active(True)
 
-            checkbox.connect('activate', self.on_checkbox_turnoff_zones_checked)
+            checkbox.connect('activate', self.on_checkbox_turnoff_areas_changed)
 
-            self.menu_turn_off_zones.append(checkbox)
+            self.menu_turn_off_areas.append(checkbox)
 
-        self.menuitem_off_zones.set_submenu(self.menu_turn_off_zones)
+        self.menuitem_off_areas.set_submenu(self.menu_turn_off_areas)
 
         # Extra stuff
         #
@@ -292,10 +290,6 @@ class GUI(Gtk.Window):
         # Start the zones thread !
         #
         threading.Thread(target=self.THREAD_zones).start()
-
-    def GET_zones_to_keep_alive(self):
-        return [self.zones_and_descriptions_dict[checkbox.get_label()]
-                for checkbox in self.menu_turn_off_zones.get_children() if checkbox.get_active()]
 
     def POPULATE_box_areas(self):
         """
@@ -538,8 +532,12 @@ class GUI(Gtk.Window):
     def on_button_computer_data_close_clicked(self, button, data=None):
         self.window_computer_data.hide()
 
-    def on_checkbox_turnoff_zones_checked(self, checkbox, data=None):
-        self.ccp.write('zones_to_keep_alive', '|'.join(self.GET_zones_to_keep_alive()))
+    def on_checkbox_turnoff_areas_changed(self, checkbox, data=None):
+        
+        areas_to_keep_on=(self.areas_description_dict[checkbox.get_label()]
+                                for checkbox in self.menu_turn_off_areas.get_children() if checkbox.get_active())
+        
+        self.ccp.write('areas_to_keep_on', '|'.join(areas_to_keep_on))
 
     def on_checkbutton_delete_warning_activate(self, button, data=None):
         self.ccp.write('delete_warning', self.checkbutton_delete_warning.get_active())

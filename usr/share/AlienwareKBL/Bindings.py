@@ -25,7 +25,7 @@ from traceback import format_exc
 
 # Local imports
 sys.path.insert(0, "/usr/share/AlienwareKBL")
-from utils import print_error
+from utils import print_error, print_warning
 from Configuration.Paths import Paths
 
 class Bindings:

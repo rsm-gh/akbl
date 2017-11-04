@@ -453,15 +453,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                           </object>
                         </child>
                         <child>
-                          <object class="GtkCheckMenuItem" id="checkbutton_static_colorchooser">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Static color chooser</property>
-                            <signal name="activate" handler="on_checkbutton_static_colorchooser_activate" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkMenuItem" id="menuitem_off_zones">
+                          <object class="GtkMenuItem" id="menuitem_off_areas">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes">When turning off the keyboard,
