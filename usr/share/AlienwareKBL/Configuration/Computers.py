@@ -299,16 +299,25 @@ class Alienware13(Computer):
         self.NAME = TEXT_ALIENWAREWARE13
         self.PRODUCT_ID = 0x0527
 
-        self.REGION_RIGHT_KEYBOARD = 0x0001  # 0x200 seems to work too
-        self.REGION_LEFT_KEYBOARD = 0x0008
-        self.REGION_LEFT_CENTER_KEYBOARD = 0x0004
-        self.REGION_RIGHT_CENTER_KEYBOARD = 0x100
-        self.REGION_ALIENWARE_NAME = 0x0040
-        self.REGION_ALIENWARE_HEAD = 0x0100
-        self.REGION_OUTER_LID = 0x0020  # to test the modes morph, blink, etc
+        # This was updated on Nov 16 2017 with the values given in the following post:
+        #       https://github.com/rsm-gh/alienware-kbl/issues/36#issuecomment-344878780
+        #
+        # The previous values given by Francesco Rosa will be put as comment...
+        #
+
+        self.REGION_RIGHT_KEYBOARD = 1  # 512 seems to work too
+        self.REGION_LEFT_KEYBOARD = 8
+        self.REGION_LEFT_CENTER_KEYBOARD = 4
+        self.REGION_RIGHT_CENTER_KEYBOARD = 2 # OLD VALUE=256
+        self.REGION_ALIENWARE_NAME = 64
+        self.REGION_ALIENWARE_HEAD = 256
+        self.REGION_OUTER_LID = 32  # The modes morph & blink haven't been tested here
         self.REGION_ALL_BUT_POWER = 0x0f9fff  # does this work?
-        self.REGION_HARD_DISK_DRIVE = 0x0200
-        self.REGION_CAPS_LOCK = 0x80
+        self.REGION_HARD_DISK_DRIVE = 512
+        self.REGION_CAPS_LOCK = 128
+    
+        # 1048476 head, hdd, CapsLock, Left keyboard, Center Left Keyboard
+
 
         self._REGIONS = [
 
