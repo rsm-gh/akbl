@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2015, 2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2014-2015, 2017  Rafael Senties Martinelli 
 #                2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
