@@ -37,12 +37,14 @@ from Configuration.CCParser import CCParser
 from Configuration.Paths import Paths
 from Configuration.Computers import Computer
 
-import Configuration.Computers
-
-from Engine.Core.Driver import Driver
-from Engine.Core.Controller import Controller
 from texts import *
 from utils import getuser
+
+import Configuration.Computers
+
+if getuser() == 'root':
+    from Engine.Core.Driver import Driver
+    from Engine.Core.Controller import Controller
 
 
 def get_alienware_device_info():
