@@ -95,6 +95,116 @@ class Computer:
             if region_name == region.name:
                 return region
 
+class AuroraR4(Computer):
+
+    def __init__(self):
+        super().__init__()
+        self.NAME = TEXT_AURORAR4
+        self.PRODUCT_ID = 0x0513
+
+        self.REGION_RIGHT_KEYBOARD = 8
+        self.REGION_RIGHT_CENTER_KEYBOARD = 4
+        self.REGION_LEFT_KEYBOARD = 1
+        self.REGION_LEFT_CENTER_KEYBOARD = 2
+        self.REGION_RIGHT_SPEAKER = 64
+        self.REGION_LEFT_SPEAKER = 32
+        self.REGION_ALIENWARE_HEAD = 128
+        self.REGION_ALIENWARE_NAME = 256
+        self.REGION_TOUCH_PAD = 512
+        self.REGION_MEDIA_BAR = 7168
+        self.REGION_POWER_BUTTON = 8192
+        self.REGION_POWER_BUTTON_EYES = 16348
+        self.REGION_ALL_BUT_POWER = 1023999
+
+        self._REGIONS = [
+
+            Region(
+                TEXT_AREA_RIGHT_KEYBOARD_ID,
+                TEXT_DESCRIPTION_RIGHT_KEYBOARD,
+                self.REGION_RIGHT_KEYBOARD,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+    
+            Region(
+                TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
+                TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
+                self.REGION_RIGHT_CENTER_KEYBOARD,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_LEFT_KEYBOARD_ID,
+                TEXT_DESCRIPTION_LEFT_KEYBOARD,
+                self.REGION_LEFT_KEYBOARD,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_LEFT_CENTER_KEYBOARD_ID,
+                TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
+                self.REGION_LEFT_CENTER_KEYBOARD,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_RIGHT_SPEAKER_ID,
+                TEXT_DESCRIPTION_RIGHT_SPEAKER,
+                self.REGION_RIGHT_SPEAKER,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_LEFT_SPEAKER_ID,
+                TEXT_DESCRIPTION_LEFT_SPEAKER,
+                self.REGION_LEFT_SPEAKER,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_ALIENWARE_HEAD_ID,
+                TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
+                self.REGION_ALIENWARE_HEAD,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_ALIENWARE_LOGO_ID,
+                TEXT_DESCRIPTION_ALIENWAREWARE_LOGO,
+                self.REGION_ALIENWARE_NAME,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_TOUCH_PAD_ID,
+                TEXT_DESCRIPTION_TOUCHPAD,
+                self.REGION_TOUCH_PAD,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_MEDIA_BAR_ID,
+                TEXT_DESCRIPTION_MEDIA_BAR,
+                self.REGION_MEDIA_BAR,
+                self.SUPPORTED_COMMANDS,
+                True, True, True),
+
+            Region(
+                TEXT_AREA_POWER_BUTTON_EYES_ID,
+                TEXT_DESCRIPTION_ALIENWAREWARE_POWERBUTTON_EYES,
+                self.REGION_POWER_BUTTON_EYES,
+                1,
+                False, False, True),
+
+            Region(
+                TEXT_AREA_POWER_BUTTON_ID,
+                TEXT_DESCRIPTION_POWER_BUTTON,
+                self.REGION_POWER_BUTTON,
+                2,
+                True, True, True)
+        ]
+        
+        self._REGIONS.sort(key=lambda region: region.description)
+
 
 class M11XR1(Computer):
 
@@ -971,6 +1081,7 @@ class M18XRX(M18XR2):
 
 
 AVAILABLE_COMPUTERS = [ 
+    AuroraR4(),
     M11XR1(),
     M11XR2(),
     M11XR3(),
