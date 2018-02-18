@@ -47,6 +47,8 @@ class Paths:
         self.GLADE_FILE = '/usr/share/AlienwareKBL/ADDONS/GUI/GUI.glade'
         self.IMAGES = '/usr/share/AlienwareKBL/ADDONS/GUI/images/'
 
+        self.BLOCK_TESTING_GLADE_FILE = '/usr/share/AlienwareKBL/ADDONS/BlockTesting/BlockTesting.glade'
+
         self.SMALL_ICON = self.IMAGES + 'icon.png'
         self.MEDIUM_ICON = self.IMAGES + 'icon-m.png'
         

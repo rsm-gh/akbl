@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2017  Rafael Senties Martinelli 
+#  Copyright (C) 2014-2018  Rafael Senties Martinelli 
 #                2011-2012  the pyAlienFX team
 #
 #
@@ -75,7 +75,6 @@ class Computer:
         
 
     def __str__(self):
-        
         attributes = '\n'.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items() if not attribute.startswith('_')])
         regions = '\nregions:\n'+'\n'.join([str(region) for region in self._REGIONS])
     

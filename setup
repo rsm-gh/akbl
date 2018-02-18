@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2017  Rafael Senties Martinelli
+#  Copyright (C) 2015-2018  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -94,6 +94,9 @@ install -D $DIR/usr/share/AlienwareKBL/ADDONS/GUI/* /usr/share/AlienwareKBL/ADDO
 
 install -d /usr/share/AlienwareKBL/ADDONS/GUI/images
 install -D $DIR/usr/share/AlienwareKBL/ADDONS/GUI/images/* /usr/share/AlienwareKBL/ADDONS/GUI/images
+
+install -d /usr/share/AlienwareKBL/ADDONS/BlockTesting
+install -D $DIR/usr/share/AlienwareKBL/ADDONS/BlockTesting/* /usr/share/AlienwareKBL/ADDONS/BlockTesting
 
 install -d /usr/share/AlienwareKBL/ADDONS/Indicator
 install -D $DIR/usr/share/AlienwareKBL/ADDONS/Indicator/* /usr/share/AlienwareKBL/ADDONS/Indicator

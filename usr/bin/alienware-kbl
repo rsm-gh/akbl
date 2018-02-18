@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2017  Rafael Senties Martinelli <rafael@senties-martinelli.com>
+#  Copyright (C) 2015-2018  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -25,6 +25,9 @@ else
         case "$1" in
             --start-daemon)
                 python3 /usr/share/AlienwareKBL/Daemon.py "$1"
+            ;;
+            --block-testing)
+                python3 /usr/share/AlienwareKBL/ADDONS/BlockTesting/BlockTesting.py
             ;;
             --start-indicator)
                 setsid python3 /usr/share/AlienwareKBL/ADDONS/Indicator/Indicator.py

@@ -533,7 +533,6 @@ class GUI(Gtk.Window):
         self.window_computer_data.hide()
 
     def on_checkbox_turnoff_areas_changed(self, checkbox, data=None):
-        
         areas_to_keep_on=(self.areas_description_dict[checkbox.get_label()]
                                 for checkbox in self.menu_turn_off_areas.get_children() if checkbox.get_active())
         

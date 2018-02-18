@@ -28,11 +28,11 @@ from Engine.Core.Constructor import Constructor
 
 class Controller:
 
-    def __init__(self):
-        
-        driver = Driver()
+    def __init__(self, driver=Driver()):
+            
         if not driver.has_device():
-            print_error("The computer is not supported")
+            print_error("The computer is not supported.")
+            self._driver = None
         else:
             self._driver = driver
             self._constructor = Constructor(self._driver.computer)
@@ -49,8 +49,7 @@ class Controller:
         return msg[0] == self._driver.computer.STATE_READY
 
     def get_computer(self):
-        
-        if self._driver.has_device():
+        if not self._driver is None and self._driver.has_device():
             return self._driver.computer
     
         return None

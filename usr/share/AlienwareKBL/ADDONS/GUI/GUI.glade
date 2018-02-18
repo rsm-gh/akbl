@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.1 
+<!-- Generated with glade 3.20.2 
 
-Copyright (C) 2014 - 2017 Rafael Senties Martinelli <rafael@senties-martinelli.com>
+Copyright (C) 2014 - 2018 Rafael Senties Martinelli
 
 This file is part of alienware-kbl.
 
@@ -23,7 +23,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
   <requires lib="gtk+" version="3.10"/>
   <!-- interface-license-type gplv3 -->
   <!-- interface-name alienware-kbl -->
-  <!-- interface-copyright 2014 - 2017 Rafael Senties Martinelli <rafael@senties-martinelli.com> -->
+  <!-- interface-copyright 2014 - 2018 Rafael Senties Martinelli -->
   <object class="GtkAdjustment" id="adjustment_blocks">
     <property name="upper">100000000000000</property>
     <property name="step_increment">1</property>
@@ -898,7 +898,7 @@ https://github.com/rsm-gh/alienware-kbl
     <property name="type_hint">dialog</property>
     <property name="transient_for">window_root</property>
     <property name="program_name">Alienware-KBL</property>
-    <property name="copyright" translatable="yes">© 2014-2017 Rafael Senties Martinelli &lt;rafael@senties-martinelli.com&gt;
+    <property name="copyright" translatable="yes">© 2014-2018 Rafael Senties Martinelli
 © 2011-2012 The pyAlienFX team
 </property>
     <property name="comments" translatable="yes">
@@ -907,7 +907,7 @@ https://github.com/rsm-gh/alienware-kbl
     <property name="website_label" translatable="yes">Home</property>
     <property name="authors">
 Alienware-KBL:
-Rafael Senties Martinelli &lt;rafael@senties-martinelli.com&gt;
+Rafael Senties Martinelli
 
 PyALienFX:
 Ledjfou125 &lt;ledjfou125@gmail.com&gt;
