@@ -35,7 +35,8 @@ from copy import deepcopy
 # local imports
 sys.path.insert(0, "/usr/share/AlienwareKBL")
 import Configuration.Theme as Theme
-import Configuration.Computers as Computer 
+import Configuration.Computers as Computer
+from utils import print_error
 from Configuration.CCParser import CCParser
 from Configuration.Paths import Paths
 
