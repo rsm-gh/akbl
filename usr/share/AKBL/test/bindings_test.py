@@ -20,7 +20,7 @@
 import time
 from AKBL.Bindings import Bindings
 
-AKBLConnection = AKBL.Bindings()
+AKBLConnection = Bindings()
 
 
 if not AKBLConnection.ping():
