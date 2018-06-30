@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/usr/bin/python3
+#
 
-#  Copyright (C) 2015-2018  Rafael Senties Martinelli
+#  Copyright (C) 2018  Rafael Senties Martinelli 
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,19 +16,6 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+from AKBL.Daemon import main
 
-if [ -f /bin/systemctl ]; then
-	echo -e "\033[0;33mDisabling the systemd daemon...\033[0m"
-    systemctl stop akbl
-    systemctl disable akbl
-fi
-
-echo -e "\033[0;33mRemoving pyhon links...\033[0m"
-
-python_versions=("python3.4" "python3.5" "python3.6")
-
-for python_version in "${python_versions[@]}"; do
-    if [ -f /usr/lib/$python_version/AKBL ]; then
-        rm -f /usr/lib/$python_version/AKBL && echo -e "\033[0;33mlink removed from $python_version\033[0m"
-    fi 
-done
+main()

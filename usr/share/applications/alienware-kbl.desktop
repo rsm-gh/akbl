@@ -1,7 +1,8 @@
 [Desktop Entry]
-Name=AlienwareKBL
-Exec=alienware-kbl
+Name=AKBL
+Exec=akbl
 Terminal=false
 Type=Application
-Icon=/usr/share/AlienwareKBL/ADDONS/GUI/images/icon.png
+Icon=/usr/share/AKBL/ADDONS/GUI/images/icon.png
 Categories=Settings;
+Name[en_US.UTF-8]=AKBL

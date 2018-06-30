@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/usr/bin/python3
+#
 
-#  Copyright (C) 2015-2018  Rafael Senties Martinelli
+#  Copyright (C)  2014-2018  Rafael Senties Martinelli 
+#                 2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -16,18 +18,20 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-if [ -f /bin/systemctl ]; then
-	echo -e "\033[0;33mDisabling the systemd daemon...\033[0m"
-    systemctl stop akbl
-    systemctl disable akbl
-fi
+import sys
 
-echo -e "\033[0;33mRemoving pyhon links...\033[0m"
+# Local imports
+from AKBL.utils import print_debug
 
-python_versions=("python3.4" "python3.5" "python3.6")
+class Request:
 
-for python_version in "${python_versions[@]}"; do
-    if [ -f /usr/lib/$python_version/AKBL ]; then
-        rm -f /usr/lib/$python_version/AKBL && echo -e "\033[0;33mlink removed from $python_version\033[0m"
-    fi 
-done
+    def __init__(self, legend, packet):
+
+        self.legend = legend
+        self.packet = packet  #[int(item) for item in packet]
+
+    def __str__(self):
+        
+        formatted_package = "packet=["+'|'.join(str(item).rjust(3) for item in self.packet)+"]"
+        
+        return formatted_package+"\t legend={}".format(self.legend)

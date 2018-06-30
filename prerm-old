@@ -15,19 +15,20 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+echo ""
 
 if [ -f /bin/systemctl ]; then
-	echo -e "\033[0;33mDisabling the systemd daemon...\033[0m"
-    systemctl stop akbl
-    systemctl disable akbl
+	echo -e "\033[0;33m[OLD VERSION] Disabling the systemd daemon...\033[0m"
+    systemctl stop alienware-kbl
+    systemctl disable alienware-kbl
 fi
 
-echo -e "\033[0;33mRemoving pyhon links...\033[0m"
+echo -e "\033[0;33m[OLD VERSION] Removing the links to the python bindings...\033[0m"
 
-python_versions=("python3.4" "python3.5" "python3.6")
+python_versions=("python3" "python3.4" "python3.5" "python3.6")
 
 for python_version in "${python_versions[@]}"; do
-    if [ -f /usr/lib/$python_version/AKBL ]; then
-        rm -f /usr/lib/$python_version/AKBL && echo -e "\033[0;33mlink removed from $python_version\033[0m"
+    if [ -f /usr/lib/$python_version/AKBL.py ]; then
+        rm -f /usr/lib/$python_version/AKBL.py && echo -e "\033[0;33m[OLD VERSION] link removed from $python_version\033[0m"
     fi 
 done

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2017  Rafael Senties Martinelli
+#  Copyright (C) 2015-2018  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -26,44 +26,34 @@ cd $DIR
 
 ./prerm
 
-echo "Removing files and directories.."
-# Remove the new version of Alienware-KBL
-#
+echo -e "\033[0;33mRemoving files and directories..\033[0m"
 
-if [ -d /usr/share/alienware-kbl ]; then
-	rm -rf /usr/share/AlienwareKBL
+
+if [ -f /usr/bin/akbl ]; then
+	rm -f /usr/bin/akbl
 fi
 
-if [ -d /usr/share/doc/alienware-kbl ]; then
-	rm -rf /usr/share/doc/AlienwareKBL
+if [ -d /usr/share/AKBL ]; then
+	rm -rf /usr/share/AKBL
 fi
 
-# Remove the old version of Alienware-KBL
-#
-
-if [ -d /usr/share/alienware-kbl ]; then
-	rm -rf /usr/share/alienware-kbl
+if [ -d /usr/share/doc/AKBL ]; then
+	rm -rf /usr/share/doc/AKBL
 fi
 
-if [ -d /usr/share/doc/alienware-kbl ]; then
-	rm -rf /usr/share/doc/alienware-kbl
+if [ -f /usr/lib/systemd/system/AKBL.service ]; then
+	rm -rf /usr/lib/systemd/system/AKBL.service
 fi
 
-# Remove common files of both versions
-#
-
-if [ -f /usr/lib/systemd/system/alienware-kbl.service ]; then
-	rm -rf /usr/lib/systemd/system/alienware-kbl.service
+if [ -d /usr/lib/python3/AKBL ]; then
+	rm -rf /usr/lib/python3/AKBL
 fi
 
-if [ -f /usr/share/applications/alienware-kbl.desktop ]; then
-	rm -f /usr/share/applications/alienware-kbl.desktop
+if [ -f /usr/share/applications/akbl.desktop ]; then
+	rm -f /usr/share/applications/akbl.desktop
 fi
 
-if [ -f /usr/bin/alienware-kbl ]; then
-	rm -f /usr/bin/alienware-kbl
-fi
 
 if [ "$1" != "-s" ]; then
-	echo -e "\e[00;32mAlienware-KBL has been removed.\e[00m"
+	echo -e "\e[00;32mAKBL has been removed.\e[00m"
 fi

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2016-2017  Rafael Senties Martinelli
+#  Copyright (C) 2016-2018  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -17,23 +17,19 @@
 
 
 if [ -f /bin/systemctl ]; then
-	echo "Enabling and starting systemd..."
-    systemctl enable alienware-kbl
-    systemctl start alienware-kbl
+	echo -e "\033[0;33mEnabling and starting systemd...\033[0m"
+    systemctl enable akbl
+    systemctl start akbl
 else
-	echo -e "\e[00;31m Warning: systemd seems to be missing. Alienware-KBL will not work.\e[00m"
+	echo -e "\e[00;31m Warning: systemd seems to be missing. AKBL will not work.\e[00m"
 fi
 
-echo "Linking the python bindings..."
-if [ ! -d /usr/lib/python3 ]; then
-    mkdir /usr/lib/python3
-fi
+echo -e "\033[0;33mLinking python...\033[0m"
 
-python_versions=("python3" "python3.4" "python3.5" "python3.6")
+python_versions=("python3.4" "python3.5" "python3.6")
 
 for python_version in "${python_versions[@]}"; do
     if [ -d /usr/lib/$python_version ]; then
-        ln -s /usr/share/AlienwareKBL/Bindings.py /usr/lib/$python_version/AKBL.py
-        echo "Python3 linked."
+        ln -s /usr/lib/python3/AKBL /usr/lib/$python_version/AKBL && echo -e "\033[0;33m$python_version linked.\033[0m"
     fi
 done

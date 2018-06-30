@@ -23,93 +23,105 @@ fi
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR
-chmod a+x ./remove ./prerm ./postinst
+chmod a+x ./remove ./remove-old ./prerm ./prerm-old ./postinst
 
-#
-# These files shouldn't be shiped with the package,
-# they are removed in case they've been forgotten
-# in the source code.
-#
-if [ -d $DIR/usr/share/alienware-kbl/__pycache__ ]; then
-	rm -rf $DIR/usr/share/alienware-kbl/__pycache__
-fi
 
 #
 # Remove previous versions
 #
 echo -e "\e[00;32mTo ensure a clean installation any previous version will be fully removed..\e[00m"
 ./remove -s
+./remove-old -s
 
 #
 # Start the installation
 #
 
-echo -e "\e[00;32mCopying the software files (the message 'omiting directory *' is normal)...\e[00m"
-
-# Documentation
-
-install -d /usr/share/doc/AlienwareKBL
-install -D $DIR/usr/share/doc/AlienwareKBL/* /usr/share/doc/AlienwareKBL
-
-install -d /usr/share/doc/AlienwareKBL/ImagesPreview
-install -D $DIR/usr/share/doc/AlienwareKBL/ImagesPreview/* /usr/share/doc/AlienwareKBL/ImagesPreview
-
-install -d /usr/share/doc/AlienwareKBL/Licenses
-install -D $DIR/usr/share/doc/AlienwareKBL/Licenses/* /usr/share/doc/AlienwareKBL/Licenses
-
-install -d /usr/share/doc/AlienwareKBL/Programming
-install -D $DIR/usr/share/doc/AlienwareKBL/Programming/* /usr/share/doc/AlienwareKBL/Programming
+echo -e "\e[00;32m\nCopying the software files (the message 'omiting directory *' is normal)...\e[00m"
 
 
-# Core
+##
+## /usr/bin
+##
 
 install -d /usr/bin
 install -D $DIR/usr/bin/* /usr/bin
 
-install -d /usr/lib/systemd/system
-install -D $DIR/usr/lib/systemd/system/* /usr/lib/systemd/system
+##
+## /usr/share/
+##
 
-install -d /usr/share/AlienwareKBL
-install -D $DIR/usr/share/AlienwareKBL/* /usr/share/AlienwareKBL
+install -d /usr/share/AKBL
+install -D $DIR/usr/share/AKBL/* /usr/share/AKBL
 
-install -d /usr/share/AlienwareKBL/Configuration
-install -D $DIR/usr/share/AlienwareKBL/Configuration/* /usr/share/AlienwareKBL/Configuration
+install -d /usr/share/AKBL/test
+install -D $DIR/usr/share/AKBL/test/* /usr/share/AKBL/test
 
-install -d /usr/share/AlienwareKBL/Engine
-install -D $DIR/usr/share/AlienwareKBL/Engine/* /usr/share/AlienwareKBL/Engine
 
-install -d /usr/share/AlienwareKBL/Engine/Core
-install -D $DIR/usr/share/AlienwareKBL/Engine/Core/* /usr/share/AlienwareKBL/Engine/Core
 
-# Addons
+install -d /usr/share/doc/AKBL
+install -D $DIR/usr/share/doc/AKBL/* /usr/share/doc/AKBL
+
+install -d /usr/share/doc/AKBL/ImagesPreview
+install -D $DIR/usr/share/doc/AKBL/ImagesPreview/* /usr/share/doc/AKBL/ImagesPreview
+
+install -d /usr/share/doc/AKBL/Licenses
+install -D $DIR/usr/share/doc/AKBL/Licenses/* /usr/share/doc/AKBL/Licenses
+
+install -d /usr/share/doc/AKBL/Programming
+install -D $DIR/usr/share/doc/AKBL/Programming/* /usr/share/doc/AKBL/Programming
 
 install -d /usr/share/applications
 install -D $DIR/usr/share/applications/* /usr/share/applications
 
-install -d /usr/share/AlienwareKBL/ADDONS
-install -D $DIR/usr/share/AlienwareKBL/ADDONS/* /usr/share/AlienwareKBL/ADDONS
+##
+## /usr/lib/
+##
 
-install -d /usr/share/AlienwareKBL/ADDONS/GUI
-install -D $DIR/usr/share/AlienwareKBL/ADDONS/GUI/* /usr/share/AlienwareKBL/ADDONS/GUI
+install -d /usr/lib/systemd/system
+install -D $DIR/usr/lib/systemd/system/* /usr/lib/systemd/system
 
-install -d /usr/share/AlienwareKBL/ADDONS/GUI/images
-install -D $DIR/usr/share/AlienwareKBL/ADDONS/GUI/images/* /usr/share/AlienwareKBL/ADDONS/GUI/images
 
-install -d /usr/share/AlienwareKBL/ADDONS/BlockTesting
-install -D $DIR/usr/share/AlienwareKBL/ADDONS/BlockTesting/* /usr/share/AlienwareKBL/ADDONS/BlockTesting
 
-install -d /usr/share/AlienwareKBL/ADDONS/Indicator
-install -D $DIR/usr/share/AlienwareKBL/ADDONS/Indicator/* /usr/share/AlienwareKBL/ADDONS/Indicator
+install -d /usr/lib/python3/AKBL
+install -D $DIR/usr/lib/python3/AKBL/* /usr/lib/python3/AKBL
 
-install -d /usr/share/AlienwareKBL/ADDONS/Indicator/images
-install -D $DIR/usr/share/AlienwareKBL/ADDONS/Indicator/images/* /usr/share/AlienwareKBL/ADDONS/Indicator/images
+install -d /usr/lib/python3/AKBL/Configuration
+install -D $DIR/usr/lib/python3/AKBL/Configuration/* /usr/lib/python3/AKBL/Configuration
+
+install -d /usr/lib/python3/AKBL/Engine
+install -D $DIR/usr/lib/python3/AKBL/Engine/* /usr/lib/python3/AKBL/Engine
+
+install -d /usr/lib/python3/AKBL/Engine/Core
+install -D $DIR/usr/lib/python3/AKBL/Engine/Core/* /usr/lib/python3/AKBL/Engine/Core
+
+install -d /usr/lib/python3/AKBL/ADDONS
+install -D $DIR/usr/lib/python3/AKBL/ADDONS/* /usr/lib/python3/AKBL/ADDONS
+
+install -d /usr/lib/python3/AKBL/ADDONS/GUI
+install -D $DIR/usr/lib/python3/AKBL/ADDONS/GUI/* /usr/lib/python3/AKBL/ADDONS/GUI
+
+install -d /usr/lib/python3/AKBL/ADDONS/GUI/images
+install -D $DIR/usr/lib/python3/AKBL/ADDONS/GUI/images/* /usr/lib/python3/AKBL/ADDONS/GUI/images
+
+install -d /usr/lib/python3/AKBL/ADDONS/BlockTesting
+install -D $DIR/usr/lib/python3/AKBL/ADDONS/BlockTesting/* /usr/lib/python3/AKBL/ADDONS/BlockTesting
+
+install -d /usr/lib/python3/AKBL/ADDONS/Indicator
+install -D $DIR/usr/lib/python3/AKBL/ADDONS/Indicator/* /usr/lib/python3/AKBL/ADDONS/Indicator
+
+install -d /usr/lib/python3/AKBL/ADDONS/Indicator/images
+install -D $DIR/usr/lib/python3/AKBL/ADDONS/Indicator/images/* /usr/lib/python3/AKBL/ADDONS/Indicator/images
+
+
+
 
 
 #
 # Execute the post-installation script
 #
-echo -e "\e[00;32mExecuting the post-installation...\e[00m"
+echo -e "\e[00;32m\nExecuting the post-installation...\e[00m"
 ./postinst
 
-echo -e "\e[00;32mAlienware-KBL is installed, enjoy it !\e[00m"
+echo -e "\e[00;32m\nAKBL is installed, enjoy it !\e[00m"
 
