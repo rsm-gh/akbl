@@ -43,7 +43,7 @@ from AKBL.Configuration.Paths import Paths
 from AKBL.ADDONS.GUI.ZoneWidget import ZoneWidget
 
 
-os.chdir("/usr/share/AlienwareKBL") # this is important for the rest of the code.
+os.chdir(Paths().MAIN) # this is important for the rest of the code.
 
 def get_text_gtk_buffer(textbuffer):
     return textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)

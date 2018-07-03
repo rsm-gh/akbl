@@ -43,18 +43,23 @@ class Paths:
             use some commad like './setup; chown rsm -R *', and I actually install it
             for making the tests.
         """
-        self.GLADE_FILE = '/usr/lib/python3/AKBL/ADDONS/GUI/GUI.glade'
-        self.IMAGES = '/usr/lib/python3/AKBL/ADDONS/GUI/images/'
+        
+        self.MAIN = '/usr/lib/python3/AKBL'
+        
+        self.GLADE_FILE = '{}/ADDONS/GUI/GUI.glade'.format(self.MAIN)
+        self.IMAGES = '{}/ADDONS/GUI/images/'.format(self.MAIN)
 
-        self.BLOCK_TESTING_GLADE_FILE = '/usr/lib/python3/AKBL/ADDONS/BlockTesting/BlockTesting.glade'
+        self.BLOCK_TESTING_GLADE_FILE = '{}/ADDONS/BlockTesting/BlockTesting.glade'.format(self.MAIN)
 
         self.SMALL_ICON = self.IMAGES + 'icon.png'
         self.MEDIUM_ICON = self.IMAGES + 'icon-m.png'
         
         
-        "Indicator images"
+        """
+            Indicator images
+        """
         
-        self.INDICATOR_IMAGES_DIR = '/usr/lib/python3/AKBL/ADDONS/Indicator/images/'
+        self.INDICATOR_IMAGES_DIR = '{}/ADDONS/Indicator/images/'.format(self.MAIN)
         self.INDICATOR_ON_ICON = self.INDICATOR_IMAGES_DIR + 'icon-on.png'
         self.INDICATOR_OFF_ICON = self.INDICATOR_IMAGES_DIR + 'icon-off.png'
         self.INDICATOR_NO_DAEMON_ICON  = self.INDICATOR_IMAGES_DIR + 'icon-no-daemon.png'
