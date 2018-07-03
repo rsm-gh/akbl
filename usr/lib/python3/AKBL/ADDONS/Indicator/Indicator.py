@@ -73,7 +73,7 @@ class Indicator:
         # GUI stuff
         #
         self.indicator = appindicator.Indicator.new_with_path(
-            'alienware-kbl-indicator',
+            'akbl-indicator',
             self.paths.INDICATOR_NO_DAEMON_ICON,
             appindicator.IndicatorCategory.APPLICATION_STATUS,
             os.path.dirname(os.path.realpath(__file__)))
@@ -182,7 +182,7 @@ class Indicator:
         AKBLConnection.set_lights(True)
 
     def on_menuitem_gui(self, widget, data=None):
-        os.system('''setsid setsid alienware-kbl''')
+        os.system('''setsid setsid akbl''')
 
     def on_menuitem_change(self, widget, data=None):
         AKBLConnection.switch_lights()
