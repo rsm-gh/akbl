@@ -31,22 +31,22 @@ echo -e "\033[0;33m[OLD VERSION] Removing files and directories...\033[0m"
 #
 
 if [ -d /usr/share/alienware-kbl ]; then
-	rm -rf /usr/share/AlienwareKBL
-fi
-
-if [ -d /usr/share/doc/alienware-kbl ]; then
-	rm -rf /usr/share/doc/AlienwareKBL
-fi
-
-# Remove the old version of Alienware-KBL
-#
-
-if [ -d /usr/share/alienware-kbl ]; then
 	rm -rf /usr/share/alienware-kbl
 fi
 
 if [ -d /usr/share/doc/alienware-kbl ]; then
 	rm -rf /usr/share/doc/alienware-kbl
+fi
+
+# Remove the old version of Alienware-KBL
+#
+
+if [ -d /usr/share/AlienwareKBL ]; then
+	rm -rf /usr/share/AlienwareKBL
+fi
+
+if [ -d /usr/share/doc/AlienwareKBL ]; then
+	rm -rf /usr/share/doc/AlienwareKBL
 fi
 
 # Remove common files of both versions
