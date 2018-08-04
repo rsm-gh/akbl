@@ -194,6 +194,7 @@ class Indicator:
         AKBLConnection.switch_lights()
 
     def on_menuitem_exit(self, widget, data=None):
+        
         AKBLConnection._command('indicator_kill')
         self._.daemon.shutdown()
         self.check_daemon = False

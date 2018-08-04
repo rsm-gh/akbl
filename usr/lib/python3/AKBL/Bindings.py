@@ -52,8 +52,29 @@ class Bindings:
                 return response
 
             except Exception:
-                print_error("Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)), format_exc()))
+                
+                try:
+                    #
+                    # I ignore why this has to be inside an exception. Its like if there was a problem printing format_exc().
+                    # The bug happens when repducing the following scenario:
+                    #    1) There is a launched indicator.
+                    #    2) The software is re-installed.
+                    #    3) The user tries to close the indicator by usig the "Exit" button.
+                    #
+                    
+                    if len(args) > 0:
+                        print_error("Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)), str(format_exc())))
+                    else:
+                        print_error("Command={}\n{}\n".format(command, str(format_exc())))
+                
+                except Exception:
+                    pass
+                
                 return False
+            
+            
+            print("DEBUG 2")
+            
         else:
             print_warning("The daemon is off.")
             return False
