@@ -30,6 +30,7 @@ from AKBL.Engine.Core.Controller import Controller
 class ConnectDaemon:
 
     def __init__(self):
+        
         self.daemon = Pyro4.Daemon()
         self.paths = Paths()
 

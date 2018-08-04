@@ -37,12 +37,12 @@ from AKBL.texts import (TEXT_PROFILES,
                         TEXT_SWICH_STATE, 
                         TEXT_EXIT)
 
+
 def daemon_is_active():
     if AKBLConnection.ping():
         return True
 
     return False
-
 
 class ConnectIndicator:
 
