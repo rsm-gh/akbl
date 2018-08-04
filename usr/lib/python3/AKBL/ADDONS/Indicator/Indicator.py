@@ -38,8 +38,10 @@ from AKBL.texts import (TEXT_PROFILES,
                         TEXT_EXIT)
 
 
+AKBL_CONECTION = Bindings()
+
 def daemon_is_active():
-    if AKBLConnection.ping():
+    if AKBL_CONECTION.ping():
         return True
 
     return False
@@ -47,9 +49,11 @@ def daemon_is_active():
 class ConnectIndicator:
 
     def __init__(self):
-        self.connected = False
+        
+        self.conected = False
         self.daemon = Pyro4.Daemon()
         self.uri = self.daemon.register(Indicator(self))
+        
         threading.Thread(target=self.pycore_thread).start()
         threading.Thread(target=self.connect).start()
 
@@ -58,7 +62,7 @@ class ConnectIndicator:
 
     def connect(self):
         sleep(0.5)
-        self.connected = AKBLConnection._command('indicator_init', self.uri)
+        self.conected = AKBL_CONECTION._command('indicator_init', self.uri)
 
 
 class Indicator:
@@ -108,6 +112,25 @@ class Indicator:
         self.set_code(666)
         threading.Thread(target=self.daemon_check).start()
 
+    def daemon_check(self):
+        
+        while self.check_daemon:
+
+            if daemon_is_active():
+                
+                if self.current_code == 666:
+                    self._.connect()
+                    AKBL_CONECTION._command('indicator_get_state')
+
+            elif self.current_code != 666:
+                GObject.idle_add(self.set_code, 666)
+                
+            else:
+                AKBL_CONECTION.reload_address(False)
+                
+                
+            sleep(1)
+            
     @Pyro4.expose
     def ping(self):
         pass
@@ -166,46 +189,29 @@ class Indicator:
 
     @Pyro4.expose
     def set_profile(self, widget, item):
-        AKBLConnection.set_profile(item)
-
-    def daemon_check(self):
-        while self.check_daemon:
-
-            if daemon_is_active():
-                if self.current_code == 666:
-                    self._.connect()
-                    AKBLConnection._command('indicator_get_state')
-
-            elif self.current_code != 666:
-                GObject.idle_add(self.set_code, 666)
-
-            sleep(1)
+        AKBL_CONECTION.set_profile(item)
 
     def on_menuitem_off(self, widget, data=None):
-        AKBLConnection.set_lights(False)
+        AKBL_CONECTION.set_lights(False)
 
     def on_menuitem_on(self, widget, data=None):
-        AKBLConnection.set_lights(True)
+        AKBL_CONECTION.set_lights(True)
 
     def on_menuitem_gui(self, widget, data=None):
         os.system('''setsid setsid akbl''')
 
     def on_menuitem_change(self, widget, data=None):
-        AKBLConnection.switch_lights()
+        AKBL_CONECTION.switch_lights()
 
     def on_menuitem_exit(self, widget, data=None):
-        
-        AKBLConnection._command('indicator_kill')
+        AKBL_CONECTION._command('indicator_kill')
         self._.daemon.shutdown()
         self.check_daemon = False
         Gtk.main_quit()
 
-
-AKBLConnection = Bindings()
-
 def main():
     
-    if not AKBLConnection.ping():
+    if not AKBL_CONECTION.ping():
         print_error("Failed to start the Indicator because the daemon is off.")
         exit(1)    
     

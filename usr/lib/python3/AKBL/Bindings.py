@@ -79,14 +79,16 @@ class Bindings:
             print_warning("The daemon is off.")
             return False
 
-    def reload_address(self):
+    def reload_address(self, print_error=True):
         """
             Try to make a connection with the Daemon.
             Returns True or False
         """
         if not self.ping() and os.path.exists(self._paths.DAEMON_PYRO_PATH):
+            
             with open(self._paths.DAEMON_PYRO_PATH, mode='rt', encoding='utf-8') as f:
                 address = f.readline().strip()
+                
             try:
                 pyro = Pyro4.Proxy(address)
                 pyro.ping()
@@ -97,7 +99,8 @@ class Bindings:
                 return True
 
             except Exception:
-                print_error(format_exc())
+                if print_error:
+                    print_error(format_exc())
 
                 self._address = False
                 self._pyro = False
