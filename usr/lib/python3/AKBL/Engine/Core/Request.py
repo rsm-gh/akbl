@@ -17,12 +17,6 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-
-import sys
-
-# Local imports
-from AKBL.utils import print_debug
-
 class Request:
 
     def __init__(self, legend, packet):

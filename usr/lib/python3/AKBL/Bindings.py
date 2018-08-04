@@ -18,7 +18,6 @@
 
 
 import os
-import sys
 import Pyro4
 import getpass
 from traceback import format_exc
@@ -52,7 +51,7 @@ class Bindings:
                 response = getattr(self._pyro, command)(*args)
                 return response
 
-            except Exception as e:
+            except Exception:
                 print_error("Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)), format_exc()))
                 return False
         else:
@@ -76,7 +75,7 @@ class Bindings:
 
                 return True
 
-            except Exception as e:
+            except Exception:
                 print_error(format_exc())
 
                 self._address = False
@@ -123,8 +122,10 @@ class Bindings:
         names = []
         for filename in filenames:
             if filename.endswith('.cfg'):
+                
+                path = self._paths.PROFILES_PATH + filename
 
-                with open(self._paths.PROFILES_PATH + filename, mode='rt', encoding='utf-8') as f:
+                with open(path, mode='rt', encoding='utf-8') as f:
                     lines = f.readlines()
 
                 for line in lines:

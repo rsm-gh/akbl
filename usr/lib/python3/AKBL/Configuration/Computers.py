@@ -18,11 +18,62 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-
-import sys
-
-from AKBL.texts import *
 from AKBL.Configuration.Region import Region
+from AKBL.texts import (TEXT_AURORAR4,
+                        TEXT_M11XR1,
+                        TEXT_M11XR2,
+                        TEXT_M11XR3,
+                        TEXT_M11XR25,
+                        TEXT_M14XR1,
+                        TEXT_M14XR2,
+                        TEXT_M14XR3,
+                        TEXT_M17X,
+                        TEXT_M17XR2,
+                        TEXT_M17XR3,
+                        TEXT_M18XRX,
+                        TEXT_M18XR2,
+                        TEXT_M15XAREA51,
+                        TEXT_ALIENWAREWARE13, 
+                        TEXT_ALIENWAREWARE13R3,
+                        TEXT_ALIENWAREWARE15,
+                        TEXT_ALIENWAREWARE15R3,
+                        TEXT_AREA_POWER_BUTTON_ID,
+                        TEXT_DESCRIPTION_POWER_BUTTON,
+                        TEXT_AREA_POWER_BUTTON_EYES_ID,
+                        TEXT_DESCRIPTION_ALIENWAREWARE_POWERBUTTON_EYES,
+                        TEXT_AREA_MEDIA_BAR_ID,
+                        TEXT_DESCRIPTION_MEDIA_BAR,
+                        TEXT_AREA_TOUCH_PAD_ID,
+                        TEXT_DESCRIPTION_TOUCHPAD,
+                        TEXT_AREA_ALIENWARE_LOGO_ID,
+                        TEXT_DESCRIPTION_ALIENWAREWARE_LOGO ,
+                        TEXT_AREA_ALIENWARE_HEAD_ID,
+                        TEXT_DESCRIPTION_ALIENWAREWARE_HEAD,
+                        TEXT_AREA_ALIENWARE_OUTER_LID_ID,
+                        TEXT_DESCRIPTION_OUTER_LID,
+                        TEXT_AREA_LEFT_SPEAKER_ID,
+                        TEXT_DESCRIPTION_LEFT_SPEAKER,
+                        TEXT_AREA_RIGHT_SPEAKER_ID,
+                        TEXT_DESCRIPTION_RIGHT_SPEAKER,
+                        TEXT_AREA_LEFT_KEYBOARD_ID,
+                        TEXT_DESCRIPTION_LEFT_KEYBOARD,
+                        TEXT_AREA_LEFT_CENTER_KEYBOARD_ID,
+                        TEXT_DESCRIPTION_LEFT_CENTER_KEYBOARD,
+                        TEXT_AREA_RIGHT_CENTER_KEYBOARD_ID,
+                        TEXT_DESCRIPTION_RIGHT_CENTER_KEYBOARD,
+                        TEXT_AREA_RIGHT_KEYBOARD_ID ,
+                        TEXT_DESCRIPTION_RIGHT_KEYBOARD,
+                        TEXT_AREA_KEYBOARD_ID,
+                        TEXT_DESCRIPTION_KEYBOARD,
+                        TEXT_AREA_LIGHT_PIPE_ID,
+                        TEXT_DESCRIPTION_LIGHT_PIPE,
+                        TEXT_AREA_TACTX_ID,
+                        TEXT_DESCRIPTION_TACTX,
+                        TEXT_AREA_HARD_DISK_DRIVE_ID,
+                        TEXT_DESCRIPTION_HDD,
+                        TEXT_AREA_CAPS_LOCK_ID,
+                        TEXT_DESCRIPTION_CAPS_LOCK)
+
 
 class Computer:
 

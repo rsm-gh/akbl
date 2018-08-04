@@ -17,10 +17,9 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-import sys
 from copy import copy
 
-from AKBL.utils import print_error, print_debug, print_warning, rgb_to_hex
+from AKBL.utils import print_error, print_warning, rgb_to_hex
 from AKBL.Engine.Core.Request import Request
 
 class Constructor(list):

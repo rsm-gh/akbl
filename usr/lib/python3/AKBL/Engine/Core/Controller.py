@@ -18,9 +18,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-import sys
-
-from AKBL.utils import print_debug, print_error, print_warning
+from AKBL.utils import print_error, print_warning
 from AKBL.Engine.Core.Driver import Driver
 from AKBL.Engine.Core.Constructor import Constructor
 

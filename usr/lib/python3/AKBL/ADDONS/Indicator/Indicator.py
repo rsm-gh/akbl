@@ -20,19 +20,22 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, GObject, GLib, Gdk
+from gi.repository import Gtk, GObject, Gdk
 from gi.repository import AppIndicator3 as appindicator
+
 import os
-import sys
 import threading
 import Pyro4
 from time import sleep
 
 
-from AKBL.texts import *
+from AKBL.utils import print_error
 from AKBL.Bindings import Bindings
 from AKBL.Configuration.Paths import Paths
-
+from AKBL.texts import (TEXT_PROFILES, 
+                        TEXT_START_THE_GUI, 
+                        TEXT_SWICH_STATE, 
+                        TEXT_EXIT)
 
 def daemon_is_active():
     if AKBLConnection.ping():
@@ -144,11 +147,12 @@ class Indicator:
                 self.profiles_menu.set_sensitive(False)
 
     @Pyro4.expose
-    def load_profiles(self, list, current, state):
+    def load_profiles(self, items, current, state):
+        
         for children in self.submenu_profiles.get_children():
             self.submenu_profiles.remove(children)
 
-        for item in sorted(list):
+        for item in sorted(items):
             submenu = Gtk.CheckMenuItem(label=item)
 
             if item == current and state:
@@ -156,6 +160,8 @@ class Indicator:
 
             submenu.connect('toggled', self.set_profile, item)
             self.submenu_profiles.append(submenu)
+           
+        
         self.submenu_profiles.show_all()
 
     @Pyro4.expose
@@ -193,7 +199,9 @@ class Indicator:
         self.check_daemon = False
         Gtk.main_quit()
 
+
 AKBLConnection = Bindings()
+
 def main():
     
     if not AKBLConnection.ping():
@@ -203,5 +211,5 @@ def main():
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     GObject.threads_init()
     Gdk.threads_init()
-    indicator = ConnectIndicator()
+    _ = ConnectIndicator()
     Gtk.main()

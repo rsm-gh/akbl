@@ -17,7 +17,6 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 import os
-import sys
 from shutil import rmtree
 
 from AKBL.utils import getuser
@@ -83,6 +82,6 @@ class Paths:
             rmtree(self.CONFIGURATION_PATH)
         #
         #
-        for dir in (os.path.dirname(self.CONFIGURATION_PATH), self.PROFILES_PATH):
-            if not os.path.exists(dir):
-                os.makedirs(dir)
+        for dir_path in (os.path.dirname(self.CONFIGURATION_PATH), self.PROFILES_PATH):
+            if not os.path.exists(dir_path):
+                os.makedirs(dir_path)

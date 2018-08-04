@@ -18,6 +18,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+
 class Region:
 
     def __init__(self, name=None, description=None, hex_id=None, max_commands=0, can_blink=False, can_morph=False, can_light=False):
@@ -43,3 +44,5 @@ class Region:
 '''.format(self.name, self.description, self.hex_id, self.can_light, self.can_blink, self.can_morph, self.max_commands)
         
         return region_description
+    
+    

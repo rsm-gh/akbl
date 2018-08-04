@@ -17,9 +17,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-import sys
-
-from AKBL.utils import print_warning, hex_to_rgb, rgb_to_hex, middle_rgb_color
+from AKBL.utils import print_warning
 
 class Zone:
 

@@ -17,15 +17,12 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-import sys
 import Pyro4
 import os
-import pwd
 from traceback import format_exc
-from time import time, sleep
 
-from AKBL.texts import *
-from AKBL.utils import getuser, print_warning, print_debug, print_error, string_is_hex_color
+from AKBL.texts import TEXT_ONLY_ROOT
+from AKBL.utils import getuser, print_warning, print_error, string_is_hex_color
 from AKBL.Configuration import Theme
 from AKBL.Configuration.Paths import Paths
 from AKBL.Configuration.CCParser import CCParser
@@ -114,7 +111,7 @@ class Daemon:
             self._indicator_send_code(100)
             try:
                 self._indicator_pyro.load_profiles(Theme.AVAILABLE_THEMES.keys(), self._theme.name, self._lights_state)
-            except Exception as e:
+            except Exception:
                 print_error(format_exc())
 
         # Update the Daemon variables
@@ -125,7 +122,7 @@ class Daemon:
         if self._indicator_pyro:
             try:
                 self._indicator_pyro.set_code(val)
-            except Exception as e:
+            except Exception:
                 print_error(format_exc())
 
     """
@@ -152,7 +149,7 @@ class Daemon:
         if self._indicator_pyro and indicator:
             try:
                 self._indicator_pyro.load_profiles(Theme.AVAILABLE_THEMES.keys(), self._theme.name, self._lights_state)
-            except Exception as e:
+            except Exception:
                 print_error(format_exc())
 
     """
@@ -317,7 +314,7 @@ class Daemon:
                             
                     elif mode == 'morph':
                         if region.can_morph:
-                           self._controller.add_color_line(region.hex_id, 'morph', left_color, right_color)
+                            self._controller.add_color_line(region.hex_id, 'morph', left_color, right_color)
                         else:
                             self._controller.add_color_line(region.hex_id, 'fixed', left_color)
                             print_warning("The mode=morph is not supported for the region={}, the mode=fixed will be used instead.".format(region.name))
@@ -346,12 +343,12 @@ class Daemon:
         return (self._computer.NAME, self._computer.VENDOR_ID, self._computer.PRODUCT_ID, self._controller.get_device_information())
 
     @Pyro4.expose
-    def modify_lights_state(self, bool):
+    def modify_lights_state(self, value):
         """
             This method does not changes the lights of the keyboard,
             it only updates the daemon and the indicator
         """
-        if bool in (False, 'False', 'false'):
+        if value in (False, 'False', 'false'):
             self._lights_state = False
             self._indicator_send_code(150)
         else:
@@ -374,7 +371,7 @@ class Daemon:
         try:
             self._indicator_pyro = Pyro4.Proxy(str(uri))
             self.reload_configurations(self._user)
-        except Exception as e:
+        except Exception:
             print_warning("Failed initialization")
             print(format_exc())
             self._indicator_pyro = False
@@ -389,4 +386,4 @@ def main():
         print(TEXT_ONLY_ROOT)
     else:
         os.chdir(os.path.dirname(os.path.realpath(__file__)))
-        d=ConnectDaemon()
+        _=ConnectDaemon()

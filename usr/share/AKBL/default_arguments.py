@@ -18,13 +18,10 @@
 
 import sys
 import os
-import pwd
 
-from AKBL.utils import getuser
 from AKBL.texts import TEXT_ERROR_DAEMON_OFF, TEXT_HELP, TEXT_LICENSE, TEXT_WRONG_ARGUMENT
 from AKBL.Bindings import Bindings
 from AKBL.Configuration.Paths import Paths
-from AKBL.Configuration.CCParser import CCParser
 
 
 AKBLConnection = Bindings()

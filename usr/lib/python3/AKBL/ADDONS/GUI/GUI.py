@@ -21,33 +21,38 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, GObject, Gdk, GdkPixbuf
+from gi.repository import Gtk, GObject, Gdk
 
 import os
-import sys
 import threading
 import shutil
-import getpass
 from traceback import format_exc
-from time import time, sleep
+from time import sleep
 from copy import deepcopy
 
 import AKBL.Configuration.Theme as Theme
 import AKBL.Configuration.Computers as Computer
-from AKBL.texts import *
-from AKBL.utils import print_error
-from AKBL.Engine import *
+from AKBL.utils import print_error, print_warning
 from AKBL.Bindings import Bindings
 from AKBL.Configuration.CCParser import CCParser
 from AKBL.Configuration.Paths import Paths
 from AKBL.ADDONS.GUI.ZoneWidget import ZoneWidget
-
+from AKBL.texts import (TEXT_COPY_CONFIG, 
+                        TEXT_COMPUTER_DATA, 
+                        TEXT_ADD, 
+                        TEXT_CONFIRM_DELETE_CONFIGURATION, 
+                        TEXT_CONFIGURATION_DELETED,
+                        TEXT_SHUTTING_LIGHTS_OFF,
+                        TEXT_APPLYING_CONFIGURATION,
+                        TEXT_SAVING_THE_CONFIGURATION,
+                        TEXT_THEME_ALREADY_EXISTS,
+                        TEXT_CHOOSE_A_THEME,
+                        TEXT_CHOOSE_A_FOLDER_TO_EXPORT)
 
 os.chdir(Paths().MAIN) # this is important for the rest of the code.
 
 def get_text_gtk_buffer(textbuffer):
     return textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)
-
 
 def gtk_append_text_to_buffer(textbuffer, text):
     textbuffer.set_text(get_text_gtk_buffer(textbuffer) + text)
@@ -83,7 +88,7 @@ def gtk_dialog_info(parent, text1, text2=None, icon=None):
     if text2 is not None:
         dialog.format_secondary_text(text2)
 
-    response = dialog.run()
+    _ = dialog.run()
     dialog.destroy()
 
 
@@ -104,10 +109,10 @@ def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filt
         window.set_current_folder(default_folder)
 
     for filter_name, filter_extension in filters:
-        filter = Gtk.FileFilter()
-        filter.set_name(filter_name)
-        filter.add_pattern(filter_extension)
-        window.add_filter(filter)
+        gtk_filter = Gtk.FileFilter()
+        gtk_filter.set_name(filter_name)
+        gtk_filter.add_pattern(filter_extension)
+        window.add_filter(gtk_filter)
 
     response = window.run()
     if response == Gtk.ResponseType.OK:
@@ -188,7 +193,7 @@ class GUI(Gtk.Window):
         """
             Add the accel groups
         """
-        for id, shorcut in (('imagemenuitem_apply_configuration', 'a'),
+        for _id, shorcut in (('imagemenuitem_apply_configuration', 'a'),
                             ('imagemenuitem_save', 's'),
                             ('imagemenuitem_delete', 'd'),
                             ('imagemenuitem_new', 'n'),
@@ -198,7 +203,7 @@ class GUI(Gtk.Window):
                             ('imagemenuitem_export', 'e'),
                             ('imagemenuitem_import', 'i')):
 
-            imagemenuitem_apply_configuration = builder.get_object(id)
+            imagemenuitem_apply_configuration = builder.get_object(_id)
             accel_group = Gtk.AccelGroup()
             self.window_root.add_accel_group(accel_group)
             imagemenuitem_apply_configuration.add_accelerator('activate', 
@@ -346,7 +351,7 @@ class GUI(Gtk.Window):
         for profile_name in sorted(Theme.AVAILABLE_THEMES.keys()):
             self.liststore_profiles.append([profile_name])
 
-        row, name = Theme.GET_last_configuration()
+        row, _ = Theme.GET_last_configuration()
 
         self.combobox_profiles.set_active(row)
 
@@ -502,7 +507,7 @@ class GUI(Gtk.Window):
         try:
             # Patch (#12)
             os.utime(self.theme.path, None)
-        except Exception as e:
+        except Exception:
             print_error('It was not possible to os.utime the profile path: \n{}\n{}'.format(self.theme.path), format_exc())
 
         AKBLConnection._command('reload_configurations')
@@ -717,9 +722,6 @@ class GUI(Gtk.Window):
         if self.color_chooser_widget.get_property('show-editor'):
             self.color_chooser_widget.set_property('show-editor', False)
 
-    def on_scrolledwindow_zones_scroll_event(self, scroll, steps, direction):
-        print(scrolltype, horizontal)
-
 
 AKBLConnection = Bindings()
 
@@ -732,5 +734,5 @@ def main():
     GObject.threads_init()
     Gdk.threads_init()
 
-    gui = GUI()
+    _ = GUI()
     Gtk.main()

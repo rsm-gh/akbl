@@ -20,23 +20,20 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, GObject, Gdk, GdkPixbuf
+from gi.repository import Gtk
 
 import os
-import sys
-import getpass
 from traceback import format_exc
-from time import time, sleep
 import subprocess
 
+from AKBL.texts import (TEXT_DEVICE_FOUND, 
+                        TEXT_DEVICE_NOT_FOUND, 
+                        TEXT_BLOCK_TEST, 
+                        TEXT_BLOCK_LIGHTS_OFF, 
+                        TEXT_ONLY_ROOT)
 
-from AKBL.texts import *
 from AKBL.utils import getuser
-import AKBL.Configuration.Theme
-import AKBL.Configuration.Computers
-from AKBL.Configuration.CCParser import CCParser
 from AKBL.Configuration.Paths import Paths
-from AKBL.Configuration.Computers import Computer
 
 
 if getuser() == 'root':
@@ -121,7 +118,7 @@ def gtk_dialog_info(parent, text1, text2=None, icon=None):
     if text2 is not None:
         dialog.format_secondary_text(text2)
 
-    response = dialog.run()
+    _ = dialog.run()
     dialog.destroy()
 
 
@@ -319,7 +316,7 @@ class BlockTesting(Gtk.Window):
             self._testing_controller.apply_config()
      
  
-        except Exception as e:
+        except Exception:
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + format_exc() + '\n')
 
     def on_button_block_testing_lights_off_clicked(self, button, data=None):
@@ -335,7 +332,7 @@ class BlockTesting(Gtk.Window):
 
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + TEXT_BLOCK_LIGHTS_OFF + '\n')
             
-        except Exception as e:
+        except Exception:
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + format_exc())
 
     def on_checkbutton_protect_common_blocks_clicked(self, checkbutton, data=None):
@@ -380,5 +377,5 @@ def main():
 
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
-    gui = BlockTesting()
+    _ = BlockTesting()
     Gtk.main()

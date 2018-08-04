@@ -19,7 +19,6 @@
 
 
 import sys
-import os
 import time
 import usb
 from traceback import format_exc
@@ -115,6 +114,6 @@ class Driver():
             self._device.detach_kernel_driver(0)
             try:
                 self._device.set_configuration()
-            except Exception as e:
+            except Exception:
                 print_error(format_exc())
                 sys.exit(1)

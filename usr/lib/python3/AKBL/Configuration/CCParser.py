@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-#  Copyright (C) 2014-2016  Rafael Senties Martinelli 
+#  Copyright (C) 2014-2016, 2018  Rafael Senties Martinelli 
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,20 +15,12 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-"""
-    To allow the compatibility with python2.7, `with open()` can not use
-    encoding='utf-8'.  Anyways the default encoding is utf-8.
-"""
 
-try:
-    import ConfigParser as configparser  # python2
-except:
-    import configparser  # python3
-
+import configparser  # python3
 import os
 import traceback
 
-__version__ = '1.4.8~4'
+__version__ = '1.4.9~0'
 
 
 class CCParser(object):
@@ -89,7 +81,7 @@ CCParser instance:
         else:
             try:
                 self._config.read(self.ini_path)
-            except Exception as e:
+            except Exception:
                 print("CCParser Warning: reading damaged file or file without section")
                 print(traceback.format_exc())
                 print()
@@ -133,7 +125,7 @@ CCParser instance:
             try:
                 val = float(val)
                 return val
-            except Exception as e:
+            except Exception:
                 if self._debug:
                     print(traceback.format_exc())
 
@@ -154,7 +146,7 @@ CCParser instance:
             try:
                 val = int(val)
                 return val
-            except Exception as e:
+            except Exception:
                 if self._debug:
                     print(traceback.format_exc())
 
@@ -203,7 +195,7 @@ CCParser instance:
             try:
                 val = float(val)
                 return val
-            except Exception as e:
+            except Exception:
                 if self._debug:
                     print(traceback.format_exc())
 
@@ -223,7 +215,7 @@ CCParser instance:
             try:
                 val = int(val)
                 return val
-            except Exception as e:
+            except Exception:
                 if self._debug:
                     print(traceback.format_exc())
 
@@ -261,38 +253,38 @@ CCParser instance:
         section = str(section)
         self._section = section
 
-    def set_default_float(self, float):
+    def set_default_float(self, value):
         """
             Set the default float to return when
             a value does not exists. By default
             it returns 0.0
         """
-        self._default_float = float
+        self._default_float = value
 
-    def set_default_string(self, str):
+    def set_default_string(self, value):
         """
             Set the default string to return when
             a value does not exists. By default
             it returns an empty string.
         """
 
-        self._default_string = str
+        self._default_string = value
 
-    def set_default_bool(self, bool):
+    def set_default_bool(self, value):
         """
             Set the default boolean to return when
             a value does not exists. By default
             it returns false
         """
-        self._default_bool = bool
+        self._default_bool = value
 
-    def set_default_int(self, int):
+    def set_default_int(self, value):
         """
             Set the default integer to return when
             a value does not exists. By default
             it returns 0
         """
-        self._default_int = int
+        self._default_int = value
 
     def write(self, value_name, value):
         """
@@ -313,7 +305,7 @@ CCParser instance:
 
             try:
                 self._config.read(self.ini_path)
-            except Exception as e:
+            except Exception:
                 print("CCParser Warning: reading damaged file or file without section")
                 print(traceback.format_exc())
                 print()
