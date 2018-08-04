@@ -20,6 +20,7 @@
 import os
 from configparser import ConfigParser
 
+from AKBL.Configuration.Paths import Paths
 from AKBL.Configuration.Computer import Computer
 from AKBL.Configuration.Region import Region
 from AKBL.utils import print_debug, print_warning
@@ -28,7 +29,7 @@ def get_computers():
 
     computers = []
     
-    path='/usr/share/AKBL/computers'
+    path=Paths().COMPUTERS_CONFIGURATION_FOLDER
     
     for file_name in os.listdir(path):
         if file_name.endswith(".ini"):

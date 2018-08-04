@@ -26,43 +26,46 @@ class Paths:
 
     def __init__(self, user=getuser()):
 
+        ## System
+        ##
+        self.COMPUTERS_CONFIGURATION_FOLDER = "/usr/share/AKBL/computers"
+        self.DAEMON_PYRO_PATH = '/etc/akbl-daemon-adress'
+        self.SYSTEMCTL_PATH = '/bin/systemctl'
+        self.MAIN = '/usr/lib/python3/AKBL'
+
+        ## User
+        ##
+        
         if user == 'root':
             self.CONFIGURATION_PATH = '/root/.config/alienware-kbl.ini'
             self.PROFILES_PATH = '/root/.local/share/alienware-kbl/'
         else:
             self.CONFIGURATION_PATH = '/home/{}/.config/alienware-kbl.ini'.format(user)
             self.PROFILES_PATH = '/home/{}/.local/share/alienware-kbl/'.format(user)
-
-        self.DAEMON_PYRO_PATH = '/etc/akbl-daemon-adress'
-        self.SYSTEMCTL_PATH = '/bin/systemctl'
-
-        """
-            Maybe these files should be called from the location of the paths file.
-            I actually dont't have any problem when developing the software because I
-            use some commad like './setup; chown rsm -R *', and I actually install it
-            for making the tests.
-        """
         
-        self.MAIN = '/usr/lib/python3/AKBL'
-        
+        ## GUI
+        ##
         self.GLADE_FILE = '{}/ADDONS/GUI/GUI.glade'.format(self.MAIN)
-        self.IMAGES = '{}/ADDONS/GUI/images/'.format(self.MAIN)
-
+        
+        ## Block testing window
+        ##
         self.BLOCK_TESTING_GLADE_FILE = '{}/ADDONS/BlockTesting/BlockTesting.glade'.format(self.MAIN)
-
+        
+        ## GUI & Others
+        ##
+        self.IMAGES = '{}/ADDONS/GUI/images/'.format(self.MAIN)
         self.SMALL_ICON = self.IMAGES + 'icon.png'
         self.MEDIUM_ICON = self.IMAGES + 'icon-m.png'
-        
-        
-        """
-            Indicator images
-        """
-        
+
+        ## Indicator
+        ##
         self.INDICATOR_IMAGES_DIR = '{}/ADDONS/Indicator/images/'.format(self.MAIN)
         self.INDICATOR_ON_ICON = self.INDICATOR_IMAGES_DIR + 'icon-on.png'
         self.INDICATOR_OFF_ICON = self.INDICATOR_IMAGES_DIR + 'icon-off.png'
         self.INDICATOR_NO_DAEMON_ICON  = self.INDICATOR_IMAGES_DIR + 'icon-no-daemon.png'
 
+
+        
         """
             This is to add support to older versions where the profiles and
             config was stored in the same directory than the code
@@ -71,13 +74,15 @@ class Paths:
         self.BACKUP_PROFILES = '/etc/alienware-kbl/profiles/'
         self.GLOBAL_CONFIG = '/etc/alienware-kbl/gobal-config.ini'
 
+
         """
             Create the tree dirs
         """
 
-        # In case there be a folder instead of the configuration file, delete the folder! Bug #84 and
+        # In case there be a folder instead of the configuration file, delete the folder. Bug #84 
         # Old versions of alienware-kbl may still creating the folder. The bug was in the Paths class.
         #
+        
         if os.path.isdir(self.CONFIGURATION_PATH):
             rmtree(self.CONFIGURATION_PATH)
         #
