@@ -166,7 +166,7 @@ right_color={}
         area_found, left_color, right_color, mode, = False, False, False, False
 
         imported_areas = []
-        supported_region_names = self._computer.get_supported_regions_names()
+        supported_region_names = self._computer.get_supported_regions_name()
         #print_debug('supported_region_names=`{}`'.format(supported_region_names))
 
         # Parse the configuration file

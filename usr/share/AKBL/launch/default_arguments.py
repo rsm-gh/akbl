@@ -19,10 +19,12 @@
 import sys
 import os
 
-from AKBL.texts import TEXT_ERROR_DAEMON_OFF, TEXT_HELP, TEXT_LICENSE, TEXT_WRONG_ARGUMENT
 from AKBL.Bindings import Bindings
 from AKBL.Configuration.Paths import Paths
-
+from AKBL.texts import (TEXT_ERROR_DAEMON_OFF, 
+                        TEXT_HELP,
+                        TEXT_LICENSE,
+                        TEXT_WRONG_ARGUMENT)
 
 AKBLConnection = Bindings()
 PATHS = Paths()

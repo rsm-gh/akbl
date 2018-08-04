@@ -20,24 +20,24 @@ export LD_PRELOAD=/usr/share/AKBL/libusb-1.0.so.0 ## This is the libusb patch.
                                                   ## Some distributions like Debian wheezy does not need it. 
 
 if [ -z "$1" ]; then
-    python3 /usr/share/AKBL/gui.py
+    python3 /usr/share/AKBL/launch/gui.py
 else
     if [ -z "$2" ]; then
         case "$1" in
             --start-daemon)
-                python3 /usr/share/AKBL/daemon.py "$1"
+                python3 /usr/share/AKBL/launch/daemon.py "$1"
             ;;
             --block-testing)
-                python3 /usr/share/AKBL/block_testing.py
+                python3 /usr/share/AKBL/launch/block_testing.py
             ;;
             --start-indicator)
-                setsid python3 /usr/share/AKBL/indicator.py
+                setsid python3 /usr/share/AKBL/launch/indicator.py
             ;;
             *)
-                python3 /usr/share/AKBL/default_arguments.py "$1"
+                python3 /usr/share/AKBL/launch/default_arguments.py "$1"
             ;;
         esac
     else
-        python3 /usr/share/AKBL/default_arguments.py "$1" "$2"
+        python3 /usr/share/AKBL/launch/default_arguments.py "$1" "$2"
     fi
 fi

@@ -16,7 +16,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-import configparser  # python3
+import configparser
 import os
 import traceback
 
@@ -54,22 +54,22 @@ class CCParser(object):
 
         self.__version__ = __version__
 
-    def print_info(self):
-        print('''
-CCParser instance:
+    def __str__(self):
+        return '''
+CCParser instance: {}
  Configuration Path: {}
  Section: {}
  Default boolean: {}
  Default float: {}
  Default integer: {}
  Default string: {}
-'''.format( self.get_configuration_path(),
+'''.format( repr(self),
+            self.get_configuration_path(),
             self.get_section(),
             self.get_default_bool(),
             self.get_default_float(),
             self.get_default_int(),
-            self.get_default_str()
-            ))
+            self.get_default_str())
 
     def check_value(self, value):
         """
@@ -342,13 +342,9 @@ CCParser instance:
     def get_configuration_path(self):
         return self.ini_path
 
-if __name__ == '__main__':
-    """
-        This is for testing purposes.
-    """
 
-    path = '/home/rsm/Desktop/test.ini'  # unexisting file
-
+def test(path):
+    
     if os.path.exists(path):
         os.remove(path)
 
@@ -362,5 +358,8 @@ if __name__ == '__main__':
 
     cp.write('string1', 'this is a test')
     print(cp.get_str('string1'))
+    print(cp)
 
-    cp.print_info()
+if __name__ == '__main__':
+    test('/home/rsm/Desktop/test.ini')  # unexisting file
+

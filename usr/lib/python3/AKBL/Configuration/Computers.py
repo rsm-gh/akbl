@@ -84,7 +84,6 @@ class Computer:
         self.DEFAULT_SPEED = 255
         
         self.NAME = 'Common Configuration'
-        self._REGIONS = []
         self.VENDOR_ID = 6268
         self.PRODUCT_ID = None
         self.SUPPORTED_COMMANDS = 15
@@ -122,7 +121,8 @@ class Computer:
         self.BLOCK_BAT_POWER = 8
         self.BLOCK_BATT_CRITICAL = 9
         
-
+        self._REGIONS = []
+        
     def __str__(self):
         attributes = '\n'.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items() if not attribute.startswith('_')])
         regions = '\nregions:\n'+'\n'.join([str(region) for region in self._REGIONS])
@@ -132,7 +132,7 @@ class Computer:
     def get_power_block(self):
         return self._power_block
         
-    def get_supported_regions_names(self):
+    def get_supported_regions_name(self):
         return [region.name for region in self._REGIONS]
 
     def get_regions(self):
@@ -1157,7 +1157,7 @@ if __name__ == '__main__':
     
     for computer in AVAILABLE_COMPUTERS:
         print(computer.NAME, 'product_id: ', computer.PRODUCT_ID)
-        print('\n{}\n'.format(computer.get_supported_regions_names()))
+        print('\n{}\n'.format(computer.get_supported_regions_name()))
         for region in computer.REGIONS:
             print('\t{}\t{}'.format(region.name, region.description))
         print('\n')
