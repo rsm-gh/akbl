@@ -17,12 +17,9 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 import os
-import sys
 from copy import copy
-from traceback import format_exc
 
 from AKBL.utils import print_warning, print_debug, string_is_hex_color
-from AKBL.Configuration.Paths import Paths
 from AKBL.Engine.Area import Area
 from AKBL.Engine.Zone import Zone
 
@@ -68,7 +65,7 @@ def CREATE_default_profile(computer, theme_path):
 
 
 def GET_last_configuration():
-    max = None
+    max_time = None
     profile_numb = 0
     profile_name = None
 
@@ -77,8 +74,8 @@ def GET_last_configuration():
         profile = AVAILABLE_THEMES[key]
         profile.update_time()
 
-        if max is None or profile.time > max:
-            max = profile.time
+        if max_time is None or profile.time > max_time:
+            max_time = profile.time
             profile_numb = num
             profile_name = profile.name
 
@@ -162,8 +159,7 @@ right_color={}
     def load(self, path):
 
         print_debug('path=`{}`'.format(path))
-
-        lines = []
+        
         with open(path, encoding='utf-8', mode='rt') as f:
             lines = f.readlines()
 
