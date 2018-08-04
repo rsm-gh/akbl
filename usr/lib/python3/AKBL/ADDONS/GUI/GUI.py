@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  Rafael Senties Martinelli 
+#  Copyright (C) 2014-2018  Rafael Senties Martinelli
 #                2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@ from time import sleep
 from copy import deepcopy
 
 import AKBL.Configuration.Theme as Theme
-import AKBL.Configuration.Computers as Computer
+from AKBL.Configuration.computer_factory import get_computer
 from AKBL.utils import print_error, print_warning
 from AKBL.Bindings import Bindings
 from AKBL.Configuration.CCParser import CCParser
@@ -51,12 +51,13 @@ from AKBL.texts import (TEXT_COPY_CONFIG,
 
 os.chdir(Paths().MAIN) # this is important for the rest of the code.
 
+
 def get_text_gtk_buffer(textbuffer):
     return textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)
 
+
 def gtk_append_text_to_buffer(textbuffer, text):
     textbuffer.set_text(get_text_gtk_buffer(textbuffer) + text)
-
 
 def gtk_dialog_question(parent, text1, text2=None, icon=None):
 
@@ -245,7 +246,7 @@ class GUI(Gtk.Window):
         #   Load a configuration
         #
         computer_name = AKBLConnection._command('get_computer_name')
-        self.computer = getattr(Computer, computer_name)()
+        self.computer = get_computer(computer_name)
         
         Theme.LOAD_profiles(self.computer, self._paths.PROFILES_PATH)
         self.POPULATE_liststore_profiles()

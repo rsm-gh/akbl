@@ -54,6 +54,9 @@ install -D $DIR/usr/bin/* /usr/bin
 install -d /usr/share/AKBL
 install -D $DIR/usr/share/AKBL/* /usr/share/AKBL
 
+install -d /usr/share/AKBL/computers
+install -D $DIR/usr/share/AKBL/computers/* /usr/share/AKBL/computers
+
 install -d /usr/share/AKBL/launch
 install -D $DIR/usr/share/AKBL/launch/* /usr/share/AKBL/launch
 

@@ -75,7 +75,7 @@ from AKBL.texts import (TEXT_AURORAR4,
                         TEXT_DESCRIPTION_CAPS_LOCK)
 
 
-class Computer:
+class Computer(object):
 
     def __init__(self):
 
@@ -450,11 +450,11 @@ class M14XR1(Computer):
         self._REGIONS.sort(key=lambda region: region.description)
 
 
-class Alienware13(Computer):
+class Alienware13R1(Computer):
 
     def __init__(self):
         super().__init__()
-        self.NAME = TEXT_ALIENWAREWARE13
+        self.NAME = 'Alienware13R1'
         self.PRODUCT_ID = 0x0527
 
         # This was updated on Nov 16 2017 with the values given in the following post:
@@ -543,7 +543,7 @@ class Alienware13(Computer):
                 True, True, True),
 
             Region(
-                TEXT_AREA_ALIENWARE_OUTER_LID_ID,
+                "OL",
                 TEXT_DESCRIPTION_OUTER_LID,
                 self.REGION_OUTER_LID,
                 self.SUPPORTED_COMMANDS,
@@ -553,7 +553,7 @@ class Alienware13(Computer):
         self._REGIONS.sort(key=lambda region: region.description)
 
 
-class Alienware13R3(Alienware13):
+class Alienware13R3(Alienware13R1):
 
     def __init__(self):
         super().__init__()
@@ -651,11 +651,11 @@ class M15XRegion51(Computer):
         self._REGIONS.sort(key=lambda region: region.description)
 
 
-class Alienware15(Computer):
+class Alienware15R1(Computer):
 
     def __init__(self):
         super().__init__()
-        self.NAME = TEXT_ALIENWAREWARE15
+        self.NAME = "Alienware15R1"
         self.PRODUCT_ID = 0x0528
 
         self.REGION_RIGHT_KEYBOARD = 0x0001
@@ -771,18 +771,18 @@ class Alienware15(Computer):
         self._REGIONS.sort(key=lambda region: region.description)
 
 
-class Alienware15R3(Alienware15):
+class Alienware15R3(Alienware15R1):
 
     def __init__(self):
         super().__init__()
-        self.NAME = TEXT_ALIENWAREWARE15R3
+        self.NAME = "Alienware15R3"
         self.PRODUCT_ID = 0x0530
 
 class M17X(Computer):
 
     def __init__(self):
         super().__init__()
-        self.NAME = TEXT_M17X
+        self.NAME = "M17XR1"
         self.PRODUCT_ID = 0x0524
 
         self.REGION_RIGHT_KEYBOARD = 0x0008
@@ -1124,7 +1124,7 @@ class M18XRX(M18XR2):
 
     def __init__(self):
         super().__init__()
-        self.NAME = TEXT_M18XRX
+        self.NAME = 'M18XR1'
         self.PRODUCT_ID = 0x0523
 
 
@@ -1134,13 +1134,13 @@ AVAILABLE_COMPUTERS = [
     M11XR2(),
     M11XR3(),
     M11XR25(),
-    Alienware13(),
+    Alienware13R1(),
     Alienware13R3(),
     M14XR1(),
     M14XR2(),
     M14XR3(),
     M15XRegion51(),
-    Alienware15(),
+    Alienware15R1(),
     Alienware15R3(),
     M17X(),
     M17XR2(),
@@ -1154,10 +1154,82 @@ AVAILABLE_COMPUTERS.sort(key= lambda computer: computer.NAME)
 
 if __name__ == '__main__':
     
-    
+    """
     for computer in AVAILABLE_COMPUTERS:
         print(computer.NAME, 'product_id: ', computer.PRODUCT_ID)
         print('\n{}\n'.format(computer.get_supported_regions_name()))
-        for region in computer.REGIONS:
+        for region in computer.get_regions():
             print('\t{}\t{}'.format(region.name, region.description))
         print('\n')
+    """
+    
+    from AKBL.Configuration.computer_factory import get_computers
+    
+    for computer in get_computers():
+        
+        found=False
+        
+        for old_computer in AVAILABLE_COMPUTERS:
+            
+            if old_computer.NAME == computer.NAME:
+                found=True
+                
+                print("CHECKING COMPUTER = {}".format(computer.NAME))
+                
+                computer_dict = computer.__dict__
+                
+                for old_key, old_value in old_computer.__dict__.items():
+                    
+                    if not old_key.startswith("_"):
+                        
+                        value = computer_dict.get(old_key)
+                        
+                        if value != old_value:
+                            
+                            if not old_key.startswith("REGION_") and old_key == "REGION_ALL_BUT_POWER":
+                            
+                                print("    ERROR ON OLD_KEY={}, {} != {}" .format(old_key, value, old_value))
+                                
+                                
+                for old_region in old_computer.get_regions():
+                    
+                    new_region = computer.get_region_by_name(old_region.name)
+                    
+                    if new_region is None:
+                        print("    MISSING OLD REGION ID={}".format(old_region.name))
+                    else:
+                        #print("   Checking region ID={}".format(new_region.name))
+                        if old_region.hex_id != new_region.hex_id:
+                            print("    region id={}, hex_id error:  {} != {}".format(old_region.name, old_region.hex_id, new_region.hex_id))
+                        
+            
+                        if old_region.max_commands != new_region.max_commands:
+                            print("    extra region id={}, max_commands  error:  {} != {}".format(old_region.name, old_region.max_commands , new_region.max_commands ))
+                                
+                
+                                
+
+                for old_region in computer.get_regions():
+                    
+                    new_region = old_computer.get_region_by_name(old_region.name)
+                    
+                    if new_region is None:
+                        print("    EXTRA REGION ID={}".format(old_region.name))
+                    else:
+                        #print("   Checking region ID={}".format(new_region.name))
+                        if old_region.hex_id != new_region.hex_id:
+                            print("    extra region id={}, hex_id error:  {} != {}".format(old_region.name, old_region.hex_id, new_region.hex_id))
+                        
+                        #if old_region.description != new_region.description:
+                        #    print("    extra region id={}, description error:  {} != {}".format(old_region.name, old_region.description, new_region.description))
+                        
+
+            
+        
+        if not found:
+            print("MISSING NEW COMPUTER = {}".format(computer.NAME))
+                
+        
+    
+    
+    

@@ -24,7 +24,8 @@ import usb
 from traceback import format_exc
 
 from AKBL.utils import print_debug, print_error
-from AKBL.Configuration.Computers import Computer, AVAILABLE_COMPUTERS, M14XR1, M14XR2
+from AKBL.Configuration import computer_factory
+from AKBL.Configuration.Computer import Computer
 
 class Driver():
 
@@ -59,7 +60,7 @@ class Driver():
             all its parameters.
         """
 
-        for computer in AVAILABLE_COMPUTERS:
+        for computer in computer_factory.get_computers():
 
             device = usb.core.find(idVendor=computer.VENDOR_ID, idProduct=computer.PRODUCT_ID)
 
@@ -69,8 +70,8 @@ class Driver():
                 print_debug(device)
                 
                 # This hack was made to differenciate the M14XR1 from the M14XR2R2
-                if isinstance(computer, M14XR1) and 'Gaming' in str(device):
-                    computer = M14XR2()
+                if computer.NAME == "M14XR1" and 'Gaming' in str(device):
+                    computer = computer_factory.get_computer("M!$XR2")
 
                 self.computer = computer
                 print_debug(self.computer)
