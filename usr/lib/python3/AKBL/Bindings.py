@@ -81,9 +81,10 @@ class Bindings:
 
     def reload_address(self, print_error=True):
         """
-            Try to make a connection with the Daemon.
-            Returns True or False
+            It tries to make a connection with the Daemon
+            and it returns True or False.
         """
+        
         if not self.ping() and os.path.exists(self._paths.DAEMON_PYRO_PATH):
             
             with open(self._paths.DAEMON_PYRO_PATH, mode='rt', encoding='utf-8') as f:
@@ -112,9 +113,10 @@ class Bindings:
 
     def ping(self):
         """
-            Check if the Daemon is connected.
-            Returns True or False
+            It checks if the Daemon is connected
+            and it returns True or False.
         """
+        
         if self._pyro:
             try:
                 self._pyro.ping()
@@ -126,14 +128,14 @@ class Bindings:
 
     def get_address(self):
         """
-            Return the current URI of the Daemon.
+            It returns the current URI of the Daemon.
         """
 
         return self._address
 
     def get_profile_names(self):
         """
-            Return a list of the existing profile names.
+            It returns a list of the existing profile names.
         """
 
         if not os.path.exists(self._paths.PROFILES_PATH):
@@ -173,18 +175,43 @@ class Bindings:
 
         return names
 
-    """
-        Default Daemon Commands
-    """
-
     def set_profile(self, profile_name):
+        """
+            Set a profile from the existing profiles.
+            
+            + 'profile' is the profile name.
+        """
+        
         return self._command('set_profile', profile_name)
 
     def switch_lights(self):
+        """
+            Toggle on/off the lights of the keyboard.
+        """
+        
         return self._command('switch_lights')
 
     def set_lights(self, state):
+        """
+            Turn the lights on or off.
+            
+            + 'state' can be a boolean or a string
+        """
+        
         return self._command('set_lights', state)
 
     def set_colors(self, mode, speed, colors1, colors2=None):
+        """
+            Change the colors and the mode of the keyboard.
+            
+            + The available modes are: 'fixed', 'morph' and 'blink',
+              'fixed' and 'blink' only take `colors1`.
+                
+            + Speed must be an integer. 1 =< speed >= 256
+            
+            + colors1 and colors2 can be a single hex_color or a list
+              of hex_colors. If both arguments are used, they must
+              have the same number of items.
+        """
+        
         return self._command('set_colors', mode, speed, colors1, colors2)
