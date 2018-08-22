@@ -72,14 +72,11 @@ class Bindings:
                 
                 return False
             
-            
-            print("DEBUG 2")
-            
         else:
             print_warning("The daemon is off.")
             return False
 
-    def reload_address(self, print_error=True):
+    def reload_address(self, display_the_error=True):
         """
             It tries to make a connection with the Daemon
             and it returns True or False.
@@ -100,7 +97,8 @@ class Bindings:
                 return True
 
             except Exception:
-                if print_error:
+                
+                if display_the_error:
                     print_error(format_exc())
 
                 self._address = False
