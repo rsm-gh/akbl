@@ -25,7 +25,13 @@ else
     if [ -z "$2" ]; then
         case "$1" in
             --start-daemon)
-                python3 /usr/share/AKBL/launch/daemon.py "$1"
+            	                
+				if [ "$EUID" -ne 0 ]
+				  then echo "The daemon can only be started by the root user."
+				else
+					python3 /usr/share/AKBL/launch/daemon.py "$1"
+				fi
+                  
             ;;
             --block-testing)
                 python3 /usr/share/AKBL/launch/block_testing.py
