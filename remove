@@ -41,12 +41,12 @@ if [ -d /usr/share/doc/AKBL ]; then
 	rm -rf /usr/share/doc/AKBL
 fi
 
-if [ -f /usr/lib/systemd/system/AKBL.service ]; then
-	rm -rf /usr/lib/systemd/system/AKBL.service
-fi
-
 if [ -d /usr/lib/python3/AKBL ]; then
 	rm -rf /usr/lib/python3/AKBL
+fi
+
+if [ -f /usr/lib/systemd/system/AKBL.service ]; then
+	rm -rf /usr/lib/systemd/system/AKBL.service
 fi
 
 if [ -f /usr/share/applications/akbl.desktop ]; then

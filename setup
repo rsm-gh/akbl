@@ -45,7 +45,7 @@ echo -e "\e[00;32mTo ensure a clean installation any previous version will be fu
 # Start the installation
 #
 
-echo -e "\e[00;32m\nCopying the software files (the message 'omiting directory *' is normal)...\e[00m"
+echo -e "\e[00;32m\nCopying the software files...\e[00m"
 
 
 ##
@@ -76,6 +76,9 @@ install -D $DIR/usr/share/doc/AKBL/* /usr/share/doc/AKBL
 
 install -d /usr/share/doc/AKBL/ImagesPreview
 install -D $DIR/usr/share/doc/AKBL/ImagesPreview/* /usr/share/doc/AKBL/ImagesPreview
+
+install -d /usr/share/doc/AKBL/BusData
+install -D $DIR/usr/share/doc/AKBL/BusData/* /usr/share/doc/AKBL/BusData
 
 install -d /usr/share/doc/AKBL/Licenses
 install -D $DIR/usr/share/doc/AKBL/Licenses/* /usr/share/doc/AKBL/Licenses
