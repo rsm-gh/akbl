@@ -21,10 +21,18 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+#
+# Set the scripts permisions
+#
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR
 chmod a+x ./remove ./remove-old ./prerm ./prerm-old ./postinst
 
+
+#
+# Export the python versions to be used
+#
+export AKBL_PYTHON_VERSIONS=("python3.4" "python3.5" "python3.6" "python3.7" "python3.8" "python3.9")
 
 #
 # Remove previous versions
