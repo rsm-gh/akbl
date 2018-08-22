@@ -1,0 +1,19 @@
+
+***********************************************************
+***********        Alienware M11X R1        ***************
+***********************************************************
+*** By neranem & cosgriffc: ***
+
+DEVICE ID 187c:0514 on Bus 005 Address 002 =================
+ bLength                :   0x12 (18 bytes)
+ bDescriptorType        :    0x1 Device
+ bcdUSB                 :  0x110 USB 1.1
+ bDeviceClass           :    0x0 Specified at interface
+ bDeviceSubClass        :    0x0
+ bDeviceProtocol        :    0x0
+ bMaxPacketSize0        :   0x40 (64 bytes)
+ idVendor               : 0x187c
+ idProduct              : 0x0514
+ bcdDevice              :    0x0 Device 0.0
+ iManufacturer          :    0x1 Alienware Gaming
+ iProduct               :    0x2 Phantom

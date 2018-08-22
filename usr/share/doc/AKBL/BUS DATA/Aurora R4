@@ -1,0 +1,51 @@
+
+***************************************************
+***********        Aurora R4        ***************
+***************************************************
+*** By feraxis: ***
+
+Device: ID 187c:0513 Alienware Corporation
+Device Descriptor:
+	bLength 18
+	bDescriptorType 1
+	bcdUSB 2.00
+	bDeviceClass 0 (Defined at Interface level)
+	bDeviceSubClass 0
+	bDeviceProtocol 0
+	bMaxPacketSize0 64
+	idVendor 0x187c Alienware Corporation
+	idProduct 0x0513
+	bcdDevice 0.00
+	iManufacturer 1 Alienware
+	iProduct 2 Gaming Desktop
+	iSerial 3 2.2.0
+	bNumConfigurations 1
+	Configuration Descriptor:
+		bLength 9
+		bDescriptorType 2
+		wTotalLength 41
+		bNumInterfaces 1
+		bConfigurationValue 1
+		iConfiguration 0
+		bmAttributes 0xc0
+			Self Powered
+		MaxPower 2mA
+		Interface Descriptor:
+			bLength 9
+			bDescriptorType 4
+			bInterfaceNumber 0
+			bAlternateSetting 0
+			bNumEndpoints 2
+			bInterfaceClass 3 Human Interface Device
+			bInterfaceSubClass 0 No Subclass
+			bInterfaceProtocol 0 None
+			iInterface 0
+		HID Device Descriptor:
+			bLength 9
+			bDescriptorType 33
+			bcdHID 1.01
+			bCountryCode 0 Not supported
+			bNumDescriptors 1
+			bDescriptorType 34 Report
+			wDescriptorLength 54
+			Report Descriptor: (length is 54)
