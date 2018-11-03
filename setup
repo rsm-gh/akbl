@@ -1,0 +1,119 @@
+#!/bin/bash
+
+#  Copyright (C) 2015-2018  RSM
+#
+#  This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License 3 as published by
+#   the Free Software Foundation.
+#
+#  This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software Foundation,
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+
+AKBL_VERSION="2018.11.03"
+
+if [ "$EUID" -ne 0 ]
+  then echo "The script must be run as root."
+  exit
+fi
+
+#
+# Set the scripts permisions
+#
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR
+chmod a+x ./remove
+
+#
+# Remove previous versions
+#
+echo -e "\e[00;32m[1/3] Removing previous versions..\e[00m"
+./remove -s
+
+#
+# Start the installation
+#
+
+echo -e "\e[00;32m\n[2/3] Copying the software files...\e[00m"
+
+
+function install_files(){
+    
+    echo "installing: $1"
+    
+    install -d $1
+    install -D $DIR$1/* $1
+    
+}
+
+install_files "/usr/bin"
+
+install_files "/usr/share/applications"
+
+install_files "/usr/share/AKBL"
+install_files "/usr/share/AKBL/computers"
+install_files "/usr/share/AKBL/launch"
+install_files "/usr/share/AKBL/test"
+
+install_files "/usr/share/doc/AKBL"
+install_files "/usr/share/doc/AKBL/BusData"
+install_files "/usr/share/doc/AKBL/BusData/Data"
+install_files "/usr/share/doc/AKBL/ImagesPreview"
+install_files "/usr/share/doc/AKBL/Licenses"
+install_files "/usr/share/doc/AKBL/Programming"
+install_files "/usr/share/doc/AKBL/Programming/class_diagrams"
+
+install_files "/usr/lib/systemd/system"
+
+install_files "/usr/lib/python3/AKBL"
+install_files "/usr/lib/python3/AKBL/Data"
+install_files "/usr/lib/python3/AKBL/Data/Computer"
+install_files "/usr/lib/python3/AKBL/Data/Theme"
+
+install_files "/usr/lib/python3/AKBL/Engine"
+
+install_files "/usr/lib/python3/AKBL/Addons"
+install_files "/usr/lib/python3/AKBL/Addons/GUI"
+install_files "/usr/lib/python3/AKBL/Addons/GUI/ColorChooserToolbar"
+install_files "/usr/lib/python3/AKBL/Addons/GUI/images"
+install_files "/usr/lib/python3/AKBL/Addons/BlockTesting"
+install_files "/usr/lib/python3/AKBL/Addons/Indicator"
+install_files "/usr/lib/python3/AKBL/Addons/Indicator/images"
+
+##
+## Post installation
+##
+
+echo -e "\e[00;32m\n[3/3] Creating the software links...\e[00m"
+
+if [ -f /bin/systemctl ]; then
+	echo -e "\n\033[0;33mEnabling and starting systemd...\033[0m"
+    systemctl enable akbl
+    systemctl start akbl
+else
+	echo -e "\e[00;31m Warning: systemd seems to be missing. AKBL will not work.\e[00m"
+fi
+echo ""
+
+echo -e "\033[0;33mLinking python...\033[0m"
+AKBL_PYTHON_VERSIONS=("python3.1" "python3.2" "python3.3" "python3.4" "python3.5" "python3.6" "python3.7" "python3.8" "python3.9")
+
+for python_version in "${AKBL_PYTHON_VERSIONS[@]}"; do
+    if [ -d /usr/lib/$python_version ]; then
+        ln -s /usr/lib/python3/AKBL /usr/lib/$python_version/AKBL && echo -e "$python_version linked"
+    fi
+done
+echo ""
+
+
+#
+#
+sed -i "s/__AKBL_VERSION__/$AKBL_VERSION/g" "/usr/lib/python3/AKBL/Addons/GUI/GUI.glade"
+sed -i "s/__version__=None/__version__='$AKBL_VERSION'/g" "/usr/share/AKBL/launch/default_arguments.py"
+echo -e "\e[00;32m\n akbl v$AKBL_VERSION is installed. Enjoy it !\e[00m"
+

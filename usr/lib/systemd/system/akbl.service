@@ -1,0 +1,8 @@
+[Unit]
+Description=AKBL Daemon
+
+[Service]
+ExecStart=/bin/bash -c "/usr/bin/akbl --start-daemon"
+
+[Install]
+WantedBy=basic.target

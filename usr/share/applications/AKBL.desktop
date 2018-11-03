@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=AKBL
+Exec=akbl
+Terminal=false
+Type=Application
+Icon=/usr/lib/python3/AKBL/Addons/GUI/images/icon.png
+Categories=Settings;
+Name[en_US.UTF-8]=AKBL
