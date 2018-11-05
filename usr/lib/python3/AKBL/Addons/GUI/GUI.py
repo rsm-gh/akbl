@@ -212,31 +212,6 @@ class GUI(Gtk.Window):
                                                               Gdk.ModifierType.CONTROL_MASK, 
                                                               Gtk.AccelFlags.VISIBLE)
 
-        """
-            Ask to the user if he wants to import its global configuration
-            (this is a support for older versions of alienware-kbl)
-        """
-        if (not os.path.exists(self._paths.CONFIGURATION_PATH) and os.path.exists(self._paths.BACKUP_CONFIG)) or \
-           (not os.path.exists(self._paths.PROFILES_PATH) and os.path.exists(self._paths.BACKUP_PROFILES)):
-
-            self.window_root.hide()
-
-            if gtk_dialog_question(self.window_root, TEXT_COPY_CONFIG, icon=self._paths.SMALL_ICON):
-                from distutils.dir_util import copy_tree
-                
-                if not os.path.exists(os.path.dirname(self._paths.CONFIGURATION_PATH)):
-                    print_warning('Adding the configuration {}'.format(self._paths.CONFIGURATION_PATH))
-                    os.makedirs(os.path.dirname(self._paths.CONFIGURATION_PATH))
-
-                if not os.path.exists(self._paths.PROFILES_PATH):
-                    os.makedirs(self._paths.PROFILES_PATH)
-
-                shutil.copyfile(self._paths.BACKUP_CONFIG, self._paths.CONFIGURATION_PATH)
-                copy_tree(self._paths.BACKUP_PROFILES, self._paths.PROFILES_PATH)
-
-            self.window_root.show()
-
-
         self.apply_configuration = False
         self.queue_zones = []
         self.ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Configuration')

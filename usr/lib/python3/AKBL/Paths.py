@@ -65,16 +65,6 @@ class Paths:
         self.INDICATOR_NO_DAEMON_ICON  = self.INDICATOR_IMAGES_DIR + 'icon-no-daemon.png'
 
 
-        
-        """
-            This is to add support to older versions where the profiles and
-            config was stored in the same directory than the code
-        """
-        self.BACKUP_CONFIG = '/etc/alienware-kbl/alienware-kbl.ini'
-        self.BACKUP_PROFILES = '/etc/alienware-kbl/profiles/'
-        self.GLOBAL_CONFIG = '/etc/alienware-kbl/gobal-config.ini'
-
-
         """
             Create the tree dirs
         """
