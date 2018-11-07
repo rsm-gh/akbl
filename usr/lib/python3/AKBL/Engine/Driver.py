@@ -68,14 +68,6 @@ class Driver():
                 self.take_over()
                 print_debug(device)
                 
-                # This hack was made to differenciate the M14XR1 from the M14XR2R2
-                if computer.NAME == "M14XR1" or computer.NAME == "M14XR2":
-                    
-                    if 'Gaming' in str(device):
-                        computer = computer_factory.get_computer("M14XR2")
-                    else:
-                        computer = computer_factory.get_computer("M14XR1")
-
                 self.computer = computer
                 print_debug(self.computer)
 
