@@ -29,17 +29,21 @@ from traceback import format_exc
 from time import sleep
 from copy import deepcopy
 
-import AKBL.Data.Theme.Theme as Theme
-from AKBL.Addons.GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
-from AKBL.Data.Computer.factory import get_computer
-from AKBL.utils import print_error, print_warning
+from AKBL.utils import print_error
 from AKBL.Bindings import Bindings
 from AKBL.CCParser import CCParser
 from AKBL.Paths import Paths
+from AKBL.Data.Theme import theme_factory
+from AKBL.Data.Computer.factory import get_computer
+from AKBL.Addons.GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
 from AKBL.Addons.GUI.ZoneWidget import ZoneWidget
+from AKBL.Addons.GUI.gtk_utils import (gtk_dialog_question,
+                                       gtk_dialog_info,
+                                       gtk_file_chooser,
+                                       gtk_folder_chooser)
+                                       
 
-from AKBL.texts import (TEXT_COPY_CONFIG, 
-                        TEXT_COMPUTER_DATA, 
+from AKBL.texts import (TEXT_COMPUTER_DATA, 
                         TEXT_ADD, 
                         TEXT_CONFIRM_DELETE_CONFIGURATION, 
                         TEXT_CONFIGURATION_DELETED,
@@ -53,102 +57,10 @@ from AKBL.texts import (TEXT_COPY_CONFIG,
                         TEXT_GUI_CANT_DAEMON_OFF)
 
 
-os.chdir(Paths().MAIN) # this is important for the rest of the code.
+os.chdir(Paths().MAIN)  # this is important for the rest of the code.
+                        # 12/11/2018, why? the code should work even without this..
 
 
-def get_text_gtk_buffer(textbuffer):
-    return textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)
-
-def gtk_append_text_to_buffer(textbuffer, text):
-    textbuffer.set_text(get_text_gtk_buffer(textbuffer) + text)
-
-def gtk_dialog_question(parent, text1, text2=None, icon=None):
-
-    dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, text1)
-
-    if icon is not None:
-        dialog.set_icon_from_file(icon)
-
-    if text2 is not None:
-        dialog.format_secondary_text(text2)
-
-    response = dialog.run()
-    if response == Gtk.ResponseType.YES:
-        dialog.hide()
-        return True
-
-    elif response == Gtk.ResponseType.NO:
-        dialog.hide()
-        return False
-
-def gtk_dialog_info(parent, text1, text2=None, icon=None):
-
-    dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.INFO, Gtk.ButtonsType.CLOSE, text1)
-
-    if icon is not None:
-        dialog.set_icon_from_file(icon)
-
-    if text2 is not None:
-        dialog.format_secondary_text(text2)
-
-    dialog.run()
-    dialog.destroy()
-
-def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filters=[]):
-
-    window = Gtk.FileChooserDialog(title, parent, Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL,
-                                                                                 Gtk.ResponseType.CANCEL,
-                                                                                 Gtk.STOCK_OPEN,
-                                                                                 Gtk.ResponseType.OK))
-
-    window.set_default_response(Gtk.ResponseType.NONE)
-    window.set_transient_for(parent)
-
-    if icon_path is not None:
-        window.set_icon_from_file(icon_path)
-
-    if default_folder is not None:
-        window.set_current_folder(default_folder)
-
-    for filter_name, filter_extension in filters:
-        gtk_filter = Gtk.FileFilter()
-        gtk_filter.set_name(filter_name)
-        gtk_filter.add_pattern(filter_extension)
-        window.add_filter(gtk_filter)
-
-    response = window.run()
-    if response == Gtk.ResponseType.OK:
-        file_path = window.get_filename()
-        window.destroy()
-
-        return file_path
-    else:
-        window.destroy()
-        return False
-
-def gtk_folder_chooser(parent, title='', icon_path=None, default_folder=None):
-
-    window = Gtk.FileChooserDialog(
-        title,
-        parent,
-        Gtk.FileChooserAction.SELECT_FOLDER,
-        (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-
-    if icon_path is not None:
-        window.set_icon_from_file(icon_path)
-
-    if default_folder is not None:
-        window.set_current_folder(default_folder)
-
-    response = window.run()
-    if response == Gtk.ResponseType.OK:
-        folder_path = window.get_filename()
-        window.destroy()
-
-        return folder_path
-    else:
-        window.destroy()
-        return False
 
 class GUI(Gtk.Window):
 
@@ -211,9 +123,7 @@ class GUI(Gtk.Window):
                                                               ord(shorcut), 
                                                               Gdk.ModifierType.CONTROL_MASK, 
                                                               Gtk.AccelFlags.VISIBLE)
-
-        self.apply_configuration = False
-        self.queue_zones = []
+        
         self.ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Configuration')
 
         #
@@ -231,7 +141,7 @@ class GUI(Gtk.Window):
         computer_name = AKBLConnection._command('get_computer_name')
         self.computer = get_computer(computer_name)
         
-        Theme.LOAD_profiles(self.computer, self._paths.PROFILES_PATH)
+        theme_factory.LOAD_profiles(self.computer, self._paths.PROFILES_PATH)
         self.POPULATE_liststore_profiles()
 
         """
@@ -337,10 +247,10 @@ class GUI(Gtk.Window):
 
         self.liststore_profiles.clear()
 
-        for profile_name in sorted(Theme.AVAILABLE_THEMES.keys()):
+        for profile_name in sorted(theme_factory._AVAILABLE_THEMES.keys()):
             self.liststore_profiles.append([profile_name])
 
-        row, _ = Theme.GET_last_configuration()
+        row, _ = theme_factory.GET_last_configuration()
 
         self.combobox_profiles.set_active(row)
 
@@ -359,13 +269,13 @@ class GUI(Gtk.Window):
         self.label_user_message.set_text(TEXT_CONFIGURATION_DELETED)
         Gdk.threads_leave()
 
-        Theme.AVAILABLE_THEMES.pop(self.theme.name)
+        theme_factory._AVAILABLE_THEMES.pop(self.theme.name)
 
         if os.path.exists(self.theme.path):
             os.remove(self.theme.path)
 
-        if len(Theme.AVAILABLE_THEMES.keys()) == 0:
-            Theme.CREATE_default_profile(self.computer)
+        if len(theme_factory._AVAILABLE_THEMES.keys()) == 0:
+            theme_factory.CREATE_default_profile(self.computer)
 
         Gdk.threads_enter()
         self.POPULATE_liststore_profiles()
@@ -427,11 +337,11 @@ class GUI(Gtk.Window):
 
         self.window_new_profile.hide()
 
-        clone = deepcopy(Theme.AVAILABLE_THEMES[self.theme.name])
+        clone = deepcopy(theme_factory._AVAILABLE_THEMES[self.theme.name])
         clone.name = text
         clone.path = '{}{}.cfg'.format(self._paths.PROFILES_PATH, text)
         clone.save()
-        Theme.AVAILABLE_THEMES[clone.name] = clone
+        theme_factory._AVAILABLE_THEMES[clone.name] = clone
         self.POPULATE_liststore_profiles()
 
         AKBLConnection._command('reload_configurations')
@@ -559,7 +469,7 @@ class GUI(Gtk.Window):
         if tree_iter is not None:
             model = widget.get_model()
             profile_name = model[tree_iter][0]
-            self.theme = Theme.AVAILABLE_THEMES[profile_name]
+            self.theme = theme_factory._AVAILABLE_THEMES[profile_name]
             self.POPULATE_box_areas()
 
     def on_button_new_profile_create_clicked(self, button, data=None):
@@ -595,7 +505,7 @@ class GUI(Gtk.Window):
                 return
 
             shutil.copy(file_path, new_path)
-            Theme.LOAD_profile(self.computer, new_path)
+            theme_factory.LOAD_profile(self.computer, new_path)
             self.POPULATE_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, widget=None, data=None):
@@ -658,7 +568,7 @@ class GUI(Gtk.Window):
                 self.button_new_profile_create.set_sensitive(False)
                 return
 
-        for name in Theme.AVAILABLE_THEMES.keys():
+        for name in theme_factory._AVAILABLE_THEMES.keys():
             if name == text:
                 self.button_new_profile_create.set_sensitive(False)
                 return

@@ -22,7 +22,7 @@ from traceback import format_exc
 
 from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.utils import getuser, print_warning, print_error, string_is_hex_color
-from AKBL.Data.Theme import Theme
+from AKBL.Data.Theme import theme_factory
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
 from AKBL.Engine.Controller import Controller
@@ -110,7 +110,9 @@ class Daemon:
         if self._indicator_pyro:
             self._indicator_send_code(100)
             try:
-                self._indicator_pyro.load_profiles(Theme.AVAILABLE_THEMES.keys(), self._theme.name, self._lights_state)
+                self._indicator_pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
+                                                   self._theme.name,
+                                                   self._lights_state)
             except Exception:
                 print_error(format_exc())
 
@@ -140,15 +142,17 @@ class Daemon:
             self._paths = Paths(user)
             self._ccp.set_configuration_path(self._paths.CONFIGURATION_PATH)
 
-        Theme.LOAD_profiles(self._computer, self._paths.PROFILES_PATH)
+        theme_factory.LOAD_profiles(self._computer, self._paths.PROFILES_PATH)
 
         if set_default:
-            _, profile_name = Theme.GET_last_configuration()
-            self._theme = Theme.get_theme_by_name(profile_name)
+            _, profile_name = theme_factory.GET_last_configuration()
+            self._theme = theme_factory.get_theme_by_name(profile_name)
 
         if self._indicator_pyro and indicator:
             try:
-                self._indicator_pyro.load_profiles(Theme.AVAILABLE_THEMES.keys(), self._theme.name, self._lights_state)
+                self._indicator_pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(), 
+                                                   self._theme.name, 
+                                                   self._lights_state)
             except Exception:
                 print_error(format_exc())
 
@@ -168,8 +172,8 @@ class Daemon:
 
         self.reload_configurations(user, False, False)
 
-        if profile in Theme.AVAILABLE_THEMES.keys():
-            self._theme = Theme.AVAILABLE_THEMES[profile]
+        if profile in theme_factory._AVAILABLE_THEMES.keys():
+            self._theme = theme_factory._AVAILABLE_THEMES[profile]
             self._iluminate_keyboard()
 
     @Pyro4.expose

@@ -25,7 +25,6 @@ class Computer(object):
     def __init__(self):
         
         self.DEFAULT_MODE = 'fixed'
-        self.DEFAULT_SPEED = 255
         
         self.NAME = 'Default Configuration'
         self.VENDOR_ID = 6268
