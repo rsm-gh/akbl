@@ -22,7 +22,9 @@ import pwd
 import inspect
 import re
 
-_DEBUG=False
+_DEBUG=True
+
+
 if not _DEBUG:
     print("""
 The debug messages are deactivated. 

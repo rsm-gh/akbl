@@ -26,7 +26,8 @@ from AKBL.utils import print_debug, print_error
 from AKBL.Data.Computer import factory as computer_factory
 from AKBL.Data.Computer.Computer import Computer
 
-class Driver():
+
+class Driver:
 
     def __init__(self):
         
@@ -39,13 +40,14 @@ class Driver():
         self.READ_REQUEST = 1
         self.READ_VALUE = 257
         self.READ_INDEX = 0
-
-        self.computer = None
         
         self._device = None
-        self._device_found = False
         
-        self.find_device()
+        self.computer = computer_factory.get_default_computer()
+        
+        if self.computer is not None:
+            self.load_device(self.computer.VENDOR_ID, self.computer.PRODUCT_ID)
+        
 
     def has_device(self):
         if self._device is None:
@@ -64,27 +66,21 @@ class Driver():
             device = usb.core.find(idVendor=computer.VENDOR_ID, idProduct=computer.PRODUCT_ID)
 
             if device is not None:
+                
                 self._device = device
                 self.take_over()
-                print_debug(device)
-                
-                # This hack was made to differenciate the M14XR1 from the M14XR2R2
-                if computer.NAME == "M14XR1" or computer.NAME == "M14XR2":
-                    
-                    if 'Gaming' in str(device):
-                        computer = computer_factory.get_computer("M14XR2")
-                    else:
-                        computer = computer_factory.get_computer("M14XR1")
-
                 self.computer = computer
+                
+                print_debug(device)
                 print_debug(self.computer)
 
 
-    def load_device(self, id_vendor, id_product):
+    def load_device(self, id_vendor, id_product, empty_computer=False):
         """
             Load a device from given'ids and then if success load
-            the global computer configuration. This is used at the block_testing_window
-            for testing new computers.
+            the global computer configuration. 
+            
+            This is used at the block_testing_window for testing new computers.
         """
 
         device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
@@ -92,7 +88,9 @@ class Driver():
         if device is not None:
             self._device = device
             self.take_over()
-            print_debug('device loaded:\n{}'.format(device))
+            print_debug('{}'.format(device))
+            
+        if empty_computer:    
             self.computer = Computer()
 
     def write_constructor(self, constructor):

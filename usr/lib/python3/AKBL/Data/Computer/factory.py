@@ -25,6 +25,45 @@ from AKBL.Data.Computer.Computer import Computer
 from AKBL.Data.Computer.Region import Region
 from AKBL.utils import print_debug, print_warning
 
+
+
+def get_computer_by_path(file_path):
+
+    print_debug("Reading {}".format(file_path))
+    
+    computer = Computer()
+    
+    config = ConfigParser()
+    config.optionxform = str
+    config.read(file_path)
+    
+    for key in config["COMMON"]:
+        if hasattr(computer, key):
+            
+            value = config["COMMON"][key]
+            
+            if value != "":
+                if key in ("NAME","DEFAULT_MODE"):
+                    setattr(computer, key, value)    
+                else:
+                    setattr(computer, key, int(value))
+                    
+                    
+    for section in config.sections():
+        if section.startswith("REGION"):
+            region = Region(config[section]["ID"],
+                            config[section]["DESCRIPTION"],
+                            int(config[section]["BLOCK"]),
+                            int(config[section]["SUPPORTED_COMMANDS"]),
+                            config[section]["CAN_BLINK"]=="True",
+                            config[section]["CAN_MORPH"]=="True",
+                            config[section]["CAN_LIGHT"]=="True")
+            
+            computer.add_region(region)
+
+    return computer
+
+
 def get_computers():
 
     computers = []
@@ -36,38 +75,7 @@ def get_computers():
             
             file_path=path+"/"+file_name
             
-            print_debug("Reading {}".format(file_path))
-            
-            computer = Computer()
-            
-            config = ConfigParser()
-            config.optionxform = str
-            config.read(file_path)
-    
-            for key in config["COMMON"]:
-                if hasattr(computer, key):
-                    
-                    value = config["COMMON"][key]
-                    
-                    if value != "":
-                        if key in ("NAME","DEFAULT_MODE"):
-                            setattr(computer, key, value)    
-                        else:
-                            setattr(computer, key, int(value))
-                            
-                            
-            for section in config.sections():
-                if section.startswith("REGION"):
-                    region = Region(config[section]["ID"],
-                                    config[section]["DESCRIPTION"],
-                                    int(config[section]["BLOCK"]),
-                                    int(config[section]["SUPPORTED_COMMANDS"]),
-                                    config[section]["CAN_BLINK"]=="True",
-                                    config[section]["CAN_MORPH"]=="True",
-                                    config[section]["CAN_LIGHT"]=="True")
-                    
-                    computer.add_region(region)
-                    
+            computer = get_computer_by_path(file_path)
             
             add = True
             for added_computer in computers:
@@ -80,11 +88,19 @@ def get_computers():
                 computers.append(computer)
     
     
-    computers.sort(key= lambda computer: computer.NAME)
+    computers.sort(key=lambda computer: computer.NAME)
     
     return computers
 
 
+def get_default_computer():
+    
+    default_computer_path = Paths().DEFAULT_COMPUTER
+    
+    if not os.path.exists(default_computer_path):
+        return None
+        
+    return get_computer_by_path(default_computer_path)
 
 def get_computer(name):
     

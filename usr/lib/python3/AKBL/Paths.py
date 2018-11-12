@@ -32,6 +32,7 @@ class Paths:
         self.DAEMON_PYRO_PATH = '/etc/akbl-daemon-adress'
         self.SYSTEMCTL_PATH = '/bin/systemctl'
         self.MAIN = '/usr/lib/python3/AKBL'
+        self.DEFAULT_COMPUTER='/etc/AKBL/default_computer.ini'
 
         ## User
         ##
