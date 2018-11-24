@@ -1,5 +1,5 @@
 
-/!\ IF YOU WANT YOUR BUG TO BE TREATED FILL THIS TEMPLATE. /!\
+/!\ IF YOU WANT YOUR BUG TO BE TREATED FILL THIS TEMPLATE AND DO NOT MODIFY IT. /!\
 
       Also, before submitting any bug download and
             install the last version of akbl.
@@ -8,9 +8,9 @@
 
 + Distribution name:
 + Distribution version:
-+ Python version:
-+ akbl version: (command `akbl -v`)
++ Python3 version: `python3 --version`
++ akbl version: `akbl -v`
 + Computer model:
-+ Daemon status: (command `akbl --daemon-is-on`)
++ Daemon status: `akbl --daemon-is-on`
 
 # Bug description
