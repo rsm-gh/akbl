@@ -10,7 +10,6 @@ Alienware13 R1          6268            1319
 Alienware15 R1          6268            1320
 Alienware13 R3          6268            1321
 M17X R2                 6268            1298
-M11X R1                 6268            1300
 
 
 Area51R2                                                # CONFIGURATION FILE MISSING
@@ -18,6 +17,8 @@ Area51R2                                                # CONFIGURATION FILE MIS
 
 ------------- D U P L I C A T E D    I D'S ------------------------
 
+M11X R1                 6268            1300
+M11X R2                 6268            1300            # The computer will use the M14X R1 config. There's no R2 Config.
 
 Aurora R4               6268            1299
 M17X R1                 6268            1299
