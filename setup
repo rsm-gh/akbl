@@ -15,7 +15,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-AKBL_VERSION="2018.11.03"
+AKBL_VERSION="2018.11.24"
 
 if [ "$EUID" -ne 0 ]
   then echo "The script must be run as root."
@@ -114,6 +114,6 @@ echo ""
 #
 #
 sed -i "s/__AKBL_VERSION__/$AKBL_VERSION/g" "/usr/lib/python3/AKBL/Addons/GUI/GUI.glade"
-sed -i "s/__version__=None/__version__='$AKBL_VERSION'/g" "/usr/share/AKBL/launch/default_arguments.py"
+sed -i "s/__version__=None/__version__='$AKBL_VERSION'/g" "/usr/share/AKBL/launch/commands.py"
 echo -e "\e[00;32m\n akbl v$AKBL_VERSION is installed. Enjoy it !\e[00m"
 
