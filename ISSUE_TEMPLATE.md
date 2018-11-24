@@ -8,9 +8,9 @@
 
 + Distribution name:
 + Distribution version:
-+ Python version:
-+ akbl version: (command `akbl -v`)
++ Python3 version: `python3 --version`
++ akbl version: `akbl -v`
 + Computer model:
-+ Daemon status: (command `akbl --daemon-is-on`)
++ Daemon status: `akbl --daemon-is-on`
 
 # Bug description
