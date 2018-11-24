@@ -69,6 +69,7 @@ class Driver:
                 
                 self._device = device
                 self.take_over()
+
                 self.computer = computer
                 
                 print_debug(device)

@@ -23,8 +23,8 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk
 
 import os
-from traceback import format_exc
 import subprocess
+from traceback import format_exc
 
 from AKBL.texts import (TEXT_DEVICE_FOUND, 
                         TEXT_DEVICE_NOT_FOUND, 
@@ -144,7 +144,6 @@ class BlockTesting(Gtk.Window):
                 'textbuffer_device_info',
                 'combobox_default_blocks',
                 'textbuffer_block_testing',
-                'label_block_hex_test',
                 'entry_block_testing',
                 'entry_id_vendor',
                 'entry_id_product',
@@ -186,14 +185,11 @@ class BlockTesting(Gtk.Window):
             value = int(text)
 
             if value < 0:
-                self.label_block_hex_test.set_text('Non > 0')
                 self.button_block_make_test.set_sensitive(False)
             else:
-                self.label_block_hex_test.set_text(hex(value))
                 self.button_block_make_test.set_sensitive(True)
 
         except:
-            self.label_block_hex_test.set_text('Non Int')
             self.button_block_make_test.set_sensitive(False)
 
     def on_togglebutton_find_device_clicked(self, button, data=None):
@@ -267,23 +263,19 @@ class BlockTesting(Gtk.Window):
         
         if self.checkbutton_auto_turn_off.get_active():
             self.on_button_block_testing_lights_off_clicked(button)
+            
         try:
             zone_left_color = self.colorbutton_1_block.get_color()
-            zone_left_color = rgb_to_hex([zone_left_color.red /
-                                          65535.0, zone_left_color.green /
-                                          65535.0, zone_left_color.blue /
-                                          65535.0])
+            zone_left_color = rgb_to_hex([zone_left_color.red/65535.0, 
+                                          zone_left_color.green/65535.0, 
+                                          zone_left_color.blue/65535.0])
 
             zone_right_color = self.colorbutton_2_block.get_color()
-            zone_right_color = rgb_to_hex([zone_right_color.red /
-                                          65535.0, zone_right_color.green /
-                                          65535.0, zone_right_color.blue /
-                                          65535.0])
-
-            zone_right_color = zone_left_color
+            zone_right_color = rgb_to_hex([zone_right_color.red/65535.0, 
+                                           zone_right_color.green/65535.0, 
+                                           zone_right_color.blue/65535.0])
 
             zone_block = int(self.entry_block_testing.get_text())
-
             speed = self.spinbutton_block_speed.get_value_as_int()
 
             index = self.combobox_block_modes.get_active()
@@ -294,7 +286,6 @@ class BlockTesting(Gtk.Window):
             # Log the test
             #
             gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_BLOCK_TEST.format(zone_block,
-                                                                                            hex(zone_block),
                                                                                             zone_mode,
                                                                                             speed,
                                                                                             zone_left_color,

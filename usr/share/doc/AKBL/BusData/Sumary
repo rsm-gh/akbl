@@ -10,26 +10,26 @@ Alienware13 R1          6268            1319
 Alienware15 R1          6268            1320
 Alienware13 R3          6268            1321
 M17X R2                 6268            1298
-M11X R1                 6268            1300
-M17X R5                 6268            1360
+
 
 Area51R2                                                # CONFIGURATION FILE MISSING
 
 
 ------------- D U P L I C A T E D    I D'S ------------------------
 
-
-M14X R1                 6268            1313
-M14X R2                 6268            1313            # The M14XR2 and the M14XR1 have the same PRODUCT_ID. They are differenciated by reading the device information, the R2 has the word 'Gaming'.
-
-Alienware15 R3          6268            1328
-M17X R4                 6268            1328
+M11X R1                 6268            1300
+M11X R2                 6268            1300            # The computer will use the M11X R1 config. There's no R2 Config.
 
 Aurora R4               6268            1299
 M17X R1                 6268            1299
 
+M14X R1                 6268            1313
+M14X R2                 6268            1313
 
+Alienware15 R3          6268            1328
+M17X R4                 6268            1328
 
-
+M17X R5                 6268            1360
+Alienware15 R4          6268            1360
 
 
