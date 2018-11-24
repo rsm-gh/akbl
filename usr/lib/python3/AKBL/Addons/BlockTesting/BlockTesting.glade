@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 
+<!-- Generated with glade 3.22.1 
 
 Copyright (C) 2014 - 2018 RSM
 
@@ -23,7 +23,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
   <requires lib="gtk+" version="3.10"/>
   <!-- interface-license-type gplv3 -->
   <!-- interface-name alienware-kbl -->
-  <!-- interface-copyright 2014 - 2018 RSM-->
+  <!-- interface-copyright 2014 - 2018 RSM -->
   <object class="GtkAdjustment" id="adjustment_blocks">
     <property name="upper">100000000000000</property>
     <property name="step_increment">1</property>
@@ -42,6 +42,9 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="rgba">rgb(255,255,255)</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="color_chooser_dialog">
         <property name="can_focus">False</property>
@@ -59,9 +62,6 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
       </object>
-    </child>
-    <child>
-      <placeholder/>
     </child>
   </object>
   <object class="GtkImage" id="image21">
@@ -185,12 +185,16 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
   </object>
   <object class="GtkTextBuffer" id="textbuffer_block_testing"/>
+  <object class="GtkTextBuffer" id="textbuffer_device_info"/>
   <object class="GtkWindow" id="window_block_testing">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">AKBL Block Testing Window</property>
     <property name="window_position">center</property>
     <property name="icon">../GUI/images/icon.png</property>
     <signal name="destroy" handler="on_window_block_testing_destroy" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="box4">
         <property name="width_request">500</property>
@@ -565,7 +569,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="text" translatable="yes">1</property>
                             <property name="adjustment">adjustment_tempo</property>
                             <property name="climb_rate">10</property>
-                            <property name="value">1</property>
+                            <property name="value">100</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -680,21 +684,6 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label_block_hex_test">
-                            <property name="width_request">141</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">hex</property>
-                            <property name="ellipsize">end</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
@@ -828,9 +817,5 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
-  <object class="GtkTextBuffer" id="textbuffer_device_info"/>
 </interface>

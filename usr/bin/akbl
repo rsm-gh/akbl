@@ -40,10 +40,10 @@ else
                 setsid python3 /usr/share/AKBL/launch/indicator.py
             ;;
             *)
-                python3 /usr/share/AKBL/launch/default_arguments.py "$1"
+                python3 /usr/share/AKBL/launch/commands.py "$1"
             ;;
         esac
     else
-        python3 /usr/share/AKBL/launch/default_arguments.py "$1" "$2"
+        python3 /usr/share/AKBL/launch/commands.py "$1" "$2"
     fi
 fi
