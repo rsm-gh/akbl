@@ -86,6 +86,7 @@ class GUI(Gtk.Window):
                     'liststore_profiles',
                     'combobox_profiles',
                     'tempobutton',
+                    'label_computer_model',
                     'box_profile_buttons',
                 'horizontal_main_box',
                 'box_area_labels',
@@ -140,6 +141,7 @@ class GUI(Gtk.Window):
         #
         computer_name = AKBLConnection._command('get_computer_name')
         self.computer = get_computer(computer_name)
+        self.label_computer_model.set_text(computer_name)
         
         theme_factory.LOAD_profiles(self.computer, self._paths.PROFILES_PATH)
         self.POPULATE_liststore_profiles()
