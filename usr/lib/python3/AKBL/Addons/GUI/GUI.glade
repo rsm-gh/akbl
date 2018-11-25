@@ -23,7 +23,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
   <requires lib="gtk+" version="3.10"/>
   <!-- interface-license-type gplv3 -->
   <!-- interface-name akbl -->
-  <!-- interface-copyright 2014 - 2018 RSM-->
+  <!-- interface-copyright 2014 - 2018 RSM -->
   <object class="GtkAdjustment" id="adjustment_blocks">
     <property name="upper">100000000000000</property>
     <property name="step_increment">1</property>
@@ -103,6 +103,11 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
     <property name="stock">gtk-refresh</property>
   </object>
   <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-info</property>
+  </object>
+  <object class="GtkImage" id="image20">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-info</property>
@@ -439,6 +444,16 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                             <signal name="activate-item" handler="on_imagemenuitem_lights_off_activate" swapped="no"/>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkImageMenuItem" id="menuitem_off_areas">
+                            <property name="label" translatable="yes">Areas to keep on</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="image">image20</property>
+                            <property name="use_stock">False</property>
+                            <property name="always_show_image">True</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -447,7 +462,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkMenuItem" id="menuitem_options">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Options</property>
+                    <property name="label" translatable="yes">Settings</property>
                     <property name="use_underline">True</property>
                     <child type="submenu">
                       <object class="GtkMenu" id="menu3">
@@ -489,7 +504,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="button_reset_toolbar_colors">
-                            <property name="label" translatable="yes">Reset the toolbar colors</property>
+                            <property name="label" translatable="yes">Reset Toolbar Colors</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="image">image19</property>
@@ -498,22 +513,12 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                             <signal name="activate" handler="on_button_reset_toolbar_colors_activate" swapped="no"/>
                           </object>
                         </child>
-                        <child>
-                          <object class="GtkMenuItem" id="menuitem_off_areas">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">When turning off the keyboard,
-the following zones will stay on.</property>
-                            <property name="label" translatable="yes">Areas to keep on</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkMenuItem" id="menuitem4">
+                  <object class="GtkMenuItem" id="menuitem_help">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Help</property>
@@ -556,9 +561,13 @@ the following zones will stay on.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="label_computer_model">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">10</property>
+                <property name="margin_right">10</property>
+                <property name="label" translatable="yes">COMPUTER-MODEL</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="expand">True</property>
