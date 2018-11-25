@@ -15,7 +15,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-AKBL_VERSION="2018.11.24"
+AKBL_VERSION="2018.11.25"
 
 if [ "$EUID" -ne 0 ]
   then echo "The script must be run as root."
