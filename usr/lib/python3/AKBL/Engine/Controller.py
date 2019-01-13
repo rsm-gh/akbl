@@ -19,12 +19,11 @@
 
 
 from AKBL.utils import print_error, print_warning
-from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Constructor import Constructor
 
 class Controller:
 
-    def __init__(self, driver=Driver()):
+    def __init__(self, driver):
             
         if not driver.has_device():
             print_error("The computer is not supported.")

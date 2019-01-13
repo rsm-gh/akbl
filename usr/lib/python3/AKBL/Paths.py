@@ -70,6 +70,10 @@ class Paths:
         self._indicator_off_icon_file= self._indicator_images_dir + 'icon-off.png'
         self._indicator_no_daemon_icon  = self._indicator_images_dir + 'icon-no-daemon.png'
 
+        ## ModelChooser
+        ##
+        self._model_chooser_glade_file = '{}/Addons/ModelChooser/ModelChooser.glade'.format(self._akbl_module_dir)
+
 
         """
             Create the tree dirs
@@ -80,14 +84,14 @@ class Paths:
         # Old versions of alienware-kbl may still creating the folder, the bug was in the Paths class.
         #
         
-        if os.path.isdir(self.configuration_file):
-            rmtree(self.configuration_file)
+        if os.path.isdir(self._configuration_file):
+            rmtree(self._configuration_file)
         
         
         #
         # Create the system folders
         #
-        for dir_path in (os.path.dirname(self.configuration_file), self._profiles_dir):
+        for dir_path in (os.path.dirname(self._configuration_file), self._profiles_dir):
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
                 

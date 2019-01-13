@@ -26,6 +26,7 @@ from AKBL.Data.Theme import theme_factory
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
 from AKBL.Engine.Controller import Controller
+from AKBL.Engine.Driver import Driver
 
 class ConnectDaemon:
 
@@ -45,7 +46,10 @@ class Daemon:
 
     def __init__(self, loop_self):
         
-        self._controller = Controller()
+        
+        driver = Driver()
+        driver.load_default_device()
+        self._controller = Controller(driver)
         
         computer = self._controller.get_computer()
         
@@ -71,7 +75,7 @@ class Daemon:
         self._user = 'root'
         self._paths = Paths()
         self._paths = Paths(self._user)
-        self._ccp = CCParser(self._paths.configuration_file, 'GUI Configuration')
+        self._ccp = CCParser(self._paths._configuration_file, 'GUI Configuration')
         self._indicator_pyro = False
         
         self.reload_configurations(self._user)
@@ -140,7 +144,7 @@ class Daemon:
         if user != self._user:
             self._user = user
             self._paths = Paths(user)
-            self._ccp.set_configuration_path(self._paths.configuration_file)
+            self._ccp.set_configuration_path(self._paths._configuration_file)
 
         theme_factory.LOAD_profiles(self._computer, self._paths._profiles_dir)
 

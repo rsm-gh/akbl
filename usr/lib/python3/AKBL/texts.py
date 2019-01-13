@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2018  Rafael Senties Martinelli
+#  Copyright (C)  2014-2019  Rafael Senties Martinelli
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,53 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+
+
+TEXT_HELP = '''
+Usage:
+
+    akbl <option>
+
+ Options:
+
+    --change                          Change the computer lights on/off.
+    --on                              Turn on the computer lights.
+    --off                             Turn off the computer lights.
+    --set-profile <profile_name>      Turn on the selected profile.
+    
+    --model-chooser                   Start the model chooser.
+    
+    --start-indicator                 Start the indicator.
+    
+    --start-daemon                    Start the daemon.
+    --daemon-is-on                    Return weather the daemon is running or not.
+    
+    --block-testing                   Display the block testing window.
+    
+    -h, --help                        Display this dialog.
+    -v, --version                     Display the software version.  
+    -l, --license                     Display the software license.
+
+ *If no option is introduced the graphical interface is launched.
+'''
+
+TEXT_LICENSE = '''
+  Copyright (C) 2014-2019  Rafael Senties Martinelli
+                2011-2012  the pyAlienFX team
+
+  This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License 3 as published by
+   the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+ '''
 
 TEXT_ADD = "Add"
 
@@ -46,49 +93,6 @@ DATA_INFO_ERROR = '''
  send this report to https://github.com/rsm-gh/alienware-kbl/issues\n
 '''
 
-TEXT_HELP = '''
-Usage:
-
-    akbl <option>
-
- Options:
-
-    --change                          Changes the computer lights on/off.
-    --on                              Turns on the computer lights.
-    --off                             Turns off the computer lights.
-    --set-profile <profile_name>      Turns on the selected profile.
-    
-    --start-indicator                 Starts the indicator.
-    
-    --start-daemon                    Starts the daemon.
-    --daemon-is-on                    Returns weather the daemon is running or not.
-    
-    --block-testing                   Displays the block testing window.
-    
-    -h, --help                        Displays this dialog.
-    -v, --version                     Display the software version.  
-    -l, --license                     Displays the software license.
-
- *If no option is introduced the graphical interface is launched.
-'''
-
-TEXT_LICENSE = '''
-  Copyright (C) 2014-2018  Rafael Senties Martinelli
-                2011-2012  the pyAlienFX team
-
-  This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License 3 as published by
-   the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
- '''
 
 TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be stablished."
 
