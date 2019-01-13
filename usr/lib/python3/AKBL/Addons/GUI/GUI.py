@@ -37,10 +37,10 @@ from AKBL.Data.Theme import theme_factory
 from AKBL.Data.Computer.factory import get_computer
 from AKBL.Addons.GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
 from AKBL.Addons.GUI.ZoneWidget import ZoneWidget
-from AKBL.Addons.GUI.gtk_utils import (gtk_dialog_question,
-                                       gtk_dialog_info,
-                                       gtk_file_chooser,
-                                       gtk_folder_chooser)
+from AKBL.Addons.gtk_utils import (gtk_dialog_question,
+                                   gtk_dialog_info,
+                                   gtk_file_chooser,
+                                   gtk_folder_chooser)
                                        
 
 from AKBL.texts import (TEXT_COMPUTER_DATA, 
@@ -125,7 +125,7 @@ class GUI(Gtk.Window):
                                                               Gdk.ModifierType.CONTROL_MASK, 
                                                               Gtk.AccelFlags.VISIBLE)
         
-        self.ccp = CCParser(self._paths.configuration_file, 'GUI Configuration')
+        self.ccp = CCParser(self._paths._configuration_file, 'GUI Configuration')
 
         #
         #

@@ -46,11 +46,7 @@ class Driver:
         #
         self._device = None
         
-        self.computer = computer_factory.get_default_computer()
-        
-        if self.computer is not None:
-            self.load_device(self.computer.VENDOR_ID, self.computer.PRODUCT_ID)
-        
+
 
     def has_device(self):
         if self._device is None:
@@ -87,13 +83,22 @@ class Driver:
 
         device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
 
-        if device is not None:
+        if device is None:
+            self._device = None
+        else:
             self._device = device
             self.take_over()
             print_debug('{}'.format(device))
             
         if empty_computer:    
             self.computer = Computer()
+
+    
+    def load_default_device(self):
+        self.computer = computer_factory.get_default_computer()
+        if self.computer is not None:
+            self.load_device(self.computer.VENDOR_ID, self.computer.PRODUCT_ID)
+            
 
     def write_constructor(self, constructor):
         

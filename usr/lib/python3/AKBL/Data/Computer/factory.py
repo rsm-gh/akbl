@@ -32,6 +32,7 @@ def get_computer_by_path(file_path):
     print_debug("Reading {}".format(file_path))
     
     computer = Computer()
+    computer.configuration_path = file_path
     
     config = ConfigParser()
     config.optionxform = str
@@ -101,6 +102,18 @@ def get_default_computer():
         return None
         
     return get_computer_by_path(default_computer_path)
+
+def set_default_computer(computer_name):
+    
+    for computer in get_computers():
+        if computer.NAME == computer_name:
+            with open(_SOFTWARE_PATHS._default_computer_file, 'w') as fw:
+                with open(computer.configuration_path, 'r') as fr:
+                    fw.write(fr.read())
+            
+            print("Default computer updated to: {}".format(computer_name))
+            return
+    
 
 def get_computer(name):
     

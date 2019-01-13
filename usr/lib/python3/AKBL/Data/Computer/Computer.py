@@ -66,6 +66,8 @@ class Computer(object):
         
         self.REGION_ALL_BUT_POWER = 1023999
         
+        self.configuration_path = ""
+        
         self.__regions = []
         self.__regions.sort(key=lambda region: region.description)
         

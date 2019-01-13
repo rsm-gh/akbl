@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2018  RSM
+#  Copyright (C) 2015-2019  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,12 +15,21 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-AKBL_VERSION="2018.11.25"
+NUMBER_OF_STEPS=5
+AKBL_VERSION="2019.01.13"
+DEBUG='False'
+
 
 if [ "$EUID" -ne 0 ]
-  then echo "The script must be run as root."
+  then echo -e "\e[00;31m The script must be run as root.\e[00m"
   exit
 fi
+
+echo -e "\n\e[00;33m *********************************** \e[00m"
+echo -e "\e[00;33m *** Installing AKBL v$AKBL_VERSION *** \e[00m"
+echo -e "\e[00;33m *********************************** \e[00m\n\n"
+
+
 
 #
 # Set the scripts permisions
@@ -32,14 +41,14 @@ chmod a+x ./remove
 #
 # Remove previous versions
 #
-echo -e "\e[00;32m[1/3] Removing previous versions..\e[00m"
+echo -e "\e[00;33m[1/$NUMBER_OF_STEPS] Removing previous versions..\e[00m"
 ./remove -s
 
 #
 # Start the installation
 #
 
-echo -e "\e[00;32m\n[2/3] Copying the software files...\e[00m"
+echo -e "\e[00;33m\n[2/$NUMBER_OF_STEPS] Installing the software files...\e[00m"
 
 
 function install_files(){
@@ -50,6 +59,9 @@ function install_files(){
     install -D $DIR$1/* $1
     
 }
+
+
+echo -e "\e[00;32m Copying the software files...\e[00m"
 
 install_files "/usr/bin"
 
@@ -84,23 +96,25 @@ install_files "/usr/lib/python3/AKBL/Addons/GUI/images"
 install_files "/usr/lib/python3/AKBL/Addons/BlockTesting"
 install_files "/usr/lib/python3/AKBL/Addons/Indicator"
 install_files "/usr/lib/python3/AKBL/Addons/Indicator/images"
+install_files "/usr/lib/python3/AKBL/Addons/ModelChooser"
+
+#
+#
+echo -e "\e[00;32m Replacing variables...\e[00m"
+
+sed -i "s/__AKBL_VERSION__/$AKBL_VERSION/g" "/usr/lib/python3/AKBL/Addons/GUI/GUI.glade"
+sed -i "s/__version__=None/__version__='$AKBL_VERSION'/g" "/usr/share/AKBL/launch/commands.py"
+sed -i "s/_DEBUG=True/_DEBUG=$DEBUG/g" "/usr/lib/python3/AKBL/utils.py"
+sed -i "s/_DEBUG=False/_DEBUG=$DEBUG/g" "/usr/lib/python3/AKBL/utils.py"
+
 
 ##
 ## Post installation
 ##
 
-echo -e "\e[00;32m\n[3/3] Creating the software links...\e[00m"
+echo -e "\e[00;33m\n[3/$NUMBER_OF_STEPS] Creating the python links...\e[00m"
+echo "python3   linked (default location)"
 
-if [ -f /bin/systemctl ]; then
-	echo -e "\n\033[0;33mEnabling and starting systemd...\033[0m"
-    systemctl enable akbl
-    systemctl start akbl
-else
-	echo -e "\e[00;31m Warning: systemd seems to be missing. AKBL will not work.\e[00m"
-fi
-echo ""
-
-echo -e "\033[0;33mLinking python...\033[0m"
 AKBL_PYTHON_VERSIONS=("python3.1" "python3.2" "python3.3" "python3.4" "python3.5" "python3.6" "python3.7" "python3.8" "python3.9")
 
 for python_version in "${AKBL_PYTHON_VERSIONS[@]}"; do
@@ -110,10 +124,25 @@ for python_version in "${AKBL_PYTHON_VERSIONS[@]}"; do
 done
 echo ""
 
+echo -e "\e[00;33m\n[4/$NUMBER_OF_STEPS] Choosing the computer model...\e[00m"
+echo "Choose the configuration file from the GTK window that will appear.."
+akbl --model-chooser false
 
-#
-#
-sed -i "s/__AKBL_VERSION__/$AKBL_VERSION/g" "/usr/lib/python3/AKBL/Addons/GUI/GUI.glade"
-sed -i "s/__version__=None/__version__='$AKBL_VERSION'/g" "/usr/share/AKBL/launch/commands.py"
-echo -e "\e[00;32m\n akbl v$AKBL_VERSION is installed. Enjoy it !\e[00m"
 
+echo -e "\e[00;33m\n[5/$NUMBER_OF_STEPS] Enabling the daemon...\e[00m"
+if [ -f /bin/systemctl ]; then
+    systemctl daemon-reload
+    systemctl enable akbl
+    systemctl start akbl
+else
+	echo -e "\e[00;31m Warning: systemd seems to be missing. AKBL will not work.\e[00m"
+fi
+echo ""
+
+
+##
+## End
+##
+echo -e "\e[00;33m ************************************* \e[00m"
+echo -e "\e[00;33m *** AKBL v$AKBL_VERSION is installed *** \e[00m"
+echo -e "\e[00;33m ************************************* \e[00m\n"
