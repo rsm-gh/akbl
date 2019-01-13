@@ -57,7 +57,7 @@ from AKBL.texts import (TEXT_COMPUTER_DATA,
                         TEXT_GUI_CANT_DAEMON_OFF)
 
 
-os.chdir(Paths().MAIN)  # this is important for the rest of the code.
+os.chdir(Paths()._akbl_module_dir)  # this is important for the rest of the code.
                         # 12/11/2018, why? the code should work even without this..
 
 
@@ -71,7 +71,7 @@ class GUI(Gtk.Window):
         # Glade
         #
         builder = Gtk.Builder()
-        builder.add_from_file(self._paths.GLADE_FILE)
+        builder.add_from_file(self._paths._gui_glade_file)
         builder.connect_signals(self)
 
         glade_object_names = (
@@ -125,7 +125,7 @@ class GUI(Gtk.Window):
                                                               Gdk.ModifierType.CONTROL_MASK, 
                                                               Gtk.AccelFlags.VISIBLE)
         
-        self.ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Configuration')
+        self.ccp = CCParser(self._paths.configuration_file, 'GUI Configuration')
 
         #
         #
@@ -143,7 +143,7 @@ class GUI(Gtk.Window):
         self.computer = get_computer(computer_name)
         self.label_computer_model.set_text(computer_name)
         
-        theme_factory.LOAD_profiles(self.computer, self._paths.PROFILES_PATH)
+        theme_factory.LOAD_profiles(self.computer, self._paths._profiles_dir)
         self.POPULATE_liststore_profiles()
 
         """
@@ -262,7 +262,7 @@ class GUI(Gtk.Window):
 
         if self.checkbutton_delete_warning.get_active():
             Gdk.threads_enter()
-            if not gtk_dialog_question(self.window_root, TEXT_CONFIRM_DELETE_CONFIGURATION, icon=self._paths.SMALL_ICON):
+            if not gtk_dialog_question(self.window_root, TEXT_CONFIRM_DELETE_CONFIGURATION, icon=self._paths._small_icon_file):
                 Gdk.threads_leave()
                 return
             Gdk.threads_leave()
@@ -341,7 +341,7 @@ class GUI(Gtk.Window):
 
         clone = deepcopy(theme_factory._AVAILABLE_THEMES[self.theme.name])
         clone.name = text
-        clone.path = '{}{}.cfg'.format(self._paths.PROFILES_PATH, text)
+        clone.path = '{}{}.cfg'.format(self._paths._profiles_dir, text)
         clone.save()
         theme_factory._AVAILABLE_THEMES[clone.name] = clone
         self.POPULATE_liststore_profiles()
@@ -497,11 +497,11 @@ class GUI(Gtk.Window):
     def on_imagemenuitem_import_activate(self, widget=None, data=None):
         file_path = gtk_file_chooser(parent=self.window_root,
                                      title=TEXT_CHOOSE_A_THEME,
-                                     icon_path=self._paths.SMALL_ICON,
+                                     icon_path=self._paths._small_icon_file,
                                      filters=(("AKBL theme", '*.cfg'),))
 
         if file_path:
-            new_path = self._paths.PROFILES_PATH + os.path.basename(file_path)
+            new_path = self._paths._profiles_dir + os.path.basename(file_path)
 
             if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, TEXT_THEME_ALREADY_EXISTS):
                 return
@@ -511,7 +511,7 @@ class GUI(Gtk.Window):
             self.POPULATE_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, widget=None, data=None):
-        folder_path = gtk_folder_chooser(parent=self.window_root, title=TEXT_CHOOSE_A_FOLDER_TO_EXPORT, icon_path=self._paths.SMALL_ICON)
+        folder_path = gtk_folder_chooser(parent=self.window_root, title=TEXT_CHOOSE_A_FOLDER_TO_EXPORT, icon_path=self._paths._small_icon_file)
 
         if folder_path:
             new_path = '{}/{}.cfg'.format(folder_path, self.theme.name)
@@ -560,7 +560,7 @@ class GUI(Gtk.Window):
             self.button_new_profile_create.set_sensitive(False)
             return
 
-        invalid_names = os.listdir(self._paths.PROFILES_PATH)
+        invalid_names = os.listdir(self._paths._profiles_dir)
         for name in invalid_names:
             if name == text:
                 self.button_new_profile_create.set_sensitive(False)
@@ -583,7 +583,7 @@ AKBLConnection = Bindings()
 def main():
 
     if not AKBLConnection.ping():
-        gtk_dialog_info(None, TEXT_GUI_CANT_DAEMON_OFF, icon=Paths().SMALL_ICON)
+        gtk_dialog_info(None, TEXT_GUI_CANT_DAEMON_OFF, icon=Paths()._small_icon_file)
     else:
         GObject.threads_init()
         Gdk.threads_init()

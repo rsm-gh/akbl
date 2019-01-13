@@ -26,7 +26,7 @@ import cairo
 from AKBL.utils import print_warning
 from AKBL.Paths import Paths
 
-_IMAGES_PATH = Paths().IMAGES
+_IMAGES_PATH = Paths()._images_dir
 _LEFT_CLICK_ID = 1
 _RIGHT_CLICK_ID = 3
 

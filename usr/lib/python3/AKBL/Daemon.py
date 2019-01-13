@@ -35,7 +35,7 @@ class ConnectDaemon:
         self.paths = Paths()
 
         uri = self.daemon.register(Daemon(self))
-        with open(self.paths.DAEMON_PYRO_PATH, encoding='utf-8', mode='wt') as f:
+        with open(self.paths._daemon_pyro_file, encoding='utf-8', mode='wt') as f:
             f.write(str(uri))
 
         self.daemon.requestLoop()
@@ -71,7 +71,7 @@ class Daemon:
         self._user = 'root'
         self._paths = Paths()
         self._paths = Paths(self._user)
-        self._ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Configuration')
+        self._ccp = CCParser(self._paths.configuration_file, 'GUI Configuration')
         self._indicator_pyro = False
         
         self.reload_configurations(self._user)
@@ -140,9 +140,9 @@ class Daemon:
         if user != self._user:
             self._user = user
             self._paths = Paths(user)
-            self._ccp.set_configuration_path(self._paths.CONFIGURATION_PATH)
+            self._ccp.set_configuration_path(self._paths.configuration_file)
 
-        theme_factory.LOAD_profiles(self._computer, self._paths.PROFILES_PATH)
+        theme_factory.LOAD_profiles(self._computer, self._paths._profiles_dir)
 
         if set_default:
             _, profile_name = theme_factory.GET_last_configuration()
