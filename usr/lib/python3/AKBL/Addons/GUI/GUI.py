@@ -43,8 +43,7 @@ from AKBL.Addons.gtk_utils import (gtk_dialog_question,
                                    gtk_folder_chooser)
                                        
 
-from AKBL.texts import (TEXT_COMPUTER_DATA, 
-                        TEXT_ADD, 
+from AKBL.texts import (TEXT_ADD, 
                         TEXT_CONFIRM_DELETE_CONFIGURATION, 
                         TEXT_CONFIGURATION_DELETED,
                         TEXT_SHUTTING_LIGHTS_OFF,
@@ -58,7 +57,7 @@ from AKBL.texts import (TEXT_COMPUTER_DATA,
 
 
 os.chdir(Paths()._akbl_module_dir)  # this is important for the rest of the code.
-                        # 12/11/2018, why? the code should work even without this..
+                                    # 12/11/2018, why? the code should work even without this..
 
 
 
@@ -149,10 +148,6 @@ class GUI(Gtk.Window):
         """
             Extra GUI initialization
         """
-
-        computer_data = AKBLConnection._command('get_computer_info')
-
-        self.textbuffer_computer_data.set_text(TEXT_COMPUTER_DATA.format(*computer_data[0:5]))
 
         # Add the areas to the  "menuitem_off_areas"
         #

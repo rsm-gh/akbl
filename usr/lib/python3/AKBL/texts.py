@@ -17,8 +17,6 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-
-
 TEXT_HELP = '''
 Usage:
 
@@ -84,23 +82,9 @@ TEXT_START_THE_GUI = "Start the GUI"
 TEXT_SWICH_STATE = "Switch State"
 TEXT_EXIT = "Exit"
 
-DATA_INFO = '''
- No Alienware device was detected.
-'''
-
-DATA_INFO_ERROR = '''
- An error ocurred while retriving the information of your computer. Please
- send this report to https://github.com/rsm-gh/alienware-kbl/issues\n
-'''
-
-
 TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be stablished."
 
-TEXT_WRONG_ARGUMENT = '''alienware-kbl: wrong argument. use "alienware-kbl --help"'''
-
-TEXT_RESTART_THE_SYSTEM = "{0} You will have to restart the system to make it effective."
-
-TEXT_ONLY_FROM_TERMINAL = "** The root permission has been removed. Unfortunately,\nthe launcher will still asking for it. call it from the terminal to skip it. **\n\n"
+TEXT_WRONG_ARGUMENT = '''akbl: wrong argument. use "akbl --help"'''
 
 TEXT_APPLYING_CONFIGURATION = "Applying the configuration.."
 
@@ -120,25 +104,9 @@ TEXT_CONFIRM_DELETE_CONFIGURATION = "Are you sure that you want to\n delete this
 
 TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED = "You have reached the maximum number of Zones for the {}."
 
-TEXT_COMPUTER_DATA = '''
- Dected As: {0}
- Vendor ID: {1}
- Product ID: {2}
-
-{3}
-
-'''
-
 TEXT_ONLY_ROOT = "This command can only be used by the root user."
 
-TEXT_NON_LINUX_USER = '''The user you wanted to add is not recognized by the system,
-it won't be added.'''
 
-
-TEXT_COMPUTER_NOT_FOUND = "Error: Computer Not Supported"
-
-
-#
 #   Block Testing
 #
 TEXT_VALUE_CHANGED = '''[Value Changed]: {}\t int: {}\t hex: {}\n'''
