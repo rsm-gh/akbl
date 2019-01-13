@@ -38,17 +38,23 @@ _EMPTY_MODEL="<NONE>"
 
 def get_alienware_device_info():
     
-    bash_output = subprocess.run("lsusb", shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+    bash_output = subprocess.run("lsusb", 
+                                 shell=True, 
+                                 stdout=subprocess.PIPE, 
+                                 universal_newlines=True)
 
     device_info = str(bash_output.stdout)
-
+    
     for line in device_info.split("\n"):
 
         if "Alienware" in line:
             bus_id = line.split()[1]
             device_id = line.split()[3][:-1] 
             
-            bash_output = subprocess.run("lsusb -D /dev/bus/usb/{}/{}".format(bus_id, device_id), shell=True, stdout=subprocess.PIPE, universal_newlines=True)
+            bash_output = subprocess.run("lsusb -D /dev/bus/usb/{}/{} 2>/dev/null".format(bus_id, device_id), 
+                                         shell=True,
+                                         stdout=subprocess.PIPE,
+                                         universal_newlines=True)
             
             device_info = str(bash_output.stdout)
             break
