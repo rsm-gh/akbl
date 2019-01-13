@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  Rafael Senties Martinelli
+#  Copyright (C) 2014-2019  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -91,13 +91,10 @@ class GUI(Gtk.Window):
                 'box_area_labels',
                 'box_areas',                
                 'label_user_message',
-                'scrolledwindow_no_computer',
             'window_new_profile',
                 'entry_new_profile',
                 'button_new_profile_create',
-            'window_about',
-            'window_computer_data',
-                'textbuffer_computer_data')
+            'window_about')
 
         for glade_object in glade_object_names:
             setattr(self, glade_object, builder.get_object(glade_object))
@@ -183,8 +180,6 @@ class GUI(Gtk.Window):
 
         if not self.checkbutton_profile_buttons.get_active():
             self.box_profile_buttons.hide()
-
-        self.scrolledwindow_no_computer.hide()
 
     def POPULATE_box_areas(self):
         """
@@ -385,12 +380,6 @@ class GUI(Gtk.Window):
     def on_button_reset_toolbar_colors_activate(self, widget, data=None):
         self.color_chooser_toolbar.reset_colors()
 
-    def on_imagemenuitem_computer_data_activate(self, button, data=None):
-        self.window_computer_data.show()
-
-    def on_button_computer_data_close_clicked(self, button, data=None):
-        self.window_computer_data.hide()
-
     def on_checkbox_turnoff_areas_changed(self, checkbox, data=None):
         areas_to_keep_on=(self.areas_description_dict[checkbox.get_label()]
                                 for checkbox in self.menu_turn_off_areas.get_children() if checkbox.get_active())
@@ -502,7 +491,7 @@ class GUI(Gtk.Window):
                 return
 
             shutil.copy(file_path, new_path)
-            theme_factory.LOAD_profile(self.computer, new_path)
+            theme_factory.load_from_file(new_path, self.computer)
             self.POPULATE_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, widget=None, data=None):
