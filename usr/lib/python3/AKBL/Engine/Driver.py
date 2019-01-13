@@ -32,15 +32,18 @@ class Driver:
     def __init__(self):
         
         # Define I/O Reqquest types
-        self.SEND_REQUEST_TYPE = 33
-        self.SEND_REQUEST = 9
-        self.SEND_VALUE = 514
-        self.SEND_INDEX = 0
-        self.READ_REQUEST_TYPE = 161
-        self.READ_REQUEST = 1
-        self.READ_VALUE = 257
-        self.READ_INDEX = 0
+        self.__send_request_type = 33
+        self.__send_request = 9
+        self.__send_value = 514
+        self.__send_index = 0
+        self.__read_request_type = 161
+        self.__read_request = 1
+        self.__read_value = 257
+        self.__read_index = 0
         
+        
+        #
+        #
         self._device = None
         
         self.computer = computer_factory.get_default_computer()
@@ -97,18 +100,18 @@ class Driver:
         print_debug('\n'.join(str(request) for request in constructor))
         
         for command in constructor:
-            self._device.ctrl_transfer(self.SEND_REQUEST_TYPE, 
-                                       self.SEND_REQUEST, 
-                                       self.SEND_VALUE, 
-                                       self.SEND_INDEX, 
+            self._device.ctrl_transfer(self.__send_request_type, 
+                                       self.__send_request, 
+                                       self.__send_value, 
+                                       self.__send_index, 
                                        command)
 
     def read_device(self, constructor):
         
-        msg = self._device.ctrl_transfer(self.READ_REQUEST_TYPE, 
-                                         self.READ_REQUEST, 
-                                         self.READ_VALUE, 
-                                         self.READ_INDEX, 
+        msg = self._device.ctrl_transfer(self.__read_request_type, 
+                                         self.__read_request, 
+                                         self.__read_value, 
+                                         self.__read_index, 
                                          len(constructor.get_first_command()))
 
         print_debug("msg={}".format(msg))
