@@ -82,9 +82,9 @@ class Bindings:
             and it returns True or False.
         """
         
-        if not self.ping() and os.path.exists(self._paths.DAEMON_PYRO_PATH):
+        if not self.ping() and os.path.exists(self._paths._daemon_pyro_file):
             
-            with open(self._paths.DAEMON_PYRO_PATH, mode='rt', encoding='utf-8') as f:
+            with open(self._paths._daemon_pyro_file, mode='rt', encoding='utf-8') as f:
                 address = f.readline().strip()
                 
             try:
@@ -136,10 +136,10 @@ class Bindings:
             It returns a list of the existing profile names.
         """
 
-        if not os.path.exists(self._paths.PROFILES_PATH):
+        if not os.path.exists(self._paths._profiles_dir):
             return []
 
-        filenames = os.listdir(self._paths.PROFILES_PATH)
+        filenames = os.listdir(self._paths._profiles_dir)
         if len(filenames) == 0:
             return []
 
@@ -147,7 +147,7 @@ class Bindings:
         for filename in filenames:
             if filename.endswith('.cfg'):
                 
-                path = self._paths.PROFILES_PATH + filename
+                path = self._paths._profiles_dir + filename
 
                 with open(path, mode='rt', encoding='utf-8') as f:
                     lines = f.readlines()

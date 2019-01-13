@@ -32,7 +32,7 @@ PATHS = Paths()
 __version__=None #TO BE REPLACED IN THE SETUP FILE
 
 def send_command(command, *args):
-    if not os.path.exists(PATHS.SYSTEMCTL_PATH) or not AKBLConnection.ping():
+    if not os.path.exists(PATHS._systemctl_dir) or not AKBLConnection.ping():
         print(TEXT_ERROR_DAEMON_OFF)
     else:
         AKBLConnection._command(command, *args)

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2018  Rafael Senties Martinelli
+#  Copyright (C) 2015-2019  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -28,11 +28,11 @@ class Paths:
 
         ## System
         ##
-        self.COMPUTERS_CONFIGURATION_FOLDER = "/usr/share/AKBL/computers"
-        self.DAEMON_PYRO_PATH = '/etc/akbl-daemon-adress'
-        self.SYSTEMCTL_PATH = '/bin/systemctl'
-        self.MAIN = '/usr/lib/python3/AKBL'
-        self.DEFAULT_COMPUTER='/etc/AKBL/default_computer.ini'
+        self._systemctl_dir = '/bin/systemctl'
+        self._akbl_module_dir = '/usr/lib/python3/AKBL'
+        self._computers_configuration_dir = "/usr/share/AKBL/computers"
+        self._default_computer_file='/etc/AKBL/default_computer.ini'
+        self._daemon_pyro_file = '/etc/akbl-daemon-adress'
 
         ## User
         ##
@@ -43,47 +43,51 @@ class Paths:
         #
         
         if user == 'root':
-            self.CONFIGURATION_PATH = '/root/.config/alienware-kbl.ini'
-            self.PROFILES_PATH = '/root/.local/share/alienware-kbl/'
+            self._configuration_file = '/root/.config/alienware-kbl.ini'
+            self._profiles_dir = '/root/.local/share/alienware-kbl/'
         else:
-            self.CONFIGURATION_PATH = '/home/{}/.config/alienware-kbl.ini'.format(user)
-            self.PROFILES_PATH = '/home/{}/.local/share/alienware-kbl/'.format(user)
+            self._configuration_file = '/home/{}/.config/alienware-kbl.ini'.format(user)
+            self._profiles_dir = '/home/{}/.local/share/alienware-kbl/'.format(user)
         
         ## GUI
         ##
-        self.GLADE_FILE = '{}/Addons/GUI/GUI.glade'.format(self.MAIN)
-        
-        ## Block testing window
-        ##
-        self.BLOCK_TESTING_GLADE_FILE = '{}/Addons/BlockTesting/BlockTesting.glade'.format(self.MAIN)
+        self._gui_glade_file = '{}/Addons/GUI/GUI.glade'.format(self._akbl_module_dir)
         
         ## GUI & Others
         ##
-        self.IMAGES = '{}/Addons/GUI/images/'.format(self.MAIN)
-        self.SMALL_ICON = self.IMAGES + 'icon.png'
-        self.MEDIUM_ICON = self.IMAGES + 'icon-m.png'
+        self._images_dir = '{}/Addons/GUI/images/'.format(self._akbl_module_dir)
+        self._small_icon_file = self._images_dir + 'icon.png'
+        self._medium_icon_file= self._images_dir + 'icon-m.png'
+        
+        ## Block testing window
+        ##
+        self._block_testing_glade_file = '{}/Addons/BlockTesting/BlockTesting.glade'.format(self._akbl_module_dir)
 
         ## Indicator
         ##
-        self.INDICATOR_IMAGES_DIR = '{}/Addons/Indicator/images/'.format(self.MAIN)
-        self.INDICATOR_ON_ICON = self.INDICATOR_IMAGES_DIR + 'icon-on.png'
-        self.INDICATOR_OFF_ICON = self.INDICATOR_IMAGES_DIR + 'icon-off.png'
-        self.INDICATOR_NO_DAEMON_ICON  = self.INDICATOR_IMAGES_DIR + 'icon-no-daemon.png'
+        self._indicator_images_dir = '{}/Addons/Indicator/images/'.format(self._akbl_module_dir)
+        self._indicator_on_icon_file= self._indicator_images_dir + 'icon-on.png'
+        self._indicator_off_icon_file= self._indicator_images_dir + 'icon-off.png'
+        self._indicator_no_daemon_icon  = self._indicator_images_dir + 'icon-no-daemon.png'
 
 
         """
             Create the tree dirs
         """
 
-        # In case there be a folder instead of the configuration file, delete the folder. Bug #84 
-        # Old versions of alienware-kbl may still creating the folder. The bug was in the Paths class.
+        #
+        # Bug #84: In case there be a folder instead of the configuration file, delete the folder.  
+        # Old versions of alienware-kbl may still creating the folder, the bug was in the Paths class.
         #
         
-        if os.path.isdir(self.CONFIGURATION_PATH):
-            rmtree(self.CONFIGURATION_PATH)
+        if os.path.isdir(self.configuration_file):
+            rmtree(self.configuration_file)
+        
+        
         #
+        # Create the system folders
         #
-        for dir_path in (os.path.dirname(self.CONFIGURATION_PATH), self.PROFILES_PATH):
+        for dir_path in (os.path.dirname(self.configuration_file), self._profiles_dir):
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
                 

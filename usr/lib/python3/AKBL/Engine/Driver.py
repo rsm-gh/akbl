@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2018  Rafael Senties Martinelli
+#  Copyright (C)  2014-2019  Rafael Senties Martinelli
 #                 2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -78,10 +78,8 @@ class Driver:
 
     def load_device(self, id_vendor, id_product, empty_computer=False):
         """
-            Load a device from given'ids and then if success load
-            the global computer configuration. 
-            
-            This is used at the block_testing_window for testing new computers.
+            Load a device from a given id_vendor and id_product.
+            If it success, it will load the global computer configuration. 
         """
 
         device = usb.core.find(idVendor=id_vendor, idProduct=id_product)

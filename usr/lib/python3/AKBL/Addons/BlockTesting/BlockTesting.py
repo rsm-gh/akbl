@@ -132,7 +132,7 @@ class BlockTesting(Gtk.Window):
             Glade
         """
         builder = Gtk.Builder()
-        builder.add_from_file(self._paths.BLOCK_TESTING_GLADE_FILE)
+        builder.add_from_file(self._paths.block_testing_glade_file)
         builder.connect_signals(self)
 
         glade_object_names = (

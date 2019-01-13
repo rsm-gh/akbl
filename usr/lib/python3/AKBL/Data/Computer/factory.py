@@ -20,7 +20,7 @@
 import os
 from configparser import ConfigParser
 
-from AKBL.Paths import Paths
+from AKBL.Paths import Paths; _SOFTWARE_PATHS = Paths()
 from AKBL.Data.Computer.Computer import Computer
 from AKBL.Data.Computer.Region import Region
 from AKBL.utils import print_debug, print_warning
@@ -68,7 +68,7 @@ def get_computers():
 
     computers = []
     
-    path=Paths().COMPUTERS_CONFIGURATION_FOLDER
+    path=Paths()._computers_configuration_dir
     
     for file_name in os.listdir(path):
         if file_name.endswith(".ini"):
@@ -95,7 +95,7 @@ def get_computers():
 
 def get_default_computer():
     
-    default_computer_path = Paths().DEFAULT_COMPUTER
+    default_computer_path = _SOFTWARE_PATHS._default_computer_file
     
     if not os.path.exists(default_computer_path):
         return None
