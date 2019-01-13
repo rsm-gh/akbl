@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  RSM
+#  Copyright (C) 2014-2018  Rafael Senties Martinelli
 #                2011-2012  the pyAlienFX team
 #
 #
