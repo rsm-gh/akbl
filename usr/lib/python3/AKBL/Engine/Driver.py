@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2018  RSM
+#  Copyright (C)  2014-2019  Rafael Senties Martinelli
 #                 2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -26,26 +26,27 @@ from AKBL.utils import print_debug, print_error
 from AKBL.Data.Computer import factory as computer_factory
 from AKBL.Data.Computer.Computer import Computer
 
-class Driver():
+
+class Driver:
 
     def __init__(self):
         
         # Define I/O Reqquest types
-        self.SEND_REQUEST_TYPE = 33
-        self.SEND_REQUEST = 9
-        self.SEND_VALUE = 514
-        self.SEND_INDEX = 0
-        self.READ_REQUEST_TYPE = 161
-        self.READ_REQUEST = 1
-        self.READ_VALUE = 257
-        self.READ_INDEX = 0
-
-        self.computer = None
+        self.__send_request_type = 33
+        self.__send_request = 9
+        self.__send_value = 514
+        self.__send_index = 0
+        self.__read_request_type = 161
+        self.__read_request = 1
+        self.__read_value = 257
+        self.__read_index = 0
         
+        
+        #
+        #
         self._device = None
-        self._device_found = False
         
-        self.find_device()
+
 
     def has_device(self):
         if self._device is None:
@@ -64,46 +65,58 @@ class Driver():
             device = usb.core.find(idVendor=computer.VENDOR_ID, idProduct=computer.PRODUCT_ID)
 
             if device is not None:
+                
                 self._device = device
                 self.take_over()
-                print_debug(device)
-                
+
                 self.computer = computer
+                
+                print_debug(device)
                 print_debug(self.computer)
 
 
-    def load_device(self, id_vendor, id_product):
+    def load_device(self, id_vendor, id_product, empty_computer=False):
         """
-            Load a device from given'ids and then if success load
-            the global computer configuration. This is used at the block_testing_window
-            for testing new computers.
+            Load a device from a given id_vendor and id_product.
+            If it success, it will load the global computer configuration. 
         """
 
         device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
 
-        if device is not None:
+        if device is None:
+            self._device = None
+        else:
             self._device = device
             self.take_over()
-            print_debug('device loaded:\n{}'.format(device))
+            print_debug('{}'.format(device))
+            
+        if empty_computer:    
             self.computer = Computer()
+
+    
+    def load_default_device(self):
+        self.computer = computer_factory.get_default_computer()
+        if self.computer is not None:
+            self.load_device(self.computer.VENDOR_ID, self.computer.PRODUCT_ID)
+            
 
     def write_constructor(self, constructor):
         
         print_debug('\n'.join(str(request) for request in constructor))
         
         for command in constructor:
-            self._device.ctrl_transfer(self.SEND_REQUEST_TYPE, 
-                                       self.SEND_REQUEST, 
-                                       self.SEND_VALUE, 
-                                       self.SEND_INDEX, 
+            self._device.ctrl_transfer(self.__send_request_type, 
+                                       self.__send_request, 
+                                       self.__send_value, 
+                                       self.__send_index, 
                                        command)
 
     def read_device(self, constructor):
         
-        msg = self._device.ctrl_transfer(self.READ_REQUEST_TYPE, 
-                                         self.READ_REQUEST, 
-                                         self.READ_VALUE, 
-                                         self.READ_INDEX, 
+        msg = self._device.ctrl_transfer(self.__read_request_type, 
+                                         self.__read_request, 
+                                         self.__read_value, 
+                                         self.__read_index, 
                                          len(constructor.get_first_command()))
 
         print_debug("msg={}".format(msg))

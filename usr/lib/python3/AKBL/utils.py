@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2016, 2018  RSM
+#  Copyright (C) 2016, 2018  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -22,13 +22,7 @@ import pwd
 import inspect
 import re
 
-_DEBUG=False
-if not _DEBUG:
-    print("""
-The debug messages are deactivated. 
-
-To change this modify the '_DEBUG' variable placed at /usr/lib/python3/AKBL/utils.py
-""")
+_DEBUG=True # this variable is actually modified in the SETUP file
 
 _RED   = "\033[1;31m"  
 _BLUE  = "\033[1;34m"

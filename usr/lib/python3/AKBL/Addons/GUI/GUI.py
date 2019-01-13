@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  RSM
+#  Copyright (C) 2014-2019  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -29,18 +29,21 @@ from traceback import format_exc
 from time import sleep
 from copy import deepcopy
 
-import AKBL.Data.Theme.Theme as Theme
-from AKBL.Addons.GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
-from AKBL.Data.Computer.factory import get_computer
-from AKBL.utils import print_error, print_warning
+from AKBL.utils import print_error
 from AKBL.Bindings import Bindings
 from AKBL.CCParser import CCParser
 from AKBL.Paths import Paths
+from AKBL.Data.Theme import theme_factory
+from AKBL.Data.Computer.factory import get_computer
+from AKBL.Addons.GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
 from AKBL.Addons.GUI.ZoneWidget import ZoneWidget
+from AKBL.Addons.gtk_utils import (gtk_dialog_question,
+                                   gtk_dialog_info,
+                                   gtk_file_chooser,
+                                   gtk_folder_chooser)
+                                       
 
-from AKBL.texts import (TEXT_COPY_CONFIG, 
-                        TEXT_COMPUTER_DATA, 
-                        TEXT_ADD, 
+from AKBL.texts import (TEXT_ADD, 
                         TEXT_CONFIRM_DELETE_CONFIGURATION, 
                         TEXT_CONFIGURATION_DELETED,
                         TEXT_SHUTTING_LIGHTS_OFF,
@@ -53,102 +56,10 @@ from AKBL.texts import (TEXT_COPY_CONFIG,
                         TEXT_GUI_CANT_DAEMON_OFF)
 
 
-os.chdir(Paths().MAIN) # this is important for the rest of the code.
+os.chdir(Paths()._akbl_module_dir)  # this is important for the rest of the code.
+                                    # 12/11/2018, why? the code should work even without this..
 
 
-def get_text_gtk_buffer(textbuffer):
-    return textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)
-
-def gtk_append_text_to_buffer(textbuffer, text):
-    textbuffer.set_text(get_text_gtk_buffer(textbuffer) + text)
-
-def gtk_dialog_question(parent, text1, text2=None, icon=None):
-
-    dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, text1)
-
-    if icon is not None:
-        dialog.set_icon_from_file(icon)
-
-    if text2 is not None:
-        dialog.format_secondary_text(text2)
-
-    response = dialog.run()
-    if response == Gtk.ResponseType.YES:
-        dialog.hide()
-        return True
-
-    elif response == Gtk.ResponseType.NO:
-        dialog.hide()
-        return False
-
-def gtk_dialog_info(parent, text1, text2=None, icon=None):
-
-    dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.INFO, Gtk.ButtonsType.CLOSE, text1)
-
-    if icon is not None:
-        dialog.set_icon_from_file(icon)
-
-    if text2 is not None:
-        dialog.format_secondary_text(text2)
-
-    dialog.run()
-    dialog.destroy()
-
-def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filters=[]):
-
-    window = Gtk.FileChooserDialog(title, parent, Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL,
-                                                                                 Gtk.ResponseType.CANCEL,
-                                                                                 Gtk.STOCK_OPEN,
-                                                                                 Gtk.ResponseType.OK))
-
-    window.set_default_response(Gtk.ResponseType.NONE)
-    window.set_transient_for(parent)
-
-    if icon_path is not None:
-        window.set_icon_from_file(icon_path)
-
-    if default_folder is not None:
-        window.set_current_folder(default_folder)
-
-    for filter_name, filter_extension in filters:
-        gtk_filter = Gtk.FileFilter()
-        gtk_filter.set_name(filter_name)
-        gtk_filter.add_pattern(filter_extension)
-        window.add_filter(gtk_filter)
-
-    response = window.run()
-    if response == Gtk.ResponseType.OK:
-        file_path = window.get_filename()
-        window.destroy()
-
-        return file_path
-    else:
-        window.destroy()
-        return False
-
-def gtk_folder_chooser(parent, title='', icon_path=None, default_folder=None):
-
-    window = Gtk.FileChooserDialog(
-        title,
-        parent,
-        Gtk.FileChooserAction.SELECT_FOLDER,
-        (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-
-    if icon_path is not None:
-        window.set_icon_from_file(icon_path)
-
-    if default_folder is not None:
-        window.set_current_folder(default_folder)
-
-    response = window.run()
-    if response == Gtk.ResponseType.OK:
-        folder_path = window.get_filename()
-        window.destroy()
-
-        return folder_path
-    else:
-        window.destroy()
-        return False
 
 class GUI(Gtk.Window):
 
@@ -159,7 +70,7 @@ class GUI(Gtk.Window):
         # Glade
         #
         builder = Gtk.Builder()
-        builder.add_from_file(self._paths.GLADE_FILE)
+        builder.add_from_file(self._paths._gui_glade_file)
         builder.connect_signals(self)
 
         glade_object_names = (
@@ -180,13 +91,10 @@ class GUI(Gtk.Window):
                 'box_area_labels',
                 'box_areas',                
                 'label_user_message',
-                'scrolledwindow_no_computer',
             'window_new_profile',
                 'entry_new_profile',
                 'button_new_profile_create',
-            'window_about',
-            'window_computer_data',
-                'textbuffer_computer_data')
+            'window_about')
 
         for glade_object in glade_object_names:
             setattr(self, glade_object, builder.get_object(glade_object))
@@ -212,35 +120,8 @@ class GUI(Gtk.Window):
                                                               ord(shorcut), 
                                                               Gdk.ModifierType.CONTROL_MASK, 
                                                               Gtk.AccelFlags.VISIBLE)
-
-        """
-            Ask to the user if he wants to import its global configuration
-            (this is a support for older versions of alienware-kbl)
-        """
-        if (not os.path.exists(self._paths.CONFIGURATION_PATH) and os.path.exists(self._paths.BACKUP_CONFIG)) or \
-           (not os.path.exists(self._paths.PROFILES_PATH) and os.path.exists(self._paths.BACKUP_PROFILES)):
-
-            self.window_root.hide()
-
-            if gtk_dialog_question(self.window_root, TEXT_COPY_CONFIG, icon=self._paths.SMALL_ICON):
-                from distutils.dir_util import copy_tree
-                
-                if not os.path.exists(os.path.dirname(self._paths.CONFIGURATION_PATH)):
-                    print_warning('Adding the configuration {}'.format(self._paths.CONFIGURATION_PATH))
-                    os.makedirs(os.path.dirname(self._paths.CONFIGURATION_PATH))
-
-                if not os.path.exists(self._paths.PROFILES_PATH):
-                    os.makedirs(self._paths.PROFILES_PATH)
-
-                shutil.copyfile(self._paths.BACKUP_CONFIG, self._paths.CONFIGURATION_PATH)
-                copy_tree(self._paths.BACKUP_PROFILES, self._paths.PROFILES_PATH)
-
-            self.window_root.show()
-
-
-        self.apply_configuration = False
-        self.queue_zones = []
-        self.ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Configuration')
+        
+        self.ccp = CCParser(self._paths._configuration_file, 'GUI Configuration')
 
         #
         #
@@ -258,16 +139,12 @@ class GUI(Gtk.Window):
         self.computer = get_computer(computer_name)
         self.label_computer_model.set_text(computer_name)
         
-        Theme.LOAD_profiles(self.computer, self._paths.PROFILES_PATH)
+        theme_factory.LOAD_profiles(self.computer, self._paths._profiles_dir)
         self.POPULATE_liststore_profiles()
 
         """
             Extra GUI initialization
         """
-
-        computer_data = AKBLConnection._command('get_computer_info')
-
-        self.textbuffer_computer_data.set_text(TEXT_COMPUTER_DATA.format(*computer_data[0:5]))
 
         # Add the areas to the  "menuitem_off_areas"
         #
@@ -303,8 +180,6 @@ class GUI(Gtk.Window):
 
         if not self.checkbutton_profile_buttons.get_active():
             self.box_profile_buttons.hide()
-
-        self.scrolledwindow_no_computer.hide()
 
     def POPULATE_box_areas(self):
         """
@@ -364,10 +239,10 @@ class GUI(Gtk.Window):
 
         self.liststore_profiles.clear()
 
-        for profile_name in sorted(Theme.AVAILABLE_THEMES.keys()):
+        for profile_name in sorted(theme_factory._AVAILABLE_THEMES.keys()):
             self.liststore_profiles.append([profile_name])
 
-        row, _ = Theme.GET_last_configuration()
+        row, _ = theme_factory.GET_last_configuration()
 
         self.combobox_profiles.set_active(row)
 
@@ -377,7 +252,7 @@ class GUI(Gtk.Window):
 
         if self.checkbutton_delete_warning.get_active():
             Gdk.threads_enter()
-            if not gtk_dialog_question(self.window_root, TEXT_CONFIRM_DELETE_CONFIGURATION, icon=self._paths.SMALL_ICON):
+            if not gtk_dialog_question(self.window_root, TEXT_CONFIRM_DELETE_CONFIGURATION, icon=self._paths._small_icon_file):
                 Gdk.threads_leave()
                 return
             Gdk.threads_leave()
@@ -386,13 +261,13 @@ class GUI(Gtk.Window):
         self.label_user_message.set_text(TEXT_CONFIGURATION_DELETED)
         Gdk.threads_leave()
 
-        Theme.AVAILABLE_THEMES.pop(self.theme.name)
+        theme_factory._AVAILABLE_THEMES.pop(self.theme.name)
 
         if os.path.exists(self.theme.path):
             os.remove(self.theme.path)
 
-        if len(Theme.AVAILABLE_THEMES.keys()) == 0:
-            Theme.CREATE_default_profile(self.computer)
+        if len(theme_factory._AVAILABLE_THEMES.keys()) == 0:
+            theme_factory.CREATE_default_profile(self.computer)
 
         Gdk.threads_enter()
         self.POPULATE_liststore_profiles()
@@ -454,11 +329,11 @@ class GUI(Gtk.Window):
 
         self.window_new_profile.hide()
 
-        clone = deepcopy(Theme.AVAILABLE_THEMES[self.theme.name])
+        clone = deepcopy(theme_factory._AVAILABLE_THEMES[self.theme.name])
         clone.name = text
-        clone.path = '{}{}.cfg'.format(self._paths.PROFILES_PATH, text)
+        clone.path = '{}{}.cfg'.format(self._paths._profiles_dir, text)
         clone.save()
-        Theme.AVAILABLE_THEMES[clone.name] = clone
+        theme_factory._AVAILABLE_THEMES[clone.name] = clone
         self.POPULATE_liststore_profiles()
 
         AKBLConnection._command('reload_configurations')
@@ -504,12 +379,6 @@ class GUI(Gtk.Window):
 
     def on_button_reset_toolbar_colors_activate(self, widget, data=None):
         self.color_chooser_toolbar.reset_colors()
-
-    def on_imagemenuitem_computer_data_activate(self, button, data=None):
-        self.window_computer_data.show()
-
-    def on_button_computer_data_close_clicked(self, button, data=None):
-        self.window_computer_data.hide()
 
     def on_checkbox_turnoff_areas_changed(self, checkbox, data=None):
         areas_to_keep_on=(self.areas_description_dict[checkbox.get_label()]
@@ -586,7 +455,7 @@ class GUI(Gtk.Window):
         if tree_iter is not None:
             model = widget.get_model()
             profile_name = model[tree_iter][0]
-            self.theme = Theme.AVAILABLE_THEMES[profile_name]
+            self.theme = theme_factory._AVAILABLE_THEMES[profile_name]
             self.POPULATE_box_areas()
 
     def on_button_new_profile_create_clicked(self, button, data=None):
@@ -612,21 +481,21 @@ class GUI(Gtk.Window):
     def on_imagemenuitem_import_activate(self, widget=None, data=None):
         file_path = gtk_file_chooser(parent=self.window_root,
                                      title=TEXT_CHOOSE_A_THEME,
-                                     icon_path=self._paths.SMALL_ICON,
+                                     icon_path=self._paths._small_icon_file,
                                      filters=(("AKBL theme", '*.cfg'),))
 
         if file_path:
-            new_path = self._paths.PROFILES_PATH + os.path.basename(file_path)
+            new_path = self._paths._profiles_dir + os.path.basename(file_path)
 
             if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, TEXT_THEME_ALREADY_EXISTS):
                 return
 
             shutil.copy(file_path, new_path)
-            Theme.LOAD_profile(self.computer, new_path)
+            theme_factory.load_from_file(new_path, self.computer)
             self.POPULATE_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, widget=None, data=None):
-        folder_path = gtk_folder_chooser(parent=self.window_root, title=TEXT_CHOOSE_A_FOLDER_TO_EXPORT, icon_path=self._paths.SMALL_ICON)
+        folder_path = gtk_folder_chooser(parent=self.window_root, title=TEXT_CHOOSE_A_FOLDER_TO_EXPORT, icon_path=self._paths._small_icon_file)
 
         if folder_path:
             new_path = '{}/{}.cfg'.format(folder_path, self.theme.name)
@@ -675,7 +544,7 @@ class GUI(Gtk.Window):
             self.button_new_profile_create.set_sensitive(False)
             return
 
-        invalid_names = os.listdir(self._paths.PROFILES_PATH)
+        invalid_names = os.listdir(self._paths._profiles_dir)
         for name in invalid_names:
             if name == text:
                 self.button_new_profile_create.set_sensitive(False)
@@ -685,7 +554,7 @@ class GUI(Gtk.Window):
                 self.button_new_profile_create.set_sensitive(False)
                 return
 
-        for name in Theme.AVAILABLE_THEMES.keys():
+        for name in theme_factory._AVAILABLE_THEMES.keys():
             if name == text:
                 self.button_new_profile_create.set_sensitive(False)
                 return
@@ -698,7 +567,7 @@ AKBLConnection = Bindings()
 def main():
 
     if not AKBLConnection.ping():
-        gtk_dialog_info(None, TEXT_GUI_CANT_DAEMON_OFF, icon=Paths().SMALL_ICON)
+        gtk_dialog_info(None, TEXT_GUI_CANT_DAEMON_OFF, icon=Paths()._small_icon_file)
     else:
         GObject.threads_init()
         Gdk.threads_init()

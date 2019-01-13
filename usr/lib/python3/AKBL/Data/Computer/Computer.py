@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  RSM
+#  Copyright (C) 2014-2018  Rafael Senties Martinelli
 #                2011-2012  the pyAlienFX team
 #
 #
@@ -25,7 +25,6 @@ class Computer(object):
     def __init__(self):
         
         self.DEFAULT_MODE = 'fixed'
-        self.DEFAULT_SPEED = 255
         
         self.NAME = 'Default Configuration'
         self.VENDOR_ID = 6268
@@ -66,6 +65,8 @@ class Computer(object):
         self.BLOCK_BATT_CRITICAL = 9
         
         self.REGION_ALL_BUT_POWER = 1023999
+        
+        self.configuration_path = ""
         
         self.__regions = []
         self.__regions.sort(key=lambda region: region.description)

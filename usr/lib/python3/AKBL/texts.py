@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2018  RSM
+#  Copyright (C)  2014-2019  Rafael Senties Martinelli
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,51 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+TEXT_HELP = '''
+Usage:
+
+    akbl <option>
+
+ Options:
+
+    --change                          Change the computer lights on/off.
+    --on                              Turn on the computer lights.
+    --off                             Turn off the computer lights.
+    --set-profile <profile_name>      Turn on the selected profile.
+    
+    --model-chooser                   Start the model chooser.
+    
+    --start-indicator                 Start the indicator.
+    
+    --start-daemon                    Start the daemon.
+    --daemon-is-on                    Return weather the daemon is running or not.
+    
+    --block-testing                   Display the block testing window.
+    
+    -h, --help                        Display this dialog.
+    -v, --version                     Display the software version.  
+    -l, --license                     Display the software license.
+
+ *If no option is introduced the graphical interface is launched.
+'''
+
+TEXT_LICENSE = '''
+  Copyright (C) 2014-2019  Rafael Senties Martinelli
+                2011-2012  the pyAlienFX team
+
+  This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License 3 as published by
+   the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+ '''
 
 TEXT_ADD = "Add"
 
@@ -37,66 +82,9 @@ TEXT_START_THE_GUI = "Start the GUI"
 TEXT_SWICH_STATE = "Switch State"
 TEXT_EXIT = "Exit"
 
-DATA_INFO = '''
- No Alienware device was detected.
-'''
-
-DATA_INFO_ERROR = '''
- An error ocurred while retriving the information of your computer. Please
- send this report to https://github.com/rsm-gh/alienware-kbl/issues\n
-'''
-
-TEXT_HELP = '''
-Usage:
-
-    akbl <option>
-
- Options:
-
-    --change                          Changes the computer lights on/off.
-    --on                              Turns on the computer lights.
-    --off                             Turns off the computer lights.
-    --set-profile <profile_name>      Turns on the selected profile.
-    
-    --start-indicator                 Starts the indicator.
-    
-    --start-daemon                    Starts the daemon.
-    --daemon-is-on                    Returns weather the daemon is running or not.
-    
-    --block-testing                   Displays the block testing window.
-    
-    -h, --help                        Displays this dialog.
-    -v, --version                     Display the software version.  
-    -l, --license                     Displays the software license.
-
- *If no option is introduced the graphical interface is launched.
-'''
-
-TEXT_LICENSE = '''
-  Copyright (C) 2014-2018  RSM
-                2011-2012  the pyAlienFX team
-
-  This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License 3 as published by
-   the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
- '''
-
 TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be stablished."
 
-TEXT_WRONG_ARGUMENT = '''alienware-kbl: wrong argument. use "alienware-kbl --help"'''
-
-TEXT_RESTART_THE_SYSTEM = "{0} You will have to restart the system to make it effective."
-
-TEXT_ONLY_FROM_TERMINAL = "** The root permission has been removed. Unfortunately,\nthe launcher will still asking for it. call it from the terminal to skip it. **\n\n"
+TEXT_WRONG_ARGUMENT = '''akbl: wrong argument. use "akbl --help"'''
 
 TEXT_APPLYING_CONFIGURATION = "Applying the configuration.."
 
@@ -116,25 +104,9 @@ TEXT_CONFIRM_DELETE_CONFIGURATION = "Are you sure that you want to\n delete this
 
 TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED = "You have reached the maximum number of Zones for the {}."
 
-TEXT_COMPUTER_DATA = '''
- Dected As: {0}
- Vendor ID: {1}
- Product ID: {2}
-
-{3}
-
-'''
-
 TEXT_ONLY_ROOT = "This command can only be used by the root user."
 
-TEXT_NON_LINUX_USER = '''The user you wanted to add is not recognized by the system,
-it won't be added.'''
 
-
-TEXT_COMPUTER_NOT_FOUND = "Error: Computer Not Supported"
-
-
-#
 #   Block Testing
 #
 TEXT_VALUE_CHANGED = '''[Value Changed]: {}\t int: {}\t hex: {}\n'''

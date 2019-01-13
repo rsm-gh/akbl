@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2016, 2018  RSM
+#  Copyright (C) 2015-2016, 2018  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -81,7 +81,7 @@ class Indicator:
         #
         self.indicator = appindicator.Indicator.new_with_path(
             'akbl-indicator',
-            self.paths.INDICATOR_NO_DAEMON_ICON,
+            self.paths._indicator_no_daemon_icon,
             appindicator.IndicatorCategory.APPLICATION_STATUS,
             os.path.dirname(os.path.realpath(__file__)))
 
@@ -156,16 +156,16 @@ class Indicator:
 
             if val in (100, 150):
                 if val == 100:
-                    self.indicator.set_icon(self.paths.INDICATOR_ON_ICON )
+                    self.indicator.set_icon(self.paths._indicator_on_icon_file)
 
                 elif val == 150:
-                    self.indicator.set_icon(self.paths.INDICATOR_OFF_ICON )
+                    self.indicator.set_icon(self.paths._indicator_off_icon_file)
 
                 for children in self.menu.get_children():
                     children.set_sensitive(True)
 
             elif val == 666:
-                self.indicator.set_icon(self.paths.INDICATOR_NO_DAEMON_ICON)
+                self.indicator.set_icon(self.paths._indicator_no_daemon_icon)
                 self.switch_state.set_sensitive(False)
                 self.profiles_menu.set_sensitive(False)
 
