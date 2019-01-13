@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2018  RSM
+#  Copyright (C) 2015-2018  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -22,10 +22,11 @@ from traceback import format_exc
 
 from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.utils import getuser, print_warning, print_error, string_is_hex_color
-from AKBL.Data.Theme import Theme
+from AKBL.Data.Theme import theme_factory
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
 from AKBL.Engine.Controller import Controller
+from AKBL.Engine.Driver import Driver
 
 class ConnectDaemon:
 
@@ -35,7 +36,7 @@ class ConnectDaemon:
         self.paths = Paths()
 
         uri = self.daemon.register(Daemon(self))
-        with open(self.paths.DAEMON_PYRO_PATH, encoding='utf-8', mode='wt') as f:
+        with open(self.paths._daemon_pyro_file, encoding='utf-8', mode='wt') as f:
             f.write(str(uri))
 
         self.daemon.requestLoop()
@@ -45,7 +46,10 @@ class Daemon:
 
     def __init__(self, loop_self):
         
-        self._controller = Controller()
+        
+        driver = Driver()
+        driver.load_default_device()
+        self._controller = Controller(driver)
         
         computer = self._controller.get_computer()
         
@@ -71,7 +75,7 @@ class Daemon:
         self._user = 'root'
         self._paths = Paths()
         self._paths = Paths(self._user)
-        self._ccp = CCParser(self._paths.CONFIGURATION_PATH, 'GUI Configuration')
+        self._ccp = CCParser(self._paths._configuration_file, 'GUI Configuration')
         self._indicator_pyro = False
         
         self.reload_configurations(self._user)
@@ -110,7 +114,9 @@ class Daemon:
         if self._indicator_pyro:
             self._indicator_send_code(100)
             try:
-                self._indicator_pyro.load_profiles(Theme.AVAILABLE_THEMES.keys(), self._theme.name, self._lights_state)
+                self._indicator_pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
+                                                   self._theme.name,
+                                                   self._lights_state)
             except Exception:
                 print_error(format_exc())
 
@@ -138,17 +144,19 @@ class Daemon:
         if user != self._user:
             self._user = user
             self._paths = Paths(user)
-            self._ccp.set_configuration_path(self._paths.CONFIGURATION_PATH)
+            self._ccp.set_configuration_path(self._paths._configuration_file)
 
-        Theme.LOAD_profiles(self._computer, self._paths.PROFILES_PATH)
+        theme_factory.LOAD_profiles(self._computer, self._paths._profiles_dir)
 
         if set_default:
-            _, profile_name = Theme.GET_last_configuration()
-            self._theme = Theme.get_theme_by_name(profile_name)
+            _, profile_name = theme_factory.GET_last_configuration()
+            self._theme = theme_factory.get_theme_by_name(profile_name)
 
         if self._indicator_pyro and indicator:
             try:
-                self._indicator_pyro.load_profiles(Theme.AVAILABLE_THEMES.keys(), self._theme.name, self._lights_state)
+                self._indicator_pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(), 
+                                                   self._theme.name, 
+                                                   self._lights_state)
             except Exception:
                 print_error(format_exc())
 
@@ -168,8 +176,8 @@ class Daemon:
 
         self.reload_configurations(user, False, False)
 
-        if profile in Theme.AVAILABLE_THEMES.keys():
-            self._theme = Theme.AVAILABLE_THEMES[profile]
+        if profile in theme_factory._AVAILABLE_THEMES.keys():
+            self._theme = theme_factory._AVAILABLE_THEMES[profile]
             self._iluminate_keyboard()
 
     @Pyro4.expose

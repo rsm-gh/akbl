@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2018  Rafael Senties Martinelli
-#                 2011-2012  the pyAlienFX team
+#  Copyright (C) 2019  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -17,20 +16,6 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-class Command(object):
+from AKBL.Addons.ModelChooser.ModelChooser import main
 
-    def __init__(self, legend, command):
-
-        self._legend = legend
-        self.__command = command  #[int(item) for item in packet]
-
-    def __str__(self):
-        formatted_package = "packet=["+'|'.join(str(item).rjust(3) for item in self.__command)+"]"
-        return formatted_package+"\t legend={}".format(self._legend)
-
-    def __iter__(self):
-        for item in self.__command:
-            yield item
-            
-    def __len__(self):
-        return len(self.__command)
+main()
