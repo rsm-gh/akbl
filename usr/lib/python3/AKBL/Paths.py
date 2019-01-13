@@ -37,6 +37,11 @@ class Paths:
         ## User
         ##
         
+        #
+        #---------------> These "alienware-kbl" paths shall be updated to "akbl"
+        #                    but users will have to migrate their data.
+        #
+        
         if user == 'root':
             self.CONFIGURATION_PATH = '/root/.config/alienware-kbl.ini'
             self.PROFILES_PATH = '/root/.local/share/alienware-kbl/'
@@ -81,3 +86,7 @@ class Paths:
         for dir_path in (os.path.dirname(self.CONFIGURATION_PATH), self.PROFILES_PATH):
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
+                
+                
+                
+                
