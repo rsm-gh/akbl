@@ -32,7 +32,8 @@ from AKBL.Engine.Driver import Driver
 
 import AKBL.Data.Computer.factory as computer_factory
 
-from AKBL.Addons.gtk_utils import gtk_dialog_info
+from AKBL.Addons.gtk_utils import gtk_dialog_info, gtk_dialog_question
+from AKBL.Addons.ModelChooser.texts import _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT
 
 _EMPTY_MODEL="<NONE>"
 
@@ -115,7 +116,6 @@ class ModelChooser(Gtk.Window):
     
     
     def upadte_detected_as(self):
-        
         driver = Driver()
         driver.find_device()
         
@@ -157,6 +157,14 @@ class ModelChooser(Gtk.Window):
             return default_computer.NAME
         
     def _on_button_close_clicked(self, data=None):
+        
+        if self.label_set_as.get_text() == _EMPTY_MODEL:
+            if gtk_dialog_question(None, 
+                                   _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, 
+                                   icon=_SOFTWARE_PATHS._small_icon_file):
+                return
+                
+        
         Gtk.main_quit()
     
     def on_window_destroy(self, data=None):
