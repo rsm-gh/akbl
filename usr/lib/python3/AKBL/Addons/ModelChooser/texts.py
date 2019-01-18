@@ -19,7 +19,7 @@
 
 _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT='''
 No computer model has been choosen, if you quit without
-choosing a computer model the software will not work. 
+choosing a computer the software will not work. 
 
-Do you want to go back and choose a model?
+Do you want to go back?
 '''

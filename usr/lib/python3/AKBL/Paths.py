@@ -32,16 +32,12 @@ class Paths:
         self._akbl_module_dir = '/usr/lib/python3/AKBL'
         self._computers_configuration_dir = "/usr/share/AKBL/computers"
         self._default_computer_file='/etc/AKBL/default_computer.ini'
-        self._daemon_pyro_file = '/etc/akbl-daemon-adress'
+        self._daemon_pyro_file = '/etc/AKBL/pyro-adress'
 
         ## User
         ##
         
-        #
-        #---------------> These "alienware-kbl" paths shall be updated to "akbl"
-        #                    but users will have to migrate their data.
-        #
-        
+        # These "alienware-kbl" paths shall be updated to "akbl"  but users will have to migrate their data.
         if user == 'root':
             self._configuration_file = '/root/.config/alienware-kbl.ini'
             self._profiles_dir = '/root/.local/share/alienware-kbl/'
@@ -76,25 +72,35 @@ class Paths:
 
 
         """
-            Create the tree dirs
+            Create the necessary folders.
         """
-
-        #
-        # Bug #84: In case there be a folder instead of the configuration file, delete the folder.  
-        # Old versions of alienware-kbl may still creating the folder, the bug was in the Paths class.
-        #
-        
-        if os.path.isdir(self._configuration_file):
-            rmtree(self._configuration_file)
-        
         
         #
         # Create the system folders
+        #
+        if user == 'root':
+            system_write_folders = [
+                os.path.dirname(self._default_computer_file),
+                os.path.dirname(self._daemon_pyro_file)]
+            
+            for dir_path in system_write_folders:
+                if not os.path.exists(dir_path):
+                    os.makedirs(dir_path)
+                
+        
+        #
+        # Create the user folders
         #
         for dir_path in (os.path.dirname(self._configuration_file), self._profiles_dir):
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
                 
-                
+        
+        #
+        # Bug #84: In case there be a folder instead of the configuration file, delete the folder.  
+        # Old versions of alienware-kbl may still creating the folder, the bug was in the Paths class.
+        #
+        if os.path.isdir(self._configuration_file):
+            rmtree(self._configuration_file) 
                 
                 
