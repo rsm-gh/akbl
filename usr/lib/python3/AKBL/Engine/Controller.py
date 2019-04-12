@@ -25,12 +25,13 @@ class Controller:
 
     def __init__(self, driver):
             
-        if not driver.has_device():
-            print_error("The computer is not supported.")
-            self._driver = None
-        else:
+        if driver.has_device():
             self._driver = driver
             self.__constructor = Constructor(self._driver.computer)
+        else:
+            self._driver = None
+            print_error("The computer is not supported.")
+            
 
     def get_computer(self):
         if not self._driver is None and self._driver.has_device():

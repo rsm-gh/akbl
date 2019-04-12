@@ -22,7 +22,7 @@ import pwd
 import inspect
 import re
 
-_DEBUG=True # this variable is actually modified in the SETUP file
+__DEBUG=True # this variable is actually modified in the SETUP file
 
 _RED   = "\033[1;31m"  
 _BLUE  = "\033[1;34m"
@@ -59,7 +59,7 @@ def print_warning(message):
 
 def print_debug(message=None):
 
-    if not _DEBUG: # Displaying debug messages on the production verson has been
+    if not __DEBUG: # Displaying debug messages on the production verson has been
         return     # removed since printing all the data slows the communication with the hardware.
 
     isp1=inspect.stack()[1]
@@ -67,9 +67,9 @@ def print_debug(message=None):
     method_name = isp1[3]
     
     if message is None:
-        print('{}DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN, module_name, method_name, _RESET))
+        print('{}_DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN, module_name, method_name, _RESET))
     else:
-        print('{}DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN, module_name, method_name, _RESET, str(message).strip()))
+        print('{}_DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN, module_name, method_name, _RESET, str(message).strip()))
 
 
 def print_error(message):
