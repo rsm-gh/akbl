@@ -132,7 +132,7 @@ class BlockTesting(Gtk.Window):
             Glade
         """
         builder = Gtk.Builder()
-        builder.add_from_file(self._paths.block_testing_glade_file)
+        builder.add_from_file(self._paths._block_testing_glade_file)
         builder.connect_signals(self)
 
         glade_object_names = (
@@ -203,7 +203,7 @@ class BlockTesting(Gtk.Window):
             product = int(self.entry_id_product.get_text())
 
         self._testing_driver = Driver()
-        self._testing_driver.load_device(id_vendor=vendor, id_product=product)
+        self._testing_driver.load_device(id_vendor=vendor, id_product=product, empty_computer=True)
 
         # try to load the controller
         if self._testing_driver.has_device():

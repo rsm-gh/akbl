@@ -73,6 +73,8 @@ class Driver:
                 
                 print_debug(device)
                 print_debug(self.computer)
+                
+                break
 
 
     def load_device(self, id_vendor, id_product, empty_computer=False):
