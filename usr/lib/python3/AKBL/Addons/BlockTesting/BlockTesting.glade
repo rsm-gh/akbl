@@ -538,7 +538,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="model">liststore_modes</property>
-                            <property name="active">1</property>
+                            <property name="active">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderertext2"/>
                               <attributes>
