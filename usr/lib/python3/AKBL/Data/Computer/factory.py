@@ -17,6 +17,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
+import traceback
 import os
 from configparser import ConfigParser
 
@@ -39,8 +40,9 @@ def get_computer_by_path(file_path):
     
     try:
         config.read(file_path)
-    except:
-        print_error("Corrupted file: {}".format(file_path))
+    except Exception:
+        print_error("Corrupted file: {}\n\n{}".format(file_path))
+        traceback.print_exc()
         return None
         
     
@@ -58,15 +60,22 @@ def get_computer_by_path(file_path):
                     
     for section in config.sections():
         if section.startswith("REGION"):
-            region = Region(config[section]["ID"],
-                            config[section]["DESCRIPTION"],
-                            int(config[section]["BLOCK"]),
-                            int(config[section]["SUPPORTED_COMMANDS"]),
-                            config[section]["CAN_BLINK"]=="True",
-                            config[section]["CAN_MORPH"]=="True",
-                            config[section]["CAN_LIGHT"]=="True")
             
-            computer.add_region(region)
+            try:
+                region = Region(config[section]["ID"],
+                                config[section]["DESCRIPTION"],
+                                int(config[section]["BLOCK"]),
+                                int(config[section]["SUPPORTED_COMMANDS"]),
+                                config[section]["CAN_BLINK"]=="True",
+                                config[section]["CAN_MORPH"]=="True",
+                                config[section]["CAN_LIGHT"]=="True")
+                
+                computer.add_region(region)
+                
+            except Exception:
+                print_error("Corrupted region: {} in {}.\n\n".format(section, file_path))
+                traceback.print_exc()
+                
 
     return computer
 
