@@ -23,7 +23,7 @@ from configparser import ConfigParser
 from AKBL.Paths import Paths; _SOFTWARE_PATHS = Paths()
 from AKBL.Data.Computer.Computer import Computer
 from AKBL.Data.Computer.Region import Region
-from AKBL.utils import print_debug, print_warning
+from AKBL.utils import print_debug, print_warning, print_error
 
 
 
@@ -36,7 +36,13 @@ def get_computer_by_path(file_path):
     
     config = ConfigParser()
     config.optionxform = str
-    config.read(file_path)
+    
+    try:
+        config.read(file_path)
+    except:
+        print_error("Corrupted file: {}".format(file_path))
+        return None
+        
     
     for key in config["COMMON"]:
         if hasattr(computer, key):
@@ -78,15 +84,16 @@ def get_computers():
             
             computer = get_computer_by_path(file_path)
             
-            add = True
-            for added_computer in computers:
-                if computer.NAME == added_computer:
-                    print_warning("Computer name already exists={}".format(computer.NAME))
-                    add = False
-                    break
-            
-            if add:
-                computers.append(computer)
+            if not computer is None:            
+                add = True
+                for added_computer in computers:
+                    if computer.NAME == added_computer:
+                        print_warning("Computer name already exists={}".format(computer.NAME))
+                        add = False
+                        break
+                
+                if add:
+                    computers.append(computer)
     
     
     computers.sort(key=lambda computer: computer.NAME)
