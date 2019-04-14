@@ -108,7 +108,7 @@ It allows starting the GUI, turning the lights On/Off, and choosing profiles. By
 
 3. Execute the setup file.
 
-*To check the last changes of the code take a look to the master branch RSS feed.
+*To check the last changes of the code take a look to the [master commits history](https://github.com/rsm-gh/akbl/commits/stable).*
 
 
 # F.A.Q.
