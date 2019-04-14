@@ -5,9 +5,9 @@ Index:
     * Python Bindings
     * Default commands
     * System Tray Indicator
-    
+   
   * How to Install
-  
+ 
   * F. A. Q.
     * If my computer is not supported, what can I do?
     * How to use the block testing window?
@@ -20,11 +20,12 @@ Index:
     * Changing the keyboard colors by checking the CPU Temperature
     * Changing the keyboard colors by checking the weather
 
+  * Credits
 
 
 # About
 
-AKBL is a software to control the lights of Alienware computers (The keyboard, the logo, the speakers, etc..). 
+AKBL is a software to control the lights of Alienware computers (The keyboard, the logo, the speakers, etc..).
 
 ## GUI
 
@@ -36,24 +37,24 @@ The GUI is designed to be easy and comfortable to use, it will allow you to easi
 
 ```python
 
-import time, random 
+import time, random
 from AlienwareKBL import AlienwareKBL
-    
+   
 akbl=AlienwareKBL()
 r = lambda: random.randint(0,255)
  
 while True:
  
     # Generate a random hex color
-    random_hex_color='#%02X%02X%02X' % (r(),r(),r())    
+    random_hex_color='#%02X%02X%02X' % (r(),r(),r())   
  
     # Set the color in mode fixed
     akbl.set_colors('fixed', 100, random_hex_color)
  
     # Wait 2 seconds
-    time.sleep(2)      
+    time.sleep(2)     
 ```
-The Python bindings allow to modify the computer lights by using other programs signals, for exemple  when receiving an email, when monitoring things like the weather or the CPU temperature. 
+The Python bindings allow to modify the computer lights by using other programs signals, for example  when receiving an email, when monitoring things like the weather or the CPU temperature.
 
 ## Default commands
 
@@ -68,23 +69,23 @@ Usage:
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
     --set-profile <profile_name>      Turn on the selected profile.
-    
-    --model-chooser                   Start the model chooser.    
-    
+   
+    --model-chooser                   Start the model chooser.   
+   
     --start-indicator                 Start the indicator.
-    
+   
     --start-daemon                    Start the daemon.
     --daemon-is-on                    Return weather the daemon is running or not.
-    
-    --block-testing                   Display the block testing window.   
-    
+   
+    --block-testing                   Display the block testing window.  
+   
     -h, --help                        Display this dialog.
-    -v, --version                     Display the software version.  
+    -v, --version                     Display the software version. 
     -l, --license                     Display the software license.
 
  *If no option is introduced the graphical interface is launched.
 ```
-The program comes with some default commands for those who doesn't know about programming. These commands can be easily added to hotkeys. 
+The program comes with some default commands for those who doesn't know about programming. These commands can be easily added to hotkeys.
 
 
 ## System Tray Indicator
@@ -108,7 +109,7 @@ It allows starting the GUI, turning the lights On/Off, and choosing profiles. By
 
 3. Execute the setup file.
 
-*To check the last changes of the code take a look to the master branch RSS feed.
+*To check the last changes of the code take a look to the [master commits history](https://github.com/rsm-gh/akbl/commits/stable).*
 
 
 # F.A.Q.
@@ -117,40 +118,41 @@ It allows starting the GUI, turning the lights On/Off, and choosing profiles. By
 
 Check if there's a bug concerning your computer model on GitHub, and if it don't exists create one:
 
-  1. Set the title of the bug as: "Add support to <model> Computer"
+  1. Set the title of the bug as: "Add support to (computer model)"
   2. Fill the general information of the bug (GNU/Linux distribution, python version etc)..
-  3. Add the USB data of your computer:
-   3.1 Open a terminal and execute the `lsusb` command:
+  3. Add the USB data of your computer: 
+    3.1 Open a terminal and execute the `lsusb` command:
+
 ```
   [rsm@m14xr1 ~]$ lsusb
-  Bus 001 Device 004: ID 187c:0521 Alienware Corporation 
+  Bus 001 Device 004: ID 187c:0521 Alienware Corporation
   Bus 001 Device 003: ID 413c:8187 Dell Computer Corp. DW375 Bluetooth Module
   Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
   Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
   Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-  Bus 002 Device 002: ID 25a7:fa23  
+  Bus 002 Device 002: ID 25a7:fa23 
   Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-```
-  
+``` 
+ 
    3.2 Find the line with the Alienware device and get the bus and device numbers:
-      
+     
 ```
   Bus 001 Device 004: ID 187c:0521 Alienware Corporation
 ```
 
    3.3 Execute the `lsusb -D /dev/bus/usb/<bus>/<device>` command:
-  
+ 
 ```
         [rsm@m14xr1 ~]$ lsusb -D /dev/bus/usb/001/004
-        Device: ID 187c:0521 Alienware Corporation 
+        Device: ID 187c:0521 Alienware Corporation
         Couldn't open device, some information will be missing
         Device Descriptor:
           bLength                18
           bDescriptorType         1
           bcdUSB               1.10
-          bDeviceClass            0 
-          bDeviceSubClass         0 
-          bDeviceProtocol         0 
+          bDeviceClass            0
+          bDeviceSubClass         0
+          bDeviceProtocol         0
           bMaxPacketSize0        64
           idVendor           0x187c Alienware Corporation
         [etc...]
@@ -178,18 +180,18 @@ When iterating over the block numbers, everything will be logged. Once that you 
 ```
 ## Text File ##
 
-[Device found]: Vendor ID: 6268	 Product ID: 1313
+[Device found]: Vendor ID: 6268     Product ID: 1313
 
 
 # This test turned on my left speaker
 [Command]: Lights off
-[TEST]: block: 32	 hex: 0x20	 mode:blink	 speed:1	 color1:#00ff00	 color2: #00ff00
+[TEST]: block: 32     hex: 0x20     mode:blink     speed:1     color1:#00ff00     color2: #00ff00
 
 
-# This test turned on the akbl logo    
+# This test turned on the akbl logo   
 [Command]: Lights off
-[TEST]: block: 256	 hex: 0x100	 mode:blink	 speed:1	 color1:#00ff00	 color2: #00ff00 
- ```  
+[TEST]: block: 256     hex: 0x100     mode:blink     speed:1     color1:#00ff00     color2: #00ff00
+ ``` 
 
 ### After making changes to a theme the changes are not applied
 
@@ -209,61 +211,61 @@ That button manages the speed of the theme in the following cases:
 
 ```python
 class AlienwareKBL():
-		
-	def reload_address(self):
-	    """
-	        It tries to make a connection with the Daemon
-		and it returns True or False.
-	    """
-	
-	def ping(self):
-	    """
-	        It checks if the Daemon is connected
-	        and it returns True or False.
-	    """ 
-	
-	def get_address(self):
-	    """
-	        It returns the current URI of the Daemon.
-	    """
-	
-	def get_profile_names(self):
-	    """
-	        It returns a list of the existing profile names.
-	    """
-	    
-	def set_profile(self, profile):
-	    """
-	        Set a profile from the existing profiles.
-	        
-	        + 'profile' is the profile name.
-	    """
-	    
-	def switch_lights(self):
+       
+    def reload_address(self):
+        """
+            It tries to make a connection with the Daemon
+        and it returns True or False.
+        """
+   
+    def ping(self):
+        """
+            It checks if the Daemon is connected
+            and it returns True or False.
+        """
+   
+    def get_address(self):
+        """
+            It returns the current URI of the Daemon.
+        """
+   
+    def get_profile_names(self):
+        """
+            It returns a list of the existing profile names.
+        """
+       
+    def set_profile(self, profile):
+        """
+            Set a profile from the existing profiles.
+           
+            + 'profile' is the profile name.
+        """
+       
+    def switch_lights(self):
            """
-	        Toggle on/off the lights of the keyboard.
+            Toggle on/off the lights of the keyboard.
            """
-	
-	def set_lights(self, state):
-	    """
-	        Turn the lights on or off.
-	        
-	        + 'state' can be a boolean or a string
-	    """
-	    
-	def set_colors(self, mode, speed, colors1, colors2=None):
-	    """
-	        Change the colors and the mode of the keyboard.
-	        
+   
+    def set_lights(self, state):
+        """
+            Turn the lights on or off.
+           
+            + 'state' can be a boolean or a string
+        """
+       
+    def set_colors(self, mode, speed, colors1, colors2=None):
+        """
+            Change the colors and the mode of the keyboard.
+           
                 + The available modes are: 'fixed', 'morph' and 'blink',
                   'fixed' and 'blink' only take 'colors1'.
-	            
-	        + Speed must be an integer. 1 =< speed =< 256
-	        
-	        + colors1 and colors2 can be a single hex_color or a list
-		  of hex_colors. If both arguments are used, they must
-		  have the same number of items.
-	    """
+               
+            + Speed must be an integer. 1 =< speed =< 256
+           
+            + colors1 and colors2 can be a single hex_color or a list
+          of hex_colors. If both arguments are used, they must
+          have the same number of items.
+        """
  
 ```
 
@@ -292,13 +294,13 @@ if not AKBLConnection.ping():
     print("The connection with the daemon is off")
     exit()
  
-  
+ 
  """
      Each command is called as:
-     
+    
          print( <command_name>, <command> )
-         
-     To check if the commands succeed. You don't 
+        
+     To check if the commands succeed. You don't
      really need to do this in your code!
  """
  
@@ -326,7 +328,7 @@ if not AKBLConnection.ping():
      time.sleep(5)
      print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
  
-      
+     
  if speed_test:
      print('set_colors blink', AKBLConnection.set_colors('blink', 1, color2))
      time.sleep(5)
@@ -335,16 +337,16 @@ if not AKBLConnection.ping():
      print('set_colors blink', AKBLConnection.set_colors('blink', 256, color2))
      time.sleep(5)
  
-  
+ 
  if colors_multiple_test:
-     colors1='#0600FF' 
+     colors1='#0600FF'
      colors2='#FF00E5'
-      
+     
      print('set_colors multiple blink', AKBLConnection.set_colors('blink', 100, colors2))
      time.sleep(5)
      print('set_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
      time.sleep(5)
-     print('set_colors mutlple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
+     print('set_colors multiple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
 ```
 
 ### Changing the keyboard colors by checking the CPU Temperature
@@ -356,29 +358,29 @@ The following script will change the keyboard colors by checking the CPU Tempera
 #
  
 import os
-import time 
+import time
 from AKBL.Bindings import Bindings
  
 def get_max_temp():
     """
-        Get the maximum temperature of the CPU by 
+        Get the maximum temperature of the CPU by
         using the bash commands "sensors"
     """
     output=os.popen('''sensors''')
     lines= output.readlines()
-    
+   
     max_temperature=0
-    
+   
     for line in lines:
         if '°C' in line:
             temp = line.split('+')[1]
             temp = temp.split('°')[0]
             temp = float(temp)
-            
+           
             if temp > max_temperature:
                 max_temperature=temp
-            
-    return max_temperature      
+           
+    return max_temperature     
  
  
 if __name__ == '__main__':
@@ -389,10 +391,10 @@ if __name__ == '__main__':
         print("The akbl daemon is off.")
     else:
         while True:
-            
+           
             max_temperature=get_max_temp()
             print("The maximum temperature is", max_temperature)
-            
+           
             if max_temperature <= 0:
                 akbl.set_colors('fixed', 100, '#000000') # black
             elif max_temperature <= 20:
@@ -429,7 +431,7 @@ else:
 
 ### Changing the keyboard colors by checking the weather
 
-I was curious to find if there was command line weather program, and it seems that `inxi` works fine :) 
+I was curious to find if there was command line weather program, and it seems that `inxi` works fine :)
 
 
 ```python
@@ -438,32 +440,32 @@ I was curious to find if there was command line weather program, and it seems th
 #
  
 import os
-import time 
-from AKBL.Bindings import Bindings 
+import time
+from AKBL.Bindings import Bindings
  
 def get_max_temp():
     """
         Get weather temperature and make a linear
         scale: 40°C <==> 100
-        
+       
         (The linear scale is only to adapt this function
          to the previous script)
     """
-    
+   
     # get the temperature
     output=os.popen('''inxi -w''')
-    line=output.read()      
+    line=output.read()     
     try:
         temp_str=line.split(' C')[0].split('(')[1]
         max_temperature=float(temp_str)
     except Exception as e:
         print(e)
         max_temperature=0
-        
+       
     # adapt it
     max_temperature=(max_temperature*10)/4
  
-    return max_temperature    
+    return max_temperature   
  
  
 if __name__ == '__main__':
@@ -474,10 +476,10 @@ if __name__ == '__main__':
         print("The akbl daemon is off.")
     else:
         while True:
-            
+           
             max_temperature=get_max_temp()
             print("The maximum temperature is", max_temperature)
-            
+           
             if max_temperature <= 0:
                 akbl.set_colors('fixed', 100, '#000000') # black
             elif max_temperature <= 20:
@@ -493,10 +495,35 @@ if __name__ == '__main__':
             else:
                 akbl.set_colors('blink', 100, '#FF0014') # red
  
-            time.sleep(5) # seconds	
-            
+            time.sleep(5) # seconds   
+           
 ```
 
 
+# Credits
+
+`akbl` is the work of libre software hakers of the GNU/Linux community. It do not depends of any corporation and its code is licensed GPL3.
+
+### AKBL
+
+* Rafael Senties Martinelli
+
+AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware stills being the same. Without their work this software wouldn't exist.
+
+*The logo was created by Amalia Angeli.
+
+## PyALienFX
+
+* Ledjfou125
+* LightHash
+* Corp
+* Niai
+
+As far as I know pyAlienFX is not maintained anymore. They made work the project for some years and at the start they got inspired from AlienFX lite, a software that allow them to understand how to communicate with the hardware.
 
 
+## AlienFX Lite
+
+* Wattos
+
+I have no information about AlienFX Lite, but in any case Wattos was the first hacker to understand the USB communication and to make some code to work with. Definitely the most important work since DELL engineers have never help us.
