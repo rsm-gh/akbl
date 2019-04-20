@@ -26,19 +26,15 @@ import os
 import subprocess
 from traceback import format_exc
 
-from AKBL.texts import (TEXT_DEVICE_FOUND, 
-                        TEXT_DEVICE_NOT_FOUND, 
-                        TEXT_BLOCK_TEST, 
-                        TEXT_BLOCK_LIGHTS_OFF, 
-                        TEXT_ONLY_ROOT)
 
+from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.utils import getuser
 from AKBL.Paths import Paths
 
+from AKBL.Addons.BlockTesting.texts import *
 
-if getuser() == 'root':
-    from AKBL.Engine.Driver import Driver
-    from AKBL.Engine.Controller import Controller
+from AKBL.Engine.Driver import Driver
+from AKBL.Engine.Controller import Controller
 
 
 def get_alienware_device_info():
@@ -140,7 +136,7 @@ class BlockTesting(Gtk.Window):
                 'combobox_block_modes',
                 'colorbutton_1_block',
                 'colorbutton_2_block',
-                'config_box',
+                'config_grid',
                 'textbuffer_device_info',
                 'combobox_default_blocks',
                 'textbuffer_block_testing',
@@ -222,25 +218,29 @@ class BlockTesting(Gtk.Window):
                                                 (False, self._computer.BLOCK_LOAD_ON_BOOT),)
             
             # Add the general computer variables
+            row_index = 0
             for attr_name, attr_value in sorted(vars(self._computer).items()):
                 if not attr_name.startswith("_") and isinstance(attr_value, int):
                     
-                    widget_box = Gtk.Box()
+                    label = Gtk.Label(attr_name)
+                    label.set_xalign (0)
                     
-                    widget_label = Gtk.Label(attr_name)
+                    adjustment = Gtk.Adjustment(0, 0, 9999999999999, 1, 1, 0)
+                    spinbutton = Gtk.SpinButton()
+                    spinbutton.set_adjustment(adjustment)
+                    spinbutton.set_value(attr_value)
+                    spinbutton.set_digits(0)
+                    spinbutton.set_numeric(True)
                     
-                    widget_entry = Gtk.Entry()
-                    widget_entry.set_text(str(attr_value))
-                    widget_entry.connect("changed", self.on_dynamic_entry_general_properties_changed, attr_name)
+                    spinbutton.connect("value-changed", self.on_dynamic_spin_general_properties_changed, attr_name)
                     
-                    
-                    widget_box.pack_start(widget_label, expand=False, fill=True, padding=5)
-                    widget_box.pack_start(widget_entry, expand=False, fill=False, padding=5)
-                    
-                    self.config_box.pack_start(widget_box, expand=False, fill=False, padding=1)
+                    self.config_grid.attach(label, 0, row_index, 1, 1)
+                    self.config_grid.attach(spinbutton, 1, row_index, 1, 1)
+                    row_index+=1
 
 
-            self.config_box.show_all()
+
+            self.config_grid.show_all()
 
 
             # activate the window
@@ -343,16 +343,12 @@ class BlockTesting(Gtk.Window):
             self.entry_block_testing.set_sensitive(False)
             self.entry_block_testing.set_text(str(value))
 
-    def on_dynamic_entry_general_properties_changed(self, entry, variable_name):
+    def on_dynamic_spin_general_properties_changed(self, spin, variable_name):
         
-        try:
-            entry_value = int(entry.get_text())
-        except:
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, "\n {} must be an integer.".format(variable_name, entry_value))
-            return
+        value = spin.get_value_as_int()
             
-        setattr(self._testing_driver.computer, variable_name, entry_value)
-        gtk_append_text_to_buffer(self.textbuffer_block_testing, "\n {} = {}".format(variable_name, entry_value))
+        setattr(self._testing_driver.computer, variable_name, value)
+        gtk_append_text_to_buffer(self.textbuffer_block_testing, "\n {} = {}".format(variable_name, value))
         
 
     
@@ -368,5 +364,5 @@ def main():
 
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
-    _ = BlockTesting()
+    BlockTesting()
     Gtk.main()

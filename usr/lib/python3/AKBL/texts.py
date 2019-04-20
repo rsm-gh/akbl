@@ -106,12 +106,3 @@ TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED = "You have reached the maximum number of Z
 
 TEXT_ONLY_ROOT = "This command can only be used by the root user."
 
-
-#   Block Testing
-#
-TEXT_VALUE_CHANGED = '''[Value Changed]: {}\t int: {}\t hex: {}\n'''
-TEXT_NON_INTEGER = '''[Error Fixed]: Non integer {}\tvalue:{} .\n'''
-TEXT_DEVICE_NOT_FOUND = '''[Device not found]: Vendor ID: {}\t Product ID: {}\n'''
-TEXT_DEVICE_FOUND = '''[Device found]: Vendor ID: {}\t Product ID: {}\n'''
-TEXT_BLOCK_TEST = '''[TEST]: zone: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
-TEXT_BLOCK_LIGHTS_OFF = '''[Command]: Lights off'''
