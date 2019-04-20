@@ -449,10 +449,36 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="sensitive">False</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkBox" id="config_box">
+                              <object class="GtkGrid" id="config_grid">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="row_homogeneous">True</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -638,7 +664,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">10</property>
-                        <property name="label" translatable="yes">Zone number:</property>
+                        <property name="label" translatable="yes">Region:</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -730,7 +756,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkButton" id="button_block_make_test">
-                            <property name="label" translatable="yes">TEST BLOCK</property>
+                            <property name="label" translatable="yes">TEST</property>
                             <property name="width_request">40</property>
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
