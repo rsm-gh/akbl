@@ -1,32 +1,32 @@
 
 Index:
-  * About
-    * GUI
-    * Python Bindings
-    * Default commands
-    * System Tray Indicator
+  * [About](https://github.com/rsm-gh/akbl#about)
+    * [GUI](https://github.com/rsm-gh/akbl#gui)
+    * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings)
+    * [Default commands](https://github.com/rsm-gh/akbl#default-commands)
+    * [System Tray Indicator](https://github.com/rsm-gh/akbl#system-tray-indicator)
    
-  * How to Install
+  * [How to Install](https://github.com/rsm-gh/akbl#how-to-install)
  
-  * F. A. Q.
+  * [F. A. Q.](https://github.com/rsm-gh/akbl#faq)
     * If my computer is not supported, what can I do?
     * How to use the block testing window?
     * After making changes to a theme the changes are not applied
     * What's the function of the tempo button / clock icon / right-top corner button?
 
-  * Python Bindings
+  * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings-1)
     * API
     * Testing all the commands
     * Changing the keyboard colors by checking the CPU Temperature
     * Changing the keyboard colors by checking the weather
 
-  * Development Documentation
+  * [Development Documentation](https://github.com/rsm-gh/akbl#development-documentation)
     * General diagram
     * Data class diagram
     * Engine class diagram
     * GUI class diagram
   
-  * Credits
+  * [Credits](https://github.com/rsm-gh/akbl#credits)
 
 
 # About
