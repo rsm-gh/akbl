@@ -107,11 +107,14 @@ class Driver:
         print_debug('\n'.join(str(request) for request in constructor))
         
         for command in constructor:
-            self._device.ctrl_transfer(self.__send_request_type, 
-                                       self.__send_request, 
-                                       self.__send_value, 
-                                       self.__send_index, 
-                                       command)
+            status = self._device.ctrl_transfer(self.__send_request_type, 
+                                                self.__send_request, 
+                                                self.__send_value, 
+                                                self.__send_index, 
+                                                command)
+            
+            print_debug("command output={}".format(status))
+            
 
     def read_device(self, constructor):
         
