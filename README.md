@@ -20,6 +20,12 @@ Index:
     * Changing the keyboard colors by checking the CPU Temperature
     * Changing the keyboard colors by checking the weather
 
+  * Development Documentation
+    * General diagram
+    * Data class diagram
+    * Engine class diagram
+    * GUI class diagram
+  
   * Credits
 
 
@@ -498,6 +504,21 @@ if __name__ == '__main__':
             time.sleep(5) # seconds   
            
 ```
+
+# Development Documentation
+
+## General diagram
+![general diagram](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/general%20diagram.png)
+
+## Data class diagram
+![Data](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/class_diagrams/Data.png)
+
+## Engine class diagram
+![Engine](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/class_diagrams/Engine.png)
+
+## GUI class diagram
+![GUI](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/class_diagrams/GUI.png)
+
 
 
 # Credits
