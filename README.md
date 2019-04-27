@@ -531,8 +531,6 @@ if __name__ == '__main__':
 
 AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware stills being the same. Without their work this software wouldn't exist.
 
-*The logo was created by Amalia Angeli.
-
 ## PyALienFX
 
 * Ledjfou125

@@ -1,0 +1,23 @@
+
+Source: https://github.com/rsm-gh
+
+Files: *
+Copyright: (C) 2014-2019 Rafael Senties Martinelli (GPL3)
+
+
+Files: usr/lib/python3/AKBL/Engine/*
+       usr/lib/python3/AKBL/Data/Computer/Computer.py
+       usr/lib/python3/AKBL/Data/Computer/Region.py
+       usr/lib/python3/AKBL/Data/Theme/Area.py
+       usr/lib/python3/AKBL/Data/Theme/Zone.py
+Copyright: 2011-2012 the pyAlienFX team
+
+
+Files: usr/lib/python3/AKBL/Addons/GUI/images/*
+	   usr/lib/python3/AKBL/Addons/Indicator/images/*
+Copyright: (C) 2015 Amalia Angeli (CC-BY)
+
+
+Files: usr/share/AKBL/libusb-1.0.10.0
+Taken from a ubuntu build in 2015
+
