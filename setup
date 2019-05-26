@@ -15,10 +15,9 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
-NUMBER_OF_STEPS=5
 AKBL_VERSION="2019.04.20"
-DEBUG='False'
-
+DEBUG='False' 				# Python boolean
+NUMBER_OF_STEPS=5 			# installation steps
 
 if [ "$EUID" -ne 0 ]
   then echo -e "\e[00;31m The script must be run as root.\e[00m"

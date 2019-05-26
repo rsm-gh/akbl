@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2018  Rafael Senties Martinelli
+#  Copyright (C) 2018-2019  Rafael Senties Martinelli
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -75,7 +75,6 @@ def get_computer_by_path(file_path):
             except Exception:
                 print_error("Corrupted region: {} in {}.\n\n".format(section, file_path))
                 traceback.print_exc()
-                
 
     return computer
 
@@ -127,8 +126,10 @@ def set_default_computer(computer_name):
                 with open(computer.configuration_path, 'r') as fr:
                     fw.write(fr.read())
             
-            print("Default computer updated to: {}".format(computer_name))
+            print("Default configuration updated to: {}".format(computer_name))
             return
+    
+    print_warning("Computer model '{}' not found.".format(computer_name))
     
 
 def get_computer(name):
