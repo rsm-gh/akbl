@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2016, 2018  Rafael Senties Martinelli
+#  Copyright (C) 2015-2016, 2018-2019  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -28,8 +28,8 @@ from AKBL.Paths import Paths
 class Bindings:
 
     def __init__(self):
-        self._address = False
-        self._pyro = False
+        self._address = None
+        self._pyro = None
         self._paths = Paths()
         self._user = getpass.getuser()
         self.reload_address()
@@ -43,10 +43,11 @@ class Bindings:
         if command in ('set_profile', 'set_lights', 'switch_lights', 'reload_configurations'):
             args = [self._user] + list(args)
 
-        if not self._address:
+        if self._address is None:
             self.reload_address()
 
-        if self._address:
+        if not self._address is None and not self._pyro is None:
+            
             try:
                 response = getattr(self._pyro, command)(*args)
                 return response
@@ -68,7 +69,7 @@ class Bindings:
                         print_error("Command={}\n{}\n".format(command, str(format_exc())))
                 
                 except Exception:
-                    pass
+                    print_error("NO TRACEBACK: Command={}\n{}\n".format(command))
                 
                 return False
             
@@ -101,21 +102,21 @@ class Bindings:
                 if display_the_error:
                     print_error(format_exc())
 
-                self._address = False
-                self._pyro = False
+                self._address = None
+                self._pyro = None
+                
                 return False
         else:
-            self._address = False
-            self._pyro = False
+            self._address = None
+            self._pyro = None
             return False
 
     def ping(self):
         """
-            It checks if the Daemon is connected
-            and it returns True or False.
+            Check if the Daemon is connected and return `True` or `False`.
         """
         
-        if self._pyro:
+        if not self._pyro is None:
             try:
                 self._pyro.ping()
                 return True
@@ -126,14 +127,14 @@ class Bindings:
 
     def get_address(self):
         """
-            It returns the current URI of the Daemon.
+            Returns the current URI of the Daemon.
         """
 
         return self._address
 
     def get_profile_names(self):
         """
-            It returns a list of the existing profile names.
+            Return a list of the existing profile names.
         """
 
         if not os.path.exists(self._paths._profiles_dir):
