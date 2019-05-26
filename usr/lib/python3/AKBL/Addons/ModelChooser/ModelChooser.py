@@ -89,8 +89,13 @@ class ModelChooser(Gtk.Window):
         #
         #
         
+        current_computer = self._get_default_computer_name()
+        
         self.upadte_detected_as()
-        self.update_set_computer()
+        
+        self.__default_computer_model = current_computer
+        self.label_set_as.set_text(current_computer)
+        
         self.update_models_liststore()
         self.textbuffer_computer_data.set_text(get_alienware_device_info())
         print("The current configuration is: "+self._get_default_computer_name())
@@ -124,10 +129,6 @@ class ModelChooser(Gtk.Window):
         else:
             self.label_detected_as.set_text(_EMPTY_MODEL)
     
-    def update_set_computer(self):
-        self.label_set_as.set_text(self._get_default_computer_name())
-    
-    
     def _on_model_change_clicked(self, widget, clicked_row):
         
         clicked_row = int(clicked_row)
@@ -144,7 +145,7 @@ class ModelChooser(Gtk.Window):
                 computer_factory.set_default_computer(computer_model)
         
         
-        self.update_set_computer()
+        self.label_set_as.set_text(self._get_default_computer_name())
         
             
     def _get_default_computer_name(self):
@@ -158,12 +159,37 @@ class ModelChooser(Gtk.Window):
         
     def _on_button_close_clicked(self, data=None):
         
+        
+        #
+        # Do not exit if no computer has been set (warn the user)
+        #
         if self.label_set_as.get_text() == _EMPTY_MODEL:
-            if gtk_dialog_question(None, 
-                                   _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, 
-                                   icon=_SOFTWARE_PATHS._small_icon_file):
+            if gtk_dialog_question(None, _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, icon=_SOFTWARE_PATHS._small_icon_file):
                 return
+            
+            
+        #
+        # In case that the computer is the same (than previously used), update the file
+        #
+            
+        if self.__default_computer_model == self._get_default_computer_name():
+            
+            for i, _ in enumerate(self.liststore_computer_models):
+            
+                iter_row = self.liststore_computer_models.get_iter(i)
+                  
+                  
+                if self.liststore_computer_models.get_value(iter_row, 1):
+
+                    computer_model = self.liststore_computer_models.get_value(iter_row, 0)
+                    computer_factory.set_default_computer(computer_model)
+                    
+                    break
                 
+        
+        #
+        # Quit the application
+        #
         
         Gtk.main_quit()
     
@@ -175,9 +201,8 @@ def main():
     if getuser() != 'root':
         gtk_dialog_info(None, TEXT_ONLY_ROOT, icon=_SOFTWARE_PATHS._small_icon_file)
         exit()
-    else:
-        
-        os.chdir(os.path.dirname(os.path.realpath(__file__)))
     
-        ModelChooser()
-        Gtk.main()
+    
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
+    ModelChooser()
+    Gtk.main()
