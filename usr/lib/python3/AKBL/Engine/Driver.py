@@ -18,8 +18,8 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 
-import sys
 import usb
+import sys
 from traceback import format_exc
 
 from AKBL.utils import print_debug, print_error
@@ -106,27 +106,37 @@ class Driver:
         
         print_debug('\n'.join(str(request) for request in constructor))
         
-        for command in constructor:
-            status = self._device.ctrl_transfer(self.__send_request_type, 
-                                                self.__send_request, 
-                                                self.__send_value, 
-                                                self.__send_index, 
-                                                command)
-            
-            print_debug("command output={}".format(status))
-            
+        try:
+            for command in constructor:
+                status = self._device.ctrl_transfer(self.__send_request_type, 
+                                                    self.__send_request, 
+                                                    self.__send_value, 
+                                                    self.__send_index, 
+                                                    command)
+                
+                print_debug("command output={}".format(status))
+                
+        except Exception:
+            print_error(format_exc())
 
     def read_device(self, constructor):
         
-        msg = self._device.ctrl_transfer(self.__read_request_type, 
-                                         self.__read_request, 
-                                         self.__read_value, 
-                                         self.__read_index, 
-                                         len(constructor.get_first_command()))
-
-        print_debug("msg={}".format(msg))
-
+        try:
+            msg = self._device.ctrl_transfer(self.__read_request_type, 
+                                             self.__read_request, 
+                                             self.__read_value, 
+                                             self.__read_index, 
+                                             len(constructor.get_first_command()))
+            
+    
+        except Exception:
+            print_error(format_exc())
+            return False
+        
+        
+        print_debug("msg={}".format(msg)) 
         return msg
+        
 
     def take_over(self):
         try:
