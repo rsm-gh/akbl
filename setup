@@ -80,6 +80,8 @@ install_files "/usr/share/doc/AKBL/Programming"
 install_files "/usr/share/doc/AKBL/Programming/class_diagrams"
 
 install_files "/usr/lib/systemd/system"
+chmod u=rw /usr/lib/systemd/system/akbl.service # The permissions must be forced.
+chmod go=r /usr/lib/systemd/system/akbl.service # The permissions must be forced.
 
 install_files "/usr/lib/python3/AKBL"
 install_files "/usr/lib/python3/AKBL/Data"
