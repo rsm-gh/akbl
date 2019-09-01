@@ -1,6 +1,4 @@
-
-Index:
-  * [About](https://github.com/rsm-gh/akbl#about)
+  * [Software Features](https://github.com/rsm-gh/akbl#about)
     * [GUI](https://github.com/rsm-gh/akbl#gui)
     * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings)
     * [Default commands](https://github.com/rsm-gh/akbl#default-commands)
@@ -21,15 +19,12 @@ Index:
     * Changing the keyboard colors by checking the weather
 
   * [Development Documentation](https://github.com/rsm-gh/akbl#development-documentation)
-    * General diagram
-    * Data class diagram
-    * Engine class diagram
-    * GUI class diagram
+    * General architecture
   
-  * [Credits](https://github.com/rsm-gh/akbl#credits)
+  * [About & Credits](https://github.com/rsm-gh/akbl#credits)
 
 
-# About
+# Software Features
 
 AKBL is a software to control the lights of Alienware computers (The keyboard, the logo, the speakers, etc..).
 
@@ -507,23 +502,15 @@ if __name__ == '__main__':
 
 # Development Documentation
 
-## General diagram
+## General Architecture
 ![general diagram](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/general%20diagram.png)
 
-## Data class diagram
-![Data](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/class_diagrams/Data.png)
-
-## Engine class diagram
-![Engine](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/class_diagrams/Engine.png)
-
-## GUI class diagram
-![GUI](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/class_diagrams/GUI.png)
+[...] Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
 
 
+# About & Credits
 
-# Credits
-
-`akbl` is the work of libre software hakers of the GNU/Linux community. It do not depends of any corporation and its code is licensed GPL3.
+This software is the work of libre software hakers of the GNU/Linux community. It do not depends of any corporation and its code is licensed GPL3.
 
 ### AKBL
 
