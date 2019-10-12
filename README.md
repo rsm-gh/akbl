@@ -1,8 +1,8 @@
   * [Software Features](https://github.com/rsm-gh/akbl#about)
-    * [GUI](https://github.com/rsm-gh/akbl#gui)
-    * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings)
-    * [Default commands](https://github.com/rsm-gh/akbl#default-commands)
+    * [Graphical Interface](https://github.com/rsm-gh/akbl#graphical-interface)
     * [System Tray Indicator](https://github.com/rsm-gh/akbl#system-tray-indicator)
+    * [Default commands](https://github.com/rsm-gh/akbl#default-commands)
+    * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings)
    
   * [How to Install](https://github.com/rsm-gh/akbl#how-to-install)
  
@@ -28,34 +28,18 @@
 
 AKBL is a software to control the lights of Alienware computers (The keyboard, the logo, the speakers, etc..).
 
-## GUI
+## Graphical Interface
 
 ![GUI](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/ImagesPreview/GUI.png)
 
 The GUI is designed to be easy and comfortable to use, it will allow you to easily create, delete, and modify profiles.
 
-## Python Bindings
+## System Tray Indicator
 
-```python
+![System tray indicator](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/ImagesPreview/Indicator.png)
 
-import time, random
-from AlienwareKBL import AlienwareKBL
-   
-akbl=AlienwareKBL()
-r = lambda: random.randint(0,255)
- 
-while True:
- 
-    # Generate a random hex color
-    random_hex_color='#%02X%02X%02X' % (r(),r(),r())   
- 
-    # Set the color in mode fixed
-    akbl.set_colors('fixed', 100, random_hex_color)
- 
-    # Wait 2 seconds
-    time.sleep(2)     
-```
-The Python bindings allow to modify the computer lights by using other programs signals, for example  when receiving an email, when monitoring things like the weather or the CPU temperature.
+
+It allows starting the GUI, turning the lights On/Off, and choosing profiles. By default it is not enabled, but it can be added to the start session of a user with the command `akbl --start-indicator`.
 
 ## Default commands
 
@@ -88,15 +72,28 @@ Usage:
 ```
 The program comes with some default commands for those who doesn't know about programming. These commands can be easily added to hotkeys.
 
+## Python Bindings
 
-## System Tray Indicator
+```python
 
-![System tray indicator](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/ImagesPreview/Indicator.png)
-
-
-It allows starting the GUI, turning the lights On/Off, and choosing profiles. By default it is not enabled, but it can be added to the start session of a user with the command `akbl --start-indicator`.
-
-
+import time, random
+from AlienwareKBL import AlienwareKBL
+   
+akbl=AlienwareKBL()
+r = lambda: random.randint(0,255)
+ 
+while True:
+ 
+    # Generate a random hex color
+    random_hex_color='#%02X%02X%02X' % (r(),r(),r())   
+ 
+    # Set the color in mode fixed
+    akbl.set_colors('fixed', 100, random_hex_color)
+ 
+    # Wait 2 seconds
+    time.sleep(2)     
+```
+The Python bindings allow to modify the computer lights by using other programs signals, for example  when receiving an email, when monitoring things like the weather or the CPU temperature.
 
 # How to Install
 
