@@ -5,13 +5,12 @@ COMPUTER                idVendor        idProduct       COMMENT
 M17X R3                 6268            1312
 M11X R3                 6268            1314            # There is no BUS data for this computer
 M18X R1                 6268            1315            # There is no BUS data for this computer
+M17X R2                 6268            1316
 M14X R3                 6268            1317
 Alienware13 R1          6268            1319
 Alienware15 R1          6268            1320
 Alienware13 R3          6268            1321
-M17X R2                 6268            1298
 Aurora R7               16700           8467
-
 Area51R2                                                # CONFIGURATION FILE MISSING
 
 
@@ -28,6 +27,7 @@ M14X R2                 6268            1313
 
 Alienware15 R3          6268            1328
 M17X R4                 6268            1328
+
 
 Area51m                 6268            1360            # CONFIGURATION FILE MISSING
 Alienware17 R5          6268            1360
