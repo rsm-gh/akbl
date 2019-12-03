@@ -8,13 +8,15 @@ M18X R1                 6268            1315            # There is no BUS data f
 M17X R2                 6268            1316
 M14X R3                 6268            1317
 Alienware13 R1          6268            1319
-Alienware15 R1          6268            1320
 Alienware13 R3          6268            1321
 Aurora R7               16700           8467
 Area51R2                                                # CONFIGURATION FILE MISSING
 
 
 ------------- D U P L I C A T E D    I D'S ------------------------
+
+Alienware15 R1          6268            1320
+Alienware15 R2			6268            1320
 
 M11X R1                 6268            1300
 M11X R2                 6268            1300            # The computer will use the M11X R1 config. There's no R2 Config.
