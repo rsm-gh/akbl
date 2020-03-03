@@ -4,7 +4,7 @@
 
 
 
-# How to Install
+### How to Install
 
 
 1. Download the [stable branch](https://github.com/rsm-gh/akbl/archive/stable.zip).
