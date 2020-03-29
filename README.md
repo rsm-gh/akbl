@@ -1,10 +1,10 @@
 
 
-## The whole information about the software [can be read here](https://rsm420.com/software/akbl).
+## The whole information about the software [can be read here](https://senties-martinelli.com/software/akbl).
 
 
 
-# How to Install
+### How to Install
 
 
 1. Download the [stable branch](https://github.com/rsm-gh/akbl/archive/stable.zip).
