@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2018  Rafael Senties Martinelli
+#  Copyright (C)  2014-2020  Rafael Senties Martinelli
 #                 2011-2012  the pyAlienFX team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class Command(object):
         self.__command = command  #[int(item) for item in packet]
 
     def __str__(self):
-        formatted_package = "packet=["+'|'.join(str(item).rjust(3) for item in self.__command)+"]"
+        formatted_package = "packet="+':'.join(str(item) for item in self.__command)
         return formatted_package+"\t legend={}".format(self._legend)
 
     def __iter__(self):

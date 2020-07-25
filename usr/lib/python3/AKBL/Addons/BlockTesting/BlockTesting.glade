@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 
+<!-- Generated with glade 3.36.0 
 
 Copyright (C) 2014 - 2018 RSM
 
@@ -42,9 +42,6 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="rgba">rgb(255,255,255)</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="color_chooser_dialog">
         <property name="can_focus">False</property>
@@ -62,6 +59,9 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
   <object class="GtkImage" id="image21">
@@ -186,53 +186,37 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
   </object>
   <object class="GtkTextBuffer" id="textbuffer_block_testing"/>
   <object class="GtkTextBuffer" id="textbuffer_device_info"/>
+  <object class="GtkTextBuffer" id="textbuffer_pyusb"/>
+  <object class="GtkTextBuffer" id="textbuffer_pyusb_info">
+    <property name="text" translatable="yes">This window must be used with a lot of caution since it will allow you to directly send commands to the USB device. 
+None of the commands is not verified. There is no verification to check if the device is ready, there is no read command, etc.
+
+The commands shall be separated with ":" ex: 2:6:0;0:0:0
+</property>
+  </object>
   <object class="GtkWindow" id="window_block_testing">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">AKBL Block Testing Window</property>
     <property name="window_position">center</property>
     <property name="icon">../GUI/images/icon.png</property>
     <signal name="destroy" handler="on_window_block_testing_destroy" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
-      <object class="GtkBox" id="box4">
-        <property name="width_request">500</property>
-        <property name="height_request">800</property>
+      <object class="GtkNotebook">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_top">10</property>
-        <property name="margin_bottom">10</property>
-        <property name="orientation">vertical</property>
+        <property name="can_focus">True</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="box_device">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">15</property>
+            <property name="margin_right">15</property>
+            <property name="margin_top">15</property>
+            <property name="margin_bottom">15</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">15</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="label" translatable="yes">Device Information</property>
-                    <property name="ellipsize">end</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="font-desc" value="&lt;Enter Value&gt; 12"/>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="height_request">200</property>
@@ -244,8 +228,6 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="height_request">200</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="margin_left">5</property>
-                        <property name="margin_right">5</property>
                         <property name="margin_top">5</property>
                         <property name="margin_bottom">5</property>
                         <property name="editable">False</property>
@@ -270,31 +252,8 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">5</property>
-                <property name="margin_right">5</property>
-                <property name="margin_top">5</property>
-                <property name="margin_bottom">5</property>
+                <property name="margin_left">15</property>
                 <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="label74">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">15</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="label" translatable="yes">Device Connection</property>
-                    <property name="ellipsize">end</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="font-desc" value="&lt;Enter Value&gt; 12"/>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkCheckButton" id="checkbutton_hex_format_when_finding">
                     <property name="label" translatable="yes">Use HEX format for the IDs</property>
@@ -320,9 +279,10 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkLabel" id="label71">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_top">10</property>
                         <property name="label" translatable="yes">ID Vendor:</property>
                         <property name="ellipsize">end</property>
-                        <property name="angle">0.040000000000000001</property>
+                        <property name="angle">0.04</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -334,6 +294,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkEntry" id="entry_id_vendor">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_top">5</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -345,6 +306,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkLabel" id="label73">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_top">10</property>
                         <property name="label" translatable="yes">ID Product</property>
                       </object>
                       <packing>
@@ -357,6 +319,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkEntry" id="entry_id_product">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_top">5</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -370,6 +333,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="margin_top">25</property>
                         <property name="image">image22</property>
                         <signal name="clicked" handler="on_togglebutton_find_device_clicked" swapped="no"/>
                       </object>
@@ -394,10 +358,15 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
           </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Device Connection</property>
+          </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="tab_fill">False</property>
           </packing>
         </child>
         <child>
@@ -405,6 +374,10 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">15</property>
+            <property name="margin_right">15</property>
+            <property name="margin_top">15</property>
+            <property name="margin_bottom">15</property>
             <property name="orientation">vertical</property>
             <property name="spacing">2</property>
             <child>
@@ -417,22 +390,21 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkLabel" id="label66">
+                      <object class="GtkCheckButton" id="checkbutton_protect_common_blocks">
+                        <property name="label" translatable="yes">Protect the general configuration</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">15</property>
-                        <property name="margin_bottom">10</property>
-                        <property name="label" translatable="yes">General Configuration</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="margin_bottom">5</property>
                         <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="font-desc" value="&lt;Enter Value&gt; 12"/>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="clicked" handler="on_checkbutton_protect_common_blocks_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -490,23 +462,6 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="checkbutton_protect_common_blocks">
-                        <property name="label" translatable="yes">Protect the general configuration</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <signal name="clicked" handler="on_checkbutton_protect_common_blocks_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -523,25 +478,6 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">15</property>
-                        <property name="margin_bottom">10</property>
-                        <property name="label" translatable="yes">Block Testing</property>
-                        <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="font-desc" value="&lt;Enter Value&gt; 12"/>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
@@ -592,7 +528,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkSpinButton" id="spinbutton_block_speed">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="text" translatable="yes">1</property>
+                            <property name="text" translatable="yes">100</property>
                             <property name="adjustment">adjustment_tempo</property>
                             <property name="climb_rate">10</property>
                             <property name="value">100</property>
@@ -637,7 +573,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="tooltip_text" translatable="yes">Color 2</property>
-                                <property name="color">#000000000000</property>
+                                <property name="color">#cccc00000000</property>
                                 <property name="rgba">rgb(204,0,0)</property>
                               </object>
                               <packing>
@@ -704,6 +640,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
+                            <property name="margin_left">15</property>
                             <signal name="changed" handler="on_entry_block_testing_changed" swapped="no"/>
                           </object>
                           <packing>
@@ -745,6 +682,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="margin_top">5</property>
                             <property name="image">image25</property>
                             <signal name="clicked" handler="on_button_block_testing_lights_off_clicked" swapped="no"/>
                           </object>
@@ -762,8 +700,10 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="margin_left">15</property>
+                            <property name="margin_top">5</property>
                             <property name="image">image21</property>
-                            <property name="xalign">0.51999998092651367</property>
+                            <property name="xalign">0.5199999809265137</property>
                             <property name="yalign">0.49000000953674316</property>
                             <signal name="clicked" handler="on_button_block_make_test_clicked" swapped="no"/>
                           </object>
@@ -792,7 +732,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -800,7 +740,6 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">15</property>
-                <property name="margin_bottom">10</property>
                 <property name="label" translatable="yes">Log</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -811,7 +750,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">8</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -824,6 +763,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="height_request">158</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_top">5</property>
                     <property name="buffer">textbuffer_block_testing</property>
                   </object>
                 </child>
@@ -831,17 +771,149 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">9</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">AKBL</property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box_pyusb">
+            <property name="name">box_pyusb</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">15</property>
+            <property name="margin_right">15</property>
+            <property name="margin_top">15</property>
+            <property name="margin_bottom">15</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkTextView">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">True</property>
+                <property name="buffer">textbuffer_pyusb_info</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">15</property>
+                <child>
+                  <object class="GtkEntry" id="entry_custom_command">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_send_custom_command">
+                    <property name="label" translatable="yes">Send
+</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="margin_left">10</property>
+                    <signal name="clicked" handler="on_button_send_custom_command_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">15</property>
+                <property name="label" translatable="yes">Log</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="font-desc" value="&lt;Enter Value&gt; 12"/>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="height_request">153</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTextView" id="textview3">
+                    <property name="height_request">158</property>
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin_top">5</property>
+                    <property name="buffer">textbuffer_pyusb</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">PyUSB</property>
+          </object>
+          <packing>
+            <property name="position">2</property>
+            <property name="tab_fill">False</property>
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
