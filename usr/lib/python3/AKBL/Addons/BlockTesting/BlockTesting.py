@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2019  Rafael Senties Martinelli
+#  Copyright (C) 2014-2020  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -35,6 +35,7 @@ from AKBL.Addons.BlockTesting.texts import *
 
 from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Controller import Controller
+from AKBL.Engine.Command import Command
 
 
 def get_alienware_device_info():
@@ -133,24 +134,28 @@ class BlockTesting(Gtk.Window):
 
         glade_object_names = (
             'window_block_testing',
-                'combobox_block_modes',
-                'colorbutton_1_block',
-                'colorbutton_2_block',
-                'config_grid',
-                'textbuffer_device_info',
-                'combobox_default_blocks',
-                'textbuffer_block_testing',
-                'entry_block_testing',
-                'entry_id_vendor',
-                'entry_id_product',
-                'togglebutton_find_device',
+                    'entry_id_vendor',
+                    'entry_id_product',
+                    'togglebutton_find_device',
                 'box_block_testing',
-                'spinbutton_block_speed',
-                'viewport_common_block',
-                'button_update_common_blocks',
-                'button_block_make_test',
-                'checkbutton_auto_turn_off',
-                'checkbutton_hex_format_when_finding',
+                    'spinbutton_block_speed',
+                    'viewport_common_block',
+                    'button_update_common_blocks',
+                    'button_block_make_test',
+                    'checkbutton_auto_turn_off',
+                    'checkbutton_hex_format_when_finding',
+                    'combobox_block_modes',
+                    'colorbutton_1_block',
+                    'colorbutton_2_block',
+                    'config_grid',
+                    'textbuffer_device_info',
+                    'combobox_default_blocks',
+                    'textbuffer_block_testing',
+                    'entry_block_testing',
+                'box_pyusb',
+                    'textbuffer_pyusb',
+                    'entry_custom_command',
+                    'button_send_custom_command',
         )
 
 
@@ -246,6 +251,7 @@ class BlockTesting(Gtk.Window):
             # activate the window
             
             self.box_block_testing.set_sensitive(True)
+            self.box_pyusb.set_sensitive(True)
             self.entry_id_vendor.set_sensitive(False)
             self.entry_id_product.set_sensitive(False)
             gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_DEVICE_FOUND.format(vendor,product))
@@ -254,10 +260,31 @@ class BlockTesting(Gtk.Window):
 
         else:
             self.box_block_testing.set_sensitive(False)
+            self.box_pyusb.set_sensitive(False)
             self.togglebutton_find_device.set_active(False)
             self.entry_id_vendor.set_sensitive(True)
             self.entry_id_product.set_sensitive(True)
             gtk_append_text_to_buffer(self.textbuffer_block_testing,TEXT_DEVICE_NOT_FOUND.format(vendor,product))
+
+
+    def on_button_send_custom_command_clicked(self, button, data=None):
+        
+        command_value = self.entry_custom_command.get_text()
+        
+        try:
+            values = (int(val) for val in command_value.split(":"))
+        except:
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + "WRONG FORMAT" + '\n')
+        
+        constructor = (Command("Custom", values),)
+        
+        try:
+            self._testing_driver.write_constructor(constructor)
+        except Exception:
+            gtk_append_text_to_buffer(self.textbuffer_pyusb, '\n' + format_exc() + '\n')
+        
+        gtk_append_text_to_buffer(self.textbuffer_pyusb, command_value + "\n")
+        
 
     def on_button_block_make_test_clicked(self, button, data=None):
         
