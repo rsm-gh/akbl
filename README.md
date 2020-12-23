@@ -109,12 +109,11 @@ The Python bindings allow to modify the computer lights by using other programs 
 
 3. Execute the setup file.
 
-*To check the last changes of the code take a look to the [master commits history](https://github.com/rsm-gh/akbl/commits/stable).*
+### Note:
 
-+ Since 2019~ many users with recent alienware computers are facing issues, probably because DELL has changed the usb protocol and it is different from old computers. I did not code that improvement.
++ Since 2019~ many users with recent alienware computers are facing issues, probably because DELL has changed the usb protocol and it is different from old computers. Some information can be found in the open issues.
 
-+ This software is not active/developped anymore, I don't have time for it.
-
++ This software is not active/developped anymore, I'm out of time for it.
 
 # F.A.Q.
 
