@@ -518,7 +518,7 @@ This software is the work of libre software hakers of the GNU/Linux community. I
 
 * Rafael Senties Martinelli
 
-AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware stills being the same. Without their work this software wouldn't exist.
+AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware should still the same.
 
 ## PyALienFX
 
@@ -527,7 +527,7 @@ AKBL is a software based on PyAlienFX. I mostly created new addons, improved the
 * Corp
 * Niai
 
-As far as I know pyAlienFX is not maintained anymore. They made work the project for some years and at the start they got inspired from AlienFX lite, a software that allow them to understand how to communicate with the hardware.
+As far as I know pyAlienFX is not maintained anymore. They made work the project for some years and at the start they got inspired from AlienFX lite.
 
 
 ## AlienFX Lite
