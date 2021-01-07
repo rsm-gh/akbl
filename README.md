@@ -1,3 +1,10 @@
+Note:
+
++ Since 2019~ many users with recent alienware computers are facing issues, probably because DELL has changed the usb protocol and it is different from old computers. Those computers are not supported. Some information can be found in the open issues.
++ This software is not active/developped anymore, I'm out of time for it.
+
+----
+
 # Index
   
   * [Software Features](https://github.com/rsm-gh/akbl#about)
@@ -108,12 +115,6 @@ The Python bindings allow to modify the computer lights by using other programs 
     * ArchLinux: `pacman -Suy systemd gtk3 libappindicator-gtk3 python python-gobject python-cairo python-pyusb python-serpent python-pyro`
 
 3. Execute the setup file.
-
-### Note:
-
-+ Since 2019~ many users with recent alienware computers are facing issues, probably because DELL has changed the usb protocol and it is different from old computers. Some information can be found in the open issues.
-
-+ This software is not active/developped anymore, I'm out of time for it.
 
 # F.A.Q.
 
