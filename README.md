@@ -20,6 +20,7 @@ Note:
     * How to use the block testing window?
     * After making changes to a theme the changes are not applied
     * What's the function of the tempo button / clock icon / right-top corner button?
+    * Why there are no distribution packages and the installation is so complex? 
 
   * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings-1)
     * API
@@ -207,6 +208,49 @@ That button manages the speed of the theme in the following cases:
   * When the section of a theme (keyboard-left, keyboard-right, etc..) has multiple zones.
   * When some zone has the morph (gradient) mode.
   * When some zone has the blink mode.
+
+### Why there are no distribution packages and the installation is so complex? 
+
+I've been asked multiple times about my installation system. Why there are no distribution packages, etc..? Here is one good part of the answer:
+
+* Why not use `setuptools`:
+
+  * It does not feed some needs like installing systemd files.
+  * This module should always be avoided because all the software of a distribution shall be managed by the package manager.
+  * This feature may be interested for python software that is multi-operative system, which is not the case for AKBL.
+
+* Why not to let distributions do their thing?
+
+  * Normally the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into his repositories.
+  * In the old times (before 2016) I used to create Debian packages and I even have my own repository, but I do not have the time to maintain them anymore. It is too much time consuming to release packages for each distribution.
+  * Create a package means that I made a Release, I don't release AKBL.
+
+* Why not create a binary?
+
+  * Even if you can compile python code, I don't think that you will be able to include all the dependencies which some may be written in other languages.
+  * There is no sense in compiling python software that is free code.
+
+* Why not using custom paths?
+
+  * The software files is kinda "complex". There are:
+    * Python module files
+    * Common resource files
+    * Binary files
+    * User files
+    * Systemd files
+    * Temp files
+    * Communication files (not in the installation but created in runtime)
+
+    and every single file has a special location defined by GNU/Linux conventions. This should not be customized by an user. If you really want to do this, you can modify the setup script, and the paths python file.
+
+* Why using a batch:
+  * Because it is the common way to install GNU/Linux software that do not comes of any repository
+  * Because it allows to do anything it is necessary to do (Move files, start services, etc etc..).
+  * Because it works for any GNU/Linux distribution. I do not need to pass hours checking the dependencies of each distribution.
+  * Because it does not requires to release the code, it can be directly taken from GIT, which allows much more flexibility.
+
+
+taken from this [question](https://github.com/rsm-gh/akbl/issues/85).
 
 
 # Python Bindings
