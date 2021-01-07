@@ -232,7 +232,7 @@ I've been asked multiple times about my installation system. Why there are no di
 
 * Why not using custom paths?
 
-  * The software files is kinda "complex". There are:
+  * The software files are kinda "complex". There are:
     * Python module files
     * Common resource files
     * Binary files
