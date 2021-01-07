@@ -221,9 +221,9 @@ I've been asked multiple times about my installation system. Why there are no di
 
 * Why not to let distributions do their thing?
 
-  * Normally the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into his repositories.
-  * In the old times (before 2016) I used to create Debian packages and I even have my own repository, but I do not have the time to maintain them anymore. It is too much time consuming to release packages for each distribution.
-  * Create a package means that I made a Release, I don't release AKBL.
+  * Normally the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into their repositories.
+  * In the old times (before 2016) I used to create Debian packages and I even have my own repository, but I do not have the time to maintain them anymore. It is too much time consuming to release packages for each distribution (Debian, Noobuntu, ArchLinux..).
+  * Create a package means that I made a release, I don't release AKBL.
 
 * Why not create a binary?
 
@@ -239,7 +239,7 @@ I've been asked multiple times about my installation system. Why there are no di
     * User files
     * Systemd files
     * Temp files
-    * Communication files (not in the installation but created in runtime)
+    * Communication files
 
     and every single file has a special location defined by GNU/Linux conventions. This should not be customized by an user. If you really want to do this, you can modify the setup script, and the paths python file.
 
