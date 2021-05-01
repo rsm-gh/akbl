@@ -2,8 +2,8 @@
 ***********************************************************
 ***********         Alienware M15           ***************
 ***********************************************************
-# By: tdeeb https://github.com/tdeeb
-# https://github.com/rsm-gh/akbl/issues/73
+#By:	 https://github.com/tdeeb
+#Issue: https://github.com/rsm-gh/akbl/issues/73
 
 Device: ID 187c:0550 Alienware Corporation 
 Device Descriptor:

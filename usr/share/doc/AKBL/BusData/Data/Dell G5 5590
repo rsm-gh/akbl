@@ -2,9 +2,8 @@
 ***********************************************************
 *************** *        Dell G5 5590       ***************
 ***********************************************************
-
-# By Marlesson: https://github.com/marlesson
-# https://github.com/rsm-gh/akbl/issues/74
+#By:    https://github.com/marlesson
+#Issue: https://github.com/rsm-gh/akbl/issues/74
 
 Device: ID 187c:0550 Alienware Corporation 
 Couldn't open device, some information will be missing

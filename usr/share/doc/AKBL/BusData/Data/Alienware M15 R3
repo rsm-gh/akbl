@@ -2,8 +2,8 @@
 ***********************************************************
 ***********       Alienware M15 R3          ***************
 ***********************************************************
-# By: cbrngrz https://github.com/cbrngrz
-# https://github.com/rsm-gh/akbl/issues/89
+#By:  	https://github.com/cbrngrz
+#Issue: https://github.com/rsm-gh/akbl/issues/89
 
 Device: ID 187c:0550 Alienware Corporation
 Couldn't open device, some information will be missing

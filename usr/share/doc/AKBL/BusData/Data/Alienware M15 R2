@@ -2,8 +2,8 @@
 ***********************************************************
 ***********       Alienware M15 R2          ***************
 ***********************************************************
-# By: masonhargrave https://github.com/masonhargrave
-# https://github.com/rsm-gh/akbl/issues/78
+#By:    https://github.com/masonhargrave
+#Issue: https://github.com/rsm-gh/akbl/issues/78
 
 Device: ID 187c:0550 Alienware Corporation
 Couldn't open device, some information will be missing

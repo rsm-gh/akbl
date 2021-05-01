@@ -2,7 +2,8 @@
 ***********************************************************
 *******            M14X R3 (probably)       ***************
 ***********************************************************
-*** By nshp: ***
+#By:    nshp
+#Issue: ?
 
 Bus 004 Device 003: ID 187c:0525 Alienware Corporation 
 Couldn't open device, some information will be missing
