@@ -3,9 +3,8 @@
 ***********************************************************
 ******************** Alienware 17 R4 **********************
 ***********************************************************
-
-# BY @mgruben https://github.com/mgruben
-# https://github.com/rsm-gh/akbl/issues/29
+#By:    https://github.com/mgruben
+#Issue: https://github.com/rsm-gh/akbl/issues/29
 
 DEVICE ID 187c:0530 on Bus 001 Address 004 =================
  bLength                :   0x12 (18 bytes)

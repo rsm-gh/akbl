@@ -2,8 +2,8 @@
 ***********************************************************
 ******************* Alienware 15 R2 ***********************
 ***********************************************************
-# By intronaut: https://github.com/1ntronaut
-# https://github.com/rsm-gh/akbl/issues/75
+#By:    https://github.com/1ntronaut
+#Issue: https://github.com/rsm-gh/akbl/issues/75
 
 Device: ID 187c:0528 Alienware Corporation 
 Couldn't open device, some information will be missing

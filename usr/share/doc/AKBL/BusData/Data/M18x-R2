@@ -2,9 +2,8 @@
 ***********************************************************
 ********************** Alienware M18x-R2 ******************
 ***********************************************************
-
-# By Lukw3: https://github.com/Lukw3
-# https://github.com/rsm-gh/akbl/issues/86
+#By:    https://github.com/Lukw3
+#Issue: https://github.com/rsm-gh/akbl/issues/86
 
 Device: ID 187c:0524 Alienware Corporation 
 Device Descriptor:

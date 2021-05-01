@@ -2,9 +2,8 @@
 ***********************************************************
 ****************** Alienware 15 R4 ************************
 ***********************************************************
-
-# By @AbsyntheSyne https://github.com/AbsyntheSyne
-# https://github.com/rsm-gh/akbl/issues/52
+#By:    https://github.com/AbsyntheSyne
+#Issue: https://github.com/rsm-gh/akbl/issues/52
 
 DEVICE ID 187c:0550 on Bus 001 Address 003 =================
  bLength                :   0x12 (18 bytes)

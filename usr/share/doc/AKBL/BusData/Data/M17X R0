@@ -2,9 +2,8 @@
 ***********************************************************
 ****************** Alienware M17X R0 (1) ******************
 ***********************************************************
-
-# By jwshalaby: https://github.com/jwshalaby
-# https://github.com/rsm-gh/akbl/issues/84
+#By:    https://github.com/jwshalaby
+#Issue: https://github.com/rsm-gh/akbl/issues/84
 
 Device: ID 187c:0512 Alienware Corporation 
 Device Descriptor:
