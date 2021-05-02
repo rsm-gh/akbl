@@ -29,6 +29,8 @@
     * Global Comunication
   
   * [About & Credits](https://github.com/rsm-gh/akbl#credits)
+  
+  * [AKBL History](https://github.com/rsm-gh/akbl#akbl-history)
 
 
 # Software Features
@@ -560,7 +562,7 @@ This software is the work of libre software hakers of the GNU/Linux community. I
 
 * Rafael Senties Martinelli
 
-AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware should still the same.
+AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware stills the same.
 
 ## PyALienFX
 
@@ -577,3 +579,31 @@ As far as I know pyAlienFX is not maintained anymore. They made work the project
 * Wattos
 
 I have no information about AlienFX Lite, but in any case Wattos was the first hacker to understand the USB communication and to make some code to work with. Definitely the most important work since DELL engineers have never help us.
+
+
+# AKBL History
+AKBL stands for **A**lienware **K**ey**B**oard **L**ights (despite the fact that it controlls much more than the keyboard). And I created my first version in 2014 by hacking PyAlienFX.  
+
+It was a real hack from PyAlienFX because in that time I did not know about programming, and I only wanted to code a command for turning on and off the keyboard lights. So I mostly did some dirty modifications, and to avoid people blaming PyAlienFX for my modifications, I released it with a new name.
+
+Then with the time, I realized that PyAlienFX was kinda dead and I was having fun learning python with this software. So I started fixing bugs, removing private content from the interface and creating new features. The major features that I have added are:
+
++ 2014: The Block Testing window. This is for debugging purposes.
++ 2015: The Daemon which had as main goal to create allow the users using the software without beeing root.
+  + 2015: The System Try Indicator (thanks to the Daemon).
+  + 2015: The Python Bindings (thanks to the Daemon). 
+
++ XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
+
+
+So mostly I've been coding AKBL since 2014, doing modifications from time to time, and saddly despite the fact that alot of users contact me for bugs and new features, no one else have ever contributed directly to the code. The problem about this, is that I'm the only developper, and my free time for the project is very limited.
+
+I may continue developping AKBL until my M14XR1 dies, but then I don't think I´ll buy another Alienware Laptop, I'll get some tiny and small performance computer.
+
+I hope that you enjoy the software while it stills alive,  
+rsm~ 
+
+
+
+
+
