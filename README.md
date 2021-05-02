@@ -579,9 +579,11 @@ I may continue developping AKBL until my M14XR1 dies, but then I don't think I´
 
 
 ## Extra
-With the time I have removed some content. In 2015-2016 AKBL was purely hosted on my personal website and I had some features like the Debian Repository, the Bug report pages, the sharing profiles pages, and the custom website. Then, I realized that all those features was taking a lot of work and I spended more time doing extra stuff than actually coding AKBL, so I decided to remove most of the features and add the project to GitHub.
+With the time I have removed some content. In 2015-2016 AKBL was purely hosted on my personal website and I had some features like the Debian Repository, the Bug report pages, the sharing profiles pages, and the custom website.  
 
-Then, some years after when I got back online with my personal website, I re-included the AKBL web page and a custom chat, but again, in 2020 I started developping other projects and I decided to close my personal website.
+Then, I realized that all those features was taking a lot of work and I spended more time doing extra stuff than actually coding AKBL, so I decided to remove most of the features and add the project to GitHub.
+
+Some years after, I got back online with my personal website and I re-included the AKBL web page and a custom chat, but again, in 2020 I started developping other projects and I decided to close my personal website.
 
 Even if the features was really nice, I do not have the time to maintain them. I'd better spend the few time that I have in the software it self.
 
