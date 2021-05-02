@@ -28,9 +28,13 @@
   * [Development Documentation](https://github.com/rsm-gh/akbl#development-documentation)
     * Global Comunication
   
+  * [AKBL History](https://github.com/rsm-gh/akbl#akbl-history)
+    * History
+    * Extra 
+  
   * [About & Credits](https://github.com/rsm-gh/akbl#credits)
   
-  * [AKBL History](https://github.com/rsm-gh/akbl#akbl-history)
+
 
 
 # Software Features
@@ -554,32 +558,6 @@ if __name__ == '__main__':
 [...] Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
 
 
-# About & Credits
-
-This software is the work of libre software hakers of the GNU/Linux community. It do not depends of any corporation and its code is licensed GPL3.
-
-### AKBL
-
-* Rafael Senties Martinelli
-
-AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware stills the same.
-
-## PyALienFX
-
-* Ledjfou125
-* LightHash
-* Corp
-* Niai
-
-As far as I know pyAlienFX is not maintained anymore. They made work the project for some years and at the start they got inspired from AlienFX lite.
-
-
-## AlienFX Lite
-
-* Wattos
-
-I have no information about AlienFX Lite, but in any case Wattos was the first hacker to understand the USB communication and to make some code to work with. Definitely the most important work since DELL engineers have never help us.
-
 
 # AKBL History
 
@@ -609,5 +587,33 @@ Then, some years after when I got back online with my personal website, I re-inc
 
 Even if the features was really nice, I do not have the time to maintain them. I'd better spend the few time that I have in the software it self.
 
+
+
+
+# About & Credits
+
+This software is the work of libre software hakers of the GNU/Linux community. It do not depends of any corporation and its code is licensed GPL3.
+
+### AKBL
+
+* Rafael Senties Martinelli
+
+AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware stills the same.
+
+## PyALienFX
+
+* Ledjfou125
+* LightHash
+* Corp
+* Niai
+
+As far as I know pyAlienFX is not maintained anymore. They made work the project for some years and at the start they got inspired from AlienFX lite.
+
+
+## AlienFX Lite
+
+* Wattos
+
+I have no information about AlienFX Lite, but in any case Wattos was the first hacker to understand the USB communication and to make some code to work with. Definitely the most important work since DELL engineers have never help us.
 
 
