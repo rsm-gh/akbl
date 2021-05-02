@@ -28,7 +28,7 @@
     * Changing the keyboard colors by checking the weather
 
   * [Development Documentation](https://github.com/rsm-gh/akbl#development-documentation)
-    * General architecture
+    * Global Comunication
   
   * [About & Credits](https://github.com/rsm-gh/akbl#credits)
 
@@ -548,7 +548,7 @@ if __name__ == '__main__':
 
 # Development Documentation
 
-## General Architecture
+## GLobal Comunication
 ![general diagram](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/general%20diagram.png)
 
 [...] Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
