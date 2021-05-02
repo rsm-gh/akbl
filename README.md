@@ -575,7 +575,7 @@ Then with the time, I realized that PyAlienFX was kinda dead and I was having fu
 
 So mostly I've been coding AKBL since 2014, doing modifications from time to time, and saddly despite the fact that alot of users contact me for bugs and new features, no one else have ever contributed directly to the code. The problem about this, is that I'm the only developper, and my free time for the project is very limited.
 
-I may continue developping AKBL until my M14XR1 dies, but then I don't think I´ll buy another Alienware Laptop, I'll get some tiny and small performance computer.
+I may continue developping AKBL until my M14XR1 dies, but then I don't think I´ll buy another Alienware Laptop, I'll get some tiny and low performance computer.
 
 
 ## Extra
