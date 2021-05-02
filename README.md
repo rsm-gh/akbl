@@ -100,8 +100,8 @@ while True:
     # Wait 2 seconds
     time.sleep(2)     
 ```
-The Python bindings allow to modify the computer lights by using other programs signals, for example  when receiving an email, when monitoring things like the weather or the CPU temperature.
-
+The Python bindings allow to modify the computer lights by using other programs signals, for example  when receiving an email, when monitoring things like the weather or the CPU temperature. You can read more about this in the [Bindings section](https://github.com/rsm-gh/akbl#python-bindings-1).
+.
 # How to Install
 
 
