@@ -582,9 +582,11 @@ I have no information about AlienFX Lite, but in any case Wattos was the first h
 
 
 # AKBL History
+
+## History
 AKBL stands for **A**lienware **K**ey**B**oard **L**ights (despite the fact that it controlls much more than the keyboard). And I created my first version in 2014 by hacking PyAlienFX.  
 
-It was a real hack from PyAlienFX because in that time I did not know about programming, and I only wanted to code a command for turning on and off the keyboard lights. So I mostly did some dirty modifications, and to avoid people blaming PyAlienFX for my modifications, I released it with a new name.
+It was a real hack from PyAlienFX because at that time I did not know about programming, and I only wanted to code a command for turning on and off the keyboard lights. So I mostly did some dirty modifications, and to avoid people blaming PyAlienFX for my code, I released it with a new name.
 
 Then with the time, I realized that PyAlienFX was kinda dead and I was having fun learning python with this software. So I started fixing bugs, removing private content from the interface and creating new features. The major features that I have added are:
 
@@ -595,15 +597,17 @@ Then with the time, I realized that PyAlienFX was kinda dead and I was having fu
 
 + XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
 
-
 So mostly I've been coding AKBL since 2014, doing modifications from time to time, and saddly despite the fact that alot of users contact me for bugs and new features, no one else have ever contributed directly to the code. The problem about this, is that I'm the only developper, and my free time for the project is very limited.
 
 I may continue developping AKBL until my M14XR1 dies, but then I don't think I´ll buy another Alienware Laptop, I'll get some tiny and small performance computer.
 
-I hope that you enjoy the software while it stills alive,  
-rsm~ 
 
+## Extra
+With the time I have removed some content. In 2015-2016 AKBL was purely hosted on my personal website and I had some features like the Debian Repository, the Bug report pages, the sharing profiles pages, and the custom website. Then, I realized that all those features was taking a lot of work and I spended more time doing extra stuff than actually coding AKBL, so I decided to remove most of the features and add the project to GitHub.
 
+Then, some years after when I got back online with my personal website, I re-included the AKBL web page and a custom chat, but again, in 2020 I started developping other projects and I decided to close my personal website.
+
+Even if the features was really nice, I do not have the time to maintain them. I'd better spend the few time that I have in the software it self.
 
 
 
