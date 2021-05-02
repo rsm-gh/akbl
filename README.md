@@ -1,7 +1,5 @@
 > Since 2019~ many users with recent alienware computers are facing issues, probably because DELL has changed the usb protocol and it is different from old computers. Those computers are not yet supported. Some information can be found in the open issues.
 
-----
-
 # Index
   
   * [Software Features](https://github.com/rsm-gh/akbl#about)
