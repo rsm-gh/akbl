@@ -101,9 +101,8 @@ while True:
     time.sleep(2)     
 ```
 The Python bindings allow to modify the computer lights by using other programs signals, for example  when receiving an email, when monitoring things like the weather or the CPU temperature. You can read more about this in the [Bindings section](https://github.com/rsm-gh/akbl#python-bindings-1).
-.
-# How to Install
 
+# How to Install
 
 1. Download the [stable branch](https://github.com/rsm-gh/akbl/archive/stable.zip).
 2. Install the dependencies:
@@ -113,6 +112,8 @@ The Python bindings allow to modify the computer lights by using other programs 
     * ArchLinux: `pacman -Suy systemd gtk3 libappindicator-gtk3 python python-gobject python-cairo python-pyusb python-serpent python-pyro`
 
 3. Execute the setup file.
+
+*Note: If you wonder why there are no installation packages, you can refer to [this question](https://github.com/rsm-gh/akbl/blob/stable/README.md#why-there-are-no-distribution-packages-and-the-installation-is-so-complex).*
 
 # F.A.Q.
 
