@@ -123,9 +123,8 @@ Check if there's a bug concerning your computer model on GitHub, and if it don't
 
   1. Set the title of the bug as: "Add support to (computer model)"
   2. Fill the general information of the bug (GNU/Linux distribution, python version etc)..
-  3. Add the USB data of your computer: 
-    3.1 Open a terminal and execute the `lsusb` command:
-
+  3. Add the USB data of your computer:  
+   3.1 Open a terminal and execute the `lsusb` command:
 ```
   [rsm@m14xr1 ~]$ lsusb
   Bus 001 Device 004: ID 187c:0521 Alienware Corporation
@@ -135,8 +134,8 @@ Check if there's a bug concerning your computer model on GitHub, and if it don't
   Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
   Bus 002 Device 002: ID 25a7:fa23 
   Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-``` 
- 
+```
+   
    3.2 Find the line with the Alienware device and get the bus and device numbers:
      
 ```
@@ -547,7 +546,7 @@ if __name__ == '__main__':
 
 # Development Documentation
 
-## GLobal Comunication
+## Global Comunication
 ![general diagram](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/general%20diagram.png)
 
 [...] Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
