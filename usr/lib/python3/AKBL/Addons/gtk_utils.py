@@ -18,7 +18,12 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-gi.require_version('AppIndicator3', '0.1')
+
+try:
+    gi.require_version('AppIndicator3', '0.1')
+except:
+    print("Warning: Running without the AppIndicator. The dependency is not installed.")
+
 from gi.repository import Gtk
 
 def get_text_gtk_buffer(textbuffer):
