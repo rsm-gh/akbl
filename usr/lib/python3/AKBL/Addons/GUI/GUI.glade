@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 
 
-Copyright (C) 2014 - 2018 RSM
+Copyright (C) 2014 - 2019 RSM
 
 This file is part of akbl.
 
@@ -23,7 +23,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
   <requires lib="gtk+" version="3.10"/>
   <!-- interface-license-type gplv3 -->
   <!-- interface-name akbl -->
-  <!-- interface-copyright 2014 - 2018 RSM -->
+  <!-- interface-copyright 2014 - 2019 RSM -->
   <object class="GtkAdjustment" id="adjustment_blocks">
     <property name="upper">100000000000000</property>
     <property name="step_increment">1</property>
@@ -833,7 +833,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
     <property name="transient_for">window_root</property>
     <property name="program_name">AKBL</property>
     <property name="version">v__AKBL_VERSION__</property>
-    <property name="copyright" translatable="yes">© 2014-2018 RSM
+    <property name="copyright" translatable="yes">© 2014-2019 RSM
 © 2011-2012 The pyAlienFX team
 </property>
     <property name="comments" translatable="yes">
