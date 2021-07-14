@@ -218,18 +218,18 @@ I've been asked multiple times about my installation system. Why there are no di
 
   * It does not feed some needs like installing systemd files.
   * This module should always be avoided because all the software of a distribution shall be managed by the package manager.
-  * This feature may be interested for python software that is multi-operative system, which is not the case for AKBL.
+  * This feature may be interesting for python software that is multi-operative system, which is not the case for AKBL.
 
 * Why not to let distributions do their thing?
 
-  * Normally the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into their repositories.
-  * In the old times (before 2016) I used to create Debian packages and I even have my own repository, but I do not have the time to maintain them anymore. It is too much time consuming to release packages for each distribution (Debian, Noobuntu, ArchLinux..).
+  * Normally the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into their repositories. If you a maintainer you can feel free to do that.
+  * In the old times (before 2016) I used to create Debian packages and I even had my own repository, but I do not have the time to maintain it anymore. It is too much time consuming to release packages for each distribution (Debian, Noobuntu, ArchLinux..).
   * Create a package means that I made a release, I don't release AKBL.
 
 * Why not create a binary?
 
   * Even if you can compile python code, I don't think that you will be able to include all the dependencies which some may be written in other languages.
-  * There is no sense in compiling python software that is free code.
+  * There is no much sense in compiling python software that is free code.
 
 * Why not using custom paths?
 
@@ -245,9 +245,9 @@ I've been asked multiple times about my installation system. Why there are no di
     and every single file has a special location defined by GNU/Linux conventions. This should not be customized by an user. If you really want to do this, you can modify the setup script, and the paths python file.
 
 * Why using a batch:
-  * Because it is the common way to install GNU/Linux software that do not comes of any repository
-  * Because it allows to do anything it is necessary to do (Move files, start services, etc etc..).
-  * Because it works for any GNU/Linux distribution. I do not need to pass hours checking the dependencies of each distribution.
+  * Because it is the common way to install GNU/Linux software that do not comes from any repository.
+  * Because it allows to do anything that it is necessary to do (Move files, start services, etc etc..).
+  * Because it works for any GNU/Linux distribution. I do not need to pass hours checking the dependencies of each distribution and making tests.
   * Because it does not requires to release the code, it can be directly taken from GIT, which allows much more flexibility.
 
 
