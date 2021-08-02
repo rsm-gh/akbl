@@ -46,7 +46,7 @@ rsm~
 
 # Software Features
 
-AKBL is a software to control the lights of Alienware computers (The keyboard, the logo, the speakers, etc..).
+AKBL is a software to control the lights of Alienware computers (The keyboard, the logo, the speakers, etc..). It includes a Graphical Interphase, a System Try Indicator, Default Commands, and Python Bindings.
 
 ## Graphical Interface
 
