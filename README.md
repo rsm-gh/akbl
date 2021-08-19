@@ -567,9 +567,6 @@ if __name__ == '__main__':
 
 [...] Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
 
-Some information about the [USB Controller](https://gitlab.com/gemarcano/OpenRGB-Wiki/-/blob/dev/Alienware-AlienFX.md) can be found here.
-
-
 # AKBL History
 
 ## History
