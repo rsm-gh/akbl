@@ -1,7 +1,7 @@
 
-**Pease consider that this software is not actively developed.** I created it in 2014 for managning my Alienware M14X-R1 (where it fully works) and even if I want to help the other users of the GNU/Linux community, I don't have either the time or the hardware to do it.
+**Please consider that this software is not actively developed.** I created it in 2014 for managing my Alienware M14X-R1 (where it fully works) and even if I want to help the other users of the GNU/Linux community, I don't have either the time or the hardware to do it.
 
-Also since 2019 many users with recent alienware computers are facing issues, probably because DELL has changed the usb protocol and it is different from the old computers. Such computers are not yet supported and some interesting information and code can be found in the open issues.
+Also since 2019 many users with recent alienware computers are facing issues, probably because DELL has changed the USB protocol and it is different from the old computers. Such computers are not yet supported and some interesting information and code can be found in the open issues.
 
 Best regards,  
 rsm~
@@ -33,7 +33,7 @@ rsm~
     * Changing the keyboard colors by checking the weather
 
   * [Development Documentation](https://github.com/rsm-gh/akbl#development-documentation)
-    * Global Comunication
+    * Global Communication
   
   * [AKBL History](https://github.com/rsm-gh/akbl#akbl-history)
     * History
@@ -562,7 +562,7 @@ if __name__ == '__main__':
 
 # Development Documentation
 
-## Global Comunication
+## Global Communication
 ![general diagram](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/general%20diagram.png)
 
 [...] Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
@@ -577,23 +577,23 @@ It was a real hack from PyAlienFX because at that time I did not know about prog
 Then with the time, I realized that PyAlienFX was kinda dead and I was having fun learning python with this software. So I started fixing bugs, removing private content from the interface and creating new features. The major features that I have added are:
 
 + 2014: The Block Testing window. This is for debugging purposes.
-+ 2015: The Daemon which had as main goal to create allow the users using the software without beeing root.
++ 2015: The Daemon which had as main goal to allow the users using the software without being root.
   + 2015: The System Try Indicator (thanks to the Daemon).
   + 2015: The Python Bindings (thanks to the Daemon). 
 
 + XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
 
-So mostly I've been coding AKBL since 2014, doing modifications from time to time, and saddly despite the fact that alot of users contact me for bugs and new features, no one else have ever contributed directly to the code. The problem about this, is that I'm the only developper, and my free time for the project is very limited.
+So mostly I've been coding AKBL since 2014, doing modifications from time to time, and saddly despite the fact that alot of users contact me for bugs and new features, no one else have ever contributed directly to the code. The problem about this, is that I'm the only developer, and my free time for the project is very limited.
 
-I may continue developping AKBL until my M14XR1 dies, but then I don't think I´ll buy another Alienware Laptop, I'll get some tiny and low performance computer.
+I may continue developing AKBL until my M14XR1 dies, but then I don't think I´ll buy another Alienware Laptop, I'll get some tiny and low performance computer.
 
 
 ## Extra
 With the time I have removed some content. In 2015-2016 AKBL was purely hosted on my personal website and I had some features like the Debian Repository, the Bug report pages, the sharing profiles pages, and the custom website.  
 
-Then, I realized that all those features was taking a lot of work and I spended more time doing extra stuff than actually coding AKBL, so I decided to remove most of the features and add the project to GitHub.
+Then, I realized that all those features was taking a lot of work and I spent more time doing extra stuff than actually coding AKBL, so I decided to remove most of the features and add the project to GitHub.
 
-Some years after, I got back online with my personal website and I re-included the AKBL web page and a custom chat, but again, in 2020 I started developping other projects and I decided to close my personal website.
+Some years after, I got back online with my personal website and I re-included the AKBL web page and a custom chat, but again, in 2020 I started developing other projects and I decided to close my personal website.
 
 Even if the features was really nice, I do not have the time to maintain them. I'd better spend the few time that I have in the software it self.
 
@@ -602,7 +602,7 @@ Even if the features was really nice, I do not have the time to maintain them. I
 
 # About & Credits
 
-This software is the work of libre software hakers of the GNU/Linux community. It do not depends of any corporation and its code is licensed GPL3.
+This software is the work of libre software hackers of the GNU/Linux community. It do not depends of any corporation and its code is licensed GPL3.
 
 ### AKBL
 
