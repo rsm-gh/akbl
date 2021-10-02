@@ -2,17 +2,16 @@
 COMPUTER                idVendor        idProduct       COMMENT 
 ------------------------------------------------------------------
 
-M17X R3                 6268            1312
 M11X R3                 6268            1314            # There is no BUS data for this computer
-M18X R1                 6268            1315            # There is no BUS data for this computer
+M18X R2                 6268            1315            # There is no BUS data for this computer
 M17X R2                 6268            1316
 M14X R3                 6268            1317
 Alienware13 R1          6268            1319
 Alienware13 R3          6268            1321
 Aurora R7               16700           8467
 Area51R2                                                # CONFIGURATION FILE MISSING
-Alienware 17 R?		    6268			1304
-M17x R0                 6268            1298			(R0 to avoid the duplicated with R1)
+Alienware17 R?		    6268			1304
+M17X R0                 6268            1298			(R0 to avoid the duplicated with R1)
 
 ------------- D U P L I C A T E D    I D'S ------------------------
 
@@ -29,8 +28,7 @@ M14X R1                 6268            1313
 M14X R2                 6268            1313
 
 Alienware15 R3          6268            1328
-M17X R4                 6268            1328
-Alienware 17 R4		    6268			1328
+Alienware17 R4		    6268			1328
 
 Dell G5 5500 			6268            1360
 Dell G5 5590 			6268            1360
