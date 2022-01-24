@@ -16,7 +16,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 AKBL_VERSION="2019.05.26"
-DEBUG='False' 				# Python boolean
+DEBUG='True' 				# Python boolean
 NUMBER_OF_STEPS=5 			# installation steps
 
 if [ "$EUID" -ne 0 ]
