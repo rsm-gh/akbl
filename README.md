@@ -221,7 +221,7 @@ That button manages the speed of the theme in the following cases:
 
 ### Why there are no distribution packages and the installation is so complex? 
 
-I've been asked multiple times about my installation system. Why there are no distribution packages, etc..? Here is one good part of the answer:
+Here is one good part of the answer:
 
 * Why not use `setuptools`:
 
@@ -258,9 +258,6 @@ I've been asked multiple times about my installation system. Why there are no di
   * Because it allows to do anything that it is necessary to do (Move files, start services, etc etc..).
   * Because it works for any GNU/Linux distribution. I do not need to pass hours checking the dependencies of each distribution and making tests.
   * Because it does not requires to release the code, it can be directly taken from GIT, which allows much more flexibility.
-
-
-taken from this [question](https://github.com/rsm-gh/akbl/issues/85).
 
 
 # Python Bindings
