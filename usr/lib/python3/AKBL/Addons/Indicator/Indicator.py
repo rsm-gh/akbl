@@ -19,9 +19,9 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-gi.require_version('AppIndicator3', '0.1')
+gi.require_version('AyatanaAppIndicator3', '0.1')
 from gi.repository import Gtk, GObject, Gdk
-from gi.repository import AppIndicator3 as appindicator
+from gi.repository import AyatanaAppIndicator3 as appindicator
 
 import os
 import threading
