@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2020  Rafael Senties Martinelli
+#  Copyright (C) 2015-2021  Rafael Senties Martinelli
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -16,7 +16,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
 
 AKBL_VERSION="2019.05.26"
-DEBUG='True' 				# Python boolean
+DEBUG='False' 				# Python boolean
 NUMBER_OF_STEPS=5 			# installation steps
 
 if [ "$EUID" -ne 0 ]
@@ -114,13 +114,13 @@ sed -i "s/_DEBUG=False/_DEBUG=$DEBUG/g" "/usr/lib/python3/AKBL/utils.py"
 ##
 
 echo -e "\e[00;33m\n[3/$NUMBER_OF_STEPS] Creating the python links...\e[00m"
-echo "python3   linked (default location)"
 
-AKBL_PYTHON_VERSIONS=("python3.1" "python3.2" "python3.3" "python3.4" "python3.5" "python3.6" "python3.7" "python3.8" "python3.9")
+
+AKBL_PYTHON_VERSIONS=($(ls /usr/lib/ | grep python3))
 
 for python_version in "${AKBL_PYTHON_VERSIONS[@]}"; do
     if [ -d /usr/lib/$python_version ]; then
-        ln -s /usr/lib/python3/AKBL /usr/lib/$python_version/AKBL && echo -e "$python_version linked"
+        ln -s /usr/lib/python3/AKBL /usr/lib/$python_version/AKBL && echo -e "linked $python_version"
     fi
 done
 echo ""
