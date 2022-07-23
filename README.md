@@ -575,23 +575,11 @@ Then with the time, I realized that PyAlienFX was kinda dead and I was having fu
   + 2015: The System Try Indicator.
   + 2015: The Python Bindings. 
 
++ 2015-2016: (Not available any more):  Custom Debian Repository, Bug report pages, Sharing profiles pages, and chat hosted on my website.  
+
 + XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
 
-So mostly I've been coding AKBL since 2014, doing modifications from time to time, and saddly despite the fact that alot of users contact me for bugs and new features, no one else have ever contributed directly to the code. The problem about this, is that I'm the only developer, and my free time for the project is very limited.
-
-I may continue developing AKBL until my M14XR1 dies, but then I don't think I´ll buy another Alienware Laptop, I'll get some tiny and low performance computer.
-
-
-## Extra
-With the time I have removed some content. In 2015-2016 AKBL was purely hosted on my personal website and I had some features like the Debian Repository, the Bug report pages, the sharing profiles pages, and the custom website.  
-
-Then, I realized that all those features was taking a lot of work and I spent more time doing extra stuff than actually coding AKBL, so I decided to remove most of the features and add the project to GitHub.
-
-Some years after, I got back online with my personal website and I re-included the AKBL web page and a custom chat, but again, in 2020 I started developing other projects and I decided to close my personal website.
-
-Even if the features was really nice, I do not have the time to maintain them. I'd better spend the few time that I have in the software it self.
-
-
++ 2022: I stopped maintaining the project since I changed my computer.
 
 
 # About & Credits
