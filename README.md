@@ -1,5 +1,5 @@
 
-**Before requesting support please consider that AKBL is not actively developed.** I created it in 2014 for managing my Alienware M14X-R1 but I changed of computer it in 2022. Even if I want to help the other users of the GNU/Linux community, I don't have the time or the hardware to do it.**
+**Before requesting support please consider that AKBL is not actively developed.** I changed my computer it in 2022 so I don't have anymore the hardware to use and test the software.**
 
 Also since 2019 many users with recent alienware computers are facing issues, probably because DELL has changed the USB protocol and it is different from the old computers. Such computers are not yet supported and some interesting information and code can be found in the open issues.
 
