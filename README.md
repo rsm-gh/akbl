@@ -572,8 +572,8 @@ Then with the time, I realized that PyAlienFX was kinda dead and I was having fu
 
 + 2014: The Block Testing window. This is for debugging purposes.
 + 2015: The Daemon which had as main goal to allow the users using the software without being root.
-  + 2015: The System Try Indicator (thanks to the Daemon).
-  + 2015: The Python Bindings (thanks to the Daemon). 
+  + 2015: The System Try Indicator.
+  + 2015: The Python Bindings. 
 
 + XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
 
