@@ -1,0 +1,24 @@
+
+***********************************************************
+******************** Alienware X17 R2 *********************
+***********************************************************
+#By: https://github.com/kermitlyon
+#Issue: https://github.com/rsm-gh/akbl/issues/107
+
+─# lsusb -D /dev/bus/usb/001/003
+Device: ID 187c:0550 Alienware Corporation LED controller
+Device Descriptor:
+bLength 18
+bDescriptorType 1
+bcdUSB 2.10
+bDeviceClass 0
+bDeviceSubClass 0
+bDeviceProtocol 0
+bMaxPacketSize0 64
+idVendor 0x187c Alienware Corporation
+idProduct 0x0550 LED controller
+bcdDevice 2.00
+iManufacturer 1 Alienware
+iProduct 2 AW-ELC
+iSerial 3 00.01
+bNumConfigurations 1

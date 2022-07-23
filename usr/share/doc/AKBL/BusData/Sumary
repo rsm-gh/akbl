@@ -1,4 +1,9 @@
 
+
+Computer models: https://en.wikipedia.org/wiki/Alienware
+
+
+
 COMPUTER                idVendor        idProduct       COMMENT 
 ------------------------------------------------------------------
 
@@ -9,8 +14,10 @@ M14X R3                 6268            1317
 Alienware13 R1          6268            1319
 Alienware13 R3          6268            1321
 Aurora R7               16700           8467           
-Alienware17 R?		    6268			1304
 M17X R0                 6268            1298			(R0 to avoid the duplicated with R1)
+
+Alienware17 R?		    6268			1304
+
 
 ------------- D U P L I C A T E D    I D'S ------------------------
 
@@ -47,4 +54,4 @@ Alienware M15 R5        6268            1360
 Alienware M17 R2		6268			1360
 Alienware15 R4          6268            1360
 Alienware17 R5          6268            1360
-
+Alienware X17 R2        6268            1360
