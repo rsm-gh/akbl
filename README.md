@@ -231,7 +231,7 @@ Here is one good part of the answer:
 
 * Why not to let distributions do their thing?
 
-  * Normally the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into their repositories. If you a maintainer you can feel free to do that.
+  * Normally the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into their repositories. If you are a maintainer you can feel you free to do it.
   * In the old times (before 2016) I used to create Debian packages and I even had my own repository, but I do not have the time to maintain it anymore. It is too much time consuming to release packages for each distribution (Debian, Noobuntu, ArchLinux..).
   * Create a package means that I made a release, I don't release AKBL.
 
