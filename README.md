@@ -1,5 +1,5 @@
 
-** Warning: AKBL is not developed anymore.** I changed my computer in the summer of 2022, so I can't use or test the software. I may still
+** Warning: AKBL is not developed anymore.** I changed my computer in the summer of 2022, so I can't use or test the software.
 
 Also, since 2019 many users with recent alienware computers are facing issues, probably because DELL has changed the USB protocol and it is different from the old computers. Such computers are not yet supported and some interesting information and code can be found in the open issues.
 
