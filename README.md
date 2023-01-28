@@ -1,5 +1,5 @@
 
-**Warning: AKBL is not developed anymore.** I changed my computer in the summer of 2022, so I can't use or test the software anymore.
+**Warning: AKBL is not developed anymore.** I changed my computer in the summer of 2022, so I can't use or test the software.
 
 Also, since 2019 many users with recent alienware computers are facing issues, probably because DELL has changed the USB protocol and it is different from the old computers. Such computers are not supported. Some interesting information and code can be found in the open issues.
 
@@ -255,7 +255,7 @@ Here is one good part of the answer:
 
 * Why using a batch:
   * Because it is the common way to install GNU/Linux software that do not comes from any repository.
-  * Because it allows to do anything that it is necessary to do (Move files, start services, etc etc..).
+  * Because it allows to do anything that it is necessary to do (Move files, start services, etc..).
   * Because it works for any GNU/Linux distribution. I do not need to pass hours checking the dependencies of each distribution and making tests.
   * Because it does not requires to release the code, it can be directly taken from GIT, which allows much more flexibility.
 
