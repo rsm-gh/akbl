@@ -1,7 +1,8 @@
 
-**AKBL is not developed anymore.** I changed my computer in the summer of 2022, so I can't use or test the software.
+Highlights:
 
-Also, since 2019 many users with recent alienware computers are facing issues, probably because DELL has changed the USB protocol and it is different from the old computers. Such computers are not supported. Some interesting information and code can be found in the open issues.
+* 2022: **AKBL is not developed anymore.** I stopped developing the software because I changed my latptop computer. I cannot use or test the software.
+* 2019: Many users with recent alienware computers are facing issues, probably because DELL has changed the USB protocol, and it is different from the old computers. Such computers are not supported. Some interesting information and code can be found in the open issues.
 
 Best regards,  
 rsm~
@@ -22,7 +23,7 @@ rsm~
   * [F. A. Q.](https://github.com/rsm-gh/akbl#faq)
     * If my computer is not supported, what can I do?
     * How to use the block testing window?
-    * After making changes to a theme the changes are not applied
+    * After making changes to a theme, the changes are not applied
     * What's the function of the tempo button / clock icon / right-top corner button?
     * Why there are no distribution packages and the installation is so complex? 
 
@@ -46,7 +47,7 @@ rsm~
 
 # Software Features
 
-AKBL is a software to control the lights of Alienware computers (The keyboard, the logo, the speakers, etc..). It includes a Graphical Interphase, a System Try Indicator, Default Commands, and Python Bindings.
+AKBL is a software to control the lights of Alienware computers (The keyboard, the logo, the speakers, etc...). It includes a Graphical Interphase, a System Try Indicator, Default Commands, and Python Bindings.
 
 ## Graphical Interface
 
@@ -174,23 +175,23 @@ Check if there's a bug concerning your computer model on GitHub, and if it don't
 ```
 
 What will happen next?
-  1. I'll take your Computer ID and Vendor ID and I'll create a configuration file into `/usr/share/AKBL/computers/`.
-  2. I'll commit the changes and I'll request you to download it, install it and test it.
-  3. I'll wait to have your feed back (everything works, there are some problems, etc..). Please be specific! and give me as much details as possible!
+  1. I'll take your Computer ID and Vendor ID, and I'll create a configuration file into `/usr/share/AKBL/computers/`.
+  2. I'll commit the changes, and I'll request you to download it, install it and test it.
+  3. I'll wait to have your feedback (everything works, there are some problems, etc..). Please be specific! and give me as many details as possible!
 
-If after all that your computer is recognized and you have minor problems (Ex: left and right keyboard), I'll commit the fixes.
+If, after all, your computer is recognized, and you have minor problems (Ex: left and right keyboard), I'll commit the fixes.
 
-If some zones are not recognized, I'll ask you to launch the block testing window to find the appropriate hex values. Once the blocks found, I'll add them to the configuration file, and I'll commit the changes to the code.
+If some zones are not recognized, I'll ask you to launch the block testing window to find the appropriate hex values. Once the blocks are found, I'll add them to the configuration file, and I'll commit the changes to the code.
 
 ### How to use the block testing window?
 
 1. Execute as root `akbl --block-testing`.
-2. A window will appear and normally the ID Vendor and ID Product will be already filled. If not, akbl may not support your computer.
-3. Click, the Connect button, and the block testing block should be ready to be used.
+2. A window will appear, and normally the ID Vendor and ID Product will be already filled. If not, akbl may not support your computer.
+3. Click the Connect button, and the block testing block should be ready to be used.
 
-The block testing will help you to find the hex id's of your keyboard by iterating one by one the different possible hex values. Normally, the only thing you need to do, is to change the Block Number combobox, and click the Test button.
+The block testing will help you find the hex id's of your keyboard by iterating one by one the different possible hex values. Normally, the only thing you need to do is to change the Block Number combobox, and click the Test button.
 
-When iterating over the block numbers, everything will be logged. Once that you have found an hex color of a zone, you can directly write the zone name. Here is an example:
+When iterating over the block numbers, everything will be logged. Once that you have found a hex color of a zone, you can directly write the zone name. Here is an example:
 
 ```
 ## Text File ##
@@ -210,7 +211,7 @@ When iterating over the block numbers, everything will be logged. Once that you 
 
 ### After making changes to a theme the changes are not applied
 
-For the moment the themes need to be saved before applying them. Any unsaved change will not be recognized by the daemon.
+For the moment, the themes need to be saved before applying them. Any unsaved change will not be recognized by the daemon.
 
 ### What's the function of the tempo button / clock icon / right-top corner button?
 
@@ -231,9 +232,9 @@ Here is one good part of the answer:
 
 * Why not to let distributions do their thing?
 
-  * Normally the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into their repositories. If you are a maintainer you can feel you free to do it.
+  * Normally, the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into their repositories. If you are a maintainer you can feel you free to do it.
   * In the old times (before 2016) I used to create Debian packages and I even had my own repository, but I do not have the time to maintain it anymore. It is too much time consuming to release packages for each distribution (Debian, Noobuntu, ArchLinux..).
-  * Create a package means that I made a release, I don't release AKBL.
+  * Creating a package means that I made a release, I don't release AKBL.
 
 * Why not create a binary?
 
@@ -584,7 +585,7 @@ Then with the time, I realized that PyAlienFX was kinda dead and I was having fu
 
 # About & Credits
 
-This software is the work of libre software hackers of the GNU/Linux community. It do not depends of any corporation and its code is licensed GPL3.
+This software is the work of libre software hackers of the GNU/Linux community. It does not depend on any corporation, and its code is licensed GPL3.
 
 ### AKBL
 
@@ -599,7 +600,7 @@ AKBL is a software based on PyAlienFX. I mostly created new addons, improved the
 * Corp
 * Niai
 
-As far as I know pyAlienFX is not maintained anymore. They made work the project for some years and at the start they got inspired from AlienFX lite.
+As far as I know, pyAlienFX is not maintained anymore. They made work the project for some years, and at the start, they got inspired from AlienFX lite.
 
 
 ## AlienFX Lite

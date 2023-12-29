@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  Rafael Senties Martinelli
+#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,13 +14,14 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
 
 from AKBL.utils import print_warning
 
-_MISSING_ZONE_COLOR="#0000FF"
+_MISSING_ZONE_COLOR = "#0000FF"
+
 
 class Theme:
 
@@ -38,7 +39,7 @@ class Theme:
 
     def set_speed(self, speed):
         """
-           There are speed limits but in order to avoid duplicated restrictions,
+           There are speed limits, but to avoid duplicated restrictions,
            they went applied in to the Constructor(). 
         """
         self.__speed = int(speed)
@@ -47,14 +48,14 @@ class Theme:
         return (area for area in sorted(self.__areas.values(), key=lambda x: x.name))
 
     def get_area_by_name(self, area_name):
-        
+
         if area_name in self.__areas.keys():
             return self.__areas[area_name]
 
         return None
 
     def add_area(self, area):
-        if not area.name in self.__areas.keys():
+        if area.name not in self.__areas.keys():
             self.__areas[area.name] = area
         else:
             print_warning("Duplicated area `{}`, `{}`".format(area.name, self.__areas.keys()))
@@ -74,15 +75,15 @@ class Theme:
             self._time = os.path.getmtime(self.path)
 
     def save(self):
-        
+
         with open(self.path, encoding='utf-8', mode='w') as f:
             f.write(self.__str__())
-        
+
         self.update_time()
-        
+
     def __str__(self):
-        
-        theme_text='''
+
+        theme_text = '''
 #############################################
 #####     AKBL configuration theme      #####
 #############################################
@@ -90,19 +91,19 @@ class Theme:
 name={}
 speed={}
 \n'''.format(self.name, self.__speed)
-            
+
         for area in sorted(self.__areas.values(), key=lambda x: x.name):
-            theme_text+='''
+            theme_text += '''
 ********************************************
 area={}
 
 '''.format(area.name)
-            
+
             for zone in area.get_zones():
-                theme_text+='''
+                theme_text += '''
 mode={}
 left_color={}
 right_color={}
 '''.format(zone.get_mode(), zone.get_left_color(), zone.get_right_color())
-        
+
         return theme_text

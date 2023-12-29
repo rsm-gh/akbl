@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2019  Rafael Senties Martinelli
+#  Copyright (C) 2014-2019 Rafael Senties Martinelli.
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 TEXT_HELP = '''
 Usage:
@@ -46,7 +46,7 @@ Usage:
 '''
 
 TEXT_LICENSE = '''
-  Copyright (C) 2014-2019  Rafael Senties Martinelli
+  Copyright (C) 2014-2019 Rafael Senties Martinelli.
                 2011-2012  the pyAlienFX team
 
   This program is free software; you can redistribute it and/or modify
@@ -60,7 +60,7 @@ TEXT_LICENSE = '''
 
  You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  '''
 
 TEXT_ADD = "Add"
@@ -79,10 +79,10 @@ Do you want to import it for this user? (yes)
 
 TEXT_PROFILES = "Profiles"
 TEXT_START_THE_GUI = "Start the GUI"
-TEXT_SWICH_STATE = "Switch State"
+TEXT_SWITCH_STATE = "Switch State"
 TEXT_EXIT = "Exit"
 
-TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be stablished."
+TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be established."
 
 TEXT_WRONG_ARGUMENT = '''akbl: wrong argument. use "akbl --help"'''
 

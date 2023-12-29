@@ -37,7 +37,7 @@ Files:
 
 
 Copyright: Copyright (C) 2014-2019 Rafael Senties Martinelli
-           Copyright (C) 2011-2012 the pyAlienFX team
+           Copyright (C) 2011-2012 the pyAlienFX team.
 License: GPL-3
 Files: 
 	usr/lib/python3/AKBL/Engine/__init__.py
@@ -154,7 +154,7 @@ Files:
 	usr/share/doc/AKBL/Programming/general diagram.odg
 	usr/share/doc/AKBL/ImagesPreview/GUI.png
 	usr/share/doc/AKBL/ImagesPreview/Indicator.png
-	usr/share/doc/AKBL/BusData/Sumary
+	usr/share/doc/AKBL/BusData/Summary
 
 Copyright: GNU/Linux community, check inside the file to find the owner.
 License: GPL-3

@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  Rafael Senties Martinelli
-#                2011-2012  the pyAlienFX team
+#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
+#                2011-2012 the pyAlienFX team.
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -16,61 +16,59 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 from AKBL.utils import print_warning
 
 class Computer(object):
 
     def __init__(self):
-        
-        self.DEFAULT_MODE = 'fixed'
-        
-        self.NAME = 'Default Configuration'
-        self.VENDOR_ID = 6268
-        self.PRODUCT_ID = None
-        self.SUPPORTED_COMMANDS = 15
-        self.DATA_LENGTH = 9
-        self.START_BYTE = 2
-        self.FILL_BYTE = 0
 
-        self.STATE_BUSY = 17
-        self.STATE_READY = 16
-        self.STATE_UNKNOWN_COMMAND = 18
-
-        self.COMMAND_END_STORAGE = 0
-        self.COMMAND_SET_COLOR = 3
-        self.COMMAND_SET_MORPH_COLOR = 1
-        self.COMMAND_SET_BLINK_COLOR = 2
-        self.COMMAND_LOOP_BLOCK_END = 4
-        self.COMMAND_TRANSMIT_EXECUTE = 5
-        self.COMMAND_GET_STATUS = 6
-        self.COMMAND_RESET = 7
-        self.COMMAND_SAVE_NEXT = 8
-        self.COMMAND_SAVE = 9
-        self.COMMAND_BATTERY_STATE = 15
-        self.COMMAND_SET_SPEED = 14
-
-        self.RESET_TOUCH_CONTROLS = 1
-        self.RESET_SLEEP_LIGHTS_ON = 2
-        self.RESET_ALL_LIGHTS_OFF = 3
-        self.RESET_ALL_LIGHTS_ON = 4
-
-        self.BLOCK_LOAD_ON_BOOT = 1
-        self.BLOCK_STANDBY = 2
-        self.BLOCK_AC_POWER = 5
-        self.BLOCK_CHARGING = 6
-        self.BLOCK_BATT_SLEEPING = 7
-        self.BLOCK_BAT_POWER = 8
-        self.BLOCK_BATT_CRITICAL = 9
-        
-        self.REGION_ALL_BUT_POWER = 1023999
-        
+        self.name = 'Default Configuration'
+        self.default_mode = 'fixed'
         self.configuration_path = ""
-        
         self.__regions = []
-        self.__regions.sort(key=lambda region: region.description)
+
+        self.vendor_id = 6268
+        self.product_id = None
+        self.supported_commands = 15
+        self.data_length = 9
+        self.start_byte = 2
+        self.fill_byte = 0
+
+        self.state_ready = 16
+        self.state_busy = 17
+        self.state_unknown_command = 18
+
+        self.command_end_storage = 0
+        self.command_set_morph_color = 1
+        self.command_set_blink_color = 2
+        self.command_set_color = 3
+
+        self.command_loop_block_end = 4
+        self.command_transmit_execute = 5
+        self.command_get_status = 6
+        self.command_reset = 7
+        self.command_save_next = 8
+        self.command_save = 9
+        self.command_battery_state = 15
+        self.command_set_speed = 14
+
+        self.reset_touch_controls = 1
+        self.reset_sleep_lights_on = 2
+        self.reset_all_lights_off = 3
+        self.reset_all_lights_on = 4
+
+        self.block_load_on_boot = 1
+        self.block_standby = 2
+        self.block_ac_power = 5
+        self.block_charging = 6
+
+        self.block_battery_sleeping = 7
+        self.block_battery_power = 8
+        self.block_battery_critical = 9
         
+        self.region_all_but_power = 1023999
         
     def __str__(self):
         attributes = '\n'.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items() if not attribute.startswith('_')])

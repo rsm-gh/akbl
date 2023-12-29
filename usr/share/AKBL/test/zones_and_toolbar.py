@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2018  Rafael Senties Martinelli
+#  Copyright (C) 2015-2018 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -50,35 +50,35 @@ class DialogWindow(Gtk.Window):
         # Add the Zone objects to be tested
         #
         for row_index in range(2):
-            FIXED_ZONE = ZoneWidget(area_name='PB',
+            fixed_zone = ZoneWidget(area_name='PB',
                                     left_color='#020202',
                                     right_color='#020202',
                                     mode='fixed',
                                     column=0,
                                     get_color_callback=self.color_chooser_toolbar.get_current_rgba)
             
-            grid.attach(child=FIXED_ZONE, left=0, top=row_index, width=1, height=1)
+            grid.attach(child=fixed_zone, left=0, top=row_index, width=1, height=1)
             
-            BLINK_ZONE = ZoneWidget(area_name='',
+            blink_zone = ZoneWidget(area_name='',
                                     left_color='#020202',
                                     right_color='#020202',
                                     mode='blink',
                                     column=1,
                                     get_color_callback=self.color_chooser_toolbar.get_current_rgba)
             
-            grid.add(BLINK_ZONE)
+            grid.add(blink_zone)
             
-            MORPH_ZONE = ZoneWidget(area_name='',
+            morph_zone = ZoneWidget(area_name='',
                                     left_color='#020202',
                                     right_color='#020202',
                                     mode='morph',
                                     column=2,
                                     get_color_callback=self.color_chooser_toolbar.get_current_rgba)
             
-            grid.add(MORPH_ZONE)
+            grid.add(morph_zone)
             
-
-    def on_toolbar_colorlist_changed(self, widget):
+    @staticmethod
+    def on_toolbar_colorlist_changed(_):
         print("The toolbar colorlist changed.")
             
             

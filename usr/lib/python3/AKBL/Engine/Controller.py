@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2019  Rafael Senties Martinelli
-#                 2011-2012  the pyAlienFX team
+#  Copyright (C) 2014-2019 Rafael Senties Martinelli.
+#                2011-2012 the pyAlienFX team.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 from AKBL.utils import print_error, print_warning
@@ -34,7 +34,7 @@ class Controller:
             
 
     def get_computer(self):
-        if not self._driver is None and self._driver.has_device():
+        if self._driver is not None and self._driver.has_device():
             return self._driver.computer
     
         return None
@@ -112,4 +112,4 @@ class Controller:
         
         self._driver.write_constructor(constructor)
         msg = self._driver.read_device(constructor)
-        return msg[0] == self._driver.computer.STATE_READY
+        return msg[0] == self._driver.computer.state_ready

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2016, 2018-2019  Rafael Senties Martinelli
+#  Copyright (C) 2015-2016, 2018-2019, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 import os
@@ -25,103 +25,73 @@ from traceback import format_exc
 from AKBL.utils import print_error, print_warning
 from AKBL.Paths import Paths
 
+
 class Bindings:
 
     def __init__(self):
-        self._address = None
-        self._pyro = None
-        self._paths = Paths()
-        self._user = getpass.getuser()
+        self.__address = None
+        self.__pyro = None
+        self.__user = getpass.getuser()
+        self.__paths = Paths(self.__user)
         self.reload_address()
 
-    def _command(self, command, *args):
+    def __command(self, command, *args):
         """
             Send a command to the daemon and return a tuple containing (boolean, response).
-            The boolean indicates weather the command was succesfull or not, and the response
-            contains the information returned by the command.
+            The boolean indicates if the command was successful or not.
+            The response contains the information returned by the command.
         """
         if command in ('set_profile', 'set_lights', 'switch_lights', 'reload_configurations'):
-            args = [self._user] + list(args)
+            args = [self.__user] + list(args)
 
-        if self._address is None:
+        if self.__address is None:
             self.reload_address()
 
-        if not self._address is None and not self._pyro is None:
-            
+        if self.__address is not None and self.__pyro is not None:
+
             try:
-                response = getattr(self._pyro, command)(*args)
+                response = getattr(self.__pyro, command)(*args)
                 return response
 
             except Exception:
-                
+
                 try:
                     #
                     # I ignore why this has to be inside an exception. Its like if there was a problem printing format_exc().
-                    # The bug happens when repducing the following scenario:
+                    # The bug happens when reducing the following scenario:
                     #    1) There is a launched indicator.
                     #    2) The software is re-installed.
-                    #    3) The user tries to close the indicator by usig the "Exit" button.
+                    #    3) The user tries to close the indicator by using the "Exit" button.
                     #
-                    
+
                     if len(args) > 0:
-                        print_error("Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)), str(format_exc())))
+                        print_error(
+                            "Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)),
+                                                                      str(format_exc())))
                     else:
                         print_error("Command={}\n{}\n".format(command, str(format_exc())))
-                
+
                 except Exception:
-                    print_error("NO TRACEBACK: Command={}\n{}\n".format(command))
-                
+                    print_error("NO TRACEBACK: Command={}\n".format(command))
+
                 return False
-            
+
         else:
             print_warning("The daemon is off.")
-            return False
-
-    def reload_address(self, display_the_error=True):
-        """
-            It tries to make a connection with the Daemon
-            and it returns True or False.
-        """
-        
-        if not self.ping() and os.path.exists(self._paths._daemon_pyro_file):
-            
-            with open(self._paths._daemon_pyro_file, mode='rt', encoding='utf-8') as f:
-                address = f.readline().strip()
-                
-            try:
-                pyro = Pyro4.Proxy(address)
-                pyro.ping()
-
-                self._address = address
-                self._pyro = pyro
-
-                return True
-
-            except Exception:
-                
-                if display_the_error:
-                    print_error(format_exc())
-
-                self._address = None
-                self._pyro = None
-                
-                return False
-        else:
-            self._address = None
-            self._pyro = None
             return False
 
     def ping(self):
         """
             Check if the Daemon is connected and return `True` or `False`.
         """
-        
-        if not self._pyro is None:
+
+        if self.__pyro is not None:
             try:
-                self._pyro.ping()
-                return True
-            except:
+                self.__pyro.ping()
+            except Exception:
                 pass
+            else:
+                return True
 
         return False
 
@@ -130,25 +100,25 @@ class Bindings:
             Returns the current URI of the Daemon.
         """
 
-        return self._address
+        return self.__address
 
     def get_profile_names(self):
         """
             Return a list of the existing profile names.
         """
 
-        if not os.path.exists(self._paths._profiles_dir):
+        if not os.path.exists(self.__paths._profiles_dir):
             return []
 
-        filenames = os.listdir(self._paths._profiles_dir)
+        filenames = os.listdir(self.__paths._profiles_dir)
         if len(filenames) == 0:
             return []
 
         names = []
         for filename in filenames:
             if filename.endswith('.cfg'):
-                
-                path = self._paths._profiles_dir + filename
+
+                path = self.__paths._profiles_dir + filename
 
                 with open(path, mode='rt', encoding='utf-8') as f:
                     lines = f.readlines()
@@ -178,17 +148,17 @@ class Bindings:
         """
             Set a profile from the existing profiles.
             
-            + 'profile' is the profile name.
+            + 'Profile' is the profile name.
         """
-        
-        return self._command('set_profile', profile_name)
+
+        return self.__command('set_profile', profile_name)
 
     def switch_lights(self):
         """
             Toggle on/off the lights of the keyboard.
         """
-        
-        return self._command('switch_lights')
+
+        return self.__command('switch_lights')
 
     def set_lights(self, state):
         """
@@ -196,8 +166,8 @@ class Bindings:
             
             + 'state' can be a boolean or a string
         """
-        
-        return self._command('set_lights', state)
+
+        return self.__command('set_lights', state)
 
     def set_colors(self, mode, speed, colors1, colors2=None):
         """
@@ -208,9 +178,55 @@ class Bindings:
                 
             + Speed must be an integer. 1 =< speed >= 256
             
-            + colors1 and colors2 can be a single hex_color or a list
+            + Colors1 and colors2 can be a single hex_color or a list
               of hex_colors. If both arguments are used, they must
               have the same number of items.
         """
-        
-        return self._command('set_colors', mode, speed, colors1, colors2)
+
+        return self.__command('set_colors', mode, speed, colors1, colors2)
+
+    def get_computer_name(self):
+        return self.__command('get_computer_name')
+
+    """
+        Admin bindings.
+    """
+
+    def reload_configurations(self):
+        return self.__command('reload_configurations')
+
+    def reload_address(self, display_the_error=True):
+        """
+            It tries to make a connection with the Daemon, and it returns True or False.
+        """
+
+        if not self.ping() and os.path.exists(self.__paths._daemon_pyro_file):
+
+            with open(self.__paths._daemon_pyro_file, mode='rt', encoding='utf-8') as f:
+                address = f.readline().strip()
+
+            try:
+                pyro = Pyro4.Proxy(address)
+                pyro.ping()
+
+            except Exception:
+                if display_the_error:
+                    print_error(format_exc())
+            else:
+                self.__address = address
+                self.__pyro = pyro
+
+                return True
+
+        self.__address = None
+        self.__pyro = None
+        return False
+
+    def indicator_start(self, uri):
+        return self.__command('indicator_start', uri)
+
+    def indicator_get_state(self):
+        return self.__command('indicator_get_state')
+
+    def indicator_kill(self):
+        return self.__command('indicator_kill')
