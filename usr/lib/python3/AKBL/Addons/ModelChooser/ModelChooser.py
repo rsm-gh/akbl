@@ -88,25 +88,25 @@ class ModelChooser(Gtk.Window):
         #
         #
 
-        current_computer = self._get_default_computer_name()
+        current_computer = self.__get_default_computer_name()
 
-        self.update_detected_as()
+        self.__update_detected_as()
 
         self.__default_computer_model = current_computer
         self.label_set_as.set_text(current_computer)
 
-        self.update_models_liststore()
+        self.__update_models_liststore()
         self.textbuffer_computer_data.set_text(get_alienware_device_info())
-        print("The current configuration is: " + self._get_default_computer_name())
+        print("The current configuration is: " + self.__get_default_computer_name())
 
         """
         
         """
         self.window_model_chooser.show_all()
 
-    def update_models_liststore(self):
+    def __update_models_liststore(self):
 
-        default_computer_name = self._get_default_computer_name()
+        default_computer_name = self.__get_default_computer_name()
         driver = Driver()
 
         self.liststore_computer_models.clear()
@@ -116,7 +116,7 @@ class ModelChooser(Gtk.Window):
 
             self.liststore_computer_models.append([computer.name, is_selected, True, driver.has_device()])
 
-    def update_detected_as(self):
+    def __update_detected_as(self):
         driver = Driver()
         driver.find_device()
 
@@ -140,10 +140,10 @@ class ModelChooser(Gtk.Window):
                 computer_model = self.liststore_computer_models.get_value(iter_row, 0)
                 computer_factory.set_default_computer(computer_model)
 
-        self.label_set_as.set_text(self._get_default_computer_name())
+        self.label_set_as.set_text(self.__get_default_computer_name())
 
     @staticmethod
-    def _get_default_computer_name():
+    def __get_default_computer_name():
 
         default_computer = computer_factory.get_default_computer()
 
@@ -165,7 +165,7 @@ class ModelChooser(Gtk.Window):
         # In case that the computer is the same (as previously used), update the file
         #
 
-        if self.__default_computer_model == self._get_default_computer_name():
+        if self.__default_computer_model == self.__get_default_computer_name():
 
             for i, _ in enumerate(self.liststore_computer_models):
 
@@ -196,3 +196,7 @@ def main():
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     ModelChooser()
     Gtk.main()
+
+
+if __name__ == "__main__":
+    main()

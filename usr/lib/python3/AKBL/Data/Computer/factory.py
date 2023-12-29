@@ -45,15 +45,22 @@ def get_computer_by_path(file_path):
         return None
 
     for key in config["COMMON"]:
-        if hasattr(computer, key):
 
-            value = config["COMMON"][key]
+        lower_key = key.lower()
 
-            if value != "":
-                if key in ("NAME", "DEFAULT_MODE"):
-                    setattr(computer, key.lower(), value)
-                else:
-                    setattr(computer, key.lower(), int(value))
+        if not hasattr(computer, lower_key):
+            print_warning("Skipping attribute '{}'".format(key))
+            continue
+
+        value = config["COMMON"][key]
+        if value == "":
+            print_warning("Empty value on attribute '{}'".format(key))
+            continue
+
+        if key in ("NAME", "DEFAULT_MODE"):
+            setattr(computer, lower_key, value)
+        else:
+            setattr(computer, lower_key, int(value))
 
     for section in config.sections():
         if section.startswith("REGION"):
@@ -84,20 +91,22 @@ def get_computers():
     for file_name in os.listdir(path):
         if file_name.endswith(".ini"):
 
-            file_path = path + "/" + file_name
+            file_path = os.path.join(path, file_name)
 
             computer = get_computer_by_path(file_path)
 
-            if computer is not None:
-                add = True
-                for added_computer in computers:
-                    if computer.name == added_computer:
-                        print_warning("Computer name already exists={}".format(computer.name))
-                        add = False
-                        break
+            if computer is None:
+                continue
 
-                if add:
-                    computers.append(computer)
+            add = True
+            for added_computer in computers:
+                if computer.name == added_computer:
+                    print_warning("Computer name already exists={}".format(computer.name))
+                    add = False
+                    break
+
+            if add:
+                computers.append(computer)
 
     computers.sort(key=lambda cmp: cmp.name)
 
