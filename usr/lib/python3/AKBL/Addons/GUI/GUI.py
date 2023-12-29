@@ -334,8 +334,8 @@ class GUI(Gtk.Window):
         self.label_user_message.set_text(texts.TEXT_APPLYING_CONFIGURATION)
         Gdk.threads_leave()
 
-        # This is to make the program recognize the last profile that has been
-        # used
+        # This is to make the program recognize
+        # the last profile that has been used
         try:
             # Patch (#12)
             os.utime(self.__theme.path, None)
