@@ -52,7 +52,7 @@ The GUI is designed to be easy and comfortable to use, it will allow you to easi
 ![System tray indicator](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/ImagesPreview/Indicator.png)
 
 
-It allows starting the GUI, turning the lights On/Off, and choosing profiles. By default it is not enabled, but it can be added to the start session of a user with the command `akbl --start-indicator`.
+It allows starting the GUI, turning the lights On/Off, and choosing profiles. By default, it is not enabled, but it can be added to the start session of a user with the command `akbl --start-indicator`.
 
 ## Default commands
 
@@ -83,16 +83,16 @@ Usage:
 
  *If no option is introduced the graphical interface is launched.
 ```
-The program comes with some default commands for those who doesn't know about programming. These commands can be easily added to hotkeys.
+The program comes with some default commands for those who don't know about programming. These commands can be easily added to hotkeys.
 
 ## Python Bindings
 
 ```python
 
 import time, random
-from AlienwareKBL import AlienwareKBL
+from AKBL.Bindings import Bindings
    
-akbl=AlienwareKBL()
+AKBLConnection=Bindings()
 r = lambda: random.randint(0,255)
  
 while True:
@@ -101,12 +101,12 @@ while True:
     random_hex_color='#%02X%02X%02X' % (r(),r(),r())   
  
     # Set the color in mode fixed
-    akbl.set_colors('fixed', 100, random_hex_color)
+    AKBLConnection.set_colors('fixed', 100, random_hex_color)
  
     # Wait 2 seconds
     time.sleep(2)     
 ```
-The Python bindings allow to modify the computer lights by using other programs signals, for example  when receiving an email, when monitoring things like the weather or the CPU temperature. You can read more about this in the [Bindings section](https://github.com/rsm-gh/akbl#python-bindings-1).
+The Python bindings allow modifying the computer lights by using other program signals, for example, when receiving an email, when monitoring things like the weather or the CPU temperature. You can read more about this in the [Bindings section](https://github.com/rsm-gh/akbl#python-bindings-1).
 
 # How to Install
 
@@ -125,10 +125,10 @@ The Python bindings allow to modify the computer lights by using other programs 
 
 ### If my computer is not supported, what can I do?
 
-Check if there's a bug concerning your computer model on GitHub, and if it don't exists create one:
+Check if there's a bug concerning your computer model on GitHub, and if it doesn't exist, create one:
 
   1. Set the title of the bug as: "Add support to (computer model)"
-  2. Fill the general information of the bug (GNU/Linux distribution, python version etc)..
+  2. Fill the general information of the bug (GNU/Linux distribution, python version etc...)
   3. Add the USB data of your computer:  
    3.1 Open a terminal and execute the `lsusb` command:
 ```
@@ -168,8 +168,8 @@ Check if there's a bug concerning your computer model on GitHub, and if it don't
 
 What will happen next?
   1. I'll take your Computer ID and Vendor ID, and I'll create a configuration file into `/usr/share/AKBL/computers/`.
-  2. I'll commit the changes, and I'll request you to download it, install it and test it.
-  3. I'll wait to have your feedback (everything works, there are some problems, etc..). Please be specific! and give me as many details as possible!
+  2. I'll commit the changes, and I'll request you to download it, install it, and test it.
+  3. I'll wait to have your feedback (everything works, there are some problems, etc...). Please be specific! and give me as many details as possible!
 
 If, after all, your computer is recognized, and you have minor problems (Ex: left and right keyboard), I'll commit the fixes.
 
@@ -201,7 +201,7 @@ When iterating over the block numbers, everything will be logged. Once that you 
 [TEST]: block: 256     hex: 0x100     mode:blink     speed:1     color1:#00ff00     color2: #00ff00
  ``` 
 
-### After making changes to a theme the changes are not applied
+### After making changes to a theme, the changes are not applied
 
 For the moment, the themes need to be saved before applying them. Any unsaved change will not be recognized by the daemon.
 
@@ -222,10 +222,10 @@ Here is one good part of the answer:
   * This module should always be avoided because all the software of a distribution shall be managed by the package manager.
   * This feature may be interesting for python software that is multi-operative system, which is not the case for AKBL.
 
-* Why not to let distributions do their thing?
+* Why not let distributions do their thing?
 
-  * Normally, the GNU/Linux software is always released with installation batchs, and then, the maintainers of each Distribution create a custom package and include it into their repositories. If you are a maintainer you can feel you free to do it.
-  * In the old times (before 2016) I used to create Debian packages and I even had my own repository, but I do not have the time to maintain it anymore. It is too much time consuming to release packages for each distribution (Debian, Noobuntu, ArchLinux..).
+  * Normally, the GNU/Linux software is always released with installation batches, and then, the maintainers of each Distribution create a custom package and include it in their repositories. If you are a maintainer, you can feel free to do it.
+  * In the old times (before 2016) I used to create Debian packages, and I even had my own repository, but I do not have the time to maintain it anymore. It is too much time-consuming to release packages for each distribution (Debian, Ubuntu, ArchLinux...).
   * Creating a package means that I made a release, I don't release AKBL.
 
 * Why not create a binary?
@@ -244,13 +244,13 @@ Here is one good part of the answer:
     * Temp files
     * Communication files
 
-    and every single file has a special location defined by GNU/Linux conventions. This should not be customized by an user. If you really want to do this, you can modify the setup script, and the paths python file.
+    and every single file has a special location defined by GNU/Linux conventions. This should not be customized by a user. If you really want to do this, you can modify the setup script and the paths of the python file.
 
 * Why using a batch:
-  * Because it is the common way to install GNU/Linux software that do not comes from any repository.
-  * Because it allows to do anything that it is necessary to do (Move files, start services, etc..).
+  * Because it is the common way to install GNU/Linux software that does not come from any repository.
+  * Because it allows doing anything that it is necessary to do (Move files, start services, etc...).
   * Because it works for any GNU/Linux distribution. I do not need to pass hours checking the dependencies of each distribution and making tests.
-  * Because it does not requires to release the code, it can be directly taken from GIT, which allows much more flexibility.
+  * Because it does not require releasing the code, it can be directly taken from GIT, which allows much more flexibility.
 
 
 # Python Bindings
@@ -258,18 +258,16 @@ Here is one good part of the answer:
 ### API
 
 ```python
-class AlienwareKBL():
+class Bindings:
        
     def reload_address(self):
         """
-            It tries to make a connection with the Daemon
-        and it returns True or False.
+            It tries to make a connection with the Daemon, and it returns True or False.
         """
    
     def ping(self):
         """
-            It checks if the Daemon is connected
-            and it returns True or False.
+            It checks if the Daemon is connected, and it returns True or False.
         """
    
     def get_address(self):
@@ -286,7 +284,7 @@ class AlienwareKBL():
         """
             Set a profile from the existing profiles.
            
-            + 'profile' is the profile name.
+            + 'Profile' is the profile name.
         """
        
     def switch_lights(self):
@@ -310,7 +308,7 @@ class AlienwareKBL():
                
             + Speed must be an integer. 1 =< speed =< 256
            
-            + colors1 and colors2 can be a single hex_color or a list
+            + Colors1 and colors2 can be a single hex_color or a list
           of hex_colors. If both arguments are used, they must
           have the same number of items.
         """
@@ -319,7 +317,7 @@ class AlienwareKBL():
 
 ### Testing all the commands
 
-This is the example that I use to test the bindings. It should be clear enough to explain all the commands !
+This is the example that I use to test the bindings. It should be clear enough to explain all the commands!
 
 ```python
 
@@ -337,7 +335,7 @@ colors_test=True
 speed_test=True
 colors_multiple_test=True
  
- 
+
 if not AKBLConnection.ping():
     print("The connection with the daemon is off")
     exit()
@@ -352,7 +350,7 @@ if not AKBLConnection.ping():
      really need to do this in your code!
  """
  
- if lights_test:
+if lights_test:
      print('lights off', AKBLConnection.set_lights(False))
      time.sleep(2)
      print('lights on', AKBLConnection.set_lights(True))
@@ -360,30 +358,30 @@ if not AKBLConnection.ping():
      print('switch lights', AKBLConnection.switch_lights())
  
  
- if profiles_test:
-     for profile_name in AKBLConnection.get_profile_names():
-         print('set profile:', profile_name, AKBLConnection.set_profile(profile_name))
-         time.sleep(5)
+if profiles_test:
+    for profile_name in AKBLConnection.get_profile_names():
+        print('set profile:', profile_name, AKBLConnection.set_profile(profile_name))
+        time.sleep(5)
  
  
- color1='#F7F200'
- color2='#0018FF'
+color1='#F7F200'
+color2='#0018FF'
  
- if colors_test:
-     print('set_colors blink', AKBLConnection.set_colors('blink', 100, color2))
-     time.sleep(5)
-     print('set_colors fixed', AKBLConnection.set_colors('fixed', 100, color1))
-     time.sleep(5)
-     print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
+if colors_test:
+    print('set_colors blink', AKBLConnection.set_colors('blink', 100, color2))
+    time.sleep(5)
+    print('set_colors fixed', AKBLConnection.set_colors('fixed', 100, color1))
+    time.sleep(5)
+    print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
  
      
- if speed_test:
-     print('set_colors blink', AKBLConnection.set_colors('blink', 1, color2))
-     time.sleep(5)
-     print('set_colors blink', AKBLConnection.set_colors('blink', 100, color2))
-     time.sleep(5)
-     print('set_colors blink', AKBLConnection.set_colors('blink', 256, color2))
-     time.sleep(5)
+if speed_test:
+    print('set_colors blink', AKBLConnection.set_colors('blink', 1, color2))
+    time.sleep(5)
+    print('set_colors blink', AKBLConnection.set_colors('blink', 100, color2))
+    time.sleep(5)
+    print('set_colors blink', AKBLConnection.set_colors('blink', 256, color2))
+    time.sleep(5)
  
  
  if colors_multiple_test:
@@ -437,44 +435,49 @@ if __name__ == '__main__':
  
     if not akbl.ping():
         print("The akbl daemon is off.")
-    else:
-        while True:
-           
-            max_temperature=get_max_temp()
-            print("The maximum temperature is", max_temperature)
-           
-            if max_temperature <= 0:
-                akbl.set_colors('fixed', 100, '#000000') # black
-            elif max_temperature <= 20:
-                akbl.set_colors('fixed', 100, '#02EDFF') # cyan
-            elif max_temperature <= 55:
-                akbl.set_colors('fixed', 100, '#0000FF') # blue
-            elif max_temperature <= 70:
-                akbl.set_colors('fixed', 100, '#FFE900') # yellow
-            elif max_temperature <= 85:
-                akbl.set_colors('fixed', 100, '#FF7800') # orange
-            elif max_temperature <= 95:
-                akbl.set_colors('fixed', 100, '#FF0014') # red
-            else:
-                akbl.set_colors('blink', 100, '#FF0014') # red
- 
-            time.sleep(5) # seconds
+        exit(1)
+
+    while True:
+       
+        max_temp=get_max_temp()
+        print("The maximum temperature is", max_temp)
+       
+        if max_temp <= 0:
+            akbl.set_colors('fixed', 100, '#000000') # black
+            
+        elif max_temp <= 20:
+            akbl.set_colors('fixed', 100, '#02EDFF') # cyan
+            
+        elif max_temp <= 55:
+            akbl.set_colors('fixed', 100, '#0000FF') # blue
+            
+        elif max_temp <= 70:
+            akbl.set_colors('fixed', 100, '#FFE900') # yellow
+            
+        elif max_temp <= 85:
+            akbl.set_colors('fixed', 100, '#FF7800') # orange
+            
+        elif max_temp <= 95:
+            akbl.set_colors('fixed', 100, '#FF0014') # red
+            
+        else:
+            akbl.set_colors('blink', 100, '#FF0014') # red
+
+        time.sleep(5) # seconds
 
 ```
 
-Note that if you want to test the code, you can just create a fake temperature:
+Note that if you want to test the code, you can create a fake temperature:
 
 ```python
-
-else:
-    max_temperature=0
-    while True:
-        #max_temperature=get_max_temp()
-                .
-                .
-                .
-        max_temperature+=10
-        time.sleep(5)
+max_temperature=0
+while True:
+    #
+    # Your code...
+    #
+    
+    max_temperature+=10
+    time.sleep(5)
 ```
 
 ### Changing the keyboard colors by checking the weather
@@ -525,21 +528,27 @@ if __name__ == '__main__':
     else:
         while True:
            
-            max_temperature=get_max_temp()
-            print("The maximum temperature is", max_temperature)
+            max_temp =get_max_temp()
+            print("The maximum temperature is", max_temp)
            
-            if max_temperature <= 0:
+            if max_temp <= 0:
                 akbl.set_colors('fixed', 100, '#000000') # black
-            elif max_temperature <= 20:
+                
+            elif max_temp <= 20:
                 akbl.set_colors('fixed', 100, '#02EDFF') # cyan
-            elif max_temperature <= 55:
+                
+            elif max_temp <= 55:
                 akbl.set_colors('fixed', 100, '#0000FF') # blue
-            elif max_temperature <= 70:
+                
+            elif max_temp <= 70:
                 akbl.set_colors('fixed', 100, '#FFE900') # yellow
-            elif max_temperature <= 85:
+                
+            elif max_temp <= 85:
                 akbl.set_colors('fixed', 100, '#FF7800') # orange
-            elif max_temperature <= 95:
+                
+            elif max_temp <= 95:
                 akbl.set_colors('fixed', 100, '#FF0014') # red
+                
             else:
                 akbl.set_colors('blink', 100, '#FF0014') # red
  
@@ -557,18 +566,18 @@ if __name__ == '__main__':
 # AKBL History
 
 ## History
-AKBL stands for **A**lienware **K**ey**B**oard **L**ights (despite the fact that it controlls much more than the keyboard). And I created my first version in 2014 by hacking PyAlienFX.  
+AKBL stands for **A**lienware **K**ey**B**oard **L**ights (despite the fact that it controls much more than the keyboard). And I created my first version in 2014 by hacking PyAlienFX.  
 
 It was a real hack from PyAlienFX because at that time I did not know about programming, and I only wanted to code a command for turning on and off the keyboard lights. So I mostly did some dirty modifications, and to avoid people blaming PyAlienFX for my code, I released it with a new name.
 
-Then with the time, I realized that PyAlienFX was kinda dead and I was having fun learning python with this software. So I started fixing bugs, removing private content from the interface and creating new features. The major features that I have added are:
+Then with the time, I realized that PyAlienFX was kinda dead, and I was having fun learning python with this software. So I started fixing bugs, removing private content from the interface and creating new features. The major features that I have added are:
 
 + 2014: The Block Testing window. This is for debugging purposes.
-+ 2015: The Daemon which had as main goal to allow the users using the software without being root.
++ 2015: The Daemon, which had as the main goal to allow the users to use the software without being root.
   + 2015: The System Try Indicator.
   + 2015: The Python Bindings. 
 
-+ 2015-2016: (Not available any more):  Custom Debian Repository, Bug report pages, Sharing profiles pages, and chat hosted on my website.  
++ 2015-2016: (Not available anymore): Custom Debian Repository, Bug report pages, Sharing profiles pages, and chat hosted on my website.  
 
 + XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
 
@@ -583,7 +592,7 @@ This software is the work of libre software hackers of the GNU/Linux community. 
 
 * Rafael Senties Martinelli
 
-AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the privative content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX but the code/concept that allows communicating with the hardware stills the same.
+AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the proprietary content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX, but the code/concept that allows communicating with the hardware stills the same.
 
 ## PyALienFX
 
@@ -599,6 +608,6 @@ As far as I know, pyAlienFX is not maintained anymore. They made work the projec
 
 * Wattos
 
-I have no information about AlienFX Lite, but in any case Wattos was the first hacker to understand the USB communication and to make some code to work with. Definitely the most important work since DELL engineers have never help us.
+I have no information about AlienFX Lite, but in any case, Wattos was the first hacker to understand the USB communication and to make some code to work with. Definitely the most important work since DELL engineers have never helped us.
 
 
