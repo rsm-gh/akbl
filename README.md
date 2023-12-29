@@ -91,18 +91,17 @@ The program comes with some default commands for those who don't know about prog
 
 import time, random
 from AKBL.Bindings import Bindings
-   
-AKBLConnection=Bindings()
-r = lambda: random.randint(0,255)
- 
+
+AKBLConnection = Bindings()
+r = lambda: random.randint(0, 255)
+
 while True:
- 
     # Generate a random hex color
-    random_hex_color='#%02X%02X%02X' % (r(),r(),r())   
- 
+    random_hex_color = '#%02X%02X%02X' % (r(), r(), r())
+
     # Set the color in mode fixed
     AKBLConnection.set_colors('fixed', 100, random_hex_color)
- 
+
     # Wait 2 seconds
     time.sleep(2)     
 ```
@@ -127,7 +126,7 @@ The Python bindings allow modifying the computer lights by using other program s
 
 Check if there's a bug concerning your computer model on GitHub, and if it doesn't exist, create one:
 
-  1. Set the title of the bug as: "Add support to (computer model)"
+  1. Set the title of the bug as: "Add support to <computer model>"
   2. Fill the general information of the bug (GNU/Linux distribution, python version etc...)
   3. Add the USB data of your computer:  
    3.1 Open a terminal and execute the `lsusb` command:
@@ -303,16 +302,15 @@ class Bindings:
         """
             Change the colors and the mode of the keyboard.
            
-                + The available modes are: 'fixed', 'morph' and 'blink',
-                  'fixed' and 'blink' only take 'colors1'.
+            + The available modes are: 'fixed', 'morph' and 'blink',
+                'fixed' and 'blink' only take 'colors1'.
                
             + Speed must be an integer. 1 =< speed =< 256
            
             + Colors1 and colors2 can be a single hex_color or a list
-          of hex_colors. If both arguments are used, they must
-          have the same number of items.
+                of hex_colors. If both arguments are used, they must
+                have the same number of items.
         """
- 
 ```
 
 ### Testing all the commands
@@ -321,60 +319,46 @@ This is the example that I use to test the bindings. It should be clear enough t
 
 ```python
 
-#!/usr/bin/python3
+# !/usr/bin/python3
 #
- 
+
 import time
 from AKBL.Bindings import Bindings
- 
-AKBLConnection=Bindings()
- 
-lights_test=True
-profiles_test=True
-colors_test=True
-speed_test=True
-colors_multiple_test=True
- 
+
+AKBLConnection = Bindings()
+
+lights_test = True
+profiles_test = True
+colors_test = True
+speed_test = True
+colors_multiple_test = True
 
 if not AKBLConnection.ping():
     print("The connection with the daemon is off")
     exit()
- 
- 
- """
-     Each command is called as:
-    
-         print( <command_name>, <command> )
-        
-     To check if the commands succeed. You don't
-     really need to do this in your code!
- """
- 
+
 if lights_test:
-     print('lights off', AKBLConnection.set_lights(False))
-     time.sleep(2)
-     print('lights on', AKBLConnection.set_lights(True))
-     time.sleep(2)
-     print('switch lights', AKBLConnection.switch_lights())
- 
- 
+    print('lights off', AKBLConnection.set_lights(False))
+    time.sleep(2)
+    print('lights on', AKBLConnection.set_lights(True))
+    time.sleep(2)
+    print('switch lights', AKBLConnection.switch_lights())
+
 if profiles_test:
     for profile_name in AKBLConnection.get_profile_names():
         print('set profile:', profile_name, AKBLConnection.set_profile(profile_name))
         time.sleep(5)
- 
- 
-color1='#F7F200'
-color2='#0018FF'
- 
+
+color1 = '#F7F200'
+color2 = '#0018FF'
+
 if colors_test:
     print('set_colors blink', AKBLConnection.set_colors('blink', 100, color2))
     time.sleep(5)
     print('set_colors fixed', AKBLConnection.set_colors('fixed', 100, color1))
     time.sleep(5)
     print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
- 
-     
+
 if speed_test:
     print('set_colors blink', AKBLConnection.set_colors('blink', 1, color2))
     time.sleep(5)
@@ -382,17 +366,16 @@ if speed_test:
     time.sleep(5)
     print('set_colors blink', AKBLConnection.set_colors('blink', 256, color2))
     time.sleep(5)
- 
- 
- if colors_multiple_test:
-     colors1='#0600FF'
-     colors2='#FF00E5'
-     
-     print('set_colors multiple blink', AKBLConnection.set_colors('blink', 100, colors2))
-     time.sleep(5)
-     print('set_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
-     time.sleep(5)
-     print('set_colors multiple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
+
+if colors_multiple_test:
+    colors1 = '#0600FF'
+    colors2 = '#FF00E5'
+
+    print('set_colors multiple blink', AKBLConnection.set_colors('blink', 100, colors2))
+    time.sleep(5)
+    print('set_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
+    time.sleep(5)
+    print('set_colors multiple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
 ```
 
 ### Changing the keyboard colors by checking the CPU Temperature
@@ -402,74 +385,75 @@ The following script will change the keyboard colors by checking the CPU Tempera
 ```python
 #!/usr/bin/python3
 #
- 
+
 import os
 import time
 from AKBL.Bindings import Bindings
- 
+
+
 def get_max_temp():
     """
         Get the maximum temperature of the CPU by
         using the bash commands "sensors"
     """
-    output=os.popen('''sensors''')
-    lines= output.readlines()
-   
-    max_temperature=0
-   
+    output = os.popen('''sensors''')
+    lines = output.readlines()
+
+    max_temperature = 0
+
     for line in lines:
         if '°C' in line:
             temp = line.split('+')[1]
             temp = temp.split('°')[0]
             temp = float(temp)
-           
+
             if temp > max_temperature:
-                max_temperature=temp
-           
-    return max_temperature     
- 
+                max_temperature = temp
+
+    return max_temperature
+
+
 def temperature_to_color(temp):
     """
         Map a temperature to a color. Return the color in HEX format.
     """
     if temp <= 0:
-        hex_color = '#000000' # black
-        
+        hex_color = '#000000'  # black
+
     elif temp <= 20:
-        hex_color = '#02EDFF' # cyan
-        
+        hex_color = '#02EDFF'  # cyan
+
     elif temp <= 55:
-        hex_color = '#0000FF' # blue
-        
+        hex_color = '#0000FF'  # blue
+
     elif temp <= 70:
-        hex_color = '#FFE900' # yellow
-        
+        hex_color = '#FFE900'  # yellow
+
     elif temp <= 85:
-        hex_color = '#FF7800' # orange
+        hex_color = '#FF7800'  # orange
 
     else:
-        hex_color = '#FF0014' # red
-        
+        hex_color = '#FF0014'  # red
+
     return hex_color
 
- 
+
 if __name__ == '__main__':
- 
-    akbl=Bindings()
- 
+
+    akbl = Bindings()
+
     if not akbl.ping():
         print("The akbl daemon is off.")
         exit(1)
 
     while True:
-       
         # Get the CPU temperature
-        max_temp=get_max_temp()
+        max_temp = get_max_temp()
         print("The maximum temperature is", max_temp)
-        
+
         # Associate a color
         temp_color = temperature_to_color(max_temp)
-        
+
         # Request AKBL to set the color
         akbl.set_colors('blink', 100, temp_color)
 
