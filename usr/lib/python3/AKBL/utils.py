@@ -18,11 +18,11 @@
 
 
 import os
+import re
 import pwd
 import inspect
-import re
 
-__DEBUG = True  # this variable is actually modified in the SETUP file
+from AKBL.settings import DEBUG
 
 _RED = "\033[1;31m"
 _BLUE = "\033[1;34m"
@@ -63,7 +63,7 @@ def print_warning(message):
 
 
 def print_debug(message=None):
-    if not __DEBUG:  # Displaying debug messages on the production version has been
+    if not DEBUG:  # Displaying debug messages on the production version has been
         return  # removed since printing all the data slows the communication with the hardware.
 
     isp1 = inspect.stack()[1]
@@ -71,10 +71,16 @@ def print_debug(message=None):
     method_name = isp1[3]
 
     if message is None:
-        print('{}_DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN, module_name, method_name, _RESET))
+        print('{}DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN,
+                                                             module_name,
+                                                             method_name,
+                                                             _RESET))
     else:
-        print('{}_DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN, module_name, method_name, _RESET,
-                                                                    str(message).strip()))
+        print('{}DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN,
+                                                                   module_name,
+                                                                   method_name,
+                                                                   _RESET,
+                                                                   str(message).strip()))
 
 
 def print_error(message):

@@ -15,18 +15,12 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-DEBUG='False' 				  # Python boolean
-NUMBER_OF_STEPS=5 			# installation steps
-
 if [ "$EUID" -ne 0 ]
   then echo -e "\e[00;31m The script must be run as root.\e[00m"
   exit
 fi
 
-echo -e "\n"
-echo -e "\e[00;33m *********************************** \e[00m"
-echo -e "\e[00;33m *********** Installing AKBL ******* \e[00m"
-echo -e "\e[00;33m *********************************** \e[00m\n\n"
+NUMBER_OF_STEPS=5 			# installation steps
 
 #
 # Set the scripts permissions
@@ -39,21 +33,24 @@ chmod a+x ./remove
 # Remove previous versions
 #
 echo -e "\e[00;33m[1/$NUMBER_OF_STEPS] Removing previous versions..\e[00m"
-./remove -s
+./remove
 
 #
 # Start the installation
 #
-
 echo -e "\e[00;33m\n[2/$NUMBER_OF_STEPS] Installing the software files...\e[00m"
 
 
 function install_files(){
     
     echo "installing: $1"
-    
+
+    if [ -d "$DIR$1/__pycache__" ]; then
+      rm -rf "$DIR$1/__pycache__"
+    fi
+
     install -d "$1"
-    install -D "$DIR$1/*" "$1"
+    install -D "$DIR$1/"* "$1"
     
 }
 
@@ -97,27 +94,22 @@ install_files "/usr/lib/python3/AKBL/Addons/Indicator"
 install_files "/usr/lib/python3/AKBL/Addons/Indicator/images"
 install_files "/usr/lib/python3/AKBL/Addons/ModelChooser"
 
-#
-#
-echo -e "\e[00;32m Replacing variables...\e[00m"
-sed -i "s/_DEBUG=True/_DEBUG=$DEBUG/g" "/usr/lib/python3/AKBL/utils.py"
-sed -i "s/_DEBUG=False/_DEBUG=$DEBUG/g" "/usr/lib/python3/AKBL/utils.py"
-
-
 ##
 ## Post installation
 ##
 
 echo -e "\e[00;33m\n[3/$NUMBER_OF_STEPS] Creating the python links...\e[00m"
 
-
 PYTHON_VERSIONS=($(ls /usr/lib/ | grep python3))
 for python_version in "${PYTHON_VERSIONS[@]}"; do
+
+  if [[ "$python_version" != "python3" ]]; then
     if [ -d "/usr/lib/$python_version" ]; then
         ln -s /usr/lib/python3/AKBL "/usr/lib/$python_version/AKBL" && echo -e "linked $python_version"
     fi
+  fi
+
 done
-echo ""
 
 echo -e "\e[00;33m\n[4/$NUMBER_OF_STEPS] Choosing the computer model...\e[00m"
 echo "Choose the configuration file from the GTK window that will appear.."
@@ -133,11 +125,3 @@ else
 	echo -e "\e[00;31m Warning: systemd seems to be missing. The daemon will have to be manually launched.\e[00m"
 fi
 echo ""
-
-
-##
-## End
-##
-echo -e "\e[00;33m ************************************* \e[00m"
-echo -e "\e[00;33m ********** AKBL is installed ******** \e[00m"
-echo -e "\e[00;33m ************************************* \e[00m\n"
