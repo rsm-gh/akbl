@@ -428,6 +428,30 @@ def get_max_temp():
            
     return max_temperature     
  
+def temperature_to_color(temp):
+    """
+        Map a temperature to a color. Return the color in HEX format.
+    """
+    if temp <= 0:
+        hex_color = '#000000' # black
+        
+    elif temp <= 20:
+        hex_color = '#02EDFF' # cyan
+        
+    elif temp <= 55:
+        hex_color = '#0000FF' # blue
+        
+    elif temp <= 70:
+        hex_color = '#FFE900' # yellow
+        
+    elif temp <= 85:
+        hex_color = '#FF7800' # orange
+
+    else:
+        hex_color = '#FF0014' # red
+        
+    return hex_color
+
  
 if __name__ == '__main__':
  
@@ -439,32 +463,18 @@ if __name__ == '__main__':
 
     while True:
        
+        # Get the CPU temperature
         max_temp=get_max_temp()
         print("The maximum temperature is", max_temp)
-       
-        if max_temp <= 0:
-            akbl.set_colors('fixed', 100, '#000000') # black
-            
-        elif max_temp <= 20:
-            akbl.set_colors('fixed', 100, '#02EDFF') # cyan
-            
-        elif max_temp <= 55:
-            akbl.set_colors('fixed', 100, '#0000FF') # blue
-            
-        elif max_temp <= 70:
-            akbl.set_colors('fixed', 100, '#FFE900') # yellow
-            
-        elif max_temp <= 85:
-            akbl.set_colors('fixed', 100, '#FF7800') # orange
-            
-        elif max_temp <= 95:
-            akbl.set_colors('fixed', 100, '#FF0014') # red
-            
-        else:
-            akbl.set_colors('blink', 100, '#FF0014') # red
+        
+        # Associate a color
+        temp_color = temperature_to_color(max_temp)
+        
+        # Request AKBL to set the color
+        akbl.set_colors('blink', 100, temp_color)
 
-        time.sleep(5) # seconds
-
+        # Wait and check again in X seconds
+        time.sleep(5)
 ```
 
 Note that if you want to test the code, you can create a fake temperature:
@@ -484,16 +494,10 @@ while True:
 
 I was curious to find if there was command line weather program, and it seems that `inxi` works fine :)
 
-
 ```python
 
-#!/usr/bin/python3
-#
- 
 import os
-import time
-from AKBL.Bindings import Bindings
- 
+
 def get_max_temp():
     """
         Get weather temperature and make a linear
@@ -516,45 +520,10 @@ def get_max_temp():
     # adapt it
     max_temperature=(max_temperature*10)/4
  
-    return max_temperature   
- 
- 
-if __name__ == '__main__':
- 
-    akbl=Bindings()
- 
-    if not akbl.ping():
-        print("The akbl daemon is off.")
-    else:
-        while True:
-           
-            max_temp =get_max_temp()
-            print("The maximum temperature is", max_temp)
-           
-            if max_temp <= 0:
-                akbl.set_colors('fixed', 100, '#000000') # black
-                
-            elif max_temp <= 20:
-                akbl.set_colors('fixed', 100, '#02EDFF') # cyan
-                
-            elif max_temp <= 55:
-                akbl.set_colors('fixed', 100, '#0000FF') # blue
-                
-            elif max_temp <= 70:
-                akbl.set_colors('fixed', 100, '#FFE900') # yellow
-                
-            elif max_temp <= 85:
-                akbl.set_colors('fixed', 100, '#FF7800') # orange
-                
-            elif max_temp <= 95:
-                akbl.set_colors('fixed', 100, '#FF0014') # red
-                
-            else:
-                akbl.set_colors('blink', 100, '#FF0014') # red
- 
-            time.sleep(5) # seconds   
-           
+    return max_temperature
 ```
+
+so you can replace the function `get_max_temp` of the previous code, and it will now change the colors regarding the weather.
 
 # Development Documentation
 
