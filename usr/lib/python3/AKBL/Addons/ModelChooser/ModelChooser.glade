@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 
+<!-- Generated with glade 3.40.0 
 
 Copyright (C) 2014 - 2018 RSM
 
@@ -24,7 +24,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
   <!-- interface-license-type gplv3 -->
   <!-- interface-name alienware-kbl -->
   <!-- interface-copyright 2014 - 2018 RSM -->
-  <object class="GtkListStore" id="liststore_computer_models">
+  <object class="GtkListStore" id="liststore_hardware_comp">
     <columns>
       <!-- column-name Model -->
       <column type="gchararray"/>
@@ -32,22 +32,33 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gboolean"/>
       <!-- column-name is_radio -->
       <column type="gboolean"/>
-      <!-- column-name is_sensitive -->
-      <column type="gboolean"/>
     </columns>
     <data>
       <row>
         <col id="0" translatable="yes">M14XR1</col>
         <col id="1">True</col>
         <col id="2">True</col>
-        <col id="3">False</col>
       </row>
       <row>
         <col id="0" translatable="yes">M14XR2
 </col>
         <col id="1">False</col>
         <col id="2">True</col>
-        <col id="3">False</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore_hardware_not_comp">
+    <columns>
+      <!-- column-name Model -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">M14XR1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">M14XR2
+</col>
       </row>
     </data>
   </object>
@@ -55,193 +66,49 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="text" translatable="yes">THIS IS SOME AMAZING Text ! :)</property>
   </object>
   <object class="GtkWindow" id="window_model_chooser">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">AKBL Model Chooser</property>
-    <property name="window_position">center</property>
-    <property name="default_width">350</property>
-    <property name="default_height">300</property>
+    <property name="window-position">center</property>
+    <property name="default-width">500</property>
+    <property name="default-height">300</property>
     <property name="icon">../GUI/images/icon.png</property>
     <signal name="destroy" handler="on_window_destroy" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
-        <property name="margin_top">5</property>
-        <property name="margin_bottom">5</property>
+        <property name="can-focus">False</property>
+        <property name="margin-left">5</property>
+        <property name="margin-right">5</property>
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">5</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_bottom">15</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">5</property>
-                <property name="column_spacing">5</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_right">10</property>
-                    <property name="label" translatable="yes">This computer is automatically detected as a:</property>
-                    <property name="wrap">True</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0.5</property>
-                    <attributes>
-                      <attribute name="font-desc" value="Sans Bold 10"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_detected_as">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_bottom">10</property>
-                    <property name="label" translatable="yes">label_detected_as</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0.5</property>
-                    <attributes>
-                      <attribute name="font-desc" value="Sans Bold 10"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_right">10</property>
-                    <property name="label" translatable="yes">But the software is currently configured as a:</property>
-                    <property name="wrap">True</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0.5</property>
-                    <attributes>
-                      <attribute name="font-desc" value="Sans Bold 10"/>
-                      <attribute name="foreground" value="#8a8ae2e23434"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_set_as">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_bottom">10</property>
-                    <property name="label" translatable="yes">label_set_as</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0.5</property>
-                    <attributes>
-                      <attribute name="font-desc" value="Sans Bold 10"/>
-                      <attribute name="foreground" value="#8a8ae2e23434"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">15</property>
-                <property name="margin_bottom">5</property>
-                <property name="label" translatable="yes">If that's not the configuration that you want to use, modify it from the following list:</property>
-                <property name="wrap">True</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="height_request">150</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="treeview_computer_models">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="model">liststore_computer_models</property>
-                    <property name="enable_grid_lines">horizontal</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection"/>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <property name="sizing">autosize</property>
-                        <property name="title" translatable="yes">Model</property>
-                        <property name="expand">True</property>
-                        <property name="sort_indicator">True</property>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <property name="sizing">fixed</property>
-                        <property name="fixed_width">65</property>
-                        <property name="min_width">65</property>
-                        <property name="max_width">65</property>
-                        <property name="title" translatable="yes">Enabled</property>
-                        <property name="clickable">True</property>
-                        <property name="alignment">0.5</property>
-                        <child>
-                          <object class="GtkCellRendererToggle">
-                            <signal name="toggled" handler="_on_model_change_clicked" swapped="no"/>
-                          </object>
-                          <attributes>
-                            <attribute name="sensitive">3</attribute>
-                            <attribute name="active">1</attribute>
-                            <attribute name="radio">2</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
+            <property name="can-focus">False</property>
+            <property name="margin-top">15</property>
+            <property name="margin-bottom">5</property>
+            <property name="label" translatable="yes">For some computers, the hardware is compatible with multiple configurations. If it is the case for your computer, please select the one that you want to use.
+
+If no option is available, it means that AKBL is not yet compatible with your hardware. In that case you can create a request on GitHub.</property>
+            <property name="wrap">True</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">15</property>
+            <property name="margin-bottom">5</property>
+            <property name="label" translatable="yes">Hardware compatible:</property>
+            <property name="wrap">True</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -250,27 +117,146 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
+          <object class="GtkScrolledWindow">
+            <property name="height-request">150</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTreeView" id="treeview_hardware_comp">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="model">liststore_hardware_comp</property>
+                <property name="search-column">0</property>
+                <property name="enable-grid-lines">horizontal</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="sizing">autosize</property>
+                    <property name="title" translatable="yes">Model</property>
+                    <property name="expand">True</property>
+                    <property name="sort-indicator">True</property>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="sizing">fixed</property>
+                    <property name="fixed-width">65</property>
+                    <property name="min-width">65</property>
+                    <property name="max-width">65</property>
+                    <property name="title" translatable="yes">Enabled</property>
+                    <property name="clickable">True</property>
+                    <property name="alignment">0.5</property>
+                    <child>
+                      <object class="GtkCellRendererToggle">
+                        <signal name="toggled" handler="_on_model_change_clicked" swapped="no"/>
+                      </object>
+                      <attributes>
+                        <attribute name="active">1</attribute>
+                        <attribute name="radio">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">15</property>
+            <property name="margin-bottom">5</property>
+            <property name="label" translatable="yes">Not Hardware compatible:</property>
+            <property name="wrap">True</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="height-request">150</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="shadow-type">in</property>
+            <child>
+              <object class="GtkTreeView" id="treeview_hardware_not_comp">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="model">liststore_hardware_not_comp</property>
+                <property name="search-column">0</property>
+                <property name="enable-grid-lines">horizontal</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="sizing">autosize</property>
+                    <property name="title" translatable="yes">Model</property>
+                    <property name="expand">True</property>
+                    <property name="sort-indicator">True</property>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkExpander">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="resize_toplevel">True</property>
+            <property name="can-focus">True</property>
+            <property name="margin-top">10</property>
+            <property name="resize-toplevel">True</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">5</property>
+                <property name="can-focus">False</property>
+                <property name="margin-top">5</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
-                    <property name="propagate_natural_width">True</property>
-                    <property name="propagate_natural_height">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="shadow-type">in</property>
+                    <property name="propagate-natural-width">True</property>
+                    <property name="propagate-natural-height">True</property>
                     <child>
                       <object class="GtkTextView">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="buffer">textbuffer_computer_data</property>
                       </object>
                     </child>
@@ -286,7 +272,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
             <child type="label">
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Detected USB data</property>
               </object>
             </child>
@@ -294,27 +280,27 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">15</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">15</property>
             <child>
               <object class="GtkButton">
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
                 <signal name="clicked" handler="_on_button_close_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -322,7 +308,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">6</property>
           </packing>
         </child>
       </object>

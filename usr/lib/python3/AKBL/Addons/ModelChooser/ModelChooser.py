@@ -76,26 +76,15 @@ class ModelChooser(Gtk.Window):
         builder.connect_signals(self)
 
         self.window_model_chooser = builder.get_object('window_model_chooser')
-        self.treeview_computer_models = builder.get_object('treeview_computer_models')
-        self.liststore_computer_models = builder.get_object('liststore_computer_models')
-        self.label_detected_as = builder.get_object('label_detected_as')
-        self.label_set_as = builder.get_object('label_set_as')
+        self.treeview_hardware_comp = builder.get_object('treeview_hardware_comp')
+        self.liststore_hardware_comp = builder.get_object('liststore_hardware_comp')
+        self.treeview_hardware_not_comp = builder.get_object('treeview_hardware_not_comp')
+        self.liststore_hardware_not_comp = builder.get_object('liststore_hardware_not_comp')
         self.textbuffer_computer_data = builder.get_object('textbuffer_computer_data')
 
-        """
-            
-        """
-        #
-        #
+        self.__default_computer_name = self.__get_default_computer_name()
 
-        current_computer = self.__get_default_computer_name()
-
-        self.__update_detected_as()
-
-        self.__default_computer_model = current_computer
-        self.label_set_as.set_text(current_computer)
-
-        self.__update_models_liststore()
+        self.__populate_liststores()
         self.textbuffer_computer_data.set_text(get_alienware_device_info())
         print("The current configuration is: " + self.__get_default_computer_name())
 
@@ -104,43 +93,35 @@ class ModelChooser(Gtk.Window):
         """
         self.window_model_chooser.show_all()
 
-    def __update_models_liststore(self):
+    def __populate_liststores(self):
 
-        default_computer_name = self.__get_default_computer_name()
+        self.liststore_hardware_comp.clear()
+        self.liststore_hardware_not_comp.clear()
+
         driver = Driver()
-
-        self.liststore_computer_models.clear()
         for computer in computer_factory.get_computers():
-            is_selected = computer.name == default_computer_name
             driver.load_device(computer.vendor_id, computer.product_id)
 
-            self.liststore_computer_models.append([computer.name, is_selected, True, driver.has_device()])
-
-    def __update_detected_as(self):
-        driver = Driver()
-        driver.find_device()
-
-        if driver.has_device():
-            self.label_detected_as.set_text(driver.computer.name)
-        else:
-            self.label_detected_as.set_text(_EMPTY_MODEL)
+            if driver.has_device():
+                self.liststore_hardware_comp.append(
+                    [computer.name, computer.name == self.__default_computer_name, True])
+            else:
+                self.liststore_hardware_not_comp.append([computer.name])
 
     def _on_model_change_clicked(self, _, clicked_row):
 
         clicked_row = int(clicked_row)
 
-        for i, _ in enumerate(self.liststore_computer_models):
+        for i, _ in enumerate(self.liststore_hardware_comp):
 
-            iter_row = self.liststore_computer_models.get_iter(i)
+            iter_row = self.liststore_hardware_comp.get_iter(i)
 
             if i != clicked_row:
-                self.liststore_computer_models.set_value(iter_row, 1, False)
+                self.liststore_hardware_comp.set_value(iter_row, 1, False)
             else:
-                self.liststore_computer_models.set_value(iter_row, 1, True)
-                computer_model = self.liststore_computer_models.get_value(iter_row, 0)
+                self.liststore_hardware_comp.set_value(iter_row, 1, True)
+                computer_model = self.liststore_hardware_comp.get_value(iter_row, 0)
                 computer_factory.set_default_computer(computer_model)
-
-        self.label_set_as.set_text(self.__get_default_computer_name())
 
     @staticmethod
     def __get_default_computer_name():
@@ -157,7 +138,7 @@ class ModelChooser(Gtk.Window):
         #
         # Do not exit if no computer has been set (warn the user)
         #
-        if self.label_set_as.get_text() == _EMPTY_MODEL:
+        if self.__get_default_computer_name() == _EMPTY_MODEL:
             if gtk_dialog_question(None, _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, icon=_SOFTWARE_PATHS._small_icon_file):
                 return
 
@@ -165,14 +146,14 @@ class ModelChooser(Gtk.Window):
         # In case that the computer is the same (as previously used), update the file
         #
 
-        if self.__default_computer_model == self.__get_default_computer_name():
+        if self.__default_computer_name == self.__get_default_computer_name():
 
-            for i, _ in enumerate(self.liststore_computer_models):
+            for i, _ in enumerate(self.liststore_hardware_comp):
 
-                iter_row = self.liststore_computer_models.get_iter(i)
+                iter_row = self.liststore_hardware_comp.get_iter(i)
 
-                if self.liststore_computer_models.get_value(iter_row, 1):
-                    computer_model = self.liststore_computer_models.get_value(iter_row, 0)
+                if self.liststore_hardware_comp.get_value(iter_row, 1):
+                    computer_model = self.liststore_hardware_comp.get_value(iter_row, 0)
                     computer_factory.set_default_computer(computer_model)
 
                     break
@@ -183,10 +164,8 @@ class ModelChooser(Gtk.Window):
 
         Gtk.main_quit()
 
-    @staticmethod
-    def on_window_destroy(*_):
-        Gtk.main_quit()
-
+    def on_window_destroy(self, *_):
+        self._on_button_close_clicked()
 
 def main():
     if getuser() != 'root':
