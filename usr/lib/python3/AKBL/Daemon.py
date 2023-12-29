@@ -29,24 +29,9 @@ from AKBL.Engine.Controller import Controller
 from AKBL.utils import getuser, print_warning, print_error, string_is_hex_color
 
 
-class ConnectDaemon:
-
-    def __init__(self):
-        self.__daemon = Pyro4.Daemon()
-        self.__paths = Paths()
-
-        uri = self.__daemon.register(Daemon(self))
-        with open(self.__paths._daemon_pyro_file, encoding='utf-8', mode='wt') as f:
-            f.write(str(uri))
-
-        self.__daemon.requestLoop()
-
-
 class Daemon:
 
-    def __init__(self, parent):
-
-        self.__parent = parent
+    def __init__(self):
 
         driver = Driver()
         driver.load_default_device()
@@ -394,6 +379,22 @@ class Daemon:
 def main():
     if getuser() != 'root':
         print(TEXT_ONLY_ROOT)
-    else:
-        os.chdir(os.path.dirname(os.path.realpath(__file__)))
-        _ = ConnectDaemon()
+        exit(1)
+
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))  # todo: why is this necessary?
+
+    akbl_daemon = Daemon()
+    pyro_daemon = Pyro4.Daemon()
+    pyro_uri = str(pyro_daemon.register(akbl_daemon))
+    pyro_uri_file = Paths()._daemon_pyro_file
+    print("Registering URI=", pyro_uri)
+    print("Updating: ", pyro_uri)
+    with open(pyro_uri_file, encoding='utf-8', mode='wt') as f:
+        f.write(pyro_uri)
+
+    pyro_daemon.requestLoop()
+
+
+if __name__ == "__main__":
+    main()
+    print("EXIT")
