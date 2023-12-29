@@ -1,17 +1,6 @@
 
-Highlights:
-
-* 2022: **AKBL is not developed anymore.** I stopped developing the software because I changed my latptop computer. I cannot use or test the software.
-* 2019: Many users with recent alienware computers are facing issues, probably because DELL has changed the USB protocol, and it is different from the old computers. Such computers are not supported. Some interesting information and code can be found in the open issues.
-
-Best regards,  
-rsm~
-
-----
-----
-
 # Index
-  
+  * [Highlights](https://github.com/rsm-gh/akbl#highlights)
   * [Software Features](https://github.com/rsm-gh/akbl#about)
     * [Graphical Interface](https://github.com/rsm-gh/akbl#graphical-interface)
     * [System Tray Indicator](https://github.com/rsm-gh/akbl#system-tray-indicator)
@@ -43,7 +32,10 @@ rsm~
   * [About & Credits](https://github.com/rsm-gh/akbl#credits)
   
 
+# Highlights
 
+* 2022: **AKBL is not actively developed.** I stopped developing the software because I changed my latptop computer. I cannot use or test the software.
+* 2019: Many users with recent alienware computers are facing issues, probably because DELL has changed the USB protocol, and it is different from the old computers. Such computers are not supported. Some interesting information and code can be found in the open issues.
 
 # Software Features
 
