@@ -20,11 +20,11 @@
 
 from AKBL.utils import print_warning
 
-class Computer(object):
+class Computer:
 
     def __init__(self):
 
-        self.name = 'Default Configuration'
+        self.name = '<Default>'
         self.default_mode = 'fixed'
         self.configuration_path = ""
         self.__regions = []

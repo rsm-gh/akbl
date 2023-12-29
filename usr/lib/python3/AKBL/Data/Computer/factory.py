@@ -51,9 +51,9 @@ def get_computer_by_path(file_path):
 
             if value != "":
                 if key in ("NAME", "DEFAULT_MODE"):
-                    setattr(computer, key, value)
+                    setattr(computer, key.lower(), value)
                 else:
-                    setattr(computer, key, int(value))
+                    setattr(computer, key.lower(), int(value))
 
     for section in config.sections():
         if section.startswith("REGION"):
@@ -126,7 +126,7 @@ def set_default_computer(computer_name):
     print_warning("Computer model '{}' not found.".format(computer_name))
 
 
-def get_computer(name):
+def get_computer_by_name(name):
     for computer in get_computers():
         if computer.name == name:
             return computer

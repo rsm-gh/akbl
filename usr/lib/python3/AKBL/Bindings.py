@@ -22,9 +22,8 @@ import Pyro4
 import getpass
 from traceback import format_exc
 
-from AKBL.utils import print_error, print_warning
 from AKBL.Paths import Paths
-
+from AKBL.utils import print_error, print_warning
 
 class Bindings:
 
@@ -50,8 +49,7 @@ class Bindings:
         if self.__address is not None and self.__pyro is not None:
 
             try:
-                response = getattr(self.__pyro, command)(*args)
-                return response
+                return getattr(self.__pyro, command)(*args)
 
             except Exception:
 
@@ -73,12 +71,10 @@ class Bindings:
 
                 except Exception:
                     print_error("NO TRACEBACK: Command={}\n".format(command))
-
-                return False
-
         else:
             print_warning("The daemon is off.")
-            return False
+
+        return None
 
     def ping(self):
         """
