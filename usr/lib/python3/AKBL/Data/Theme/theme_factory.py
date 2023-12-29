@@ -48,13 +48,19 @@ def load_profiles(computer, folder_path):
     # Add the default profile
     #
     if len(_AVAILABLE_THEMES.keys()) <= 0:
-        create_default_profile(computer, folder_path)
+        theme = create_default_profile(computer, folder_path)
+    else:
+        theme = list(_AVAILABLE_THEMES.values())[0]
+
+    return theme
 
 
 def create_default_profile(computer, theme_path):
     theme = Theme(computer)
     copy_theme(theme, 'Default', theme_path + 'Default.cfg')
     theme.save()
+
+    return theme
 
 
 def get_last_configuration():

@@ -35,7 +35,8 @@ from AKBL.Bindings import Bindings
 from AKBL.CCParser import CCParser
 from AKBL.Paths import Paths
 from AKBL.Data.Theme import theme_factory
-from AKBL.Data.Computer.factory import get_computer
+from AKBL.Data.Computer.Computer import Computer
+import AKBL.Data.Computer.factory as computer_factory
 from AKBL.Addons.GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
 from AKBL.Addons.GUI.ZoneWidget import ZoneWidget
 from AKBL.Addons.gtk_utils import (gtk_dialog_question,
@@ -50,9 +51,8 @@ class GUI(Gtk.Window):
 
     def __init__(self):
 
-        self.__akbl = Bindings()
+        self.__bindings = Bindings()
         self.__paths = Paths()
-        self.__theme = None
         self.__response = None
         self.__speed = -1
 
@@ -122,11 +122,15 @@ class GUI(Gtk.Window):
 
         #   Load a configuration
         #
-        computer_name = self.__akbl.get_computer_name()
-        self.__computer = get_computer(computer_name)
-        self.label_computer_model.set_text(computer_name)
+        computer_name = self.__bindings.get_computer_name()
+        self.__computer = computer_factory.get_computer_by_name(computer_name)
+        if self.__computer is None:
+            self.__computer = Computer()
 
-        theme_factory.load_profiles(self.__computer, self.__paths._profiles_dir)
+        self.label_computer_model.set_text(self.__computer.name)
+
+        self.__theme = theme_factory.load_profiles(self.__computer, self.__paths._profiles_dir)
+
         self.populate_liststore_profiles()
 
         """
@@ -137,6 +141,7 @@ class GUI(Gtk.Window):
         #
         self.__menu_turn_off_areas = Gtk.Menu()
         self.__areas_description_dict = dict((area.description, area.name) for area in self.__theme.get_areas())
+
         active_configuration_areas = self.__ccp.get_str_defval('areas_to_keep_on', '').split('|')
 
         for description, area in sorted(self.__areas_description_dict.items(), key=lambda x: x[0]):
@@ -152,7 +157,7 @@ class GUI(Gtk.Window):
         self.menuitem_off_areas.set_submenu(self.__menu_turn_off_areas)
 
         # Extra stuff
-        #        
+        #
         self.horizontal_main_box.add(self.__color_chooser_toolbar)
         self.horizontal_main_box.reorder_child(self.__color_chooser_toolbar, 0)
 
@@ -230,7 +235,6 @@ class GUI(Gtk.Window):
         row, _ = theme_factory.get_last_configuration()
 
         self.combobox_profiles.set_active(row)
-
         self.__speed = self.__theme.get_speed()
 
     def delete_current_configuration(self):
@@ -254,13 +258,13 @@ class GUI(Gtk.Window):
             os.remove(self.__theme.path)
 
         if len(theme_factory._AVAILABLE_THEMES.keys()) == 0:
-            theme_factory.create_default_profile(self.__computer)
+            theme_factory.create_default_profile(self.__computer, self.__paths._profiles_dir)
 
         Gdk.threads_enter()
         self.populate_liststore_profiles()
         Gdk.threads_leave()
 
-        self.__akbl.reload_configurations()
+        self.__bindings.reload_configurations()
 
         sleep(0.5)
 
@@ -304,7 +308,7 @@ class GUI(Gtk.Window):
         self.label_user_message.set_text(texts.TEXT_SHUTTING_LIGHTS_OFF)
         Gdk.threads_leave()
 
-        self.__akbl.set_lights(False)
+        self.__bindings.set_lights(False)
 
         Gdk.threads_enter()
         self.label_user_message.set_text('')
@@ -322,7 +326,7 @@ class GUI(Gtk.Window):
         theme_factory._AVAILABLE_THEMES[clone.name] = clone
         self.populate_liststore_profiles()
 
-        self.__akbl.reload_configurations()
+        self.__bindings.reload_configurations()
 
     def illuminate_keyboard(self):
 
@@ -339,9 +343,9 @@ class GUI(Gtk.Window):
             print_error(
                 'It was not possible to os.utime the profile path: \n{}\n{}'.format(self.__theme.path, format_exc()))
 
-        self.__akbl.reload_configurations()
+        self.__bindings.reload_configurations()
 
-        self.__akbl.set_lights(True)
+        self.__bindings.set_lights(True)
 
         Gdk.threads_enter()
         self.label_user_message.set_text('')
@@ -553,3 +557,7 @@ def main():
     Gdk.threads_init()
     _ = GUI()
     Gtk.main()
+
+
+if __name__ == "__main__":
+    main()
