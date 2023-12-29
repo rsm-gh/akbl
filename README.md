@@ -480,13 +480,18 @@ if __name__ == '__main__':
 Note that if you want to test the code, you can create a fake temperature:
 
 ```python
-max_temperature=0
+max_temp=0
 while True:
+    
+    # Get the CPU temperature
+    #max_temp=get_max_temp()
+    print("The maximum temperature is", max_temp)
+    
     #
-    # Your code...
+    # The rest of the code...
     #
     
-    max_temperature+=10
+    max_temp+=10
     time.sleep(5)
 ```
 
