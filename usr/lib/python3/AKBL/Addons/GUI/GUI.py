@@ -162,10 +162,10 @@ class GUI(Gtk.Window):
 
         self.populate_box_areas()
 
-        self.window_root.show_all()
-
         if not self.checkbutton_profile_buttons.get_active():
             self.box_profile_buttons.hide()
+
+        self.window_root.show_all()
 
     def populate_box_areas(self):
         """
@@ -237,7 +237,8 @@ class GUI(Gtk.Window):
 
         if self.checkbutton_delete_warning.get_active():
             Gdk.threads_enter()
-            if not gtk_dialog_question(self.window_root, texts.TEXT_CONFIRM_DELETE_CONFIGURATION,
+            if not gtk_dialog_question(self.window_root,
+                                       texts.TEXT_CONFIRM_DELETE_CONFIGURATION,
                                        icon=self.__paths._small_icon_file):
                 Gdk.threads_leave()
                 return
@@ -477,7 +478,8 @@ class GUI(Gtk.Window):
             self.populate_liststore_profiles()
 
     def on_imagemenuitem_export_activate(self, *_):
-        folder_path = gtk_folder_chooser(parent=self.window_root, title=texts.TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
+        folder_path = gtk_folder_chooser(parent=self.window_root,
+                                         title=texts.TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
                                          icon_path=self.__paths._small_icon_file)
 
         if folder_path:
@@ -547,10 +549,6 @@ class GUI(Gtk.Window):
 
 
 def main():
-    if not Bindings().ping():
-        gtk_dialog_info(None, texts.TEXT_GUI_CANT_DAEMON_OFF, icon=Paths()._small_icon_file)
-        exit(1)
-
     GObject.threads_init()
     Gdk.threads_init()
     _ = GUI()
