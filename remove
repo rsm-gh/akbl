@@ -25,36 +25,40 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd "$DIR"
 
 if [ -f /bin/systemctl ]; then
-	echo -e "\n\033[0;32mDisabling the systemd daemon...\033[0m"
+	echo -e "\n\033[0;32m Disabling the systemd daemon...\033[0m"
     systemctl stop akbl
     systemctl disable akbl
     echo ""
 fi
 
-echo -e "\033[0;32mRemoving the software links..\033[0m"
+echo -e "\033[0;32m Removing the python links..\033[0m"
 
 AKBL_PYTHON_VERSIONS=($(ls /usr/lib/ | grep python3))
 
 for python_version in "${AKBL_PYTHON_VERSIONS[@]}"; do
 
-	if [[ -L "/usr/lib/$python_version/AKBL" ]]; then
-	  rm -f "/usr/lib/$python_version/AKBL" && echo -e "$python_version link removed"
-	fi
+  if [[ "$python_version" != "python3" ]]; then
+
+    if [[ -L "/usr/lib/$python_version/AKBL" ]]; then
+      rm -f "/usr/lib/$python_version/AKBL" && echo -e "/usr/lib/$python_version/AKBL link removed"
+    fi
 
     if [ -f "/usr/lib/$python_version/AKBL" ] || [ -f "/usr/lib/$python_version/AKBL.py" ]; then
-        rm -f "/usr/lib/$python_version/AKBL" && echo -e "$python_version file removed"
-    fi 
-    
-    if [  -d "/usr/lib/$python_version/AKBL" ] || [ -d "/usr/lib/$python_version/AKBL.py" ]; then
-        rm -rf "/usr/lib/$python_version/AKBL.py" && echo -e "$python_version directory removed"
+        rm -f "/usr/lib/$python_version/AKBL" && echo -e "/usr/lib/$python_version/AKBL file removed"
     fi
+
+    if [ -d "/usr/lib/$python_version/AKBL" ] || [ -d "/usr/lib/$python_version/AKBL.py" ]; then
+        rm -rf "/usr/lib/$python_version/AKBL.py" && echo -e "/usr/lib/$python_version/AKBL directory removed"
+    fi
+
+  fi
     
 done
 echo ""
 
 
 
-echo -e "\033[0;32mRemoving the software files and directories..\033[0m"
+echo -e "\033[0;32m Removing the software files and directories..\033[0m"
 
 
 function remove_file(){
@@ -81,10 +85,3 @@ remove_file "/usr/lib/systemd/system/AKBL.service"
 remove_dir  "/usr/share/AKBL"
 remove_dir  "/usr/share/doc/AKBL"
 remove_dir  "/usr/lib/python3/AKBL"
-
-
-
-
-if [ "$1" != "-s" ]; then
-	echo -e "\e[00;32mAKBL has been removed.\e[00m"
-fi
