@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2016, 2018  Rafael Senties Martinelli
+#  Copyright (C) 2015-2016, 2018, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,123 +14,108 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 import gi
+
 gi.require_version('Gtk', '3.0')
 gi.require_version('AyatanaAppIndicator3', '0.1')
 from gi.repository import Gtk, GObject, Gdk
-from gi.repository import AyatanaAppIndicator3 as appindicator
+from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 import os
 import threading
 import Pyro4
 from time import sleep
 
-
 from AKBL.utils import print_error
 from AKBL.Bindings import Bindings
 from AKBL.Paths import Paths
-from AKBL.texts import (TEXT_PROFILES, 
-                        TEXT_START_THE_GUI, 
-                        TEXT_SWICH_STATE, 
+from AKBL.texts import (TEXT_PROFILES,
+                        TEXT_START_THE_GUI,
+                        TEXT_SWITCH_STATE,
                         TEXT_EXIT)
 
-
-AKBL_CONECTION = Bindings()
-
-def daemon_is_active():
-    if AKBL_CONECTION.ping():
-        return True
-
-    return False
 
 class ConnectIndicator:
 
     def __init__(self):
-        
-        self.conected = False
-        self.daemon = Pyro4.Daemon()
-        self.uri = self.daemon.register(Indicator(self))
-        
-        threading.Thread(target=self.pycore_thread).start()
+        self.__akbl = Bindings()
+        self.__indicator = Indicator(self, self.__akbl)
+        self.__pyro_daemon = Pyro4.Daemon()
+        self.__uri = self.__pyro_daemon.register(self.__indicator)
+
+        threading.Thread(target=self.__pyro_thread).start()
         threading.Thread(target=self.connect).start()
 
-    def pycore_thread(self):
-        self.daemon.requestLoop()
-
     def connect(self):
+        # Todo: read the return status of indicator_start
         sleep(0.5)
-        self.conected = AKBL_CONECTION._command('indicator_init', self.uri)
+        return self.__akbl.indicator_start(self.__uri)
+
+    def shutdown(self):
+        self.__pyro_daemon.shutdown()
+
+    def __pyro_thread(self):
+        self.__pyro_daemon.requestLoop()
 
 
 class Indicator:
 
-    def __init__(self, self_main):
-        self._ = self_main
+    def __init__(self, parent, akbl=None):
 
-        self.paths = Paths()
+        self.__parent = parent
+        self.__paths = Paths()
+        if akbl is None:
+            self.__akbl = Bindings()
+        else:
+            self.__akbl = akbl
 
         # Status variables for the loop
         #
-        self.current_code = None
-        self.check_daemon = True
+        self.__current_code = None
+        self.__check_daemon = True
 
         # GUI stuff
         #
-        self.indicator = appindicator.Indicator.new_with_path(
+        self.__app_indicator = AppIndicator.Indicator.new_with_path(
             'akbl-indicator',
-            self.paths._indicator_no_daemon_icon,
-            appindicator.IndicatorCategory.APPLICATION_STATUS,
+            self.__paths._indicator_no_daemon_icon,
+            AppIndicator.IndicatorCategory.APPLICATION_STATUS,
             os.path.dirname(os.path.realpath(__file__)))
 
-        self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+        self.__app_indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
-        self.menu = Gtk.Menu()
+        self.__menu = Gtk.Menu()
 
-        self.profiles_menu = Gtk.MenuItem(label=TEXT_PROFILES)
-        self.menu.append(self.profiles_menu)
-        self.submenu_profiles = Gtk.Menu()
-        self.profiles_menu.set_submenu(self.submenu_profiles)
+        self.__profiles_menu = Gtk.MenuItem(label=TEXT_PROFILES)
+        self.__menu.append(self.__profiles_menu)
+        self.__submenu_profiles = Gtk.Menu()
+        self.__profiles_menu.set_submenu(self.__submenu_profiles)
 
         item = Gtk.MenuItem(label=TEXT_START_THE_GUI)
-        item.connect('activate', self.on_menuitem_gui)
-        self.menu.append(item)
+        item.connect('activate', self.__on_menuitem_gui)
+        self.__menu.append(item)
 
-        self.switch_state = Gtk.MenuItem(label=TEXT_SWICH_STATE)
-        self.switch_state.connect('activate', self.on_menuitem_change)
-        self.menu.append(self.switch_state)
+        self.__submenu_switch_state = Gtk.MenuItem(label=TEXT_SWITCH_STATE)
+        self.__submenu_switch_state.connect('activate', self.__on_menuitem_change)
+        self.__menu.append(self.__submenu_switch_state)
 
         item = Gtk.MenuItem(TEXT_EXIT)
-        item.connect('activate', self.on_menuitem_exit)
-        self.menu.append(item)
+        item.connect('activate', self.__on_menuitem_exit)
+        self.__menu.append(item)
 
-        self.menu.show_all()
-        self.indicator.set_menu(self.menu)
+        self.__menu.show_all()
+        self.__app_indicator.set_menu(self.__menu)
 
         self.set_code(666)
-        threading.Thread(target=self.daemon_check).start()
+        threading.Thread(target=self.__daemon_check).start()
 
-    def daemon_check(self):
-        
-        while self.check_daemon:
+    """
+        Public & Pyro Methods
+    """
 
-            if daemon_is_active():
-                
-                if self.current_code == 666:
-                    self._.connect()
-                    AKBL_CONECTION._command('indicator_get_state')
-
-            elif self.current_code != 666:
-                GObject.idle_add(self.set_code, 666)
-                
-            else:
-                AKBL_CONECTION.reload_address(False)
-                
-                
-            sleep(1)
-            
     @Pyro4.expose
     def ping(self):
         pass
@@ -147,33 +132,35 @@ class Indicator:
 
         try:
             val = int(val)
-        except:
+        except Exception:
             print("AKBL-Indicator: Wrong code {}".format(val))
             return
 
-        if val != self.current_code:
-            self.current_code = val
+        if val == self.__current_code:
+            return
 
-            if val in (100, 150):
-                if val == 100:
-                    self.indicator.set_icon(self.paths._indicator_on_icon_file)
+        self.__current_code = val
 
-                elif val == 150:
-                    self.indicator.set_icon(self.paths._indicator_off_icon_file)
+        if val in (100, 150):
+            if val == 100:
+                self.__app_indicator.set_icon(self.__paths._indicator_on_icon_file)
 
-                for children in self.menu.get_children():
-                    children.set_sensitive(True)
+            elif val == 150:
+                self.__app_indicator.set_icon(self.__paths._indicator_off_icon_file)
 
-            elif val == 666:
-                self.indicator.set_icon(self.paths._indicator_no_daemon_icon)
-                self.switch_state.set_sensitive(False)
-                self.profiles_menu.set_sensitive(False)
+            for children in self.__menu.get_children():
+                children.set_sensitive(True)
+
+        elif val == 666:
+            self.__app_indicator.set_icon(self.__paths._indicator_no_daemon_icon)
+            self.__submenu_switch_state.set_sensitive(False)
+            self.__profiles_menu.set_sensitive(False)
 
     @Pyro4.expose
     def load_profiles(self, items, current, state):
-        
-        for children in self.submenu_profiles.get_children():
-            self.submenu_profiles.remove(children)
+
+        for children in self.__submenu_profiles.get_children():
+            self.__submenu_profiles.remove(children)
 
         for item in sorted(items):
             submenu = Gtk.CheckMenuItem(label=item)
@@ -182,41 +169,67 @@ class Indicator:
                 submenu.set_active(True)
 
             submenu.connect('toggled', self.set_profile, item)
-            self.submenu_profiles.append(submenu)
-           
-        
-        self.submenu_profiles.show_all()
+            self.__submenu_profiles.append(submenu)
+
+        self.__submenu_profiles.show_all()
 
     @Pyro4.expose
-    def set_profile(self, widget, item):
-        AKBL_CONECTION.set_profile(item)
+    def set_profile(self, _, item):
+        self.__akbl.set_profile(item)
 
-    def on_menuitem_off(self, widget, data=None):
-        AKBL_CONECTION.set_lights(False)
+    """
+        Private methods
+    """
 
-    def on_menuitem_on(self, widget, data=None):
-        AKBL_CONECTION.set_lights(True)
+    def __daemon_check(self):
 
-    def on_menuitem_gui(self, widget, data=None):
-        os.system('''setsid setsid akbl''')
+        while self.__check_daemon:
 
-    def on_menuitem_change(self, widget, data=None):
-        AKBL_CONECTION.switch_lights()
+            if self.__akbl.ping():
 
-    def on_menuitem_exit(self, widget, data=None):
-        AKBL_CONECTION._command('indicator_kill')
-        self._.daemon.shutdown()
-        self.check_daemon = False
+                if self.__current_code == 666:
+                    self.__parent.connect()
+                    self.__akbl.indicator_get_state()
+
+            elif self.__current_code != 666:
+                GObject.idle_add(self.set_code, 666)
+
+            else:
+                self.__akbl.reload_address(False)
+
+            sleep(1)
+
+    def __on_menuitem_off(self, *_):
+        self.__akbl.set_lights(False)
+
+    def __on_menuitem_on(self, *_):
+        self.__akbl.set_lights(True)
+
+    def __on_menuitem_change(self, *_):
+        self.__akbl.switch_lights()
+
+    def __on_menuitem_exit(self, *_):
+        self.__akbl.indicator_kill()
+        self.__parent.pyro_shutdown()
+        self.__check_daemon = False
         Gtk.main_quit()
 
+    @staticmethod
+    def __on_menuitem_gui(*_):
+        os.system('''setsid setsid akbl''')
+
+
 def main():
-    
-    if not AKBL_CONECTION.ping():
+    if not Bindings().ping():
         print_error("Failed to start the Indicator because the daemon is off.")
-        exit(1)    
-    
+        exit(1)
+
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     GObject.threads_init()
     Gdk.threads_init()
     _ = ConnectIndicator()
     Gtk.main()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2016, 2018  Rafael Senties Martinelli
+#  Copyright (C) 2014-2016, 2018, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,63 +14,59 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import sys
-import os
 
+import AKBL.texts as texts
 from AKBL.Bindings import Bindings
-from AKBL.Paths import Paths
-from AKBL.texts import (TEXT_ERROR_DAEMON_OFF, 
-                        TEXT_HELP,
-                        TEXT_LICENSE,
-                        TEXT_WRONG_ARGUMENT)
+from AKBL.settings import __version__
 
-AKBLConnection = Bindings()
-PATHS = Paths()
+def process_args(args):
 
-__version__=None #TO BE REPLACED IN THE SETUP FILE
+    if len(args) < 2:
+        print(texts.TEXT_WRONG_ARGUMENT)
+        return
 
-def send_command(command, *args):
-    if not os.path.exists(PATHS._systemctl_dir) or not AKBLConnection.ping():
-        print(TEXT_ERROR_DAEMON_OFF)
-    else:
-        AKBLConnection._command(command, *args)
+    akbl_bindings = Bindings()
+    arg1 = str(args[1])
 
-if __name__ == '__main__':
+    if arg1 in ('--help','-h'):
+        print(texts.TEXT_HELP)
 
-    total = len(sys.argv)
+    elif arg1 in ('--license','-l'):
+        print(texts.TEXT_LICENSE)
 
-    if total >= 2:
-        arg1 = str(sys.argv[1])
+    elif arg1 in ('--version', '-v'):
+        print(__version__)
 
-        if arg1 == '--help' or arg1 == '-h':
-            print(TEXT_HELP)
+    elif arg1 == '--daemon-is-on':
+        print(akbl_bindings.ping())
 
-        elif arg1 == '--license' or arg1 == '-l':
-            print(TEXT_LICENSE)
+    elif arg1 in ('--off', '--on', '--change', '--set-profile'):
 
-        elif arg1 == '--version' or arg1 == '-v':
-            print(__version__)
-
-        elif arg1 == '--daemon-is-on':
-            print(AKBLConnection.ping())
-
-        elif arg1 in ('--off', '--on', '--change', '--set-profile') and not AKBLConnection.ping():
-            print(TEXT_ERROR_DAEMON_OFF)
+        if not akbl_bindings.ping():
+            print(texts.TEXT_ERROR_DAEMON_OFF)
 
         elif arg1 == '--off':
-            send_command('set_lights', False)
-        
+            akbl_bindings.set_lights(False)
+
         elif arg1 == '--on':
-            send_command('set_lights', True)
-        
+            akbl_bindings.set_lights(True)
+
         elif arg1 == '--change':
-            send_command('switch_lights')
-            
+            akbl_bindings.switch_lights()
+
         elif arg1 == '--set-profile':
-            send_command('set_profile', sys.argv[2])
-        else:
-            print(TEXT_WRONG_ARGUMENT)
+            if len(args) != 3:
+                print(texts.TEXT_WRONG_ARGUMENT)
+            else:
+                akbl_bindings.set_profile(args[2])
+
     else:
-        print(TEXT_WRONG_ARGUMENT)
+        print(texts.TEXT_WRONG_ARGUMENT)
+
+
+if __name__ == '__main__':
+    process_args(sys.argv)
+

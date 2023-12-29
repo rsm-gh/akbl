@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2018  Rafael Senties Martinelli
+#  Copyright (C) 2018 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 
@@ -33,6 +33,7 @@ class ColorToolItem(Gtk.ToolItem):
         
         super().__init__()
 
+        self.__position = -1
         self.set_position(position)
 
         self.__picked = False
@@ -52,6 +53,7 @@ class ColorToolItem(Gtk.ToolItem):
 
         
         self.__color_selector = Gtk.ColorSelectionDialog("Select a color", window_parent)
+        self.__current_color = None
         self.set_color(start_color)
         
         self.__drawing_area = Gtk.DrawingArea()
@@ -103,7 +105,7 @@ class ColorToolItem(Gtk.ToolItem):
         return True
         
         
-    def __on_clicked(self, widget, event):
+    def __on_clicked(self, _, event):
         
         if event.button == _LEFT_CLICK_ID:
             
@@ -126,10 +128,10 @@ class ColorToolItem(Gtk.ToolItem):
         elif _RIGHT_CLICK_ID:
             self.__menu.popup(None, None, None, None, 0, Gtk.get_current_event_time())
 
-    def __on_delete_menuitem_clicked(self, widget):
+    def __on_delete_menuitem_clicked(self, _):
         self.emit("request-delete")
         
-# I ignore why this wasn't possible to be defined at __init__ as same as the ColorChooserToolbar 
+# I ignore why this wasn't possible to be defined at __init__ as the same as the ColorChooserToolbar
 GObject.type_register(ColorToolItem)
 GObject.signal_new('color-changed', ColorToolItem, GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, ())
 

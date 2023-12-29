@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  Rafael Senties Martinelli
+#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,21 +14,24 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import gi
+
 gi.require_version('Gtk', '3.0')
 
 from gi.repository import Gtk
 
+
 def get_text_gtk_buffer(textbuffer):
     return textbuffer.get_text(textbuffer.get_start_iter(), textbuffer.get_end_iter(), True)
+
 
 def gtk_append_text_to_buffer(textbuffer, text):
     textbuffer.set_text(get_text_gtk_buffer(textbuffer) + text)
 
-def gtk_dialog_question(parent, text1, text2=None, icon=None):
 
+def gtk_dialog_question(parent, text1, text2=None, icon=None):
     dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, text1)
 
     if icon is not None:
@@ -46,8 +49,8 @@ def gtk_dialog_question(parent, text1, text2=None, icon=None):
         dialog.hide()
         return False
 
-def gtk_dialog_info(parent, text1, text2=None, icon=None):
 
+def gtk_dialog_info(parent, text1, text2=None, icon=None):
     dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.INFO, Gtk.ButtonsType.CLOSE, text1)
 
     if icon is not None:
@@ -59,12 +62,16 @@ def gtk_dialog_info(parent, text1, text2=None, icon=None):
     dialog.run()
     dialog.destroy()
 
-def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filters=[]):
+
+def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filters=None):
+
+    if filters is None:
+        filters = []
 
     window = Gtk.FileChooserDialog(title, parent, Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL,
-                                                                                 Gtk.ResponseType.CANCEL,
-                                                                                 Gtk.STOCK_OPEN,
-                                                                                 Gtk.ResponseType.OK))
+                                                                               Gtk.ResponseType.CANCEL,
+                                                                               Gtk.STOCK_OPEN,
+                                                                               Gtk.ResponseType.OK))
 
     window.set_default_response(Gtk.ResponseType.NONE)
     window.set_transient_for(parent)
@@ -91,8 +98,8 @@ def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filt
         window.destroy()
         return False
 
-def gtk_folder_chooser(parent, title='', icon_path=None, default_folder=None):
 
+def gtk_folder_chooser(parent, title='', icon_path=None, default_folder=None):
     window = Gtk.FileChooserDialog(
         title,
         parent,

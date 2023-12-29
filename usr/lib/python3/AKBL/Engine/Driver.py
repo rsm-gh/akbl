@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C)  2014-2019  Rafael Senties Martinelli
-#                 2011-2012  the pyAlienFX team
+#  Copyright (C) 2014-2019 Rafael Senties Martinelli.
+#                2011-2012 the pyAlienFX team.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 import usb
@@ -30,8 +30,8 @@ from AKBL.Data.Computer.Computer import Computer
 class Driver:
 
     def __init__(self):
-        
-        # Define I/O Reqquest types
+
+        # Define I/O Request types
         self.__send_request_type = 33
         self.__send_request = 9
         self.__send_value = 514
@@ -40,13 +40,11 @@ class Driver:
         self.__read_request = 1
         self.__read_value = 257
         self.__read_index = 0
-        
-        
+
         #
         #
         self._device = None
-        
-
+        self.computer = None
 
     def has_device(self):
         if self._device is None:
@@ -56,26 +54,24 @@ class Driver:
     def find_device(self):
         """
             Look for all the devices listed in the `Computers.py` file.
-            If a computer is finded, the device is loaded as well as 
+            If a computer is found, the device is loaded as well as
             all its parameters.
         """
 
         for computer in computer_factory.get_computers():
 
-            device = usb.core.find(idVendor=computer.VENDOR_ID, idProduct=computer.PRODUCT_ID)
+            device = usb.core.find(idVendor=computer.vendor_id, idProduct=computer.product_id)
 
             if device is not None:
-                
                 self._device = device
                 self.take_over()
 
                 self.computer = computer
-                
+
                 print_debug(device)
                 print_debug(self.computer)
-                
-                break
 
+                break
 
     def load_device(self, id_vendor, id_product, empty_computer=False):
         """
@@ -91,57 +87,53 @@ class Driver:
             self._device = device
             self.take_over()
             print_debug('{}'.format(device))
-            
-        if empty_computer:    
+
+        if empty_computer:
             self.computer = Computer()
 
-    
     def load_default_device(self):
         self.computer = computer_factory.get_default_computer()
         if self.computer is not None:
-            self.load_device(self.computer.VENDOR_ID, self.computer.PRODUCT_ID)
-            
+            self.load_device(self.computer.vendor_id, self.computer.product_id)
 
     def write_constructor(self, constructor):
-        
+
         print_debug('\n'.join(str(request) for request in constructor))
-        
+
         try:
             for command in constructor:
-                status = self._device.ctrl_transfer(self.__send_request_type, 
-                                                    self.__send_request, 
-                                                    self.__send_value, 
-                                                    self.__send_index, 
+                status = self._device.ctrl_transfer(self.__send_request_type,
+                                                    self.__send_request,
+                                                    self.__send_value,
+                                                    self.__send_index,
                                                     command)
-                
+
                 print_debug("command output={}".format(status))
-                
+
         except Exception:
             print_error(format_exc())
 
     def read_device(self, constructor):
-        
+
         try:
-            msg = self._device.ctrl_transfer(self.__read_request_type, 
-                                             self.__read_request, 
-                                             self.__read_value, 
-                                             self.__read_index, 
+            msg = self._device.ctrl_transfer(self.__read_request_type,
+                                             self.__read_request,
+                                             self.__read_value,
+                                             self.__read_index,
                                              len(constructor.get_first_command()))
-            
-    
+
+
         except Exception:
             print_error(format_exc())
             return False
-        
-        
-        print_debug("msg={}".format(msg)) 
+
+        print_debug("msg={}".format(msg))
         return msg
-        
 
     def take_over(self):
         try:
             self._device.set_configuration()
-        except:
+        except Exception:
             self._device.detach_kernel_driver(0)
             try:
                 self._device.set_configuration()

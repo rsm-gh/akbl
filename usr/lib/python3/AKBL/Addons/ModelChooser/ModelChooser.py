@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2019  Rafael Senties Martinelli
+#  Copyright (C) 2019 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 import gi
@@ -113,10 +113,10 @@ class ModelChooser(Gtk.Window):
         
         self.liststore_computer_models.clear()
         for computer in computer_factory.get_computers():
-            is_selected = computer.NAME == default_computer_name
-            driver.load_device(computer.VENDOR_ID, computer.PRODUCT_ID)
+            is_selected = computer.name == default_computer_name
+            driver.load_device(computer.vendor_id, computer.product_id)
             
-            self.liststore_computer_models.append([computer.NAME, is_selected, True, driver.has_device()])
+            self.liststore_computer_models.append([computer.name, is_selected, True, driver.has_device()])
     
     
     def upadte_detected_as(self):
@@ -124,7 +124,7 @@ class ModelChooser(Gtk.Window):
         driver.find_device()
         
         if driver.has_device():
-            self.label_detected_as.set_text(driver.computer.NAME)
+            self.label_detected_as.set_text(driver.computer.name)
         else:
             self.label_detected_as.set_text(_EMPTY_MODEL)
     
@@ -154,7 +154,7 @@ class ModelChooser(Gtk.Window):
         if default_computer is None:
             return _EMPTY_MODEL
         else:
-            return default_computer.NAME
+            return default_computer.name
         
     def _on_button_close_clicked(self, data=None):
         

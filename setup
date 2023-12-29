@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2021  Rafael Senties Martinelli
+#  Copyright (C) 2015-2021, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -13,10 +13,9 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-AKBL_VERSION="2019.05.26"
-DEBUG='False' 				# Python boolean
+DEBUG='False' 				  # Python boolean
 NUMBER_OF_STEPS=5 			# installation steps
 
 if [ "$EUID" -ne 0 ]
@@ -24,17 +23,16 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-echo -e "\n\e[00;33m *********************************** \e[00m"
-echo -e "\e[00;33m *** Installing AKBL v$AKBL_VERSION *** \e[00m"
+echo -e "\n"
+echo -e "\e[00;33m *********************************** \e[00m"
+echo -e "\e[00;33m *********** Installing AKBL ******* \e[00m"
 echo -e "\e[00;33m *********************************** \e[00m\n\n"
 
-
-
 #
-# Set the scripts permisions
+# Set the scripts permissions
 #
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd $DIR
+cd "$DIR"
 chmod a+x ./remove
 
 #
@@ -54,8 +52,8 @@ function install_files(){
     
     echo "installing: $1"
     
-    install -d $1
-    install -D $DIR$1/* $1
+    install -d "$1"
+    install -D "$DIR$1/*" "$1"
     
 }
 
@@ -102,9 +100,6 @@ install_files "/usr/lib/python3/AKBL/Addons/ModelChooser"
 #
 #
 echo -e "\e[00;32m Replacing variables...\e[00m"
-
-sed -i "s/__AKBL_VERSION__/$AKBL_VERSION/g" "/usr/lib/python3/AKBL/Addons/GUI/GUI.glade"
-sed -i "s/__version__=None/__version__='$AKBL_VERSION'/g" "/usr/share/AKBL/launch/commands.py"
 sed -i "s/_DEBUG=True/_DEBUG=$DEBUG/g" "/usr/lib/python3/AKBL/utils.py"
 sed -i "s/_DEBUG=False/_DEBUG=$DEBUG/g" "/usr/lib/python3/AKBL/utils.py"
 
@@ -116,11 +111,10 @@ sed -i "s/_DEBUG=False/_DEBUG=$DEBUG/g" "/usr/lib/python3/AKBL/utils.py"
 echo -e "\e[00;33m\n[3/$NUMBER_OF_STEPS] Creating the python links...\e[00m"
 
 
-AKBL_PYTHON_VERSIONS=($(ls /usr/lib/ | grep python3))
-
-for python_version in "${AKBL_PYTHON_VERSIONS[@]}"; do
-    if [ -d /usr/lib/$python_version ]; then
-        ln -s /usr/lib/python3/AKBL /usr/lib/$python_version/AKBL && echo -e "linked $python_version"
+PYTHON_VERSIONS=($(ls /usr/lib/ | grep python3))
+for python_version in "${PYTHON_VERSIONS[@]}"; do
+    if [ -d "/usr/lib/$python_version" ]; then
+        ln -s /usr/lib/python3/AKBL "/usr/lib/$python_version/AKBL" && echo -e "linked $python_version"
     fi
 done
 echo ""
@@ -145,5 +139,5 @@ echo ""
 ## End
 ##
 echo -e "\e[00;33m ************************************* \e[00m"
-echo -e "\e[00;33m *** AKBL v$AKBL_VERSION is installed *** \e[00m"
+echo -e "\e[00;33m ********** AKBL is installed ******** \e[00m"
 echo -e "\e[00;33m ************************************* \e[00m\n"

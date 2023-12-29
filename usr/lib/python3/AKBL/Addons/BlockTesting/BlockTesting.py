@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2020  Rafael Senties Martinelli
+#  Copyright (C) 2014-2020 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -14,17 +14,17 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 import gi
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 import os
 import subprocess
 from traceback import format_exc
-
 
 from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.utils import getuser
@@ -38,7 +38,6 @@ from AKBL.Engine.Command import Command
 
 
 def get_alienware_device_info():
-    
     bash_output = subprocess.run("lsusb", shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 
     device_info = str(bash_output.stdout)
@@ -47,19 +46,20 @@ def get_alienware_device_info():
 
         if "Alienware" in line:
             bus_id = line.split()[1]
-            device_id = line.split()[3][:-1] 
-            
-            bash_output = subprocess.run("lsusb -D /dev/bus/usb/{}/{}".format(bus_id, device_id), shell=True, stdout=subprocess.PIPE, universal_newlines=True)
-            
+            device_id = line.split()[3][:-1]
+
+            bash_output = subprocess.run("lsusb -D /dev/bus/usb/{}/{}".format(bus_id, device_id), shell=True,
+                                         stdout=subprocess.PIPE, universal_newlines=True)
+
             device_info = str(bash_output.stdout)
             break
-    
+
     return device_info
 
 
 def rgb_to_hex(rgb):
-    return '#%02x%02x%02x' % (int(rgb[0] * 255), 
-                              int(rgb[1] * 255), 
+    return '#%02x%02x%02x' % (int(rgb[0] * 255),
+                              int(rgb[1] * 255),
                               int(rgb[2] * 255))
 
 
@@ -75,7 +75,6 @@ def gtk_append_text_to_buffer(textbuffer, text):
 
 
 def gtk_dialog_question(parent, text1, text2=None, icon=None):
-
     dialog = Gtk.MessageDialog(parent,
                                Gtk.DialogFlags.MODAL,
                                Gtk.MessageType.QUESTION,
@@ -100,7 +99,6 @@ def gtk_dialog_question(parent, text1, text2=None, icon=None):
 
 
 def gtk_dialog_info(parent, text1, text2=None, icon=None):
-
     dialog = Gtk.MessageDialog(parent,
                                Gtk.DialogFlags.MODAL,
                                Gtk.MessageType.INFO,
@@ -122,41 +120,44 @@ class BlockTesting(Gtk.Window):
 
     def __init__(self):
 
-        self._paths = Paths()
+        self.__paths = Paths()
+        self.__testing_controller = None
+        self.__testing_driver = None
+        self.__computer = None
+        self.__computer_blocks_to_save = []
 
         """
             Glade
         """
         builder = Gtk.Builder()
-        builder.add_from_file(self._paths._block_testing_glade_file)
+        builder.add_from_file(self.__paths._block_testing_glade_file)
         builder.connect_signals(self)
 
         glade_object_names = (
             'window_block_testing',
-                    'entry_id_vendor',
-                    'entry_id_product',
-                    'togglebutton_find_device',
-                'box_block_testing',
-                    'spinbutton_block_speed',
-                    'viewport_common_block',
-                    'button_update_common_blocks',
-                    'button_block_make_test',
-                    'checkbutton_auto_turn_off',
-                    'checkbutton_hex_format_when_finding',
-                    'combobox_block_modes',
-                    'colorbutton_1_block',
-                    'colorbutton_2_block',
-                    'config_grid',
-                    'textbuffer_device_info',
-                    'combobox_default_blocks',
-                    'textbuffer_block_testing',
-                    'entry_block_testing',
-                'box_pyusb',
-                    'textbuffer_pyusb',
-                    'entry_custom_command',
-                    'button_send_custom_command',
+            'entry_id_vendor',
+            'entry_id_product',
+            'togglebutton_find_device',
+            'box_block_testing',
+            'spinbutton_block_speed',
+            'viewport_common_block',
+            'button_update_common_blocks',
+            'button_block_make_test',
+            'checkbutton_auto_turn_off',
+            'checkbutton_hex_format_when_finding',
+            'combobox_block_modes',
+            'colorbutton_1_block',
+            'colorbutton_2_block',
+            'config_grid',
+            'textbuffer_device_info',
+            'combobox_default_blocks',
+            'textbuffer_block_testing',
+            'entry_block_testing',
+            'box_pyusb',
+            'textbuffer_pyusb',
+            'entry_custom_command',
+            'button_send_custom_command',
         )
-
 
         # load the glade objects
         for glade_object in glade_object_names:
@@ -164,7 +165,7 @@ class BlockTesting(Gtk.Window):
 
         # get the computer info
         computer_device_info = get_alienware_device_info()
-        
+
         # Fill the computer data
         self.textbuffer_device_info.set_text(computer_device_info)
 
@@ -175,11 +176,11 @@ class BlockTesting(Gtk.Window):
                     self.entry_id_vendor.set_text(line.split()[1])
                 elif 'idProduct' in line:
                     self.entry_id_product.set_text(line.split()[1])
-        
+
         # Display the window
         self.window_block_testing.show_all()
 
-    def on_entry_block_testing_changed(self, entry, data=None):
+    def on_entry_block_testing_changed(self, entry, *_):
         text = entry.get_text()
         try:
             value = int(text)
@@ -189,10 +190,10 @@ class BlockTesting(Gtk.Window):
             else:
                 self.button_block_make_test.set_sensitive(True)
 
-        except:
+        except Exception:
             self.button_block_make_test.set_sensitive(False)
 
-    def on_togglebutton_find_device_clicked(self, button, data=None):
+    def on_togglebutton_find_device_clicked(self, *_):
 
         # try to load the driver
         if self.checkbutton_hex_format_when_finding.get_active():
@@ -202,58 +203,54 @@ class BlockTesting(Gtk.Window):
             vendor = int(self.entry_id_vendor.get_text())
             product = int(self.entry_id_product.get_text())
 
-        self._testing_driver = Driver()
-        self._testing_driver.load_device(id_vendor=vendor, id_product=product, empty_computer=True)
+        self.__testing_driver = Driver()
+        self.__testing_driver.load_device(id_vendor=vendor, id_product=product, empty_computer=True)
 
         # try to load the controller
-        if self._testing_driver.has_device():
-            
-            self._testing_controller = Controller(self._testing_driver)
-            
-            self._computer = self._testing_driver.computer
-            
-            self._COMPUTER_BLOCKS_TO_SAVE = (#(True, self._computer.BLOCK_LOAD_ON_BOOT),
-                                                #(True, self._computer.BLOCK_STANDBY),
-                                                #(True, self._computer.BLOCK_AC_POWER),
-                                                #(#True, self._computer.BLOCK_CHARGING),
-                                                #(True, self._computer.BLOCK_BATT_SLEEPING),
-                                                #(True, self._computer.BLOCK_BAT_POWER),
-                                                #(True, self._computer.BLOCK_BATT_CRITICAL),
-                                                (False, self._computer.BLOCK_LOAD_ON_BOOT),)
-            
+        if self.__testing_driver.has_device():
+
+            self.__testing_controller = Controller(self.__testing_driver)
+
+            self.__computer = self.__testing_driver.computer
+
+            self.__computer_blocks_to_save = (  # (True, self.__computer.block_load_on_boot),
+                # (True, self.__computer.BLOCK_STANDBY),
+                # (True, self.__computer.block_ac_power),
+                # (#True, self.__computer.block_charging),
+                # (True, self.__computer.block_battery_sleeping),
+                # (True, self.__computer.block_battery_power),
+                # (True, self.__computer.block_battery_critical),
+                (False, self.__computer.block_load_on_boot),)
+
             # Add the general computer variables
             row_index = 0
-            for attr_name, attr_value in sorted(vars(self._computer).items()):
+            for attr_name, attr_value in sorted(vars(self.__computer).items()):
                 if not attr_name.startswith("_") and isinstance(attr_value, int):
-                    
                     label = Gtk.Label(attr_name)
-                    label.set_xalign (0)
-                    
+                    label.set_xalign(0)
+
                     adjustment = Gtk.Adjustment(0, 0, 9999999999999, 1, 1, 0)
                     spinbutton = Gtk.SpinButton()
                     spinbutton.set_adjustment(adjustment)
                     spinbutton.set_value(attr_value)
                     spinbutton.set_digits(0)
                     spinbutton.set_numeric(True)
-                    
+
                     spinbutton.connect("value-changed", self.on_dynamic_spin_general_properties_changed, attr_name)
-                    
+
                     self.config_grid.attach(label, 0, row_index, 1, 1)
                     self.config_grid.attach(spinbutton, 1, row_index, 1, 1)
-                    row_index+=1
-
-
+                    row_index += 1
 
             self.config_grid.show_all()
 
-
             # activate the window
-            
+
             self.box_block_testing.set_sensitive(True)
             self.box_pyusb.set_sensitive(True)
             self.entry_id_vendor.set_sensitive(False)
             self.entry_id_product.set_sensitive(False)
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_DEVICE_FOUND.format(vendor,product))
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_DEVICE_FOUND.format(vendor, product))
 
             self.combobox_default_blocks.set_active(0)
 
@@ -263,43 +260,43 @@ class BlockTesting(Gtk.Window):
             self.togglebutton_find_device.set_active(False)
             self.entry_id_vendor.set_sensitive(True)
             self.entry_id_product.set_sensitive(True)
-            gtk_append_text_to_buffer(self.textbuffer_block_testing,TEXT_DEVICE_NOT_FOUND.format(vendor,product))
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_DEVICE_NOT_FOUND.format(vendor, product))
 
+    def on_button_send_custom_command_clicked(self, *_):
 
-    def on_button_send_custom_command_clicked(self, button, data=None):
-        
         command_value = self.entry_custom_command.get_text()
-        
+
         try:
             values = (int(val) for val in command_value.split(":"))
-        except:
+        except Exception:
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + "WRONG FORMAT" + '\n')
-        
+            return
+
         constructor = (Command("Custom", values),)
-        
+
         try:
-            self._testing_driver.write_constructor(constructor)
+            self.__testing_driver.write_constructor(constructor)
         except Exception:
             gtk_append_text_to_buffer(self.textbuffer_pyusb, '\n' + format_exc() + '\n')
-        
-        gtk_append_text_to_buffer(self.textbuffer_pyusb, command_value + "\n")
-        
+            return
 
-    def on_button_block_make_test_clicked(self, button, data=None):
-        
+        gtk_append_text_to_buffer(self.textbuffer_pyusb, command_value + "\n")
+
+    def on_button_block_make_test_clicked(self, button, *_):
+
         if self.checkbutton_auto_turn_off.get_active():
             self.on_button_block_testing_lights_off_clicked(button)
-            
+
         try:
             zone_left_color = self.colorbutton_1_block.get_color()
-            zone_left_color = rgb_to_hex([zone_left_color.red/65535.0, 
-                                          zone_left_color.green/65535.0, 
-                                          zone_left_color.blue/65535.0])
+            zone_left_color = rgb_to_hex([zone_left_color.red / 65535.0,
+                                          zone_left_color.green / 65535.0,
+                                          zone_left_color.blue / 65535.0])
 
             zone_right_color = self.colorbutton_2_block.get_color()
-            zone_right_color = rgb_to_hex([zone_right_color.red/65535.0, 
-                                           zone_right_color.green/65535.0, 
-                                           zone_right_color.blue/65535.0])
+            zone_right_color = rgb_to_hex([zone_right_color.red / 65535.0,
+                                           zone_right_color.green / 65535.0,
+                                           zone_right_color.blue / 65535.0])
 
             zone_block = int(self.entry_block_testing.get_text())
             speed = self.spinbutton_block_speed.get_value_as_int()
@@ -319,46 +316,45 @@ class BlockTesting(Gtk.Window):
 
             #   Test
             #
-            self._testing_controller.erase_config()
-            
-            for save, block in self._COMPUTER_BLOCKS_TO_SAVE:
-                    
-                self._testing_controller.add_block_line(save=save, block=block)
-                self._testing_controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_ON)
-                self._testing_controller.add_speed_line(speed)
-                self._testing_controller.add_color_line(zone_block, zone_mode, zone_left_color, zone_right_color)
-                self._testing_controller.end_colors_line()
-                self._testing_controller.end_block_line()
-                
-            self._testing_controller.apply_config()
-     
- 
+            self.__testing_controller.erase_config()
+
+            for save, block in self.__computer_blocks_to_save:
+                self.__testing_controller.add_block_line(save=save, block=block)
+                self.__testing_controller.add_reset_line(self.__computer.reset_all_lights_on)
+                self.__testing_controller.add_speed_line(speed)
+                self.__testing_controller.add_color_line(zone_block, zone_mode, zone_left_color, zone_right_color)
+                self.__testing_controller.end_colors_line()
+                self.__testing_controller.end_block_line()
+
+            self.__testing_controller.apply_config()
+
+
         except Exception:
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + format_exc() + '\n')
 
-    def on_button_block_testing_lights_off_clicked(self, button, data=None):
+    def on_button_block_testing_lights_off_clicked(self, *_):
         try:
 
-            self._testing_controller.erase_config()
-            
-            for save, block in self._COMPUTER_BLOCKS_TO_SAVE:
-                self._testing_controller.add_block_line(save, block)
-                self._testing_controller.add_reset_line(self._computer.RESET_ALL_LIGHTS_OFF)
-                
-            self._testing_controller.apply_config()
+            self.__testing_controller.erase_config()
+
+            for save, block in self.__computer_blocks_to_save:
+                self.__testing_controller.add_block_line(save, block)
+                self.__testing_controller.add_reset_line(self.__computer.reset_all_lights_off)
+
+            self.__testing_controller.apply_config()
 
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + TEXT_BLOCK_LIGHTS_OFF + '\n')
-            
+
         except Exception:
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + format_exc())
 
-    def on_checkbutton_protect_common_blocks_clicked(self, checkbutton, data=None):
+    def on_checkbutton_protect_common_blocks_clicked(self, checkbutton, *_):
         if checkbutton.get_active():
             self.viewport_common_block.set_sensitive(False)
         else:
             self.viewport_common_block.set_sensitive(True)
 
-    def on_combobox_default_blocks_changed(self, combobox, data=None):
+    def on_combobox_default_blocks_changed(self, combobox, *_):
         index = combobox.get_active()
         model = combobox.get_model()
         value = model[index][0]
@@ -370,20 +366,19 @@ class BlockTesting(Gtk.Window):
             self.entry_block_testing.set_text(str(value))
 
     def on_dynamic_spin_general_properties_changed(self, spin, variable_name):
-        
+
         value = spin.get_value_as_int()
-            
-        setattr(self._testing_driver.computer, variable_name, value)
+
+        setattr(self.__testing_driver.computer, variable_name, value)
         gtk_append_text_to_buffer(self.textbuffer_block_testing, "\n {} = {}".format(variable_name, value))
-        
 
-    
 
-    def on_window_block_testing_destroy(self, data=None):
+    @staticmethod
+    def on_window_block_testing_destroy(_):
         Gtk.main_quit()
 
+
 def main():
-    
     if getuser() != 'root':
         print(TEXT_ONLY_ROOT)
         exit()

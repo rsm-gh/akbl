@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018  Rafael Senties Martinelli
-#                2011-2012  the pyAlienFX team
+#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
+#                2011-2012 the pyAlienFX team.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -15,32 +15,33 @@
 #
 # You should have received a copy of the GNU General Public License
 #   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA.
+#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 from AKBL.Data.Computer.Region import Region
 
+
 class Area(Region):
-    
+
     def __init__(self, region):
-        super().__init__(name = region.name,
-                         description = region.description,
-                         hex_id = region.hex_id,
-                         can_light = region.can_light,
-                         can_blink = region.can_blink,
-                         can_morph = region.can_morph,
-                         max_commands = region.max_commands)
-        
+        super().__init__(name=region.name,
+                         description=region.description,
+                         hex_id=region.hex_id,
+                         can_light=region.can_light,
+                         can_blink=region.can_blink,
+                         can_morph=region.can_morph,
+                         max_commands=region.max_commands)
+
         self.__current_zone_hex_id = self.hex_id
         self.__zones = []
 
     def __str__(self):
-        
-        zones_description=""
+
+        zones_description = ""
         for zone in self.__zones:
-            zones_description+=str(zone)
-        
-        area_description='''
+            zones_description += str(zone)
+
+        area_description = '''
     name={}
     description={}
     hex_id={}
@@ -48,19 +49,19 @@ class Area(Region):
     can_light={}
     can_blink={}
     can_morph={}
-    max_comands={}
+    max_commands={}
     zones:
 {}
-'''.format(self.name, 
-           self.description, 
-           self.hex_id, 
-           self.__current_zone_hex_id, 
-           self.can_light, 
-           self.can_blink, 
-           self.can_morph, 
-           self.max_commands, 
+'''.format(self.name,
+           self.description,
+           self.hex_id,
+           self.__current_zone_hex_id,
+           self.can_light,
+           self.can_blink,
+           self.can_morph,
+           self.max_commands,
            zones_description)
-        
+
         return area_description
 
     def get_zone(self, column_index):
@@ -84,5 +85,3 @@ class Area(Region):
         for zone in self.__zones:
             zone.set_hex_id(self.__current_zone_hex_id)
             self.__current_zone_hex_id += 1
-    
-
