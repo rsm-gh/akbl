@@ -26,6 +26,7 @@ class Computer:
 
         self.name = '<Default>'
         self.default_mode = 'fixed'
+        self.default_speed = 1
         self.configuration_path = ""
         self.__regions = []
 

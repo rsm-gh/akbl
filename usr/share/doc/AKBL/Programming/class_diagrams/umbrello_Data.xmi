@@ -143,9 +143,9 @@
         <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="u0fK1FigpVjE8" isSpecification="false" name="BLOCK_STANDBY"/>
         <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="ukBFpPxi1q2Lc" isSpecification="false" name="BLOCK_AC_POWER"/>
         <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="uBm6InK1EST29" isSpecification="false" name="BLOCK_CHARGING"/>
-        <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="uKSbsEw6LqQtc" isSpecification="false" name="BLOCK_BATT_SLEEPING"/>
-        <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="uiPU4fpN2A0DX" isSpecification="false" name="BLOCK_BAT_POWER"/>
-        <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="ud62rNw5lh7jv" isSpecification="false" name="BLOCK_BATT_CRITICAL"/>
+        <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="uKSbsEw6LqQtc" isSpecification="false" name="BLOCK_BATTERY_SLEEPING"/>
+        <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="uiPU4fpN2A0DX" isSpecification="false" name="BLOCK_BATTERY_POWER"/>
+        <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="ud62rNw5lh7jv" isSpecification="false" name="BLOCK_BATTERY_CRITICAL"/>
         <UML:Attribute visibility="public" type="uP6Blki6O6xlV" xmi.id="u8UP5SODhX1qU" isSpecification="false" name="REGION_ALL_BUT_POWER"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uL8ud3SEMpXhl" isSpecification="false" name="get_regions" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uv0ve67J6fKwR" isSpecification="false" name="get_regions_name" isOverride="false" isVirtual="false"/>
