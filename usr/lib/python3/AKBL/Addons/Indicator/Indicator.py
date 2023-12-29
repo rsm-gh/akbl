@@ -29,7 +29,6 @@ import threading
 import Pyro4
 from time import sleep
 
-from AKBL.utils import print_error
 from AKBL.Bindings import Bindings
 from AKBL.Paths import Paths
 from AKBL.texts import (TEXT_PROFILES,
@@ -220,10 +219,6 @@ class Indicator:
 
 
 def main():
-    if not Bindings().ping():
-        print_error("Failed to start the Indicator because the daemon is off.")
-        exit(1)
-
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
     GObject.threads_init()
     Gdk.threads_init()
