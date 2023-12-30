@@ -22,9 +22,9 @@
     * Changing the keyboard colors by checking the CPU Temperature
     * Changing the keyboard colors by checking the weather
 
-  * [Development Documentation](https://github.com/rsm-gh/akbl#development-documentation)
+  * [Documentation](https://github.com/rsm-gh/akbl#documentation)
   
-  * [History](https://github.com/rsm-gh/akbl#akbl-history)
+  * [History](https://github.com/rsm-gh/akbl#history)
   
   * [About & Credits](https://github.com/rsm-gh/akbl#credits)
   
@@ -511,8 +511,8 @@ def get_max_temp():
 
 so you can replace the function `get_max_temp` of the previous code, and it will now change the colors regarding the weather.
 
-# Development Documentation
-Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
+# Documentation
+Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL).
 
 # History
 
