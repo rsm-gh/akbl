@@ -531,9 +531,6 @@ Then with the time, I realized that PyAlienFX was kinda dead, and I was having f
 
 + XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
 
-+ 2022: I stopped maintaining the project since I changed my computer.
-
-
 # About & Credits
 
 This software is the work of libre software hackers of the GNU/Linux community. It does not depend on any corporation, and its code is licensed GPL3.
