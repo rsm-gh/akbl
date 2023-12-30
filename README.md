@@ -24,9 +24,7 @@
 
   * [Development Documentation](https://github.com/rsm-gh/akbl#development-documentation)
   
-  * [AKBL History](https://github.com/rsm-gh/akbl#akbl-history)
-    * History
-    * Extra 
+  * [History](https://github.com/rsm-gh/akbl#akbl-history)
   
   * [About & Credits](https://github.com/rsm-gh/akbl#credits)
   
@@ -516,9 +514,8 @@ so you can replace the function `get_max_temp` of the previous code, and it will
 # Development Documentation
 Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
 
-# AKBL History
+# History
 
-## History
 AKBL stands for **A**lienware **K**ey**B**oard **L**ights (despite the fact that it controls much more than the keyboard). And I created my first version in 2014 by hacking PyAlienFX.  
 
 It was a real hack from PyAlienFX because at that time I did not know about programming, and I only wanted to code a command for turning on and off the keyboard lights. So I mostly did some dirty modifications, and to avoid people blaming PyAlienFX for my code, I released it with a new name.
