@@ -23,7 +23,6 @@
     * Changing the keyboard colors by checking the weather
 
   * [Development Documentation](https://github.com/rsm-gh/akbl#development-documentation)
-    * Global Communication
   
   * [AKBL History](https://github.com/rsm-gh/akbl#akbl-history)
     * History
@@ -92,7 +91,7 @@ The program comes with some default commands for those who don't know about prog
 import time, random
 from AKBL.Bindings import Bindings
 
-AKBLConnection = Bindings()
+akbl = Bindings()
 r = lambda: random.randint(0, 255)
 
 while True:
@@ -100,7 +99,7 @@ while True:
     random_hex_color = '#%02X%02X%02X' % (r(), r(), r())
 
     # Set the color in mode fixed
-    AKBLConnection.set_colors('fixed', 100, random_hex_color)
+    akbl.set_colors('fixed', 100, random_hex_color)
 
     # Wait 2 seconds
     time.sleep(2)     
@@ -325,7 +324,7 @@ This is the example that I use to test the bindings. It should be clear enough t
 import time
 from AKBL.Bindings import Bindings
 
-AKBLConnection = Bindings()
+akbl = Bindings()
 
 lights_test = True
 profiles_test = True
@@ -333,49 +332,49 @@ colors_test = True
 speed_test = True
 colors_multiple_test = True
 
-if not AKBLConnection.ping():
+if not akbl.ping():
     print("The connection with the daemon is off")
     exit()
 
 if lights_test:
-    print('lights off', AKBLConnection.set_lights(False))
+    print('lights off', akbl.set_lights(False))
     time.sleep(2)
-    print('lights on', AKBLConnection.set_lights(True))
+    print('lights on', akbl.set_lights(True))
     time.sleep(2)
-    print('switch lights', AKBLConnection.switch_lights())
+    print('switch lights', akbl.switch_lights())
 
 if profiles_test:
-    for profile_name in AKBLConnection.get_profile_names():
-        print('set profile:', profile_name, AKBLConnection.set_profile(profile_name))
+    for profile_name in akbl.get_profile_names():
+        print('set profile:', profile_name, akbl.set_profile(profile_name))
         time.sleep(5)
 
 color1 = '#F7F200'
 color2 = '#0018FF'
 
 if colors_test:
-    print('set_colors blink', AKBLConnection.set_colors('blink', 100, color2))
+    print('set_colors blink', akbl.set_colors('blink', 100, color2))
     time.sleep(5)
-    print('set_colors fixed', AKBLConnection.set_colors('fixed', 100, color1))
+    print('set_colors fixed', akbl.set_colors('fixed', 100, color1))
     time.sleep(5)
-    print('set_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
+    print('set_colors morph', akbl.set_colors('morph', 100, color1, color2))
 
 if speed_test:
-    print('set_colors blink', AKBLConnection.set_colors('blink', 1, color2))
+    print('set_colors blink', akbl.set_colors('blink', 1, color2))
     time.sleep(5)
-    print('set_colors blink', AKBLConnection.set_colors('blink', 100, color2))
+    print('set_colors blink', akbl.set_colors('blink', 100, color2))
     time.sleep(5)
-    print('set_colors blink', AKBLConnection.set_colors('blink', 256, color2))
+    print('set_colors blink', akbl.set_colors('blink', 256, color2))
     time.sleep(5)
 
 if colors_multiple_test:
     colors1 = '#0600FF'
     colors2 = '#FF00E5'
 
-    print('set_colors multiple blink', AKBLConnection.set_colors('blink', 100, colors2))
+    print('set_colors multiple blink', akbl.set_colors('blink', 100, colors2))
     time.sleep(5)
-    print('set_colors multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
+    print('set_colors multiple morph', akbl.set_colors('morph', 100, colors1, colors2))
     time.sleep(5)
-    print('set_colors multiple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
+    print('set_colors multiple fixed', akbl.set_colors('fixed', 100, colors1))
 ```
 
 ### Changing the keyboard colors by checking the CPU Temperature
@@ -515,11 +514,7 @@ def get_max_temp():
 so you can replace the function `get_max_temp` of the previous code, and it will now change the colors regarding the weather.
 
 # Development Documentation
-
-## Global Communication
-![general diagram](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/Programming/general%20diagram.png)
-
-[...] Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
+Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL)
 
 # AKBL History
 
@@ -528,14 +523,14 @@ AKBL stands for **A**lienware **K**ey**B**oard **L**ights (despite the fact that
 
 It was a real hack from PyAlienFX because at that time I did not know about programming, and I only wanted to code a command for turning on and off the keyboard lights. So I mostly did some dirty modifications, and to avoid people blaming PyAlienFX for my code, I released it with a new name.
 
-Then with the time, I realized that PyAlienFX was kinda dead, and I was having fun learning python with this software. So I started fixing bugs, removing private content from the interface and creating new features. The major features that I have added are:
+Then with the time, I realized that PyAlienFX was kinda dead, and I was having fun learning python with this software. So I started fixing bugs, removing proprietary content from the interface and creating new features. The major features that I have added are:
 
 + 2014: The Block Testing window. This is for debugging purposes.
 + 2015: The Daemon, which had as the main goal to allow the users to use the software without being root.
   + 2015: The System Try Indicator.
   + 2015: The Python Bindings. 
 
-+ 2015-2016: (Not available anymore): Custom Debian Repository, Bug report pages, Sharing profiles pages, and chat hosted on my website.  
++ 2015-2016: Custom Debian Repository, Bug report pages, Sharing profiles pages, and chat hosted on my website (These features are not available anymore).  
 
 + XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
 
