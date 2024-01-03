@@ -18,7 +18,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from AKBL.Data.Computer.Region import Region
+from AKBL.Computer.Region import Region
 
 
 class Area(Region):

@@ -16,17 +16,18 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import os
 import gi
-
+import cairo
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 from gi.repository import GObject
-import cairo
 
 from AKBL.utils import print_warning
-from AKBL.Paths import Paths
 
-_IMAGES_PATH = Paths()._images_dir
+_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+_IMG_DIR = os.path.join(_SCRIPT_DIR, "img")
+
 _LEFT_CLICK_ID = 1
 _RIGHT_CLICK_ID = 3
 
@@ -223,11 +224,12 @@ class ZoneWidget(Gtk.Frame):
             self.emit('request-delete')
 
     def __get_command_button_image(self, index):
-
         if self.__column == 0 or self.__area_name in ('PB', 'PBE'):
-            return Gtk.Image.new_from_file('{}{}.png'.format(_IMAGES_PATH, _BUTTONS_IMAGE_PATTERN[index]))
+            img_path = os.path.join(_IMG_DIR, _BUTTONS_IMAGE_PATTERN[index])
+        else:
+            img_path = os.path.join(_IMG_DIR, _BUTTONS_IMAGE_PATTERN_WITH_DELETE[index])
 
-        return Gtk.Image.new_from_file('{}{}.png'.format(_IMAGES_PATH, _BUTTONS_IMAGE_PATTERN_WITH_DELETE[index]))
+        return Gtk.Image.new_from_file(img_path+".png")
 
     def __on_draw_drawingarea(self, widget, cr, area_number):
 

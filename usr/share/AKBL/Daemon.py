@@ -24,8 +24,8 @@ from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
 from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.Engine.Driver import Driver
-from AKBL.Data.Theme import theme_factory
 from AKBL.Engine.Controller import Controller
+from AKBL.Theme import factory as theme_factory
 from AKBL.utils import getuser, print_warning, print_error, string_is_hex_color
 
 
@@ -42,6 +42,7 @@ class Daemon:
         if self.__computer is None:
             exit(1)
 
+        # Todo: Why save blocks in true and false?
         self.__computer_blocks_to_save = ((True, self.__computer.block_load_on_boot),
                                           (False, self.__computer.block_load_on_boot))
 
@@ -60,58 +61,6 @@ class Daemon:
         self.__lights_state = False
         self.__pyro = None
         self.reload_configurations(self.__user)
-
-    def _illuminate_keyboard(self):
-
-        # Find the last theme that has been used
-        #
-        os.utime(self.__theme.path, None)
-
-        # Illuminate the computer lights
-        #
-
-        self.__controller.erase_config()
-
-        for save, block in self.__computer_blocks_to_save:
-
-            self.__controller.add_block_line(save=save, block=block)
-            self.__controller.add_reset_line(self.__computer.reset_all_lights_on)
-            self.__controller.add_speed_line(self.__theme.get_speed())
-
-            for area in self.__theme.get_areas():
-                for zone in area.get_zones():
-                    self.__controller.add_color_line(zone.get_hex_id(),
-                                                     zone.get_mode(),
-                                                     zone.get_left_color(),
-                                                     zone.get_right_color())
-
-                self.__controller.end_colors_line()
-
-            self.__controller.end_block_line()
-
-        self.__controller.apply_config()
-
-        # Update the Indicator
-        #
-        if self.__pyro:
-            self._indicator_send_code(100)
-            try:
-                self.__pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
-                                          self.__theme.name,
-                                          self.__lights_state)
-            except Exception:
-                print_error(format_exc())
-
-        # Update the Daemon variables
-        #
-        self.__lights_state = True
-
-    def _indicator_send_code(self, val):
-        if self.__pyro:
-            try:
-                self.__pyro.set_code(val)
-            except Exception:
-                print_error(format_exc())
 
     """
         General Bindings
@@ -162,7 +111,7 @@ class Daemon:
 
         if profile in theme_factory._AVAILABLE_THEMES.keys():
             self.__theme = theme_factory._AVAILABLE_THEMES[profile]
-            self._illuminate_keyboard()
+            self.__illuminate_keyboard()
 
     @Pyro4.expose
     def switch_lights(self, user):
@@ -170,10 +119,7 @@ class Daemon:
             If the lights are on, put them off
             or if the lights are off, put them on
         """
-        if self.__lights_state:
-            self.set_lights(user, False)
-        else:
-            self.set_lights(user, True)
+        self.set_lights(user, not self.__lights_state)
 
     @Pyro4.expose
     def set_lights(self, user_name, state):
@@ -225,9 +171,9 @@ class Daemon:
                 self.__controller.apply_config()
 
             self.__lights_state = False
-            self._indicator_send_code(150)
+            self.__indicator_send_code(150)
         else:
-            self._illuminate_keyboard()
+            self.__illuminate_keyboard()
 
     @Pyro4.expose
     def set_colors(self, mode, speed, left_colors, right_colors=None):
@@ -345,10 +291,10 @@ class Daemon:
         """
         if value in (False, 'False', 'false'):
             self.__lights_state = False
-            self._indicator_send_code(150)
+            self.__indicator_send_code(150)
         else:
             self.__lights_state = True
-            self._indicator_send_code(100)
+            self.__indicator_send_code(100)
 
     """
         Indicator Bindings
@@ -357,9 +303,9 @@ class Daemon:
     @Pyro4.expose
     def indicator_get_state(self):
         if self.__lights_state:
-            self._indicator_send_code(100)
+            self.__indicator_send_code(100)
         else:
-            self._indicator_send_code(150)
+            self.__indicator_send_code(150)
 
     @Pyro4.expose
     def indicator_start(self, uri):
@@ -374,6 +320,62 @@ class Daemon:
     @Pyro4.expose
     def indicator_kill(self):
         self.__pyro = False
+
+    """
+        Private Methods
+    """
+
+    def __illuminate_keyboard(self):
+
+        # Find the last theme that has been used
+        #
+        os.utime(self.__theme.path, None)
+
+        # Illuminate the computer lights
+        #
+
+        self.__controller.erase_config()
+
+        for save, block in self.__computer_blocks_to_save:
+
+            self.__controller.add_block_line(save=save, block=block)
+            self.__controller.add_reset_line(self.__computer.reset_all_lights_on)
+            self.__controller.add_speed_line(self.__theme.get_speed())
+
+            for area in self.__theme.get_areas():
+                for zone in area.get_zones():
+                    self.__controller.add_color_line(zone.get_hex_id(),
+                                                     zone.get_mode(),
+                                                     zone.get_left_color(),
+                                                     zone.get_right_color())
+
+                self.__controller.end_colors_line()
+
+            self.__controller.end_block_line()
+
+        self.__controller.apply_config()
+
+        # Update the Indicator
+        #
+        if self.__pyro:
+            self.__indicator_send_code(100)
+            try:
+                self.__pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
+                                          self.__theme.name,
+                                          self.__lights_state)
+            except Exception:
+                print_error(format_exc())
+
+        # Update the Daemon variables
+        #
+        self.__lights_state = True
+
+    def __indicator_send_code(self, val):
+        if self.__pyro:
+            try:
+                self.__pyro.set_code(val)
+            except Exception:
+                print_error(format_exc())
 
 
 def main():
@@ -397,4 +399,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    print("EXIT")

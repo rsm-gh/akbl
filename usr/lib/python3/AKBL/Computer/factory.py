@@ -22,8 +22,8 @@ import traceback
 from configparser import ConfigParser
 
 from AKBL.Paths import Paths
-from AKBL.Data.Computer.Region import Region
-from AKBL.Data.Computer.Computer import Computer
+from AKBL.Computer.Region import Region
+from AKBL.Computer.Computer import Computer
 from AKBL.utils import print_debug, print_warning, print_error
 
 _SOFTWARE_PATHS = Paths()

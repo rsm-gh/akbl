@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2019 Rafael Senties Martinelli.
+#  Copyright (C) 2019, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -16,28 +16,33 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
+import os
+import sys
 import gi
-
+import subprocess
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-import os
-import subprocess
-
-from AKBL.texts import (TEXT_ONLY_ROOT)
-from AKBL.utils import getuser
 from AKBL.Paths import Paths
+from AKBL.utils import getuser
+from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.Engine.Driver import Driver
+import AKBL.Computer.factory as computer_factory
 
-import AKBL.Data.Computer.factory as computer_factory
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
+sys.path.insert(0, PROJECT_DIR)
 
-from AKBL.Addons.gtk_utils import gtk_dialog_info, gtk_dialog_question
-from AKBL.Addons.ModelChooser.texts import _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT
+from gtk_utils import gtk_dialog_info, gtk_dialog_question
 
 _EMPTY_MODEL = "<NONE>"
 _SOFTWARE_PATHS = Paths()
+_TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT = '''
+No computer model is chosen. If you quit without
+choosing a computer the software will not work. 
 
+Do you want to go back?
+'''
 
 def get_alienware_device_info():
     bash_output = subprocess.run("lsusb",
@@ -71,8 +76,9 @@ class ModelChooser(Gtk.Window):
         """
             Glade
         """
+        glade_path = os.path.join(SCRIPT_DIR, "ModelChooser.glade")
         builder = Gtk.Builder()
-        builder.add_from_file(_SOFTWARE_PATHS._model_chooser_glade_file)
+        builder.add_from_file(glade_path)
         builder.connect_signals(self)
 
         self.window_model_chooser = builder.get_object('window_model_chooser')
@@ -167,15 +173,10 @@ class ModelChooser(Gtk.Window):
     def on_window_destroy(self, *_):
         self._on_button_close_clicked()
 
-def main():
+if __name__ == "__main__":
     if getuser() != 'root':
         gtk_dialog_info(None, TEXT_ONLY_ROOT, icon=_SOFTWARE_PATHS._small_icon_file)
         exit()
 
-    os.chdir(os.path.dirname(os.path.realpath(__file__)))
-    ModelChooser()
+    _ = ModelChooser()
     Gtk.main()
-
-
-if __name__ == "__main__":
-    main()

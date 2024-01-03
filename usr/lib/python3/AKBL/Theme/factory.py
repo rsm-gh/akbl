@@ -18,9 +18,9 @@
 
 import os
 
-from AKBL.Data.Theme.Area import Area
-from AKBL.Data.Theme.Zone import Zone
-from AKBL.Data.Theme.Theme import Theme, _MISSING_ZONE_COLOR
+from AKBL.Theme.Area import Area
+from AKBL.Theme.Zone import Zone
+from AKBL.Theme.Theme import Theme, _MISSING_ZONE_COLOR
 from AKBL.utils import print_warning, print_debug, string_is_hex_color
 
 _AVAILABLE_THEMES = {}

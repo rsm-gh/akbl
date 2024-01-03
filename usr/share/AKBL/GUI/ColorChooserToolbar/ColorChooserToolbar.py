@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2018 Rafael Senties Martinelli.
+#  Copyright (C) 2018, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -16,14 +16,19 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
+import os
 import gi
+import sys
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 from gi.repository import GObject
 
 from AKBL.utils import rgb_to_hex
-from AKBL.Addons.GUI.ColorChooserToolbar.ColorToolItem import ColorToolItem
+
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+sys.path.insert(0, PROJECT_DIR)
+
+from GUI.ColorChooserToolbar.ColorToolItem import ColorToolItem
 
 _DEFAULT_HEX_COLORS = ('#ff0000',
                        '#ff00ff',
