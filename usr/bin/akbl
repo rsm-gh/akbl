@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#  Copyright (C) 2015-2019 Rafael Senties Martinelli.
+#  Copyright (C) 2015-2019, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -16,54 +16,49 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-export LD_PRELOAD=/usr/share/AKBL/libusb-1.0.so.0 ## This is the libusb patch. 
-                                                  ## Some distributions like Debian wheezy does not need it. 
+## This is the libusb patch, some distributions like Debian wheezy does not need it.
+export LD_PRELOAD=/usr/share/AKBL/libusb-1.0.so.0
 
 if [ -z "$1" ]; then
-    python3 /usr/share/AKBL/launch/gui.py
+    python3 /usr/share/AKBL/GUI/GUI.py
 
 elif [ -z "$2" ]; then
     case "$1" in
         --start-daemon)
-                            
-            if [ "$EUID" -ne 0 ]
-            then 
-                echo "The daemon can only be started by the root user."
-            else
-                python3 /usr/share/AKBL/launch/daemon.py "$1"
-            fi
-              
+            python3 /usr/share/AKBL/Daemon.py
         ;;
         --block-testing)
-            python3 /usr/share/AKBL/launch/block_testing.py
+            python3 /usr/share/AKBL/BlockTesting/BlockTesting.py
         ;;
         --start-indicator)
-            setsid python3 /usr/share/AKBL/launch/indicator.py
+            setsid python3 /usr/share/AKBL/Indicator/Indicator.py
         ;;
         --model-chooser)
-            python3 /usr/share/AKBL/launch/model_chooser.py
+            python3 /usr/share/AKBL/ModelChooser/ModelChooser.py
             
             if [ "$EUID" -eq 0 ]; then
                 systemctl restart akbl
             fi
         ;;
         *)
-            python3 /usr/share/AKBL/launch/commands.py "$1"
+            python3 /usr/share/AKBL/commands.py "$1"
         ;;
     esac
     
         
 elif [ -z "$3" ]; then
-    # Used for choosing a computer model without restarting the daemon when instaling the software...
+
     case "$1" in
+        # Used for choosing a computer model without restarting the daemon when installing the software...
+        # Todo: verify if this still necessary and why. Shouldn't it be better to restart the daemon with the new computer?
         --model-chooser)
-            python3 /usr/share/AKBL/launch/model_chooser.py
+            python3 /usr/share/AKBL/ModelChooser/ModelChooser.py
         ;;
         *)
-            python3 /usr/share/AKBL/launch/commands.py "$1"
+            python3 /usr/share/AKBL/commands.py "$1" "$2"
         ;;
     esac
 else
-    python3 /usr/share/AKBL/launch/commands.py "$1"
+    python3 /usr/share/AKBL/commands.py "$1"
 fi
 

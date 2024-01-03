@@ -18,23 +18,24 @@
 
 
 import gi
-
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-
 import os
 import subprocess
 from traceback import format_exc
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
-from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.utils import getuser
-from AKBL.Paths import Paths
-
-from AKBL.Addons.BlockTesting.texts import *
-
+from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.Engine.Driver import Driver
-from AKBL.Engine.Controller import Controller
 from AKBL.Engine.Command import Command
+from AKBL.Engine.Controller import Controller
+
+_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+_TEXT_DEVICE_NOT_FOUND = '''[Device not found]: Vendor ID: {}\t Product ID: {}\n'''
+_TEXT_DEVICE_FOUND = '''[Device found]: Vendor ID: {}\t Product ID: {}\n'''
+_TEXT_BLOCK_TEST = '''[TEST]: zone: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
+_TEXT_BLOCK_LIGHTS_OFF = '''[Command]: Lights off'''
 
 
 def get_alienware_device_info():
@@ -120,17 +121,18 @@ class BlockTesting(Gtk.Window):
 
     def __init__(self):
 
-        self.__paths = Paths()
-        self.__testing_controller = None
-        self.__testing_driver = None
         self.__computer = None
+        self.__testing_driver = None
+        self.__testing_controller = None
         self.__computer_blocks_to_save = []
 
         """
             Glade
         """
+        glade_path = os.path.join(_SCRIPT_DIR, "BlockTesting.glade")
+
         builder = Gtk.Builder()
-        builder.add_from_file(self.__paths._block_testing_glade_file)
+        builder.add_from_file(glade_path)
         builder.connect_signals(self)
 
         glade_object_names = (
@@ -250,7 +252,7 @@ class BlockTesting(Gtk.Window):
             self.box_pyusb.set_sensitive(True)
             self.entry_id_vendor.set_sensitive(False)
             self.entry_id_product.set_sensitive(False)
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_DEVICE_FOUND.format(vendor, product))
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_FOUND.format(vendor, product))
 
             self.combobox_default_blocks.set_active(0)
 
@@ -260,7 +262,7 @@ class BlockTesting(Gtk.Window):
             self.togglebutton_find_device.set_active(False)
             self.entry_id_vendor.set_sensitive(True)
             self.entry_id_product.set_sensitive(True)
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_DEVICE_NOT_FOUND.format(vendor, product))
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_NOT_FOUND.format(vendor, product))
 
     def on_button_send_custom_command_clicked(self, *_):
 
@@ -308,7 +310,7 @@ class BlockTesting(Gtk.Window):
 
             # Log the test
             #
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, TEXT_BLOCK_TEST.format(zone_block,
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_BLOCK_TEST.format(zone_block,
                                                                                             zone_mode,
                                                                                             speed,
                                                                                             zone_left_color,
@@ -343,7 +345,7 @@ class BlockTesting(Gtk.Window):
 
             self.__testing_controller.apply_config()
 
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + TEXT_BLOCK_LIGHTS_OFF + '\n')
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + _TEXT_BLOCK_LIGHTS_OFF + '\n')
 
         except Exception:
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + format_exc())
@@ -372,13 +374,11 @@ class BlockTesting(Gtk.Window):
         setattr(self.__testing_driver.computer, variable_name, value)
         gtk_append_text_to_buffer(self.textbuffer_block_testing, "\n {} = {}".format(variable_name, value))
 
-
     @staticmethod
     def on_window_block_testing_destroy(_):
         Gtk.main_quit()
 
-
-def main():
+if __name__ == "__main__":
     if getuser() != 'root':
         print(TEXT_ONLY_ROOT)
         exit()

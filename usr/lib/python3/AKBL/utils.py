@@ -58,7 +58,10 @@ def print_warning(message):
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
-    print('{}WARNING from `{}` on method `{}`:{}\n{}\n\n'.format(_LIGHT_YELLOW, module_name, method_name, _RESET,
+    print('{}WARNING from `{}` on method `{}`:{}\n{}\n\n'.format(_LIGHT_YELLOW,
+                                                                 module_name,
+                                                                 method_name,
+                                                                 _RESET,
                                                                  str(message).strip()))
 
 
@@ -88,7 +91,10 @@ def print_error(message):
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
-    print('{}ERROR from `{}` on method `{}`{}:\n{}\n\n'.format(_RED, module_name, method_name, _RESET,
+    print('{}ERROR from `{}` on method `{}`{}:\n{}\n\n'.format(_RED,
+                                                               module_name,
+                                                               method_name,
+                                                               _RESET,
                                                                str(message).strip()))
 
 

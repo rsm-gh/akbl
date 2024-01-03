@@ -23,8 +23,8 @@ import sys
 from traceback import format_exc
 
 from AKBL.utils import print_debug, print_error
-from AKBL.Data.Computer import factory as computer_factory
-from AKBL.Data.Computer.Computer import Computer
+from AKBL.Computer.Computer import Computer
+from AKBL.Computer import factory as computer_factory
 
 
 class Driver:

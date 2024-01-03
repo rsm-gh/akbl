@@ -18,34 +18,37 @@
 
 
 import gi
+import os
+import sys
+import shutil
+import threading
+from time import sleep
+from copy import deepcopy
+from traceback import format_exc
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, Gdk
 
-import os
-import threading
-import shutil
-from traceback import format_exc
-from time import sleep
-from copy import deepcopy
-
 import AKBL.texts as texts
+from AKBL.Paths import Paths
 from AKBL.utils import print_error
 from AKBL.Bindings import Bindings
 from AKBL.CCParser import CCParser
-from AKBL.Paths import Paths
-from AKBL.Data.Theme import theme_factory
-from AKBL.Data.Computer.Computer import Computer
-import AKBL.Data.Computer.factory as computer_factory
-from AKBL.Addons.GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
-from AKBL.Addons.GUI.ZoneWidget import ZoneWidget
-from AKBL.Addons.gtk_utils import (gtk_dialog_question,
-                                   gtk_dialog_info,
-                                   gtk_file_chooser,
-                                   gtk_folder_chooser)
+from AKBL.Computer.Computer import Computer
+from AKBL.Theme import factory as theme_factory
+import AKBL.Computer.factory as computer_factory
 
-# 12/11/2018, why? the code should work even without this...
-os.chdir(Paths()._akbl_module_dir)  # this is important for the rest of the code.
+_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+_PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
+sys.path.insert(0, _PROJECT_DIR)
+
+from GUI.ZoneWidget import ZoneWidget
+from GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
+from gtk_utils import (gtk_dialog_question,
+                       gtk_dialog_info,
+                       gtk_file_chooser,
+                       gtk_folder_chooser)
+
 
 class GUI(Gtk.Window):
 
@@ -58,8 +61,10 @@ class GUI(Gtk.Window):
 
         # Glade
         #
+        glade_path = os.path.join(_SCRIPT_DIR, "GUI.glade")
+
         builder = Gtk.Builder()
-        builder.add_from_file(self.__paths._gui_glade_file)
+        builder.add_from_file(glade_path)
         builder.connect_signals(self)
 
         glade_object_names = (
@@ -552,12 +557,8 @@ class GUI(Gtk.Window):
         self.button_new_profile_create.set_sensitive(True)
 
 
-def main():
+if __name__ == "__main__":
     GObject.threads_init()
     Gdk.threads_init()
     _ = GUI()
     Gtk.main()
-
-
-if __name__ == "__main__":
-    main()

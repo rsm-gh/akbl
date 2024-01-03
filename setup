@@ -40,7 +40,6 @@ echo -e "\e[00;33m[1/$NUMBER_OF_STEPS] Removing previous versions..\e[00m"
 #
 echo -e "\e[00;33m\n[2/$NUMBER_OF_STEPS] Installing the software files...\e[00m"
 
-
 function install_files(){
     
     echo "installing: $1"
@@ -62,9 +61,16 @@ install_files "/usr/bin"
 install_files "/usr/share/applications"
 
 install_files "/usr/share/AKBL"
-install_files "/usr/share/AKBL/computers"
-install_files "/usr/share/AKBL/launch"
 install_files "/usr/share/AKBL/test"
+install_files "/usr/share/AKBL/launch"
+install_files "/usr/share/AKBL/computers"
+install_files "/usr/share/AKBL/GUI"
+install_files "/usr/share/AKBL/GUI/ColorChooserToolbar"
+install_files "/usr/share/AKBL/GUI/images"
+install_files "/usr/share/AKBL/BlockTesting"
+install_files "/usr/share/AKBL/Indicator"
+install_files "/usr/share/AKBL/Indicator/images"
+install_files "/usr/share/AKBL/ModelChooser"
 
 install_files "/usr/share/doc/AKBL"
 install_files "/usr/share/doc/AKBL/BusData"
@@ -79,20 +85,10 @@ chmod u=rw /usr/lib/systemd/system/akbl.service # The permissions must be forced
 chmod go=r /usr/lib/systemd/system/akbl.service # The permissions must be forced.
 
 install_files "/usr/lib/python3/AKBL"
-install_files "/usr/lib/python3/AKBL/Data"
-install_files "/usr/lib/python3/AKBL/Data/Computer"
-install_files "/usr/lib/python3/AKBL/Data/Theme"
-
 install_files "/usr/lib/python3/AKBL/Engine"
+install_files "/usr/lib/python3/AKBL/Computer"
+install_files "/usr/lib/python3/AKBL/Theme"
 
-install_files "/usr/lib/python3/AKBL/Addons"
-install_files "/usr/lib/python3/AKBL/Addons/GUI"
-install_files "/usr/lib/python3/AKBL/Addons/GUI/ColorChooserToolbar"
-install_files "/usr/lib/python3/AKBL/Addons/GUI/images"
-install_files "/usr/lib/python3/AKBL/Addons/BlockTesting"
-install_files "/usr/lib/python3/AKBL/Addons/Indicator"
-install_files "/usr/lib/python3/AKBL/Addons/Indicator/images"
-install_files "/usr/lib/python3/AKBL/Addons/ModelChooser"
 
 ##
 ## Post installation
@@ -124,4 +120,5 @@ if [ -f /bin/systemctl ]; then
 else
 	echo -e "\e[00;31m Warning: systemd seems to be missing. The daemon will have to be manually launched.\e[00m"
 fi
+
 echo ""

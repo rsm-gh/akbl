@@ -46,10 +46,6 @@ class Paths:
             self._configuration_file = '/home/{}/.config/alienware-kbl.ini'.format(user)
             self._profiles_dir = '/home/{}/.local/share/alienware-kbl/'.format(user)
 
-        ## GUI
-        ##
-        self._gui_glade_file = '{}/Addons/GUI/GUI.glade'.format(self._akbl_module_dir)
-
         ## GUI & Others
         ##
         self._images_dir = '{}/Addons/GUI/images/'.format(self._akbl_module_dir)
@@ -59,17 +55,6 @@ class Paths:
         ## Block testing window
         ##
         self._block_testing_glade_file = '{}/Addons/BlockTesting/BlockTesting.glade'.format(self._akbl_module_dir)
-
-        ## Indicator
-        ##
-        self._indicator_images_dir = '{}/Addons/Indicator/images/'.format(self._akbl_module_dir)
-        self._indicator_on_icon_file = self._indicator_images_dir + 'icon-on.png'
-        self._indicator_off_icon_file = self._indicator_images_dir + 'icon-off.png'
-        self._indicator_no_daemon_icon = self._indicator_images_dir + 'icon-no-daemon.png'
-
-        ## ModelChooser
-        ##
-        self._model_chooser_glade_file = '{}/Addons/ModelChooser/ModelChooser.glade'.format(self._akbl_module_dir)
 
         """
             Create the necessary folders.

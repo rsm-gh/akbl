@@ -16,26 +16,20 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
+import os
 import gi
-
+import Pyro4
+import threading
+from time import sleep
 gi.require_version('Gtk', '3.0')
 gi.require_version('AyatanaAppIndicator3', '0.1')
 from gi.repository import Gtk, GObject, Gdk
 from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
-import os
-import threading
-import Pyro4
-from time import sleep
-
+from AKBL import texts
 from AKBL.Bindings import Bindings
-from AKBL.Paths import Paths
-from AKBL.texts import (TEXT_PROFILES,
-                        TEXT_START_THE_GUI,
-                        TEXT_SWITCH_STATE,
-                        TEXT_EXIT)
 
+_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 class ConnectIndicator:
 
@@ -65,7 +59,7 @@ class Indicator:
     def __init__(self, parent, akbl=None):
 
         self.__parent = parent
-        self.__paths = Paths()
+
         if akbl is None:
             self.__akbl = Bindings()
         else:
@@ -78,30 +72,34 @@ class Indicator:
 
         # GUI stuff
         #
+        self.__icon_on = os.path.join(_SCRIPT_DIR, 'icon-on.png')
+        self.__icon_off = os.path.join(_SCRIPT_DIR, 'icon-off.png')
+        self.__icon_no_daemon = os.path.join(_SCRIPT_DIR, 'icon-no-daemon.png')
+
         self.__app_indicator = AppIndicator.Indicator.new_with_path(
             'akbl-indicator',
-            self.__paths._indicator_no_daemon_icon,
+            self.__icon_no_daemon,
             AppIndicator.IndicatorCategory.APPLICATION_STATUS,
-            os.path.dirname(os.path.realpath(__file__)))
+            _SCRIPT_DIR)
 
         self.__app_indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
         self.__menu = Gtk.Menu()
 
-        self.__profiles_menu = Gtk.MenuItem(label=TEXT_PROFILES)
+        self.__profiles_menu = Gtk.MenuItem(label=texts.TEXT_PROFILES)
         self.__menu.append(self.__profiles_menu)
         self.__submenu_profiles = Gtk.Menu()
         self.__profiles_menu.set_submenu(self.__submenu_profiles)
 
-        item = Gtk.MenuItem(label=TEXT_START_THE_GUI)
+        item = Gtk.MenuItem(label=texts.TEXT_START_THE_GUI)
         item.connect('activate', self.__on_menuitem_gui)
         self.__menu.append(item)
 
-        self.__submenu_switch_state = Gtk.MenuItem(label=TEXT_SWITCH_STATE)
+        self.__submenu_switch_state = Gtk.MenuItem(label=texts.TEXT_SWITCH_STATE)
         self.__submenu_switch_state.connect('activate', self.__on_menuitem_change)
         self.__menu.append(self.__submenu_switch_state)
 
-        item = Gtk.MenuItem(TEXT_EXIT)
+        item = Gtk.MenuItem(texts.TEXT_EXIT)
         item.connect('activate', self.__on_menuitem_exit)
         self.__menu.append(item)
 
@@ -142,16 +140,16 @@ class Indicator:
 
         if val in (100, 150):
             if val == 100:
-                self.__app_indicator.set_icon(self.__paths._indicator_on_icon_file)
+                self.__app_indicator.set_icon(self.__icon_on)
 
             elif val == 150:
-                self.__app_indicator.set_icon(self.__paths._indicator_off_icon_file)
+                self.__app_indicator.set_icon(self.__icon_off)
 
             for children in self.__menu.get_children():
                 children.set_sensitive(True)
 
         elif val == 666:
-            self.__app_indicator.set_icon(self.__paths._indicator_no_daemon_icon)
+            self.__app_indicator.set_icon(self.__icon_no_daemon)
             self.__submenu_switch_state.set_sensitive(False)
             self.__profiles_menu.set_sensitive(False)
 
@@ -217,14 +215,8 @@ class Indicator:
     def __on_menuitem_gui(*_):
         os.system('''setsid setsid akbl''')
 
-
-def main():
-    os.chdir(os.path.dirname(os.path.realpath(__file__)))
+if __name__ == "__main__":
     GObject.threads_init()
     Gdk.threads_init()
     _ = ConnectIndicator()
     Gtk.main()
-
-
-if __name__ == "__main__":
-    main()
