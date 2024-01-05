@@ -23,9 +23,9 @@ from traceback import format_exc
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
 from AKBL.texts import TEXT_ONLY_ROOT
-from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Controller import Controller
 from AKBL.Theme import factory as theme_factory
+import AKBL.Computer.factory as computer_factory
 from AKBL.utils import getuser, print_warning, print_error, string_is_hex_color
 
 
@@ -33,14 +33,15 @@ class Daemon:
 
     def __init__(self):
 
-        driver = Driver()
-        driver.load_default_device()
+        self.__computer = computer_factory.get_installed_computer()
 
-        self.__controller = Controller(driver)
-
-        self.__computer = self.__controller.get_computer()
         if self.__computer is None:
+            print("Error, no computer configuration is installed.", flush=True)
             exit(1)
+        else:
+            print("Starting the computer configuration '{}'.".format(self.__computer.name), flush=True)
+
+        self.__controller = Controller(self.__computer)
 
         # Todo: Why save blocks in true and false?
         self.__computer_blocks_to_save = ((True, self.__computer.block_load_on_boot),
