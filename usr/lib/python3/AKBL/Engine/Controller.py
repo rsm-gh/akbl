@@ -19,31 +19,33 @@
 
 
 from AKBL.utils import print_error, print_warning
+from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Constructor import Constructor
 
 class Controller:
 
-    def __init__(self, driver):
-            
+    def __init__(self, computer):
+
+        self.__computer = computer
+
+        driver = Driver()
+        driver.load_device(self.__computer.vendor_id,
+                           self.__computer.product_id)
+
         if driver.has_device():
-            self._driver = driver
-            self.__constructor = Constructor(self._driver.computer)
+            self.__driver = driver
+            self.__constructor = Constructor(computer)
         else:
-            self._driver = None
+            self.__driver = None
+            self.__constructor = None
             print_error("The computer is not supported.")
-            
+
 
     def get_computer(self):
-        if self._driver is not None and self._driver.has_device():
-            return self._driver.computer
-    
-        return None
+        return self.__computer
 
     def get_device_information(self):
-        if self._driver.has_device():
-            return str(self._driver._device)
-            
-        return None
+        return self.__driver.device_information()
 
     def erase_config(self):
         self.__constructor.clear()
@@ -53,14 +55,14 @@ class Controller:
 
     def add_reset_line(self, res_cmd):
         
-        self._driver.take_over()
+        self.__driver.take_over()
         
-        constructor = Constructor(self._driver.computer)
+        constructor = Constructor(self.__computer)
         constructor.set_get_status()
         constructor.set_reset_area(res_cmd)
         
         while not self.__device_is_ready():
-            self._driver.write_constructor(constructor)
+            self.__driver.write_constructor(constructor)
                 
         return True
 
@@ -92,24 +94,24 @@ class Controller:
 
         # Wait until is OK to write.
         #
-        constructor = Constructor(self._driver.computer)
+        constructor = Constructor(self.__computer)
         constructor.set_get_status()
         constructor.set_reset_area()
 
         while not self.__device_is_ready():
-            self._driver.write_constructor(constructor)
+            self.__driver.write_constructor(constructor)
 
         # Write the current constructor
         #
-        self._driver.write_constructor(self.__constructor)
+        self.__driver.write_constructor(self.__constructor)
         
     def __device_is_ready(self):
         
-        self._driver.take_over()
+        self.__driver.take_over()
         
-        constructor = Constructor(self._driver.computer)
+        constructor = Constructor(self.__computer)
         constructor.set_get_status()
         
-        self._driver.write_constructor(constructor)
-        msg = self._driver.read_device(constructor)
-        return msg[0] == self._driver.computer.state_ready
+        self.__driver.write_constructor(constructor)
+        msg = self.__driver.read_device(constructor)
+        return msg[0] == self.__computer.state_ready

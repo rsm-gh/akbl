@@ -22,14 +22,15 @@ import usb
 import sys
 from traceback import format_exc
 
-from AKBL.utils import print_debug, print_error
 from AKBL.Computer.Computer import Computer
-from AKBL.Computer import factory as computer_factory
+from AKBL.utils import print_debug, print_error
 
 
 class Driver:
 
     def __init__(self):
+
+        self.__usb_device = None
 
         # Define I/O Request types
         self.__send_request_type = 33
@@ -41,60 +42,24 @@ class Driver:
         self.__read_value = 257
         self.__read_index = 0
 
-        #
-        #
-        self._device = None
-        self.computer = None
+    def load_device(self, id_vendor, id_product):
+
+        self.__usb_device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
+
+        if self.__usb_device is not None:
+            print_debug('{}'.format(self.__usb_device))
+            self.take_over()
 
     def has_device(self):
-        if self._device is None:
+        if self.__usb_device is None:
             return False
         return True
 
-    def find_device(self):
-        """
-            Look for all the devices listed in the `Computers.py` file.
-            If a computer is found, the device is loaded as well as
-            all its parameters.
-        """
+    def device_information(self):
+        if self.__usb_device is None:
+            return ""
 
-        for computer in computer_factory.get_computers():
-
-            device = usb.core.find(idVendor=computer.vendor_id, idProduct=computer.product_id)
-
-            if device is not None:
-                self._device = device
-                self.take_over()
-
-                self.computer = computer
-
-                print_debug(device)
-                print_debug(self.computer)
-
-                break
-
-    def load_device(self, id_vendor, id_product, empty_computer=False):
-        """
-            Load a device from a given id_vendor and id_product.
-            If it success, it will load the global computer configuration. 
-        """
-
-        device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
-
-        if device is None:
-            self._device = None
-        else:
-            self._device = device
-            self.take_over()
-            print_debug('{}'.format(device))
-
-        if empty_computer:
-            self.computer = Computer()
-
-    def load_default_device(self):
-        self.computer = computer_factory.get_default_computer()
-        if self.computer is not None:
-            self.load_device(self.computer.vendor_id, self.computer.product_id)
+        return str(self.__usb_device)
 
     def write_constructor(self, constructor):
 
@@ -102,11 +67,11 @@ class Driver:
 
         try:
             for command in constructor:
-                status = self._device.ctrl_transfer(self.__send_request_type,
-                                                    self.__send_request,
-                                                    self.__send_value,
-                                                    self.__send_index,
-                                                    command)
+                status = self.__usb_device.ctrl_transfer(self.__send_request_type,
+                                                         self.__send_request,
+                                                         self.__send_value,
+                                                         self.__send_index,
+                                                         command)
 
                 print_debug("command output={}".format(status))
 
@@ -116,11 +81,11 @@ class Driver:
     def read_device(self, constructor):
 
         try:
-            msg = self._device.ctrl_transfer(self.__read_request_type,
-                                             self.__read_request,
-                                             self.__read_value,
-                                             self.__read_index,
-                                             len(constructor.get_first_command()))
+            msg = self.__usb_device.ctrl_transfer(self.__read_request_type,
+                                                  self.__read_request,
+                                                  self.__read_value,
+                                                  self.__read_index,
+                                                  len(constructor.get_first_command()))
 
 
         except Exception:
@@ -131,12 +96,15 @@ class Driver:
         return msg
 
     def take_over(self):
+
+        print_debug("take_over")
+
         try:
-            self._device.set_configuration()
+            self.__usb_device.set_configuration()
         except Exception:
-            self._device.detach_kernel_driver(0)
+            self.__usb_device.detach_kernel_driver(0)
             try:
-                self._device.set_configuration()
+                self.__usb_device.set_configuration()
             except Exception:
                 print_error(format_exc())
                 sys.exit(1)

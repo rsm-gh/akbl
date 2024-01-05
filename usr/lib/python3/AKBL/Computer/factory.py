@@ -22,14 +22,29 @@ import traceback
 from configparser import ConfigParser
 
 from AKBL.Paths import Paths
+from AKBL.Engine.Driver import Driver
 from AKBL.Computer.Region import Region
 from AKBL.Computer.Computer import Computer
 from AKBL.utils import print_debug, print_warning, print_error
 
 _SOFTWARE_PATHS = Paths()
 
+def get_compatible_computers():
 
-def get_computer_by_path(file_path):
+    driver = Driver()
+
+    compatible_computers = []
+
+    for installed_computer in get_installed_computers():
+        driver.load_device(installed_computer.vendor_id, installed_computer.product_id)
+
+        if driver.has_device():
+            compatible_computers.append(installed_computer)
+
+    return compatible_computers
+
+
+def get_installed_computer_by_path(file_path):
     print_debug("Reading {}".format(file_path))
 
     computer = Computer()
@@ -83,7 +98,7 @@ def get_computer_by_path(file_path):
     return computer
 
 
-def get_computers():
+def get_installed_computers():
     computers = []
 
     path = Paths()._computers_configuration_dir
@@ -93,7 +108,7 @@ def get_computers():
 
             file_path = os.path.join(path, file_name)
 
-            computer = get_computer_by_path(file_path)
+            computer = get_installed_computer_by_path(file_path)
 
             if computer is None:
                 continue
@@ -113,30 +128,37 @@ def get_computers():
     return computers
 
 
-def get_default_computer():
-    default_computer_path = _SOFTWARE_PATHS._default_computer_file
+def get_installed_computer():
 
-    if not os.path.exists(default_computer_path):
+    if not os.path.exists(_SOFTWARE_PATHS._default_computer_file):
         return None
 
-    return get_computer_by_path(default_computer_path)
+    return get_installed_computer_by_path(_SOFTWARE_PATHS._default_computer_file)
 
 
-def set_default_computer(computer_name):
-    for computer in get_computers():
-        if computer.name == computer_name:
-            with open(_SOFTWARE_PATHS._default_computer_file, 'w') as fw:
-                with open(computer.configuration_path, 'r') as fr:
-                    fw.write(fr.read())
+def set_installed_computer(computer_name):
 
-            print("Default configuration updated to: {}".format(computer_name))
-            return
+    computer = None
+    for inst_computer in get_installed_computers():
+        if inst_computer.name == computer_name:
+            computer = inst_computer
+            break
 
-    print_warning("Computer model '{}' not found.".format(computer_name))
+    if computer is None:
+        print_warning("Computer name '{}' not found.".format(computer_name))
+        return False
 
+    with open(computer.configuration_path, 'r') as f:
+        installed_data = f.read()
 
-def get_computer_by_name(name):
-    for computer in get_computers():
+    with open(_SOFTWARE_PATHS._default_computer_file, 'w') as f:
+        f.write(installed_data)
+
+    print("Installed computer set to: {}".format(computer_name))
+    return True
+
+def get_installed_computer_by_name(name):
+    for computer in get_installed_computers():
         if computer.name == name:
             return computer
 

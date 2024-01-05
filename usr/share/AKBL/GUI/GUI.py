@@ -128,7 +128,7 @@ class GUI(Gtk.Window):
         #   Load a configuration
         #
         computer_name = self.__bindings.get_computer_name()
-        self.__computer = computer_factory.get_computer_by_name(computer_name)
+        self.__computer = computer_factory.get_installed_computer_by_name(computer_name)
         if self.__computer is None:
             self.__computer = Computer()
 

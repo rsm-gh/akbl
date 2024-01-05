@@ -26,7 +26,6 @@ from gi.repository import Gtk
 from AKBL.Paths import Paths
 from AKBL.utils import getuser
 from AKBL.texts import TEXT_ONLY_ROOT
-from AKBL.Engine.Driver import Driver
 import AKBL.Computer.factory as computer_factory
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -104,15 +103,16 @@ class ModelChooser(Gtk.Window):
         self.liststore_hardware_comp.clear()
         self.liststore_hardware_not_comp.clear()
 
-        driver = Driver()
-        for computer in computer_factory.get_computers():
-            driver.load_device(computer.vendor_id, computer.product_id)
+        compatible_computers = computer_factory.get_compatible_computers()
 
-            if driver.has_device():
-                self.liststore_hardware_comp.append(
-                    [computer.name, computer.name == self.__default_computer_name, True])
+        for inst_computer in computer_factory.get_compatible_computers():
+
+            if inst_computer in compatible_computers:
+                    self.liststore_hardware_comp.append([inst_computer.name,
+                                                         inst_computer.name == self.__default_computer_name,
+                                                         True])
             else:
-                self.liststore_hardware_not_comp.append([computer.name])
+                self.liststore_hardware_not_comp.append([inst_computer.name])
 
     def _on_model_change_clicked(self, _, clicked_row):
 
@@ -127,12 +127,12 @@ class ModelChooser(Gtk.Window):
             else:
                 self.liststore_hardware_comp.set_value(iter_row, 1, True)
                 computer_model = self.liststore_hardware_comp.get_value(iter_row, 0)
-                computer_factory.set_default_computer(computer_model)
+                computer_factory.set_installed_computer(computer_model)
 
     @staticmethod
     def __get_default_computer_name():
 
-        default_computer = computer_factory.get_default_computer()
+        default_computer = computer_factory.get_installed_computer()
 
         if default_computer is None:
             return _EMPTY_MODEL
@@ -160,7 +160,7 @@ class ModelChooser(Gtk.Window):
 
                 if self.liststore_hardware_comp.get_value(iter_row, 1):
                     computer_model = self.liststore_hardware_comp.get_value(iter_row, 0)
-                    computer_factory.set_default_computer(computer_model)
+                    computer_factory.set_installed_computer(computer_model)
 
                     break
 
