@@ -26,7 +26,12 @@ from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.Engine.Controller import Controller
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
-from AKBL.utils import getuser, print_warning, print_error, string_is_hex_color
+from AKBL.utils import (getuser,
+                        print_warning,
+                        print_error,
+                        print_info,
+                        print_debug,
+                        string_is_hex_color)
 
 
 class Daemon:
@@ -37,7 +42,6 @@ class Daemon:
 
         if self.__computer is None:
             print("Error, no computer configuration is installed.", flush=True)
-            exit(1)
         else:
             print("Starting the computer configuration '{}'.".format(self.__computer.name), flush=True)
 
@@ -69,10 +73,12 @@ class Daemon:
 
     @Pyro4.expose
     def ping(self):
-        pass
+        print_debug()
 
     @Pyro4.expose
     def reload_configurations(self, user, indicator=True, set_default=True):
+
+        print_debug("user={} indicator={} set_default={}".format(user, indicator, set_default))
 
         if user != self.__user:
             self.__user = user
@@ -104,6 +110,9 @@ class Daemon:
 
             + 'Profile' is the profile name
         """
+
+        print_debug("user={} profile={}".format(user, profile))
+
         if user != self.__user:
             self.__user = user
             self.__paths = Paths(user)
@@ -120,15 +129,18 @@ class Daemon:
             If the lights are on, put them off
             or if the lights are off, put them on
         """
+        print_debug("user={}".format(user))
         self.set_lights(user, not self.__lights_state)
 
     @Pyro4.expose
-    def set_lights(self, user_name, state):
+    def set_lights(self, user, state):
         """
             Turn the lights on or off, 'state' can be a boolean or a string.
         """
-        if user_name != self.__user:
-            self.reload_configurations(user_name)
+        print_debug("user={} state={}".format(user, state))
+
+        if user != self.__user:
+            self.reload_configurations(user)
 
         if state in (False, 'False', 'false'):
 
@@ -189,6 +201,8 @@ class Daemon:
             + Left_colors and right_colors can be a single hex color or a list of hex_colors.
               If both arguments are used, they must have the same number of items.
         """
+
+        print_debug("mode={} speed={} left_colors={} right_colors={}".format(mode, speed, left_colors, right_colors))
 
         if mode not in ('fixed', 'morph', 'blink'):
             print_warning("Wrong mode" + str(mode))
@@ -275,10 +289,12 @@ class Daemon:
 
     @Pyro4.expose
     def get_computer_name(self):
+        print_debug()
         return self.__computer.name
 
     @Pyro4.expose
     def get_computer_info(self):
+        print_debug()
         return (self.__computer.name,
                 self.__computer.vendor_id,
                 self.__computer.product_id,
@@ -290,6 +306,9 @@ class Daemon:
             This method does not change the lights of the keyboard,
             it only updates the daemon and the indicator
         """
+
+        print_debug("value={}".format(value))
+
         if value in (False, 'False', 'false'):
             self.__lights_state = False
             self.__indicator_send_code(150)
@@ -303,6 +322,9 @@ class Daemon:
 
     @Pyro4.expose
     def indicator_get_state(self):
+
+        print_debug()
+
         if self.__lights_state:
             self.__indicator_send_code(100)
         else:
@@ -310,6 +332,9 @@ class Daemon:
 
     @Pyro4.expose
     def indicator_start(self, uri):
+
+        print_debug()
+
         try:
             self.__pyro = Pyro4.Proxy(str(uri))
             self.reload_configurations(self.__user)
@@ -327,6 +352,8 @@ class Daemon:
     """
 
     def __illuminate_keyboard(self):
+
+        print_debug()
 
         # Find the last theme that has been used
         #
@@ -371,10 +398,13 @@ class Daemon:
         #
         self.__lights_state = True
 
-    def __indicator_send_code(self, val):
+    def __indicator_send_code(self, value):
+
+        print_debug("value={}".format(value))
+
         if self.__pyro:
             try:
-                self.__pyro.set_code(val)
+                self.__pyro.set_code(value)
             except Exception:
                 print_error(format_exc())
 
@@ -390,8 +420,7 @@ def main():
     pyro_daemon = Pyro4.Daemon()
     pyro_uri = str(pyro_daemon.register(akbl_daemon))
     pyro_uri_file = Paths()._daemon_pyro_file
-    print("Registering URI=", pyro_uri)
-    print("Updating: ", pyro_uri)
+    print_info('Registering URI="{}"\nUpdating "{}"'.format(pyro_uri, pyro_uri_file))
     with open(pyro_uri_file, encoding='utf-8', mode='wt') as f:
         f.write(pyro_uri)
 

@@ -251,7 +251,7 @@ CCParser instance:
         if isinstance(ini_path, str):
             self.__ini_path = ini_path
             if not os.path.exists(ini_path):
-                print("CCParser Warning: the path to the configuration file does not exists\n")
+                print("CCParser Warning: the path to the configuration file does not exist.\n")
         else:
             print("CCParser Warning: The path is not valid.\n")
             self.__ini_path = ''

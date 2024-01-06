@@ -82,7 +82,7 @@ def get_last_configuration():
 
 
 def load_from_file(path, computer):
-    print_debug('path=`{}`'.format(path))
+    print_debug('path="{}"'.format(path))
 
     with open(path, encoding='utf-8', mode='rt') as f:
         lines = f.readlines()
@@ -189,22 +189,31 @@ def load_from_file(path, computer):
 
     # Add areas in case they be missing
     #
+    warning_text = ""
+
     for area_name in supported_region_names:
         if area_name not in imported_areas:
             region = computer.get_region_by_name(area_name)
             area = Area(region)
+
+            theme.add_area(area)
+            warning_text += 'Adding missing Area="{}"\n'.format(area_name)
 
             zone = Zone(mode=computer.default_mode,
                         left_color=_MISSING_ZONE_COLOR,
                         right_color=_MISSING_ZONE_COLOR)
 
             area.add_zone(zone)
-            theme.add_area(area)
-            print_warning("missing area.name=`{}` on theme=`{}`".format(area_name, theme.name))
-            print_debug(
-                'adding Zone to the missing Area, mode=`{}`, left_color=`{}`, right_color=`{}`'.format(zone.get_mode(),
-                                                                                                       zone.get_left_color(),
-                                                                                                       zone.get_right_color()))
+
+            warning_text += 'Adding Zone to the previous area, mode="{}" left_color="{}" right_color="{}"\n'.format(
+                zone.get_mode(),
+                zone.get_left_color(),
+                zone.get_right_color())
+
+
+    if warning_text != "":
+        print_warning(warning_text)
+
 
     print_debug(theme)
 

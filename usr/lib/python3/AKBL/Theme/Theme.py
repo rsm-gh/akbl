@@ -58,7 +58,7 @@ class Theme:
         if area.name not in self.__areas.keys():
             self.__areas[area.name] = area
         else:
-            print_warning("Duplicated area `{}`, `{}`".format(area.name, self.__areas.keys()))
+            print_warning('Duplicated area "{}", "{}"'.format(area.name, self.__areas.keys()))
 
     def modify_zone(self, area_name, column, left_color, right_color, mode):
         zone = self.__areas[area_name].get_zone(column)
