@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 
+<!-- Generated with glade 3.40.0 
 
 Copyright (C) 2014 - 2019 RSM
 
@@ -26,135 +26,135 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
   <!-- interface-copyright 2014 - 2019 RSM -->
   <object class="GtkAdjustment" id="adjustment_blocks">
     <property name="upper">100000000000000</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment_tempo">
     <property name="upper">255</property>
     <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">1</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment_verical_zone_scrolling">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-info</property>
   </object>
   <object class="GtkImage" id="image10">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-open</property>
   </object>
   <object class="GtkImage" id="image11">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-dialog-error</property>
   </object>
   <object class="GtkImage" id="image12">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">Apply Theme
+    <property name="can-focus">False</property>
+    <property name="tooltip-text" translatable="yes">Apply Theme
      (ctrl-a)</property>
     <property name="stock">gtk-connect</property>
     <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image13">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">Save Theme 
+    <property name="can-focus">False</property>
+    <property name="tooltip-text" translatable="yes">Save Theme 
     (ctrl-s)</property>
     <property name="stock">gtk-save</property>
     <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image14">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">Delete Theme 
+    <property name="can-focus">False</property>
+    <property name="tooltip-text" translatable="yes">Delete Theme 
      (ctrl-d)</property>
     <property name="stock">gtk-dialog-error</property>
     <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image15">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">New Theme 
+    <property name="can-focus">False</property>
+    <property name="tooltip-text" translatable="yes">New Theme 
     (ctrl-n)</property>
     <property name="stock">gtk-edit</property>
     <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image19">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-refresh</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-info</property>
   </object>
   <object class="GtkImage" id="image20">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-info</property>
   </object>
   <object class="GtkImage" id="image26">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-paste</property>
   </object>
   <object class="GtkImage" id="image27">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">Import Theme
+    <property name="can-focus">False</property>
+    <property name="tooltip-text" translatable="yes">Import Theme
      (ctrl-i)</property>
     <property name="stock">gtk-open</property>
     <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image28">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">Export Theme
+    <property name="can-focus">False</property>
+    <property name="tooltip-text" translatable="yes">Export Theme
      (ctrl-e)</property>
     <property name="stock">gtk-paste</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-about</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-connect</property>
   </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-close</property>
   </object>
   <object class="GtkImage" id="image6">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-save</property>
   </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-apply</property>
   </object>
   <object class="GtkImage" id="image8">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-cancel</property>
   </object>
   <object class="GtkImage" id="image9">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-edit</property>
   </object>
   <object class="GtkListStore" id="liststore_default_blocks">
@@ -264,48 +264,45 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
   </object>
   <object class="GtkWindow" id="window_root">
-    <property name="width_request">600</property>
-    <property name="height_request">600</property>
+    <property name="width-request">600</property>
+    <property name="height-request">600</property>
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">AKBL</property>
-    <property name="window_position">center</property>
-    <property name="icon">images/icon-m.png</property>
+    <property name="window-position">center</property>
+    <property name="icon">img/icon-m.png</property>
     <signal name="destroy" handler="on_window_root_destroy" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkMenuBar" id="menubar">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkMenuItem" id="menuitem_application">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="right_justified">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="right-justified">True</property>
                     <property name="label" translatable="yes">Application</property>
                     <child type="submenu">
                       <object class="GtkMenu" id="menu_application">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkImageMenuItem" id="imagemenuitem_quit">
                             <property name="label">Quit</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image5</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_quit_activate" swapped="no"/>
                           </object>
                         </child>
@@ -316,22 +313,22 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkMenuItem" id="menuitem_profile">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="right_justified">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="right-justified">True</property>
                     <property name="label" translatable="yes">Profile</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <child type="submenu">
                       <object class="GtkMenu" id="menu_profile">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkImageMenuItem" id="imagemenuitem_new">
                             <property name="label">New</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image9</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_new_activate" swapped="no"/>
                           </object>
                         </child>
@@ -339,10 +336,10 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkImageMenuItem" id="imagemenuitem_save">
                             <property name="label">Save</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image6</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_save_activate" swapped="no"/>
                           </object>
                         </child>
@@ -350,27 +347,27 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkImageMenuItem" id="imagemenuitem_delete">
                             <property name="label">Delete</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image11</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_delete_activate" swapped="no"/>
                           </object>
                         </child>
                         <child>
                           <object class="GtkSeparatorMenuItem" id="menuitem2">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="imagemenuitem_import">
                             <property name="label" translatable="yes">Import</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image10</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_import_activate" swapped="no"/>
                           </object>
                         </child>
@@ -378,10 +375,10 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkImageMenuItem" id="imagemenuitem_export">
                             <property name="label" translatable="yes">Export</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image26</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_export_activate" swapped="no"/>
                           </object>
                         </child>
@@ -392,22 +389,22 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkMenuItem" id="menuitem_command">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="right_justified">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="right-justified">True</property>
                     <property name="label" translatable="yes">Commands</property>
                     <child type="submenu">
                       <object class="GtkMenu" id="menu_command">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkImageMenuItem" id="imagemenuitem_apply_configuration">
                             <property name="label">Apply theme</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="right_justified">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="right-justified">True</property>
                             <property name="image">image4</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_apply_configuration_activate" swapped="no"/>
                           </object>
                         </child>
@@ -415,10 +412,10 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkImageMenuItem" id="button_lights_on">
                             <property name="label" translatable="yes">Lights On</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image1</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_lights_on_activate" swapped="no"/>
                           </object>
                         </child>
@@ -426,10 +423,10 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkImageMenuItem" id="button_lights_off">
                             <property name="label" translatable="yes">Lights Off</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image2</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_lights_off_activate" swapped="no"/>
                             <signal name="activate-item" handler="on_imagemenuitem_lights_off_activate" swapped="no"/>
                           </object>
@@ -438,10 +435,10 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkImageMenuItem" id="menuitem_off_areas">
                             <property name="label" translatable="yes">Areas to keep on</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image20</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                           </object>
                         </child>
                       </object>
@@ -451,24 +448,24 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkMenuItem" id="menuitem_options">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Settings</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <child type="submenu">
                       <object class="GtkMenu" id="menu3">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkSeparatorMenuItem" id="menuitem5">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkCheckMenuItem" id="checkbutton_autosave">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Auto-Save any change made to the theme.</property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes">Auto-Save any change made to the theme.</property>
                             <property name="label" translatable="yes">Auto Save</property>
                             <property name="active">True</property>
                             <signal name="activate" handler="on_checkbutton_autosave_activate" swapped="no"/>
@@ -477,7 +474,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                         <child>
                           <object class="GtkCheckMenuItem" id="checkbutton_profile_buttons">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Profile Buttons</property>
                             <signal name="activate" handler="on_checkbutton_profile_buttons_activate" swapped="no"/>
                           </object>
@@ -485,8 +482,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                         <child>
                           <object class="GtkCheckMenuItem" id="checkbutton_delete_warning">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Display a warning when deleting a theme.</property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes">Display a warning when deleting a theme.</property>
                             <property name="label" translatable="yes">Warning on Delete</property>
                             <property name="active">True</property>
                             <signal name="activate" handler="on_checkbutton_delete_warning_activate" swapped="no"/>
@@ -496,10 +493,10 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkImageMenuItem" id="button_reset_toolbar_colors">
                             <property name="label" translatable="yes">Reset Toolbar Colors</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image19</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_button_reset_toolbar_colors_activate" swapped="no"/>
                           </object>
                         </child>
@@ -510,21 +507,21 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkMenuItem" id="menuitem_help">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Help</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <child type="submenu">
                       <object class="GtkMenu" id="menu4">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkImageMenuItem" id="imagemenuitem_about">
                             <property name="label">About</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="image">image3</property>
-                            <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_button_about_activate" swapped="no"/>
                           </object>
                         </child>
@@ -542,10 +539,10 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <object class="GtkLabel" id="label_computer_model">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_left">10</property>
-                <property name="margin_right">10</property>
-                <property name="label" translatable="yes">COMPUTER-MODEL</property>
+                <property name="can-focus">False</property>
+                <property name="margin-left">10</property>
+                <property name="margin-right">10</property>
+                <property name="label" translatable="yes">&lt;COMPUTER-MODEL&gt;</property>
                 <property name="xalign">1</property>
               </object>
               <packing>
@@ -557,12 +554,12 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <object class="GtkBox" id="box_profile_buttons">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkButton" id="button_apply">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">image12</property>
                     <signal name="clicked" handler="on_button_apply_clicked" swapped="no"/>
                   </object>
@@ -575,8 +572,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkButton" id="button_delete">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">image14</property>
                     <signal name="clicked" handler="on_button_delete_clicked" swapped="no"/>
                   </object>
@@ -589,8 +586,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkButton" id="button_new">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">image15</property>
                     <signal name="clicked" handler="on_button_new_clicked" swapped="no"/>
                   </object>
@@ -603,8 +600,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkButton" id="button_save">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">image13</property>
                     <property name="xalign">0.44999998807907104</property>
                     <signal name="clicked" handler="on_button_save_clicked" swapped="no"/>
@@ -618,8 +615,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkButton" id="button_export">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">image28</property>
                     <signal name="clicked" handler="on_button_export_clicked" swapped="no"/>
                   </object>
@@ -632,8 +629,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkButton" id="button_import">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">image27</property>
                     <signal name="clicked" handler="on_button_import_clicked" swapped="no"/>
                   </object>
@@ -646,7 +643,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkSeparator">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                   </object>
                   <packing>
@@ -665,9 +662,9 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <object class="GtkComboBox" id="combobox_profiles">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Theme Selection</property>
-                <property name="margin_right">5</property>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes">Theme Selection</property>
+                <property name="margin-right">5</property>
                 <property name="model">liststore_profiles</property>
                 <signal name="changed" handler="on_combobox_profiles_changed" swapped="no"/>
                 <child>
@@ -686,20 +683,20 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <object class="GtkVolumeButton" id="tempobutton">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Adjust the speed of the theme.</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Adjust the speed of the theme.</property>
                 <property name="orientation">vertical</property>
                 <property name="value">1</property>
                 <property name="size">button</property>
                 <property name="adjustment">adjustment_tempo</property>
                 <property name="icons">appointment-soon</property>
-                <property name="use_symbolic">False</property>
+                <property name="use-symbolic">False</property>
                 <signal name="value-changed" handler="on_tempobutton_value_changed" swapped="no"/>
                 <child internal-child="plus_button">
                   <object class="GtkButton" id="volumebutton-plus_button">
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="relief">none</property>
@@ -707,8 +704,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 </child>
                 <child internal-child="minus_button">
                   <object class="GtkButton" id="volumebutton-minus_button">
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="relief">none</property>
@@ -729,27 +726,30 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
+          <placeholder/>
+        </child>
+        <child>
           <object class="GtkBox" id="horizontal_main_box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="vadjustment">adjustment_verical_zone_scrolling</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkViewport">
-                    <property name="width_request">110</property>
+                    <property name="width-request">110</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-left">10</property>
+                    <property name="margin-right">10</property>
                     <child>
                       <object class="GtkBox" id="box_area_labels">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <placeholder/>
@@ -768,17 +768,17 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow_zones">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="vadjustment">adjustment_verical_zone_scrolling</property>
-                <property name="shadow_type">in</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkViewport" id="viewport1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkBox" id="box_areas">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <placeholder/>
@@ -802,13 +802,10 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkLabel" id="label_user_message">
-            <property name="height_request">10</property>
+            <property name="height-request">10</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -821,28 +818,27 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
     </child>
   </object>
   <object class="GtkAboutDialog" id="window_about">
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">5</property>
     <property name="title" translatable="yes">                    About</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="icon">images/icon-m.png</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">window_root</property>
-    <property name="program_name">AKBL</property>
-    <property name="version">v__AKBL_VERSION__</property>
-    <property name="copyright" translatable="yes">© 2014-2019 RSM
+    <property name="window-position">center-on-parent</property>
+    <property name="destroy-with-parent">True</property>
+    <property name="icon">img/icon-m.png</property>
+    <property name="type-hint">dialog</property>
+    <property name="transient-for">window_root</property>
+    <property name="program-name">AKBL</property>
+    <property name="copyright" translatable="yes">© 2014-2019, 2024 Rafael Senties Martinelli
 © 2011-2012 The pyAlienFX team
 </property>
     <property name="comments" translatable="yes">
 </property>
     <property name="website">https://github.com/rsm-gh/akbl</property>
-    <property name="website_label" translatable="yes">Home</property>
+    <property name="website-label" translatable="yes">Home</property>
     <property name="authors">
 AKBL:
-RSM
+Rafael Senties Martinelli
 
 PyALienFX:
 Ledjfou125 &lt;ledjfou125@gmail.com&gt;
@@ -868,25 +864,22 @@ PyUSB http://sourceforge.net/apps/trac/pyusb/
 LibUSB http://www.libusb.org/ 
 </property>
     <property name="artists">Amalia Angeli</property>
-    <property name="logo">images/icon-m.png</property>
-    <property name="license_type">gpl-3-0</property>
-    <child>
-      <placeholder/>
-    </child>
+    <property name="logo">img/icon-m.png</property>
+    <property name="license-type">gpl-3-0</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="aboutdialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -894,32 +887,29 @@ LibUSB http://www.libusb.org/
     </child>
   </object>
   <object class="GtkDialog" id="window_new_profile">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">New Profile</property>
     <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <property name="deletable">False</property>
-    <property name="transient_for">window_root</property>
-    <child>
-      <placeholder/>
-    </child>
+    <property name="transient-for">window_root</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="button_new_profile_create">
                 <property name="label" translatable="yes">Create</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="has-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="image">image7</property>
                 <signal name="clicked" handler="on_button_new_profile_create_clicked" swapped="no"/>
               </object>
@@ -933,8 +923,8 @@ LibUSB http://www.libusb.org/
               <object class="GtkButton" id="button_new_profile_cancel">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="image">image8</property>
                 <signal name="clicked" handler="on_button_new_profile_cancel_clicked" swapped="no"/>
               </object>
@@ -954,12 +944,12 @@ LibUSB http://www.libusb.org/
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Name of the new profile:</property>
               </object>
               <packing>
@@ -970,13 +960,13 @@ LibUSB http://www.libusb.org/
             </child>
             <child>
               <object class="GtkEntry" id="entry_new_profile">
-                <property name="height_request">20</property>
+                <property name="height-request">20</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="margin_left">5</property>
-                <property name="margin_right">5</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">15</property>
+                <property name="can-focus">True</property>
+                <property name="margin-left">5</property>
+                <property name="margin-right">5</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">15</property>
                 <signal name="changed" handler="on_entry_new_profile_changed" swapped="no"/>
               </object>
               <packing>

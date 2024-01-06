@@ -146,9 +146,6 @@ class Daemon:
 
             areas_to_keep_on = self.__ccp.get_str_defval('areas_to_keep_on', '')
 
-            print_warning("AREAS TO KEEP ON")
-            print_warning(areas_to_keep_on)
-
             if areas_to_keep_on == '':
 
                 self.__controller.erase_config()
@@ -165,8 +162,6 @@ class Daemon:
                 """
 
                 areas_to_keep_on = areas_to_keep_on.split('|')
-
-                print_warning(areas_to_keep_on)
 
                 self.__controller.erase_config()
                 for save, block in self.__computer_blocks_to_save:

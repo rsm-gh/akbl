@@ -78,10 +78,10 @@ def print_debug(message=None, direct_output=False):
     method_name = isp1[3]
 
     if message is None:
-        print('\n{}[DEBUG]: "{}" {}.{}"'.format(_CYAN,
-                                                module_name,
-                                                method_name,
-                                                _RESET))
+        print('\n{}[DEBUG]: "{}" {}{}'.format(_CYAN,
+                                              module_name,
+                                              method_name,
+                                              _RESET))
     else:
         print('\n{}[DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
                                                    module_name,

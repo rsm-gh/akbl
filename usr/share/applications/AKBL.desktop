@@ -3,6 +3,6 @@ Name=AKBL
 Exec=akbl
 Terminal=false
 Type=Application
-Icon=/usr/lib/python3/AKBL/Addons/GUI/images/icon.png
+Icon=/home/cadweb/Documents/eclipse-workspace/akbl/usr/share/AKBL/icon.png
 Categories=Settings;
 Name[en_US.UTF-8]=AKBL
