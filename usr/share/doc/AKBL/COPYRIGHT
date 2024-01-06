@@ -14,29 +14,9 @@ Files: usr/share/AKBL/libusb-1.0.so.0
 
 Copyright: Copyright (C) 2015 Amalia Angeli.
 License: CC-BY 4.0
-Files:
-	usr/lib/python3/AKBL/Addons/GUI/images/empty.png
-	usr/lib/python3/AKBL/Addons/GUI/images/cross_off.png
-	usr/lib/python3/AKBL/Addons/GUI/images/cross_on.png
-	usr/lib/python3/AKBL/Addons/GUI/images/morph_on.png
-	usr/lib/python3/AKBL/Addons/GUI/images/icon.png
-	usr/lib/python3/AKBL/Addons/GUI/images/icon-m.png
-	usr/lib/python3/AKBL/Addons/GUI/images/tempo.png
-	usr/lib/python3/AKBL/Addons/GUI/images/morph_off.png
-	usr/lib/python3/AKBL/Addons/GUI/images/blink_off.png
-	usr/lib/python3/AKBL/Addons/GUI/images/cross.png
-	usr/lib/python3/AKBL/Addons/GUI/images/fixed_on.png
-	usr/lib/python3/AKBL/Addons/GUI/images/blink_on.png
-	usr/lib/python3/AKBL/Addons/GUI/images/fixed_off.png
+Files: *.png
 
-	usr/lib/python3/AKBL/Addons/Indicator/images/icon-off.png
-	usr/lib/python3/AKBL/Addons/Indicator/images/icon-no-daemon.png
-	usr/lib/python3/AKBL/Addons/Indicator/images/icon-on.png
-
-
-
-
-Copyright: Copyright (C) 2014-2019 Rafael Senties Martinelli
+Copyright: Copyright (C) 2014-2019, 2024 Rafael Senties Martinelli.
            Copyright (C) 2011-2012 the pyAlienFX team.
 License: GPL-3
 Files: 

@@ -70,17 +70,17 @@ class Indicator:
         self.__current_code = None
         self.__check_daemon = True
 
+        image_dir = os.path.join(os.path.join(_SCRIPT_DIR, "img"))
+
+        self.__icon_no_daemon = os.path.join(image_dir, 'icon-no-daemon.png')
+
         # GUI stuff
         #
-        self.__icon_on = os.path.join(_SCRIPT_DIR, 'icon-on.png')
-        self.__icon_off = os.path.join(_SCRIPT_DIR, 'icon-off.png')
-        self.__icon_no_daemon = os.path.join(_SCRIPT_DIR, 'icon-no-daemon.png')
-
         self.__app_indicator = AppIndicator.Indicator.new_with_path(
             'akbl-indicator',
             self.__icon_no_daemon,
             AppIndicator.IndicatorCategory.APPLICATION_STATUS,
-            _SCRIPT_DIR)
+            image_dir)
 
         self.__app_indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
@@ -99,7 +99,7 @@ class Indicator:
         self.__submenu_switch_state.connect('activate', self.__on_menuitem_change)
         self.__menu.append(self.__submenu_switch_state)
 
-        item = Gtk.MenuItem(texts.TEXT_EXIT)
+        item = Gtk.MenuItem(label=texts.TEXT_EXIT)
         item.connect('activate', self.__on_menuitem_exit)
         self.__menu.append(item)
 
@@ -140,16 +140,16 @@ class Indicator:
 
         if val in (100, 150):
             if val == 100:
-                self.__app_indicator.set_icon(self.__icon_on)
+                self.__app_indicator.set_icon_full(self.__icon_no_daemon,"On")
 
             elif val == 150:
-                self.__app_indicator.set_icon(self.__icon_off)
+                self.__app_indicator.set_icon_full(self.__icon_no_daemon, "Off")
 
             for children in self.__menu.get_children():
                 children.set_sensitive(True)
 
         elif val == 666:
-            self.__app_indicator.set_icon(self.__icon_no_daemon)
+            self.__app_indicator.set_icon_full(self.__icon_no_daemon, "No Daemon")
             self.__submenu_switch_state.set_sensitive(False)
             self.__profiles_menu.set_sensitive(False)
 
@@ -216,7 +216,5 @@ class Indicator:
         os.system('''setsid setsid akbl''')
 
 if __name__ == "__main__":
-    GObject.threads_init()
-    Gdk.threads_init()
     _ = ConnectIndicator()
     Gtk.main()

@@ -215,7 +215,7 @@ def load_from_file(path, computer):
         print_warning(warning_text)
 
 
-    print_debug(theme)
+    #print_debug(theme)
 
     #
     # Add the configuration

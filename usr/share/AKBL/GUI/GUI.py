@@ -61,6 +61,9 @@ class GUI(Gtk.Window):
 
         # Glade
         #
+
+
+
         glade_path = os.path.join(_SCRIPT_DIR, "GUI.glade")
 
         builder = Gtk.Builder()
@@ -558,7 +561,5 @@ class GUI(Gtk.Window):
 
 
 if __name__ == "__main__":
-    GObject.threads_init()
-    Gdk.threads_init()
     _ = GUI()
     Gtk.main()
