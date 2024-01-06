@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2016, 2018 Rafael Senties Martinelli.
+#  Copyright (C) 2016, 2018, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -48,7 +48,7 @@ def rgb_to_hex(rgb):
 
 
 def __parse_module_name(name):
-    """ Used for the `print` functions """
+    """ Used for the 'print' functions """
 
     return str(name).split("from '", 1)[1].split("'>", 1)[0]
 
@@ -58,32 +58,36 @@ def print_warning(message):
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
-    print('{}WARNING from `{}` on method `{}`:{}\n{}\n\n'.format(_LIGHT_YELLOW,
-                                                                 module_name,
-                                                                 method_name,
-                                                                 _RESET,
-                                                                 str(message).strip()))
+    print('\n{}[WARNING]: "{}" {}:{}\n{}'.format(_LIGHT_YELLOW,
+                                                 module_name,
+                                                 method_name,
+                                                 _RESET,
+                                                 str(message).strip()))
 
 
-def print_debug(message=None):
+def print_debug(message=None, direct_output=False):
     if not DEBUG:  # Displaying debug messages on the production version has been
         return  # removed since printing all the data slows the communication with the hardware.
+
+    if direct_output:
+        print(message)
+        return
 
     isp1 = inspect.stack()[1]
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
     if message is None:
-        print('{}DEBUG from `{}` on method `{}`.{}\n'.format(_CYAN,
-                                                             module_name,
-                                                             method_name,
-                                                             _RESET))
+        print('\n{}[DEBUG]: "{}" {}.{}"'.format(_CYAN,
+                                                module_name,
+                                                method_name,
+                                                _RESET))
     else:
-        print('{}DEBUG from `{}` on method `{}`:{}\n{}\n\n'.format(_CYAN,
-                                                                   module_name,
-                                                                   method_name,
-                                                                   _RESET,
-                                                                   str(message).strip()))
+        print('\n{}[DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
+                                                   module_name,
+                                                   method_name,
+                                                   _RESET,
+                                                   str(message).strip()))
 
 
 def print_error(message):
@@ -91,11 +95,23 @@ def print_error(message):
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
-    print('{}ERROR from `{}` on method `{}`{}:\n{}\n\n'.format(_RED,
-                                                               module_name,
-                                                               method_name,
-                                                               _RESET,
-                                                               str(message).strip()))
+    print('\n{}[ERROR]: "{}" {}{}:\n{}'.format(_RED,
+                                               module_name,
+                                               method_name,
+                                               _RESET,
+                                               str(message).strip()))
+
+
+def print_info(message):
+    isp1 = inspect.stack()[1]
+    module_name = __parse_module_name(inspect.getmodule(isp1[0]))
+    method_name = isp1[3]
+
+    print('\n{}[INFO]: "{}" {}{}:\n{}'.format(_GREEN,
+                                              module_name,
+                                              method_name,
+                                              _RESET,
+                                              str(message).strip()))
 
 
 if __name__ == '__main__':
