@@ -61,9 +61,6 @@ class GUI(Gtk.Window):
 
         # Glade
         #
-
-
-
         glade_path = os.path.join(_SCRIPT_DIR, "GUI.glade")
 
         builder = Gtk.Builder()
@@ -173,11 +170,11 @@ class GUI(Gtk.Window):
         self.checkbutton_delete_warning.set_active(self.__ccp.get_bool_defval('delete_warning', True))
 
         self.populate_box_areas()
+        self.window_root.show_all()
 
+        # It must be called after show_all() or it wont work.
         if not self.checkbutton_profile_buttons.get_active():
             self.box_profile_buttons.hide()
-
-        self.window_root.show_all()
 
     def populate_box_areas(self):
         """
