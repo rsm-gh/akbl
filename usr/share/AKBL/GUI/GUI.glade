@@ -286,36 +286,11 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <object class="GtkMenuItem" id="menuitem_application">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="right-justified">True</property>
-                    <property name="label" translatable="yes">Application</property>
-                    <child type="submenu">
-                      <object class="GtkMenu" id="menu_application">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <child>
-                          <object class="GtkImageMenuItem" id="imagemenuitem_quit">
-                            <property name="label">Quit</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="image">image5</property>
-                            <property name="use-stock">False</property>
-                            <property name="always-show-image">True</property>
-                            <signal name="activate" handler="on_imagemenuitem_quit_activate" swapped="no"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
                   <object class="GtkMenuItem" id="menuitem_profile">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="right-justified">True</property>
-                    <property name="label" translatable="yes">Profile</property>
+                    <property name="label" translatable="yes">File</property>
                     <property name="use-underline">True</property>
                     <child type="submenu">
                       <object class="GtkMenu" id="menu_profile">
@@ -380,6 +355,23 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="use-stock">False</property>
                             <property name="always-show-image">True</property>
                             <signal name="activate" handler="on_imagemenuitem_export_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorMenuItem" id="menuitem1">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImageMenuItem" id="imagemenuitem_quit">
+                            <property name="label">Quit</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="image">image5</property>
+                            <property name="use-stock">False</property>
+                            <property name="always-show-image">True</property>
+                            <signal name="activate" handler="on_imagemenuitem_quit_activate" swapped="no"/>
                           </object>
                         </child>
                       </object>
@@ -475,7 +467,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkCheckMenuItem" id="checkbutton_profile_buttons">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes">Profile Buttons</property>
+                            <property name="label" translatable="yes">File Toolbar</property>
                             <signal name="activate" handler="on_checkbutton_profile_buttons_activate" swapped="no"/>
                           </object>
                         </child>
@@ -825,7 +817,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
     <property name="modal">True</property>
     <property name="window-position">center-on-parent</property>
     <property name="destroy-with-parent">True</property>
-    <property name="icon">../icon</property>
+    <property name="icon">../icon.png</property>
     <property name="type-hint">dialog</property>
     <property name="transient-for">window_root</property>
     <property name="program-name">AKBL</property>
@@ -864,7 +856,7 @@ PyUSB http://sourceforge.net/apps/trac/pyusb/
 LibUSB http://www.libusb.org/ 
 </property>
     <property name="artists">Amalia Angeli</property>
-    <property name="logo">../icon</property>
+    <property name="logo">../icon.png</property>
     <property name="license-type">gpl-3-0</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
