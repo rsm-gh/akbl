@@ -116,7 +116,9 @@ echo -e "\e[00;33m\n[5/$NUMBER_OF_STEPS] Enabling the daemon...\e[00m"
 if [ -f /bin/systemctl ]; then
     systemctl daemon-reload
     systemctl enable akbl
-    systemctl start akbl
+    systemctl restart akbl
+    sleep 2
+    systemctl status akbl
 else
 	echo -e "\e[00;31m Warning: systemd seems to be missing. The daemon will have to be manually launched.\e[00m"
 fi
