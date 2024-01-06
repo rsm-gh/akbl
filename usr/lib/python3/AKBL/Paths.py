@@ -29,8 +29,7 @@ class Paths:
 
         ## System
         ##
-        self._systemctl_dir = '/bin/systemctl'
-        self._akbl_module_dir = '/usr/lib/python3/AKBL'
+        self._akbl_share_dir = '/usr/share/AKBL'
         self._computers_configuration_dir = "/usr/share/AKBL/computers"
         self._default_computer_file = '/etc/AKBL/default_computer.ini'
         self._daemon_pyro_file = '/etc/AKBL/pyro-address'
@@ -48,13 +47,7 @@ class Paths:
 
         ## GUI & Others
         ##
-        self._images_dir = '{}/Addons/GUI/images/'.format(self._akbl_module_dir)
-        self._small_icon_file = self._images_dir + 'icon.png'
-        self._medium_icon_file = self._images_dir + 'icon-m.png'
-
-        ## Block testing window
-        ##
-        self._block_testing_glade_file = '{}/Addons/BlockTesting/BlockTesting.glade'.format(self._akbl_module_dir)
+        self._icon_file = os.path.join(self._akbl_share_dir, 'icon.png')
 
         """
             Create the necessary folders.

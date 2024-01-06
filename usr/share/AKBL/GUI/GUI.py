@@ -27,7 +27,7 @@ from copy import deepcopy
 from traceback import format_exc
 
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GObject, Gdk
+from gi.repository import Gtk, Gdk
 
 import AKBL.texts as texts
 from AKBL.Paths import Paths
@@ -130,9 +130,8 @@ class GUI(Gtk.Window):
 
         #   Load a configuration
         #
-        computer_name = self.__bindings.get_computer_name()
-        self.__computer = computer_factory.get_installed_computer_by_name(computer_name)
-        if self.__computer is None:
+        self.__computer = computer_factory.get_installed_computer()
+        if self.__computer is None: #todo: display message install computer model
             self.__computer = Computer()
 
         self.label_computer_model.set_text(self.__computer.name)
@@ -251,7 +250,7 @@ class GUI(Gtk.Window):
             Gdk.threads_enter()
             if not gtk_dialog_question(self.window_root,
                                        texts.TEXT_CONFIRM_DELETE_CONFIGURATION,
-                                       icon=self.__paths._small_icon_file):
+                                       icon=self.__paths._icon_file):
                 Gdk.threads_leave()
                 return
             Gdk.threads_leave()
@@ -476,7 +475,7 @@ class GUI(Gtk.Window):
     def on_imagemenuitem_import_activate(self, *_):
         file_path = gtk_file_chooser(parent=self.window_root,
                                      title=texts.TEXT_CHOOSE_A_THEME,
-                                     icon_path=self.__paths._small_icon_file,
+                                     icon_path=self.__paths._icon_file,
                                      filters=(("AKBL theme", '*.cfg'),))
 
         if file_path:
@@ -492,7 +491,7 @@ class GUI(Gtk.Window):
     def on_imagemenuitem_export_activate(self, *_):
         folder_path = gtk_folder_chooser(parent=self.window_root,
                                          title=texts.TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
-                                         icon_path=self.__paths._small_icon_file)
+                                         icon_path=self.__paths._icon_file)
 
         if folder_path:
             new_path = '{}/{}.cfg'.format(folder_path, self.__theme.name)

@@ -71,7 +71,7 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="window-position">center</property>
     <property name="default-width">500</property>
     <property name="default-height">300</property>
-    <property name="icon">../GUI/images/icon.png</property>
+    <property name="icon">../icon.png</property>
     <signal name="destroy" handler="on_window_destroy" swapped="no"/>
     <child>
       <object class="GtkBox">
