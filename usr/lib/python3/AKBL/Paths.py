@@ -18,7 +18,7 @@
 
 
 import os
-from shutil import rmtree
+import shutil
 
 from AKBL.utils import getuser
 
@@ -37,13 +37,20 @@ class Paths:
         ## User
         ##
 
-        # These "alienware-kbl" paths shall be updated to "akbl" but users will have to migrate their data.
+
         if user == 'root':
-            self._configuration_file = '/root/.config/alienware-kbl.ini'
-            self._profiles_dir = '/root/.local/share/alienware-kbl/'
+            self._configuration_file = '/root/.config/akbl.ini'
+            self._profiles_dir = '/root/.local/share/akbl/'
         else:
-            self._configuration_file = '/home/{}/.config/alienware-kbl.ini'.format(user)
-            self._profiles_dir = '/home/{}/.local/share/alienware-kbl/'.format(user)
+            self._configuration_file = '/home/{}/.config/akbl.ini'.format(user)
+            self._profiles_dir = '/home/{}/.local/share/akbl/'.format(user)
+
+        # The paths went renamed from "alienware-kbl" to "akbl", this will migrate the data.
+        for location in (self._configuration_file, self._profiles_dir):
+            old_location = location.replace("akbl", "alienware-kbl")
+            if os.path.exists(old_location):
+                os.rename(old_location, location)
+
 
         ## GUI & Others
         ##
@@ -77,4 +84,4 @@ class Paths:
         # Old versions of alienware-kbl may still create the folder, the bug was in the Paths class.
         #
         if os.path.isdir(self._configuration_file):
-            rmtree(self._configuration_file)
+            shutil.rmtree(self._configuration_file)
