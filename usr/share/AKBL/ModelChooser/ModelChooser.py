@@ -145,7 +145,7 @@ class ModelChooser(Gtk.Window):
         # Do not exit if no computer has been set (warn the user)
         #
         if self.__get_default_computer_name() == _EMPTY_MODEL:
-            if gtk_dialog_question(None, _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, icon=_SOFTWARE_PATHS._small_icon_file):
+            if gtk_dialog_question(None, _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, icon=_SOFTWARE_PATHS._icon_file):
                 return
 
         #
@@ -175,7 +175,7 @@ class ModelChooser(Gtk.Window):
 
 if __name__ == "__main__":
     if getuser() != 'root':
-        gtk_dialog_info(None, TEXT_ONLY_ROOT, icon=_SOFTWARE_PATHS._small_icon_file)
+        gtk_dialog_info(None, TEXT_ONLY_ROOT, icon=_SOFTWARE_PATHS._icon_file)
         exit()
 
     _ = ModelChooser()
