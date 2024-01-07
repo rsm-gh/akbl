@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2020 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2020, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -379,7 +379,7 @@ class BlockTesting(Gtk.Window):
         Gtk.main_quit()
 
 if __name__ == "__main__":
-    if getuser() != 'root':
+    if getuser() != 'root': # todo, add a graphical pop-up
         print(TEXT_ONLY_ROOT)
         exit()
 

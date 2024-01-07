@@ -154,7 +154,6 @@ def set_installed_computer(computer_name):
     with open(_SOFTWARE_PATHS._default_computer_file, 'w') as f:
         f.write(installed_data)
 
-    print("Installed computer set to: {}".format(computer_name))
     return True
 
 def get_installed_computer_by_name(name):

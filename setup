@@ -53,13 +53,9 @@ function install_files(){
     
 }
 
-
-echo -e "\e[00;32m Copying the software files...\e[00m"
-
 install_files "/usr/bin"
 
 install_files "/usr/share/applications"
-
 install_files "/usr/share/AKBL"
 install_files "/usr/share/AKBL/test"
 install_files "/usr/share/AKBL/launch"
@@ -80,15 +76,14 @@ install_files "/usr/share/doc/AKBL/Licenses"
 install_files "/usr/share/doc/AKBL/Programming"
 install_files "/usr/share/doc/AKBL/Programming/class_diagrams"
 
-install_files "/usr/lib/systemd/system"
-chmod u=rw /usr/lib/systemd/system/akbl.service # The permissions must be forced.
-chmod go=r /usr/lib/systemd/system/akbl.service # The permissions must be forced.
-
 install_files "/usr/lib/python3/AKBL"
 install_files "/usr/lib/python3/AKBL/Engine"
 install_files "/usr/lib/python3/AKBL/Computer"
 install_files "/usr/lib/python3/AKBL/Theme"
 
+install_files "/usr/lib/systemd/system"
+chmod u=rw /usr/lib/systemd/system/akbl.service # The permissions must be forced.
+chmod go=r /usr/lib/systemd/system/akbl.service # The permissions must be forced.
 
 ##
 ## Post installation
@@ -108,8 +103,7 @@ for python_version in "${PYTHON_VERSIONS[@]}"; do
 done
 
 echo -e "\e[00;33m\n[4/$NUMBER_OF_STEPS] Choosing the computer model...\e[00m"
-echo "Choose the configuration file from the GTK window that will appear.."
-akbl --model-chooser false
+python3 /usr/share/AKBL/ModelChooser/cmd.py
 
 
 echo -e "\e[00;33m\n[5/$NUMBER_OF_STEPS] Enabling the daemon...\e[00m"
