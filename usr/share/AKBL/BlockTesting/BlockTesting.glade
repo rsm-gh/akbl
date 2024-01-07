@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 
+<!-- Generated with glade 3.40.0 
 
-Copyright (C) 2014 - 2018 RSM
+Copyright (C) 2014-2020, 2024 Rafael Senties Martinelli
 
-This file is part of alienware-kbl.
+This file is part of AKBL.
 
-alienware-kbl is free software: you can redistribute it and/or modify
+AKBL is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-alienware-kbl is distributed in the hope that it will be useful,
+AKBL is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
+along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
 <interface>
-  <requires lib="gtk+" version="3.10"/>
+  <requires lib="gtk+" version="3.24"/>
   <!-- interface-license-type gplv3 -->
-  <!-- interface-name alienware-kbl -->
-  <!-- interface-copyright 2014 - 2018 RSM -->
+  <!-- interface-name AKBL -->
+  <!-- interface-copyright 2014-2020, 2024 Rafael Senties Martinelli -->
   <object class="GtkAdjustment" id="adjustment_blocks">
     <property name="upper">100000000000000</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment_tempo">
     <property name="lower">1</property>
     <property name="upper">255</property>
     <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">16</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">16</property>
   </object>
   <object class="GtkColorChooserDialog" id="colorchooserdialog">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">Color Selector</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
+    <property name="window-position">center-on-parent</property>
+    <property name="type-hint">dialog</property>
     <property name="rgba">rgb(255,255,255)</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="color_chooser_dialog">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="colorchooserdialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -60,23 +60,20 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkImage" id="image21">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-dialog-warning</property>
   </object>
   <object class="GtkImage" id="image22">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-connect</property>
   </object>
   <object class="GtkImage" id="image25">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-info</property>
   </object>
   <object class="GtkListStore" id="liststore_default_blocks">
@@ -188,48 +185,49 @@ along with alienware-kbl.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTextBuffer" id="textbuffer_device_info"/>
   <object class="GtkTextBuffer" id="textbuffer_pyusb"/>
   <object class="GtkTextBuffer" id="textbuffer_pyusb_info">
-    <property name="text" translatable="yes">This window must be used with a lot of caution since it will allow you to directly send commands to the USB device. 
-None of the commands is not verified. There is no verification to check if the device is ready, there is no read command, etc.
+    <property name="text" translatable="yes">This tab must be used with a lot of caution because it allows to directly send commands to the USB device. 
 
-The commands shall be separated with ":" ex: 2:6:0;0:0:0
+* None of the commands is verified !
+* No check is performed: device ready, read command, etc.
+* The commands shall be separated with ":" ex: 2:6:0;0:0:0
 </property>
   </object>
   <object class="GtkWindow" id="window_block_testing">
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">AKBL Block Testing Window</property>
-    <property name="window_position">center</property>
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes">AKBL - Block Testing Window</property>
+    <property name="window-position">center</property>
     <property name="icon">../icon.png</property>
     <signal name="destroy" handler="on_window_block_testing_destroy" swapped="no"/>
     <child>
       <object class="GtkNotebook">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <child>
           <object class="GtkBox" id="box_device">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_left">15</property>
-            <property name="margin_right">15</property>
-            <property name="margin_top">15</property>
-            <property name="margin_bottom">15</property>
+            <property name="can-focus">False</property>
+            <property name="margin-left">15</property>
+            <property name="margin-right">15</property>
+            <property name="margin-top">15</property>
+            <property name="margin-bottom">15</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
-                    <property name="height_request">200</property>
+                    <property name="height-request">200</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="can-focus">True</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkTextView" id="textview2">
-                        <property name="height_request">200</property>
+                        <property name="height-request">200</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="margin_top">5</property>
-                        <property name="margin_bottom">5</property>
+                        <property name="can-focus">True</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
                         <property name="editable">False</property>
                         <property name="buffer">textbuffer_device_info</property>
                       </object>
@@ -251,18 +249,18 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_left">15</property>
+                <property name="can-focus">False</property>
+                <property name="margin-left">15</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="checkbutton_hex_format_when_finding">
                     <property name="label" translatable="yes">Use HEX format for the IDs</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="draw-indicator">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -273,13 +271,13 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                 <child>
                   <object class="GtkBox" id="box8">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel" id="label71">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">10</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">10</property>
                         <property name="label" translatable="yes">ID Vendor:</property>
                         <property name="ellipsize">end</property>
                         <property name="angle">0.04</property>
@@ -293,8 +291,8 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                     <child>
                       <object class="GtkEntry" id="entry_id_vendor">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="margin_top">5</property>
+                        <property name="can-focus">True</property>
+                        <property name="margin-top">5</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -305,8 +303,8 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                     <child>
                       <object class="GtkLabel" id="label73">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">10</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">10</property>
                         <property name="label" translatable="yes">ID Product</property>
                       </object>
                       <packing>
@@ -318,8 +316,8 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                     <child>
                       <object class="GtkEntry" id="entry_id_product">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="margin_top">5</property>
+                        <property name="can-focus">True</property>
+                        <property name="margin-top">5</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -331,9 +329,9 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                       <object class="GtkToggleButton" id="togglebutton_find_device">
                         <property name="label" translatable="yes">Connect</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="margin_top">25</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-top">25</property>
                         <property name="image">image22</property>
                         <signal name="clicked" handler="on_togglebutton_find_device_clicked" swapped="no"/>
                       </object>
@@ -362,43 +360,43 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">Device Connection</property>
           </object>
           <packing>
-            <property name="tab_fill">False</property>
+            <property name="tab-fill">False</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box_block_testing">
             <property name="visible">True</property>
             <property name="sensitive">False</property>
-            <property name="can_focus">False</property>
-            <property name="margin_left">15</property>
-            <property name="margin_right">15</property>
-            <property name="margin_top">15</property>
-            <property name="margin_bottom">15</property>
+            <property name="can-focus">False</property>
+            <property name="margin-left">15</property>
+            <property name="margin-right">15</property>
+            <property name="margin-top">15</property>
+            <property name="margin-bottom">15</property>
             <property name="orientation">vertical</property>
             <property name="spacing">2</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_protect_common_blocks">
                         <property name="label" translatable="yes">Protect the general configuration</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="margin_bottom">5</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-bottom">5</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                         <signal name="clicked" handler="on_checkbutton_protect_common_blocks_clicked" swapped="no"/>
                       </object>
                       <packing>
@@ -409,24 +407,25 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                     </child>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow2">
-                        <property name="width_request">500</property>
-                        <property name="height_request">150</property>
+                        <property name="width-request">500</property>
+                        <property name="height-request">150</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="window_placement">bottom-left</property>
-                        <property name="shadow_type">in</property>
+                        <property name="can-focus">True</property>
+                        <property name="window-placement">bottom-left</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkViewport" id="viewport_common_block">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="config_grid">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
-                                <property name="row_homogeneous">True</property>
+                                <property name="row-homogeneous">True</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -476,29 +475,30 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
+                      <!-- n-columns=3 n-rows=3 -->
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="row_spacing">5</property>
-                        <property name="column_spacing">20</property>
+                        <property name="can-focus">False</property>
+                        <property name="row-spacing">5</property>
+                        <property name="column-spacing">20</property>
                         <child>
                           <object class="GtkLabel" id="label67">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Mode:</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="combobox_block_modes">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="model">liststore_modes</property>
                             <property name="active">0</property>
                             <child>
@@ -509,56 +509,56 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label68">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Speed:</property>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkSpinButton" id="spinbutton_block_speed">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="text" translatable="yes">100</property>
                             <property name="adjustment">adjustment_tempo</property>
-                            <property name="climb_rate">10</property>
+                            <property name="climb-rate">10</property>
                             <property name="value">100</property>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label70">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Colors:</property>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="box10">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkColorButton" id="colorbutton_1_block">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Color 1</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes">Color 1</property>
                                 <property name="rgba">rgb(32,74,135)</property>
                               </object>
                               <packing>
@@ -570,9 +570,9 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                             <child>
                               <object class="GtkColorButton" id="colorbutton_2_block">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Color 2</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes">Color 2</property>
                                 <property name="color">#cccc00000000</property>
                                 <property name="rgba">rgb(204,0,0)</property>
                               </object>
@@ -584,9 +584,18 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">1</property>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">1</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -598,8 +607,8 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                     <child>
                       <object class="GtkLabel" id="label72">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">10</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">10</property>
                         <property name="label" translatable="yes">Region:</property>
                         <property name="xalign">0</property>
                       </object>
@@ -612,14 +621,14 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                     <child>
                       <object class="GtkBox" id="box6">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">5</property>
-                        <property name="margin_bottom">15</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">15</property>
                         <child>
                           <object class="GtkComboBox" id="combobox_default_blocks">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">List of common block numbers. Set "-1" to use custom blocks. </property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes">List of common block numbers. Set "-1" to use custom blocks. </property>
                             <property name="model">liststore_default_blocks</property>
                             <signal name="changed" handler="on_combobox_default_blocks_changed" swapped="no"/>
                             <child>
@@ -639,8 +648,8 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                           <object class="GtkEntry" id="entry_block_testing">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="margin_left">15</property>
+                            <property name="can-focus">True</property>
+                            <property name="margin-left">15</property>
                             <signal name="changed" handler="on_entry_block_testing_changed" swapped="no"/>
                           </object>
                           <packing>
@@ -660,11 +669,11 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                       <object class="GtkCheckButton" id="checkbutton_auto_turn_off">
                         <property name="label" translatable="yes">Auto Lights Off</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="draw-indicator">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -675,14 +684,14 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <child>
                           <object class="GtkButton" id="button_block_testing_lights_off">
                             <property name="label" translatable="yes">Lights Off</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin_top">5</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="margin-top">5</property>
                             <property name="image">image25</property>
                             <signal name="clicked" handler="on_button_block_testing_lights_off_clicked" swapped="no"/>
                           </object>
@@ -695,15 +704,15 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                         <child>
                           <object class="GtkButton" id="button_block_make_test">
                             <property name="label" translatable="yes">TEST</property>
-                            <property name="width_request">40</property>
+                            <property name="width-request">40</property>
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin_left">15</property>
-                            <property name="margin_top">5</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="margin-left">15</property>
+                            <property name="margin-top">5</property>
                             <property name="image">image21</property>
-                            <property name="xalign">0.5199999809265137</property>
+                            <property name="xalign">0.51999998092651367</property>
                             <property name="yalign">0.49000000953674316</property>
                             <signal name="clicked" handler="on_button_block_make_test_clicked" swapped="no"/>
                           </object>
@@ -738,8 +747,8 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">15</property>
+                <property name="can-focus">False</property>
+                <property name="margin-top">15</property>
                 <property name="label" translatable="yes">Log</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -756,14 +765,14 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow3">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="shadow_type">in</property>
+                <property name="can-focus">True</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTextView" id="textview1">
-                    <property name="height_request">158</property>
+                    <property name="height-request">158</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="margin_top">5</property>
+                    <property name="can-focus">True</property>
+                    <property name="margin-top">5</property>
                     <property name="buffer">textbuffer_block_testing</property>
                   </object>
                 </child>
@@ -782,12 +791,12 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">AKBL</property>
           </object>
           <packing>
             <property name="position">1</property>
-            <property name="tab_fill">False</property>
+            <property name="tab-fill">False</property>
           </packing>
         </child>
         <child>
@@ -795,17 +804,17 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
             <property name="name">box_pyusb</property>
             <property name="visible">True</property>
             <property name="sensitive">False</property>
-            <property name="can_focus">False</property>
-            <property name="margin_left">15</property>
-            <property name="margin_right">15</property>
-            <property name="margin_top">15</property>
-            <property name="margin_bottom">15</property>
+            <property name="can-focus">False</property>
+            <property name="margin-left">15</property>
+            <property name="margin-right">15</property>
+            <property name="margin-top">15</property>
+            <property name="margin-bottom">15</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkTextView">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="buffer">textbuffer_pyusb_info</property>
               </object>
               <packing>
@@ -817,12 +826,12 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">15</property>
+                <property name="can-focus">False</property>
+                <property name="margin-top">15</property>
                 <child>
                   <object class="GtkEntry" id="entry_custom_command">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -835,9 +844,9 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
                     <property name="label" translatable="yes">Send
 </property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="margin_left">10</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="margin-left">10</property>
                     <signal name="clicked" handler="on_button_send_custom_command_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -856,8 +865,8 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_top">15</property>
+                <property name="can-focus">False</property>
+                <property name="margin-top">15</property>
                 <property name="label" translatable="yes">Log</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -873,17 +882,17 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
             </child>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="height_request">153</property>
+                <property name="height-request">153</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="shadow_type">in</property>
+                <property name="can-focus">True</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTextView" id="textview3">
-                    <property name="height_request">158</property>
+                    <property name="height-request">158</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
-                    <property name="can_focus">True</property>
-                    <property name="margin_top">5</property>
+                    <property name="can-focus">True</property>
+                    <property name="margin-top">5</property>
                     <property name="buffer">textbuffer_pyusb</property>
                   </object>
                 </child>
@@ -902,18 +911,15 @@ The commands shall be separated with ":" ex: 2:6:0;0:0:0
         <child type="tab">
           <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes">PyUSB</property>
           </object>
           <packing>
             <property name="position">2</property>
-            <property name="tab_fill">False</property>
+            <property name="tab-fill">False</property>
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
