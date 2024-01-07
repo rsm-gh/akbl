@@ -86,12 +86,8 @@ class ModelChooser(Gtk.Window):
         self.treeview_hardware_not_comp = builder.get_object('treeview_hardware_not_comp')
         self.liststore_hardware_not_comp = builder.get_object('liststore_hardware_not_comp')
         self.textbuffer_computer_data = builder.get_object('textbuffer_computer_data')
-
-        self.__default_computer_name = self.__get_default_computer_name()
-
         self.__populate_liststores()
         self.textbuffer_computer_data.set_text(get_alienware_device_info())
-        print("The current configuration is: " + self.__get_default_computer_name())
 
         """
         
@@ -100,16 +96,18 @@ class ModelChooser(Gtk.Window):
 
     def __populate_liststores(self):
 
+        installed_computer_name = self.__get_installed_computer_name()
+
         self.liststore_hardware_comp.clear()
         self.liststore_hardware_not_comp.clear()
 
         compatible_computers = computer_factory.get_compatible_computers()
 
-        for inst_computer in computer_factory.get_compatible_computers():
+        for inst_computer in computer_factory.get_installed_computers():
 
             if inst_computer in compatible_computers:
                     self.liststore_hardware_comp.append([inst_computer.name,
-                                                         inst_computer.name == self.__default_computer_name,
+                                                         inst_computer.name == installed_computer_name,
                                                          True])
             else:
                 self.liststore_hardware_not_comp.append([inst_computer.name])
@@ -119,18 +117,12 @@ class ModelChooser(Gtk.Window):
         clicked_row = int(clicked_row)
 
         for i, _ in enumerate(self.liststore_hardware_comp):
-
             iter_row = self.liststore_hardware_comp.get_iter(i)
+            self.liststore_hardware_comp.set_value(iter_row, 1, i == clicked_row)
 
-            if i != clicked_row:
-                self.liststore_hardware_comp.set_value(iter_row, 1, False)
-            else:
-                self.liststore_hardware_comp.set_value(iter_row, 1, True)
-                computer_model = self.liststore_hardware_comp.get_value(iter_row, 0)
-                computer_factory.set_installed_computer(computer_model)
 
     @staticmethod
-    def __get_default_computer_name():
+    def __get_installed_computer_name():
 
         default_computer = computer_factory.get_installed_computer()
 
@@ -142,32 +134,39 @@ class ModelChooser(Gtk.Window):
     def _on_button_close_clicked(self, *_):
 
         #
-        # Do not exit if no computer has been set (warn the user)
+        # Install the selected configuration
         #
-        if self.__get_default_computer_name() == _EMPTY_MODEL:
+        for i, _ in enumerate(self.liststore_hardware_comp):
+
+            iter_row = self.liststore_hardware_comp.get_iter(i)
+
+            if self.liststore_hardware_comp.get_value(iter_row, 1):
+                computer_model = self.liststore_hardware_comp.get_value(iter_row, 0)
+                computer_factory.set_installed_computer(computer_model)
+                break
+
+        #
+        # Retrieve the installed configuration
+        #
+        installed_computer_name = self.__get_installed_computer_name()
+
+        #
+        # Warn the user that no computer is installed
+        #
+        if installed_computer_name == _EMPTY_MODEL:
             if gtk_dialog_question(None, _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, icon=_SOFTWARE_PATHS._icon_file):
                 return
 
+
         #
-        # In case that the computer is the same (as previously used), update the file
+        # Print the computer model
         #
-
-        if self.__default_computer_name == self.__get_default_computer_name():
-
-            for i, _ in enumerate(self.liststore_hardware_comp):
-
-                iter_row = self.liststore_hardware_comp.get_iter(i)
-
-                if self.liststore_hardware_comp.get_value(iter_row, 1):
-                    computer_model = self.liststore_hardware_comp.get_value(iter_row, 0)
-                    computer_factory.set_installed_computer(computer_model)
-
-                    break
+        print("The installed computer model is:", installed_computer_name)
 
         #
         # Quit the application
         #
-
+        
         Gtk.main_quit()
 
     def on_window_destroy(self, *_):
