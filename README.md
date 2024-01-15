@@ -30,7 +30,7 @@
 
 # Highlights
 
-* 2022: **AKBL is not actively developed.** I stopped developing the software because I changed my latptop. I cannot puse or test the software anymore.
+* 2022: **AKBL is not actively developed.** I almost stopped the development because I changed my latptop, so I have major limitations for using and testing the software.
 * 2019: Many users with recent alienware computers are facing issues, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues.
 
 # Software Features
