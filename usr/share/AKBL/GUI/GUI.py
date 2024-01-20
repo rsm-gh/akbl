@@ -27,7 +27,7 @@ from copy import deepcopy
 from traceback import format_exc
 
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 import AKBL.texts as texts
 from AKBL.Paths import Paths
@@ -241,20 +241,9 @@ class GUI(Gtk.Window):
         self.combobox_profiles.set_active(row)
         self.__speed = self.__theme.get_speed()
 
-    def delete_current_configuration(self):
+    def __on_thread_delete_current_configuration(self):
 
-        if self.checkbutton_delete_warning.get_active():
-            Gdk.threads_enter()
-            if not gtk_dialog_question(self.window_root,
-                                       texts.TEXT_CONFIRM_DELETE_CONFIGURATION,
-                                       icon=self.__paths._icon_file):
-                Gdk.threads_leave()
-                return
-            Gdk.threads_leave()
-
-        Gdk.threads_enter()
-        self.label_user_message.set_text(texts.TEXT_CONFIGURATION_DELETED)
-        Gdk.threads_leave()
+        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_CONFIGURATION_DELETED)
 
         theme_factory._AVAILABLE_THEMES.pop(self.__theme.name)
 
@@ -264,17 +253,13 @@ class GUI(Gtk.Window):
         if len(theme_factory._AVAILABLE_THEMES.keys()) == 0:
             theme_factory.create_default_profile(self.__computer, self.__paths._profiles_dir)
 
-        Gdk.threads_enter()
-        self.populate_liststore_profiles()
-        Gdk.threads_leave()
+        GLib.idle_add(self.populate_liststore_profiles)
 
         self.__bindings.reload_configurations()
 
         sleep(0.5)
-
-        Gdk.threads_enter()
-        self.label_user_message.set_text(' ')
-        Gdk.threads_leave()
+        
+        GLib.idle_add(self.label_user_message.set_text, ' ')
 
     def on_zonewidget_updated(self, zone_widget):
 
@@ -285,7 +270,7 @@ class GUI(Gtk.Window):
                                  mode=zone_widget.get_mode())
 
         if self.checkbutton_autosave.get_active():
-            threading.Thread(target=self.save_configuration_file).start()
+            threading.Thread(target=self.__on_thread_save_configuration_file).start()
 
     def on_zonewidget_request_delete(self, zone_widget):
 
@@ -304,19 +289,12 @@ class GUI(Gtk.Window):
         #
         #
         if self.checkbutton_autosave.get_active():
-            threading.Thread(target=self.save_configuration_file).start()
+            threading.Thread(target=self.__on_thread_save_configuration_file).start()
 
-    def turn_lights_off(self):
-
-        Gdk.threads_enter()
-        self.label_user_message.set_text(texts.TEXT_SHUTTING_LIGHTS_OFF)
-        Gdk.threads_leave()
-
+    def __on_thread_turn_lights_off(self):
+        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_SHUTTING_LIGHTS_OFF)
         self.__bindings.set_lights(False)
-
-        Gdk.threads_enter()
-        self.label_user_message.set_text('')
-        Gdk.threads_leave()
+        GLib.idle_add(self.label_user_message.set_text, "")
 
     def new_profile(self):
         text = self.entry_new_profile.get_text()
@@ -332,16 +310,12 @@ class GUI(Gtk.Window):
 
         self.__bindings.reload_configurations()
 
-    def illuminate_keyboard(self):
+    def __on_thread_illuminate_keyboard(self):
 
-        Gdk.threads_enter()
-        self.label_user_message.set_text(texts.TEXT_APPLYING_CONFIGURATION)
-        Gdk.threads_leave()
+        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_APPLYING_CONFIGURATION)
 
-        # This is to make the program recognize
-        # the last profile that has been used
+        # This is to make the program recognize the last profile that has been used, patch #12
         try:
-            # Patch (#12)
             os.utime(self.__theme.path, None)
         except Exception:
             print_error(
@@ -351,21 +325,12 @@ class GUI(Gtk.Window):
 
         self.__bindings.set_lights(True)
 
-        Gdk.threads_enter()
-        self.label_user_message.set_text('')
-        Gdk.threads_leave()
+        GLib.idle_add(self.label_user_message.set_text, '')
 
-    def save_configuration_file(self):
-
-        Gdk.threads_enter()
-        self.label_user_message.set_text(texts.TEXT_SAVING_THE_CONFIGURATION)
-        Gdk.threads_leave()
-
+    def __on_thread_save_configuration_file(self):
+        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_SAVING_THE_CONFIGURATION)
         self.__theme.save()
-
-        Gdk.threads_enter()
-        self.label_user_message.set_text('')
-        Gdk.threads_leave()
+        GLib.idle_add(self.label_user_message.set_text, '')
 
     def on_toolbar_colorlist_changed(self, *_):
         hex_colors = self.__color_chooser_toolbar.get_hex_colors()
@@ -439,7 +404,7 @@ class GUI(Gtk.Window):
         self.__theme.set_speed(255 - value)
 
         if self.checkbutton_autosave.get_active():
-            threading.Thread(target=self.save_configuration_file).start()
+            threading.Thread(target=self.__on_thread_save_configuration_file).start()
 
     def on_combobox_profiles_changed(self, widget, *_):
         tree_iter = widget.get_active_iter()
@@ -453,16 +418,16 @@ class GUI(Gtk.Window):
         self.new_profile()
 
     def on_imagemenuitem_apply_configuration_activate(self, *_):
-        threading.Thread(target=self.illuminate_keyboard).start()
+        threading.Thread(target=self.__on_thread_illuminate_keyboard).start()
 
     def on_imagemenuitem_save_activate(self, *_):
-        threading.Thread(target=self.save_configuration_file).start()
+        threading.Thread(target=self.__on_thread_save_configuration_file).start()
 
     def on_imagemenuitem_lights_on_activate(self, *_):
-        threading.Thread(target=self.illuminate_keyboard).start()
+        threading.Thread(target=self.__on_thread_illuminate_keyboard).start()
 
     def on_imagemenuitem_lights_off_activate(self, *_):
-        threading.Thread(target=self.turn_lights_off).start()
+        threading.Thread(target=self.__on_thread_turn_lights_off).start()
 
     @staticmethod
     def on_imagemenuitem_quit_activate(*_):
@@ -504,7 +469,13 @@ class GUI(Gtk.Window):
         self.window_new_profile.show()
 
     def on_imagemenuitem_delete_activate(self, *_):
-        threading.Thread(target=self.delete_current_configuration).start()
+        if self.checkbutton_delete_warning.get_active():
+            if not gtk_dialog_question(self.window_root,
+                                       texts.TEXT_CONFIRM_DELETE_CONFIGURATION,
+                                       icon=self.__paths._icon_file):
+                return
+
+        threading.Thread(target=self.__on_thread_delete_current_configuration).start()
 
     @staticmethod
     def on_window_root_destroy(*_):
