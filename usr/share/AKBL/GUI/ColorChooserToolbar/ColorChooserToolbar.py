@@ -179,9 +179,3 @@ class ColorChooserToolbar(Gtk.Toolbar):
         
         # display all the items
         tool_item.show_all()
-        
-
-    
-
-        
-        

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2018 Rafael Senties Martinelli.
+#  Copyright (C) 2015-2018, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -20,8 +20,7 @@ import os
 import gi
 import cairo
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
-from gi.repository import GObject
+from gi.repository import Gtk, Gdk, GObject
 
 from AKBL.utils import print_warning
 
@@ -84,8 +83,8 @@ class ZoneWidget(Gtk.Frame):
 
         # Variables
         #
-        self.__left_color = []
-        self.__right_color = []
+        self.__left_color = None
+        self.__right_color = None
         self.__mode = ''
 
         self.__hex_id = ''
@@ -235,16 +234,13 @@ class ZoneWidget(Gtk.Frame):
 
         if self.__command_buttons_state[2]:  # morph
 
-            middle_color = self.middle_rgb_color(
-                (self.__left_color.red, self.__left_color.green, self.__left_color.blue),
-                (self.__right_color.red, self.__right_color.green, self.__right_color.blue))
-
-            middle_color = Gdk.RGBA(*middle_color)
+            middle_color = self.__middle_rgb_color(self.__left_color, self.__right_color)
 
             if area_number == 1:
                 start_color = self.__left_color
                 end_color = middle_color
-            if area_number == 2:
+
+            else:
                 start_color = middle_color
                 end_color = self.__right_color
         else:
@@ -276,14 +272,16 @@ class ZoneWidget(Gtk.Frame):
         self.__commands_buttons_box.override_background_color(Gtk.StateType.NORMAL, gdk_color)
 
     @staticmethod
-    def middle_rgb_color(rgb_color1, rgb_color2):
+    def __middle_rgb_color(rgb_color1, rgb_color2):
         """
             Return the middle RGB from two RGB colors.
             Useful for creating gradients!
         """
-        return [((rgb_color1[0] + rgb_color2[0]) / 2.0),
-                ((rgb_color1[1] + rgb_color2[1]) / 2.0),
-                ((rgb_color1[2] + rgb_color2[2]) / 2.0)]
+        red = (rgb_color1.red + rgb_color2.red) / 2.0
+        green = (rgb_color1.green + rgb_color2.green) / 2.0
+        blue = (rgb_color1.blue + rgb_color2.blue) / 2.0
+
+        return Gdk.RGBA(red, green, blue)
 
     def set_hex_id(self, hex_id):
         self.__hex_id = hex_id
@@ -322,11 +320,13 @@ class ZoneWidget(Gtk.Frame):
         return self.__mode
 
     def get_left_color(self):
-        return "#{0:02x}{1:02x}{2:02x}".format(int(self.__left_color.red * 255), int(self.__left_color.green * 255),
+        return "#{0:02x}{1:02x}{2:02x}".format(int(self.__left_color.red * 255),
+                                               int(self.__left_color.green * 255),
                                                int(self.__left_color.blue * 255))
 
     def get_right_color(self):
-        return "#{0:02x}{1:02x}{2:02x}".format(int(self.__right_color.red * 255), int(self.__right_color.green * 255),
+        return "#{0:02x}{1:02x}{2:02x}".format(int(self.__right_color.red * 255),
+                                               int(self.__right_color.green * 255),
                                                int(self.__right_color.blue * 255))
 
     def set_right_color(self, hex_color):

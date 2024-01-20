@@ -80,8 +80,7 @@ def gtk_dialog_question(parent, text1, text2=None, icon=None):
                                Gtk.DialogFlags.MODAL,
                                Gtk.MessageType.QUESTION,
                                Gtk.ButtonsType.YES_NO,
-                               text1
-                               )
+                               text1)
 
     if icon is not None:
         dialog.set_icon_from_file(icon)
@@ -385,5 +384,5 @@ if __name__ == "__main__":
 
     os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
-    BlockTesting()
+    _ = BlockTesting()
     Gtk.main()

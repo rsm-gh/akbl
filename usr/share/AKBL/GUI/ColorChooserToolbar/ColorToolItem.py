@@ -18,8 +18,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
-from gi.repository import GObject
+from gi.repository import Gtk, Gdk, GObject
 
 _LEFT_CLICK_ID = 1
 _RIGHT_CLICK_ID = 3
