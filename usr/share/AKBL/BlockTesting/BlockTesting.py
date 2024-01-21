@@ -83,8 +83,7 @@ def gtk_dialog_info(parent, text1, text2=None, icon=None):
                                Gtk.DialogFlags.MODAL,
                                Gtk.MessageType.INFO,
                                Gtk.ButtonsType.CLOSE,
-                               text1,
-                               )
+                               text1)
 
     if icon is not None:
         dialog.set_icon_from_file(icon)
@@ -176,6 +175,18 @@ class BlockTesting(Gtk.Window):
 
     def on_togglebutton_find_device_clicked(self, *_):
 
+        try:
+            int(self.entry_id_vendor.get_text())
+            int(self.entry_id_product.get_text())
+        except ValueError:
+            if self.checkbutton_hex_format_when_finding.get_active():
+                text = "Only HEX numbers can be entered."
+            else:
+                text = "Only Integer numbers can be entered."
+            gtk_dialog_info(self.window_block_testing, text)
+            return
+
+
         # try to load the driver
         if self.checkbutton_hex_format_when_finding.get_active():
             vendor = int(self.entry_id_vendor.get_text(), 16)
@@ -190,14 +201,18 @@ class BlockTesting(Gtk.Window):
         # Load the controller
         #
         if not self.__testing_driver.has_device():
+            gtk_dialog_info(self.window_block_testing, "The connection was not successful.")
             self.box_block_testing.set_sensitive(False)
             self.box_pyusb.set_sensitive(False)
-            self.togglebutton_find_device.set_active(False)
+            self.togglebutton_find_device.set_active(True)
             self.entry_id_vendor.set_sensitive(True)
             self.entry_id_product.set_sensitive(True)
             gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_NOT_FOUND.format(vendor, product))
 
         else:
+            gtk_dialog_info(self.window_block_testing, "The connection was successful.")
+            self.togglebutton_find_device.set_active(False)
+
             self.__computer.vendor_id = vendor
             self.__computer.product_id = product
 
@@ -236,13 +251,11 @@ class BlockTesting(Gtk.Window):
             self.config_grid.show_all()
 
             # activate the window
-
             self.box_block_testing.set_sensitive(True)
             self.box_pyusb.set_sensitive(True)
             self.entry_id_vendor.set_sensitive(False)
             self.entry_id_product.set_sensitive(False)
             gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_FOUND.format(vendor, product))
-
             self.combobox_default_blocks.set_active(0)
 
 
