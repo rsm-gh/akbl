@@ -17,7 +17,7 @@
 
 
 ## This is the libusb patch, some distributions like Debian wheezy does not need it.
-export LD_PRELOAD=/usr/share/AKBL/libusb-1.0.so.0
+#export LD_PRELOAD=/usr/share/AKBL/libusb-1.0.so.0
 
 ROOT_TEXT="This command can only be used by root users."
 
