@@ -63,18 +63,19 @@ Usage:
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
     --set-profile <profile_name>      Turn on the selected profile.
-   
-    --model-chooser                   Start the model chooser.   
-   
+    
+    --model-chooser-gui               Launch the model chooser from a GUI.
+    --model-chooser-cmd               Launch the model chooser from a CMD.
+    
     --start-indicator                 Start the indicator.
-   
+    
     --start-daemon                    Start the daemon.
     --daemon-is-on                    Return weather the daemon is running or not.
-   
-    --block-testing                   Display the block testing window.  
-   
+    
+    --block-testing                   Launch the block testing window.
+    
     -h, --help                        Display this dialog.
-    -v, --version                     Display the software version. 
+    -v, --version                     Display the software version.  
     -l, --license                     Display the software license.
 
  *If no option is introduced the graphical interface is launched.

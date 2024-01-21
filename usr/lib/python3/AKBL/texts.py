@@ -29,14 +29,15 @@ Usage:
     --off                             Turn off the computer lights.
     --set-profile <profile_name>      Turn on the selected profile.
     
-    --model-chooser                   Start the model chooser.
+    --model-chooser-gui               Launch the model chooser from a GUI.
+    --model-chooser-cmd               Launch the model chooser from a CMD.
     
     --start-indicator                 Start the indicator.
     
     --start-daemon                    Start the daemon.
     --daemon-is-on                    Return weather the daemon is running or not.
     
-    --block-testing                   Display the block testing window.
+    --block-testing                   Launch the block testing window.
     
     -h, --help                        Display this dialog.
     -v, --version                     Display the software version.  
@@ -103,6 +104,3 @@ TEXT_CONFIGURATION_DELETED = "The configuration has been deleted.."
 TEXT_CONFIRM_DELETE_CONFIGURATION = "Are you sure that you want to\n delete this configuration?"
 
 TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED = "You have reached the maximum number of Zones for the {}."
-
-TEXT_ONLY_ROOT = "This command can only be used by the root user."
-

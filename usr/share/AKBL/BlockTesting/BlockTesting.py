@@ -19,16 +19,15 @@
 
 import gi
 import os
-import subprocess
 from traceback import format_exc
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from AKBL.utils import getuser
-from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Command import Command
 from AKBL.Engine.Controller import Controller
+from AKBL.utils import get_alienware_device_info
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -36,26 +35,6 @@ _TEXT_DEVICE_NOT_FOUND = '''[Device not found]: Vendor ID: {}\t Product ID: {}\n
 _TEXT_DEVICE_FOUND = '''[Device found]: Vendor ID: {}\t Product ID: {}\n'''
 _TEXT_BLOCK_TEST = '''[TEST]: zone: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
 _TEXT_BLOCK_LIGHTS_OFF = '''[Command]: Lights off'''
-
-
-def get_alienware_device_info():
-    bash_output = subprocess.run("lsusb", shell=True, stdout=subprocess.PIPE, universal_newlines=True)
-
-    device_info = str(bash_output.stdout)
-
-    for line in device_info.split("\n"):
-
-        if "Alienware" in line:
-            bus_id = line.split()[1]
-            device_id = line.split()[3][:-1]
-
-            bash_output = subprocess.run("lsusb -D /dev/bus/usb/{}/{}".format(bus_id, device_id), shell=True,
-                                         stdout=subprocess.PIPE, universal_newlines=True)
-
-            device_info = str(bash_output.stdout)
-            break
-
-    return device_info
 
 
 def rgb_to_hex(rgb):
@@ -310,10 +289,10 @@ class BlockTesting(Gtk.Window):
             # Log the test
             #
             gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_BLOCK_TEST.format(zone_block,
-                                                                                            zone_mode,
-                                                                                            speed,
-                                                                                            zone_left_color,
-                                                                                            zone_right_color))
+                                                                                             zone_mode,
+                                                                                             speed,
+                                                                                             zone_left_color,
+                                                                                             zone_right_color))
 
             #   Test
             #
@@ -377,12 +356,7 @@ class BlockTesting(Gtk.Window):
     def on_window_block_testing_destroy(_):
         Gtk.main_quit()
 
+
 if __name__ == "__main__":
-    if getuser() != 'root': # todo, add a graphical pop-up
-        print(TEXT_ONLY_ROOT)
-        exit()
-
-    os.chdir(os.path.dirname(os.path.realpath(__file__)))
-
     _ = BlockTesting()
     Gtk.main()

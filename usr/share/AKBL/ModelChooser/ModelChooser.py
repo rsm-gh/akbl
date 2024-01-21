@@ -19,20 +19,18 @@
 import os
 import sys
 import gi
-import subprocess
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from AKBL.Paths import Paths
-from AKBL.utils import getuser
-from AKBL.texts import TEXT_ONLY_ROOT
+from AKBL.utils import get_alienware_device_info
 import AKBL.Computer.factory as computer_factory
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
 sys.path.insert(0, PROJECT_DIR)
 
-from gtk_utils import gtk_dialog_info, gtk_dialog_question
+from gtk_utils import gtk_dialog_question
 
 _EMPTY_MODEL = "<NONE>"
 _SOFTWARE_PATHS = Paths()
@@ -42,31 +40,6 @@ choosing a computer the software will not work.
 
 Do you want to go back?
 '''
-
-def get_alienware_device_info():
-    bash_output = subprocess.run("lsusb",
-                                 shell=True,
-                                 stdout=subprocess.PIPE,
-                                 universal_newlines=True)
-
-    device_info = str(bash_output.stdout)
-
-    for line in device_info.split("\n"):
-
-        if "Alienware" in line:
-            bus_id = line.split()[1]
-            device_id = line.split()[3][:-1]
-
-            bash_output = subprocess.run("lsusb -D /dev/bus/usb/{}/{} 2>/dev/null".format(bus_id, device_id),
-                                         shell=True,
-                                         stdout=subprocess.PIPE,
-                                         universal_newlines=True)
-
-            device_info = str(bash_output.stdout)
-            break
-
-    return device_info
-
 
 class ModelChooser(Gtk.Window):
 
@@ -173,9 +146,5 @@ class ModelChooser(Gtk.Window):
         self._on_button_close_clicked()
 
 if __name__ == "__main__":
-    if getuser() != 'root':
-        gtk_dialog_info(None, TEXT_ONLY_ROOT, icon=_SOFTWARE_PATHS._icon_file)
-        exit()
-
     _ = ModelChooser()
     Gtk.main()

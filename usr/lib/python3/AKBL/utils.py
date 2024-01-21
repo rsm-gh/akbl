@@ -21,6 +21,7 @@ import os
 import re
 import pwd
 import inspect
+import subprocess
 
 from AKBL.settings import DEBUG
 
@@ -31,6 +32,23 @@ _GREEN = "\033[0;32m"
 _RESET = "\033[0;0m"
 _LIGHT_YELLOW = "\033[0;93m"
 
+
+def get_alienware_device_info():
+    cmd = subprocess.run("lsusb", stdout=subprocess.PIPE)
+    device_info = cmd.stdout.decode('utf-8', errors="ignore")
+
+    for line in device_info.split("\n"):
+        if "alienware" in line.lower():
+            bus_id = line.split()[1]
+            device_id = line.split()[3][:-1]
+
+            path = "/dev/bus/usb/{}/{}".format(bus_id, device_id)
+            cmd = subprocess.run(['lsusb', '-D', path], stdout=subprocess.PIPE)
+
+            device_info += "\n" + cmd.stdout.decode('utf-8', errors="ignore")
+            break
+
+    return device_info
 
 def getuser():
     return pwd.getpwuid(os.geteuid()).pw_name
