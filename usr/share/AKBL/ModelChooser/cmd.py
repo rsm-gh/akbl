@@ -54,7 +54,7 @@ if computer is None:
                     if inp > len(compatible_computers):
                         print("    Error, the number is not in the list")
                     else:
-                        computer = compatible_computers[i-1]
+                        computer = compatible_computers[inp-1]
                         break
 
 
