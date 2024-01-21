@@ -75,8 +75,6 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
     <columns>
       <!-- column-name block -->
       <column type="gint"/>
-      <!-- column-name < -->
-      <column type="&lt; define a new column &gt;"/>
     </columns>
     <data>
       <row>
@@ -248,38 +246,23 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="margin-start">15</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkCheckButton" id="checkbutton_hex_format_when_finding">
-                    <property name="label" translatable="yes">Use HEX format for the IDs</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box8">
+                  <!-- n-columns=2 n-rows=2 -->
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel" id="label71">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="margin-end">5</property>
                         <property name="margin-top">10</property>
-                        <property name="label" translatable="yes">ID Vendor:</property>
+                        <property name="label" translatable="yes">ID Vendor</property>
                         <property name="ellipsize">end</property>
                         <property name="angle">0.04</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -289,55 +272,70 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="margin-top">5</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label73">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="margin-end">5</property>
                         <property name="margin-top">10</property>
                         <property name="label" translatable="yes">ID Product</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="entry_id_product">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="margin-top">5</property>
+                        <property name="margin-top">10</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="button_connect_clicked">
-                        <property name="label" translatable="yes">Connect</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <signal name="clicked" handler="on_button_connect_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_hex_format_when_finding">
+                    <property name="label" translatable="yes">Use HEX format</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="margin-top">10</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button_connect_clicked">
+                    <property name="label" translatable="yes">Connect</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="margin-top">10</property>
+                    <signal name="clicked" handler="on_button_connect_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
