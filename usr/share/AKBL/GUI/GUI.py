@@ -61,10 +61,8 @@ class GUI(Gtk.Window):
 
         # Glade
         #
-        glade_path = os.path.join(_SCRIPT_DIR, "GUI.glade")
-
         builder = Gtk.Builder()
-        builder.add_from_file(glade_path)
+        builder.add_from_file(os.path.join(_SCRIPT_DIR, "GUI.glade"))
         builder.connect_signals(self)
 
         glade_object_names = (

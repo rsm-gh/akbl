@@ -48,9 +48,8 @@ class ModelChooser(Gtk.Window):
         """
             Glade
         """
-        glade_path = os.path.join(SCRIPT_DIR, "ModelChooser.glade")
         builder = Gtk.Builder()
-        builder.add_from_file(glade_path)
+        builder.add_from_file(os.path.join(SCRIPT_DIR, "ModelChooser.glade"))
         builder.connect_signals(self)
 
         self.window_model_chooser = builder.get_object('window_model_chooser')
