@@ -19,6 +19,7 @@
 
 import gi
 import os
+import sys
 from traceback import format_exc
 
 gi.require_version('Gtk', '3.0')
@@ -28,89 +29,33 @@ from AKBL.Computer.Computer import Computer
 from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Command import Command
 from AKBL.Engine.Controller import Controller
-from AKBL.utils import get_alienware_device_info
+from AKBL.utils import get_alienware_device_info, rgb_to_hex
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+_PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
+sys.path.insert(0, _PROJECT_DIR)
+
+from gtk_utils import gtk_dialog_info, gtk_append_text_to_buffer
 
 _TEXT_DEVICE_NOT_FOUND = '''[Device not found]: Vendor ID: {}\t Product ID: {}\n'''
 _TEXT_DEVICE_FOUND = '''[Device found]: Vendor ID: {}\t Product ID: {}\n'''
 _TEXT_BLOCK_TEST = '''[TEST]: zone: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
 _TEXT_BLOCK_LIGHTS_OFF = '''[Command]: Lights off'''
 
-
-def rgb_to_hex(rgb):
-    return '#%02x%02x%02x' % (int(rgb[0] * 255),
-                              int(rgb[1] * 255),
-                              int(rgb[2] * 255))
-
-
-def get_text_gtk_buffer(textbuffer):
-    return textbuffer.get_text(
-        textbuffer.get_start_iter(),
-        textbuffer.get_end_iter(),
-        True)
-
-
-def gtk_append_text_to_buffer(textbuffer, text):
-    textbuffer.set_text(get_text_gtk_buffer(textbuffer) + text)
-
-
-def gtk_dialog_question(parent, text1, text2=None, icon=None):
-    dialog = Gtk.MessageDialog(parent,
-                               Gtk.DialogFlags.MODAL,
-                               Gtk.MessageType.QUESTION,
-                               Gtk.ButtonsType.YES_NO,
-                               text1)
-
-    if icon is not None:
-        dialog.set_icon_from_file(icon)
-
-    if text2 is not None:
-        dialog.format_secondary_text(text2)
-
-    response = dialog.run()
-    if response == Gtk.ResponseType.YES:
-        dialog.hide()
-        return True
-
-    elif response == Gtk.ResponseType.NO:
-        dialog.hide()
-        return False
-
-
-def gtk_dialog_info(parent, text1, text2=None, icon=None):
-    dialog = Gtk.MessageDialog(parent,
-                               Gtk.DialogFlags.MODAL,
-                               Gtk.MessageType.INFO,
-                               Gtk.ButtonsType.CLOSE,
-                               text1)
-
-    if icon is not None:
-        dialog.set_icon_from_file(icon)
-
-    if text2 is not None:
-        dialog.format_secondary_text(text2)
-
-    _ = dialog.run()
-    dialog.destroy()
-
-
 class BlockTesting(Gtk.Window):
 
     def __init__(self):
 
         self.__computer = Computer()
-        self.__testing_driver = Driver()
-        self.__testing_controller = None
+        self.__driver = Driver()
+        self.__controller = None
         self.__computer_blocks_to_save = []
 
         """
             Glade
         """
-        glade_path = os.path.join(_SCRIPT_DIR, "BlockTesting.glade")
-
         builder = Gtk.Builder()
-        builder.add_from_file(glade_path)
+        builder.add_from_file(os.path.join(_SCRIPT_DIR, "BlockTesting.glade"))
         builder.connect_signals(self)
 
         glade_object_names = (
@@ -136,8 +81,7 @@ class BlockTesting(Gtk.Window):
             'box_pyusb',
             'textbuffer_pyusb',
             'entry_custom_command',
-            'button_send_custom_command',
-        )
+            'button_send_custom_command')
 
         # load the glade objects
         for glade_object in glade_object_names:
@@ -153,9 +97,9 @@ class BlockTesting(Gtk.Window):
         if 'idVendor' in computer_device_info and 'idProduct' in computer_device_info:
             for line in computer_device_info.split('\n'):
                 if 'idVendor' in line:
-                    self.entry_id_vendor.set_text(line.split()[1])
+                    self.entry_id_vendor.set_text(line.split()[1].strip())
                 elif 'idProduct' in line:
-                    self.entry_id_product.set_text(line.split()[1])
+                    self.entry_id_product.set_text(line.split()[1].strip())
 
         # Display the window
         self.window_block_testing.show_all()
@@ -189,18 +133,18 @@ class BlockTesting(Gtk.Window):
 
         # try to load the driver
         if self.checkbutton_hex_format_when_finding.get_active():
-            vendor = int(self.entry_id_vendor.get_text(), 16)
-            product = int(self.entry_id_product.get_text(), 16)
+            vendor = int(self.entry_id_vendor.get_text(), 16) # this is because its string
+            product = int(self.entry_id_product.get_text(), 16) # this is because its string
         else:
             vendor = int(self.entry_id_vendor.get_text())
             product = int(self.entry_id_product.get_text())
 
-        self.__testing_driver.load_device(id_vendor=vendor, id_product=product)
+        self.__driver.load_device(id_vendor=vendor, id_product=product)
 
         #
         # Load the controller
         #
-        if not self.__testing_driver.has_device():
+        if not self.__driver.has_device():
             gtk_dialog_info(self.window_block_testing, "The connection was not successful.")
             self.box_block_testing.set_sensitive(False)
             self.box_pyusb.set_sensitive(False)
@@ -216,7 +160,7 @@ class BlockTesting(Gtk.Window):
             self.__computer.vendor_id = vendor
             self.__computer.product_id = product
 
-            self.__testing_controller = Controller(self.__computer)
+            self.__controller = Controller(self.__computer)
 
             self.__computer_blocks_to_save = (
                 # (True, self.__computer.block_load_on_boot),
@@ -273,7 +217,7 @@ class BlockTesting(Gtk.Window):
         constructor = (Command("Custom", values),)
 
         try:
-            self.__testing_driver.write_constructor(constructor)
+            self.__driver.write_constructor(constructor)
         except Exception:
             gtk_append_text_to_buffer(self.textbuffer_pyusb, '\n' + format_exc() + '\n')
             return
@@ -314,17 +258,17 @@ class BlockTesting(Gtk.Window):
 
             #   Test
             #
-            self.__testing_controller.erase_config()
+            self.__controller.erase_config()
 
             for save, block in self.__computer_blocks_to_save:
-                self.__testing_controller.add_block_line(save=save, block=block)
-                self.__testing_controller.add_reset_line(self.__computer.reset_all_lights_on)
-                self.__testing_controller.add_speed_line(speed)
-                self.__testing_controller.add_color_line(zone_block, zone_mode, zone_left_color, zone_right_color)
-                self.__testing_controller.end_colors_line()
-                self.__testing_controller.end_block_line()
+                self.__controller.add_block_line(save=save, block=block)
+                self.__controller.add_reset_line(self.__computer.reset_all_lights_on)
+                self.__controller.add_speed_line(speed)
+                self.__controller.add_color_line(zone_block, zone_mode, zone_left_color, zone_right_color)
+                self.__controller.end_colors_line()
+                self.__controller.end_block_line()
 
-            self.__testing_controller.apply_config()
+            self.__controller.apply_config()
 
 
         except Exception:
@@ -333,13 +277,13 @@ class BlockTesting(Gtk.Window):
     def on_button_block_testing_lights_off_clicked(self, *_):
         try:
 
-            self.__testing_controller.erase_config()
+            self.__controller.erase_config()
 
             for save, block in self.__computer_blocks_to_save:
-                self.__testing_controller.add_block_line(save, block)
-                self.__testing_controller.add_reset_line(self.__computer.reset_all_lights_off)
+                self.__controller.add_block_line(save, block)
+                self.__controller.add_reset_line(self.__computer.reset_all_lights_off)
 
-            self.__testing_controller.apply_config()
+            self.__controller.apply_config()
 
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + _TEXT_BLOCK_LIGHTS_OFF + '\n')
 
@@ -369,7 +313,7 @@ class BlockTesting(Gtk.Window):
         gtk_append_text_to_buffer(self.textbuffer_block_testing, "\n {} = {}".format(variable_name, value))
 
     @staticmethod
-    def on_window_block_testing_destroy(_):
+    def on_window_block_testing_destroy(*_):
         Gtk.main_quit()
 
 

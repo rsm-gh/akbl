@@ -30,7 +30,11 @@ def gtk_append_text_to_buffer(textbuffer, text):
 
 
 def gtk_dialog_question(parent, text1, text2=None, icon=None):
-    dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO, text1)
+    dialog = Gtk.MessageDialog(parent,
+                               Gtk.DialogFlags.MODAL,
+                               Gtk.MessageType.QUESTION,
+                               Gtk.ButtonsType.YES_NO,
+                               text1)
 
     if icon is not None:
         dialog.set_icon_from_file(icon)
@@ -49,7 +53,11 @@ def gtk_dialog_question(parent, text1, text2=None, icon=None):
 
 
 def gtk_dialog_info(parent, text1, text2=None, icon=None):
-    dialog = Gtk.MessageDialog(parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.INFO, Gtk.ButtonsType.CLOSE, text1)
+    dialog = Gtk.MessageDialog(parent,
+                               Gtk.DialogFlags.MODAL,
+                               Gtk.MessageType.INFO,
+                               Gtk.ButtonsType.CLOSE,
+                               text1)
 
     if icon is not None:
         dialog.set_icon_from_file(icon)
