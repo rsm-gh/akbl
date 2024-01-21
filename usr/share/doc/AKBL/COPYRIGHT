@@ -11,162 +11,68 @@ Copyright: Taken from a ubuntu build in 2015, http://www.libusb.info
 License: LGPL3
 Files: usr/share/AKBL/libusb-1.0.so.0
 
+Copyright: Copyright (C) 2014-2022, 2024 Rafael Senties Martinelli
+License: GPL-3
+Files:
+	README.md
+	remove
+	setup
+
+	usr/bin/akbl
+
+    usr/lib/python3/AKBL/Computer/factory.py
+    usr/lib/python3/AKBL/Theme/factory.py
+    usr/lib/python3/AKBL/Bindings.py
+    usr/lib/python3/AKBL/CCParser.py
+    usr/lib/python3/AKBL/Paths.py
+    usr/lib/python3/AKBL/settings.py
+    usr/lib/python3/AKBL/texts.py
+	usr/lib/python3/AKBL/utils.py
+	usr/lib/systemd/system/akbl.service
+
+	usr/share/AKBL/BlockTesting/BlockTesting.py
+	usr/share/AKBL/BlockTesting/BlockTesting.glade
+	usr/share/AKBL/GUI/GUI.glade
+	usr/share/AKBL/GUI/GUI.py
+	usr/share/AKBL/GUI/ZoneWidget.py
+	usr/share/AKBL/GUI/ColorChooserToolbar/ColorToolItem.py
+	usr/share/AKBL/GUI/ColorChooserToolbar/ColorChooserToolbar.py
+    usr/share/AKBL/Indicator/Indicator.py
+	usr/share/AKBL/ModelChooser/ModelChooser.glade
+	usr/share/AKBL/ModelChooser/ModelChooser.py
+	usr/share/AKBL/ModelChooser/cmd.py
+	usr/share/AKBL/test/bindings.py
+	usr/share/AKBL/test/zones_and_toolbar.py
+    usr/share/AKBL/commands.py
+    usr/share/AKBL/Daemon.py
+    usr/share/AKBL/gtk_utils.py
+
+    usr/share/applications/AKBL.desktop
+
+	usr/share/doc/AKBL/ImagesPreview/*
+	usr/share/doc/AKBL/Programming/*
+	usr/share/doc/AKBL/BusData/Summary
+
+Copyright: Copyright (C) 2014-2022, 2024 Rafael Senties Martinelli.
+           Copyright (C) 2011-2012 the pyAlienFX team.
+License: GPL-3
+Files:
+	usr/lib/python3/AKBL/Computer/Computer.py
+	usr/lib/python3/AKBL/Computer/Region.py
+	usr/lib/python3/AKBL/Engine/Command.py
+	usr/lib/python3/AKBL/Engine/Constructor.py
+	usr/lib/python3/AKBL/Engine/Controller.py
+    usr/lib/python3/AKBL/Engine/Driver.py
+	usr/lib/python3/AKBL/Theme/Zone.py
+	usr/lib/python3/AKBL/Theme/Area.py
+
+Copyright: GNU/Linux community.
+License: GPL-3
+Files:
+	usr/share/doc/AKBL/BusData/Data/*
+	usr/share/AKBL/computers/*
+
 
 Copyright: Copyright (C) 2015 Amalia Angeli.
 License: CC-BY 4.0
 Files: *.png
-
-Copyright: Copyright (C) 2014-2019, 2024 Rafael Senties Martinelli.
-           Copyright (C) 2011-2012 the pyAlienFX team.
-License: GPL-3
-Files: 
-	usr/lib/python3/AKBL/Engine/__init__.py
-	usr/lib/python3/AKBL/Engine/Driver.py
-	usr/lib/python3/AKBL/Engine/Controller.py
-	usr/lib/python3/AKBL/Engine/Command.py
-	usr/lib/python3/AKBL/Engine/Constructor.py
-	usr/lib/python3/AKBL/Data/Computer/Computer.py
-	usr/lib/python3/AKBL/Data/Computer/Region.py
-	usr/lib/python3/AKBL/Data/Theme/Zone.py
-	usr/lib/python3/AKBL/Data/Theme/Area.py
-
-
-
-Copyright: Copyright (C) 2014-2019 Rafael Senties Martinelli
-License: GPL-3
-Files:
-	README.md
-	COPYRIGHT
-	ISSUE_TEMPLATE.md
-	remove
-	setup
-	.gitignore
-
-	usr/bin/akbl
-	usr/share/applications/AKBL.desktop
-	usr/share/AKBL/launch/model_chooser.py
-	usr/share/AKBL/launch/indicator.py
-	usr/share/AKBL/launch/daemon.py
-	usr/share/AKBL/launch/gui.py
-	usr/share/AKBL/launch/block_testing.py
-	usr/share/AKBL/launch/commands.py
-	usr/share/AKBL/test/zones_and_toolbar.py
-	usr/share/AKBL/test/bindings.py
-	
-	usr/lib/systemd/system/akbl.service
-	
-	usr/__init__.py
-	usr/lib/__init__.py
-	usr/lib/python3/__init__.py
-	usr/lib/python3/AKBL/utils.py
-	usr/lib/python3/AKBL/__init__.py
-	usr/lib/python3/AKBL/Bindings.py
-	usr/lib/python3/AKBL/Paths.py
-	usr/lib/python3/AKBL/texts.py
-	usr/lib/python3/AKBL/Daemon.py
-	usr/lib/python3/AKBL/Addons/ModelChooser/ModelChooser.glade
-	usr/lib/python3/AKBL/Addons/ModelChooser/ModelChooser.py
-	usr/lib/python3/AKBL/Addons/ModelChooser/__init__.py
-	usr/lib/python3/AKBL/Addons/ModelChooser/texts.py
-	usr/lib/python3/AKBL/Addons/__init__.py
-	usr/lib/python3/AKBL/Addons/gtk_utils.py
-	usr/lib/python3/AKBL/Addons/GUI/GUI.glade
-	usr/lib/python3/AKBL/Addons/GUI/GUI.py
-	usr/lib/python3/AKBL/Addons/GUI/__init__.py
-	usr/lib/python3/AKBL/Addons/GUI/ZoneWidget.py
-	usr/lib/python3/AKBL/Addons/GUI/ColorChooserToolbar/__init__.py
-	usr/lib/python3/AKBL/Addons/GUI/ColorChooserToolbar/ColorToolItem.py
-	usr/lib/python3/AKBL/Addons/GUI/ColorChooserToolbar/ColorChooserToolbar.py
-	usr/lib/python3/AKBL/Addons/Indicator/__init__.py
-	usr/lib/python3/AKBL/Addons/Indicator/Indicator.py
-	usr/lib/python3/AKBL/Addons/BlockTesting/BlockTesting.py
-	usr/lib/python3/AKBL/Addons/BlockTesting/BlockTesting.glade
-	usr/lib/python3/AKBL/Addons/BlockTesting/__init__.py
-	usr/lib/python3/AKBL/Addons/BlockTesting/texts.py
-	usr/lib/python3/AKBL/Data/Computer/factory.py
-	usr/lib/python3/AKBL/Data/Computer/__init__.py
-	usr/lib/python3/AKBL/Data/__init__.py
-	usr/lib/python3/AKBL/Data/Theme/__init__.py
-	usr/lib/python3/AKBL/Data/Theme/Theme.py
-	usr/lib/python3/AKBL/Data/Theme/theme_factory.py
-	usr/lib/python3/AKBL/CCParser.py
-
-	usr/share/AKBL/computers/M11XR2.ini
-	usr/share/AKBL/computers/AuroraR7.ini
-	usr/share/AKBL/computers/DellG7_7590.ini
-	usr/share/AKBL/computers/Alienware15R1.ini
-	usr/share/AKBL/computers/M18x-R2.ini
-	usr/share/AKBL/computers/M14XR1.ini
-	usr/share/AKBL/computers/AuroraR4.ini
-	usr/share/AKBL/computers/DellG5_5590.ini
-	usr/share/AKBL/computers/M11XR1.ini
-	usr/share/AKBL/computers/AlienwareM17R2.ini
-	usr/share/AKBL/computers/M17XR2.ini
-	usr/share/AKBL/computers/AlienwareM15R2.ini
-	usr/share/AKBL/computers/M14XR3.ini
-	usr/share/AKBL/computers/Alienware15R2.ini
-	usr/share/AKBL/computers/Alienware13R3.ini
-	usr/share/AKBL/computers/Alienware13R1.ini
-	usr/share/AKBL/computers/M17XR1.ini
-	usr/share/AKBL/computers/Alienware15R4.ini
-	usr/share/AKBL/computers/Alienware17R3.ini
-	usr/share/AKBL/computers/M14XR2.ini
-	usr/share/AKBL/computers/Alienware17R4.ini
-	usr/share/AKBL/computers/Area51R5.ini
-	usr/share/AKBL/computers/AlienwareM15R3.ini
-	usr/share/AKBL/computers/Alienware17R2.ini
-	usr/share/AKBL/computers/M18XR1.ini
-	usr/share/AKBL/computers/M17XR0.ini
-	usr/share/AKBL/computers/Alienware17R5.ini
-	usr/share/AKBL/computers/Alienware17Rx.ini
-	usr/share/AKBL/computers/Alienware15R3.ini
-	usr/share/AKBL/computers/AlienwareM15.ini
-	usr/share/AKBL/computers/DellG5_5500.ini
-	usr/share/AKBL/computers/M11XR3.ini
-
-	usr/share/doc/AKBL/Programming/general diagram.png
-	usr/share/doc/AKBL/Programming/class_diagrams/Engine.png
-	usr/share/doc/AKBL/Programming/class_diagrams/GUI.png
-	usr/share/doc/AKBL/Programming/class_diagrams/Data.png
-	usr/share/doc/AKBL/Programming/class_diagrams/umbrello_Data.xmi
-	usr/share/doc/AKBL/Programming/class_diagrams/umbrello_GUI.xmi
-	usr/share/doc/AKBL/Programming/class_diagrams/umbrello_Engine.xmi
-	usr/share/doc/AKBL/Programming/general diagram.odg
-	usr/share/doc/AKBL/ImagesPreview/GUI.png
-	usr/share/doc/AKBL/ImagesPreview/Indicator.png
-	usr/share/doc/AKBL/BusData/Summary
-
-Copyright: GNU/Linux community, check inside the file to find the owner.
-License: GPL-3
-Files:
-	usr/share/doc/AKBL/BusData/Data/Aurora R4
-	usr/share/doc/AKBL/BusData/Data/Area51 R5
-	usr/share/doc/AKBL/BusData/Data/M14X R2
-	usr/share/doc/AKBL/BusData/Data/M17X R0
-	usr/share/doc/AKBL/BusData/Data/Alienware17 R2
-	usr/share/doc/AKBL/BusData/Data/M17X R2
-	usr/share/doc/AKBL/BusData/Data/Alienware17 R?
-	usr/share/doc/AKBL/BusData/Data/Alienware15 R3
-	usr/share/doc/AKBL/BusData/Data/Dell G5 5500
-	usr/share/doc/AKBL/BusData/Data/M17X R1
-	usr/share/doc/AKBL/BusData/Data/Alienware13 R3
-	usr/share/doc/AKBL/BusData/Data/Alienware15 R1
-	usr/share/doc/AKBL/BusData/Data/Area51m
-	usr/share/doc/AKBL/BusData/Data/Alienware M15
-	usr/share/doc/AKBL/BusData/Data/Alienware15 R4
-	usr/share/doc/AKBL/BusData/Data/Dell G5 5590
-	usr/share/doc/AKBL/BusData/Data/M11X R1
-	usr/share/doc/AKBL/BusData/Data/Alienware15 R2
-	usr/share/doc/AKBL/BusData/Data/M14X R1
-	usr/share/doc/AKBL/BusData/Data/Alienware13 R1
-	usr/share/doc/AKBL/BusData/Data/Dell G7 7590
-	usr/share/doc/AKBL/BusData/Data/Aurora R7
-	usr/share/doc/AKBL/BusData/Data/M14X R3
-	usr/share/doc/AKBL/BusData/Data/M11X R2
-	usr/share/doc/AKBL/BusData/Data/Alienware M17 R2
-	usr/share/doc/AKBL/BusData/Data/Alienware M15 R2
-	usr/share/doc/AKBL/BusData/Data/Alienware17 R5
-	usr/share/doc/AKBL/BusData/Data/Alienware17 R4
-	usr/share/doc/AKBL/BusData/Data/Alienware M15 R3
-	usr/share/doc/AKBL/BusData/Data/M18x-R2
-	usr/share/doc/AKBL/BusData/Data/Area51 R2
