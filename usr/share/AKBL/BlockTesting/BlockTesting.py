@@ -24,6 +24,7 @@ from traceback import format_exc
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+from AKBL.Computer.Computer import Computer
 from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Command import Command
 from AKBL.Engine.Controller import Controller
@@ -99,8 +100,8 @@ class BlockTesting(Gtk.Window):
 
     def __init__(self):
 
-        self.__computer = None
-        self.__testing_driver = None
+        self.__computer = Computer()
+        self.__testing_driver = Driver()
         self.__testing_controller = None
         self.__computer_blocks_to_save = []
 
@@ -183,17 +184,27 @@ class BlockTesting(Gtk.Window):
             vendor = int(self.entry_id_vendor.get_text())
             product = int(self.entry_id_product.get_text())
 
-        self.__testing_driver = Driver()
-        self.__testing_driver.load_device(id_vendor=vendor, id_product=product, empty_computer=True)
+        self.__testing_driver.load_device(id_vendor=vendor, id_product=product)
 
-        # try to load the controller
-        if self.__testing_driver.has_device():
+        #
+        # Load the controller
+        #
+        if not self.__testing_driver.has_device():
+            self.box_block_testing.set_sensitive(False)
+            self.box_pyusb.set_sensitive(False)
+            self.togglebutton_find_device.set_active(False)
+            self.entry_id_vendor.set_sensitive(True)
+            self.entry_id_product.set_sensitive(True)
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_NOT_FOUND.format(vendor, product))
 
-            self.__testing_controller = Controller(self.__testing_driver)
+        else:
+            self.__computer.vendor_id = vendor
+            self.__computer.product_id = product
 
-            self.__computer = self.__testing_driver.computer
+            self.__testing_controller = Controller(self.__computer)
 
-            self.__computer_blocks_to_save = (  # (True, self.__computer.block_load_on_boot),
+            self.__computer_blocks_to_save = (
+                # (True, self.__computer.block_load_on_boot),
                 # (True, self.__computer.BLOCK_STANDBY),
                 # (True, self.__computer.block_ac_power),
                 # (#True, self.__computer.block_charging),
@@ -234,13 +245,7 @@ class BlockTesting(Gtk.Window):
 
             self.combobox_default_blocks.set_active(0)
 
-        else:
-            self.box_block_testing.set_sensitive(False)
-            self.box_pyusb.set_sensitive(False)
-            self.togglebutton_find_device.set_active(False)
-            self.entry_id_vendor.set_sensitive(True)
-            self.entry_id_product.set_sensitive(True)
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_NOT_FOUND.format(vendor, product))
+
 
     def on_button_send_custom_command_clicked(self, *_):
 
@@ -346,10 +351,8 @@ class BlockTesting(Gtk.Window):
             self.entry_block_testing.set_text(str(value))
 
     def on_dynamic_spin_general_properties_changed(self, spin, variable_name):
-
         value = spin.get_value_as_int()
-
-        setattr(self.__testing_driver.computer, variable_name, value)
+        setattr(self.__computer, variable_name, value)
         gtk_append_text_to_buffer(self.textbuffer_block_testing, "\n {} = {}".format(variable_name, value))
 
     @staticmethod
