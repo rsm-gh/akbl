@@ -48,14 +48,15 @@ if computer is None:
                 print("    Error, only numbers are accepted.")
 
             else:
-                if inp == 0:
+                if inp <= 0:
                     break
+                    
+                elif inp > len(compatible_computers):
+                    print("    Error, the number is not in the list")
+                    
                 else:
-                    if inp > len(compatible_computers):
-                        print("    Error, the number is not in the list")
-                    else:
-                        computer = compatible_computers[i-1]
-                        break
+                    computer = compatible_computers[inp-1]
+                    break
 
 
 
@@ -65,3 +66,4 @@ if computer is None:
 if computer is not None:
     print("Installed computer set to: {}".format(computer.name))
     computer_factory.set_installed_computer(computer.name)
+
