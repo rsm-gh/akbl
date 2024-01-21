@@ -62,7 +62,7 @@ class BlockTesting(Gtk.Window):
             'window_block_testing',
             'entry_id_vendor',
             'entry_id_product',
-            'togglebutton_find_device',
+            'button_connect',
             'box_block_testing',
             'spinbutton_block_speed',
             'viewport_common_block',
@@ -117,80 +117,82 @@ class BlockTesting(Gtk.Window):
         except Exception:
             self.button_block_make_test.set_sensitive(False)
 
-    def on_togglebutton_find_device_clicked(self, *_):
+    def on_button_connect_clicked(self, *_):
+
+        hex_format = self.checkbutton_hex_format_when_finding.get_active()
 
         try:
-            int(self.entry_id_vendor.get_text())
-            int(self.entry_id_product.get_text())
+            if hex_format:
+                vendor = int(self.entry_id_vendor.get_text(), 16)  # this is because its string
+                product = int(self.entry_id_product.get_text(), 16)  # this is because its string
+            else:
+                vendor = int(self.entry_id_vendor.get_text())
+                product = int(self.entry_id_product.get_text())
+
         except ValueError:
-            if self.checkbutton_hex_format_when_finding.get_active():
+            if hex_format:
                 text = "Only HEX numbers can be entered."
             else:
                 text = "Only Integer numbers can be entered."
+
             gtk_dialog_info(self.window_block_testing, text)
             return
 
-
+        #
         # try to load the driver
-        if self.checkbutton_hex_format_when_finding.get_active():
-            vendor = int(self.entry_id_vendor.get_text(), 16) # this is because its string
-            product = int(self.entry_id_product.get_text(), 16) # this is because its string
-        else:
-            vendor = int(self.entry_id_vendor.get_text())
-            product = int(self.entry_id_product.get_text())
-
+        #
         self.__driver.load_device(id_vendor=vendor, id_product=product)
 
         #
-        # Load the controller
+        # Check the controller
         #
         if not self.__driver.has_device():
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_NOT_FOUND.format(vendor, product))
             gtk_dialog_info(self.window_block_testing, "The connection was not successful.")
             self.box_block_testing.set_sensitive(False)
             self.box_pyusb.set_sensitive(False)
-            self.togglebutton_find_device.set_active(True)
             self.entry_id_vendor.set_sensitive(True)
             self.entry_id_product.set_sensitive(True)
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_NOT_FOUND.format(vendor, product))
+            return
 
-        else:
-            gtk_dialog_info(self.window_block_testing, "The connection was successful.")
-            self.togglebutton_find_device.set_active(False)
 
-            self.__computer.vendor_id = vendor
-            self.__computer.product_id = product
+        gtk_dialog_info(self.window_block_testing, "The connection was successful.")
+        self.button_connect.set_active(False)
 
-            self.__controller = Controller(self.__computer)
+        self.__computer.vendor_id = vendor
+        self.__computer.product_id = product
 
-            self.__computer_blocks_to_save = (
-                # (True, self.__computer.block_load_on_boot),
-                # (True, self.__computer.BLOCK_STANDBY),
-                # (True, self.__computer.block_ac_power),
-                # (#True, self.__computer.block_charging),
-                # (True, self.__computer.block_battery_sleeping),
-                # (True, self.__computer.block_battery_power),
-                # (True, self.__computer.block_battery_critical),
-                (False, self.__computer.block_load_on_boot),)
+        self.__controller = Controller(self.__computer)
 
-            # Add the general computer variables
-            row_index = 0
-            for attr_name, attr_value in sorted(vars(self.__computer).items()):
-                if not attr_name.startswith("_") and isinstance(attr_value, int):
-                    label = Gtk.Label(attr_name)
-                    label.set_xalign(0)
+        self.__computer_blocks_to_save = (
+            # (True, self.__computer.block_load_on_boot),
+            # (True, self.__computer.BLOCK_STANDBY),
+            # (True, self.__computer.block_ac_power),
+            # (#True, self.__computer.block_charging),
+            # (True, self.__computer.block_battery_sleeping),
+            # (True, self.__computer.block_battery_power),
+            # (True, self.__computer.block_battery_critical),
+            (False, self.__computer.block_load_on_boot),)
 
-                    adjustment = Gtk.Adjustment(0, 0, 9999999999999, 1, 1, 0)
-                    spinbutton = Gtk.SpinButton()
-                    spinbutton.set_adjustment(adjustment)
-                    spinbutton.set_value(attr_value)
-                    spinbutton.set_digits(0)
-                    spinbutton.set_numeric(True)
+        # Add the general computer variables
+        row_index = 0
+        for attr_name, attr_value in sorted(vars(self.__computer).items()):
+            if not attr_name.startswith("_") and isinstance(attr_value, int):
+                label = Gtk.Label(attr_name)
+                label.set_xalign(0)
 
-                    spinbutton.connect("value-changed", self.on_dynamic_spin_general_properties_changed, attr_name)
+                adjustment = Gtk.Adjustment(0, 0, 9999999999999, 1, 1, 0)
+                spinbutton = Gtk.SpinButton()
+                spinbutton.set_adjustment(adjustment)
+                spinbutton.set_value(attr_value)
+                spinbutton.set_digits(0)
+                spinbutton.set_numeric(True)
 
-                    self.config_grid.attach(label, 0, row_index, 1, 1)
-                    self.config_grid.attach(spinbutton, 1, row_index, 1, 1)
-                    row_index += 1
+                spinbutton.connect("value-changed", self.on_dynamic_spin_general_properties_changed, attr_name)
+
+                self.config_grid.attach(label, 0, row_index, 1, 1)
+                self.config_grid.attach(spinbutton, 1, row_index, 1, 1)
+                row_index += 1
 
             self.config_grid.show_all()
 

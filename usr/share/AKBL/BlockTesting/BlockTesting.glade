@@ -66,11 +66,6 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
     <property name="can-focus">False</property>
     <property name="icon-name">dialog-warning</property>
   </object>
-  <object class="GtkImage" id="image22">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">network-wired</property>
-  </object>
   <object class="GtkImage" id="image25">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -264,7 +259,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -325,26 +320,24 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToggleButton" id="togglebutton_find_device">
+                      <object class="GtkButton" id="button_connect_clicked">
                         <property name="label" translatable="yes">Connect</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
-                        <property name="margin-top">25</property>
-                        <property name="image">image22</property>
-                        <signal name="clicked" handler="on_togglebutton_find_device_clicked" swapped="no"/>
+                        <signal name="clicked" handler="on_button_connect_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
