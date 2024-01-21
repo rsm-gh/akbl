@@ -22,12 +22,10 @@ from traceback import format_exc
 
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
-from AKBL.texts import TEXT_ONLY_ROOT
 from AKBL.Engine.Controller import Controller
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
-from AKBL.utils import (getuser,
-                        print_warning,
+from AKBL.utils import (print_warning,
                         print_error,
                         print_info,
                         print_debug,
@@ -405,10 +403,6 @@ class Daemon:
 
 
 def main():
-    if getuser() != 'root':
-        print(TEXT_ONLY_ROOT)
-        exit(1)
-
     os.chdir(os.path.dirname(os.path.realpath(__file__)))  # todo: why is this necessary?
 
     akbl_daemon = Daemon()

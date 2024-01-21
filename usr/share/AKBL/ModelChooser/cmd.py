@@ -16,14 +16,18 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
+import sys
+from AKBL.utils import get_alienware_device_info
 import AKBL.Computer.factory as computer_factory
 
 computer = computer_factory.get_installed_computer()
+compatible_computers = computer_factory.get_compatible_computers()
 
-if computer is None:
+force = False
+if len(sys.argv) > 1:
+    force = sys.argv[1] == "--force"
 
-    compatible_computers = computer_factory.get_compatible_computers()
+if computer is None or force:
 
     if len(compatible_computers) == 0:
         print("Error: No configuration is available for this hardware.")
@@ -35,7 +39,6 @@ if computer is None:
         print("There are multiple configurations that can be used for your computer. Please select the one that matches your computer:")
         for i, comp in enumerate(compatible_computers, 1):
             print("    {}) {}".format(i, comp.name))
-
         print("\n    or press 0 to quit.\n")
 
         while True:
@@ -50,20 +53,23 @@ if computer is None:
             else:
                 if inp <= 0:
                     break
-                    
+
                 elif inp > len(compatible_computers):
                     print("    Error, the number is not in the list")
-                    
+
                 else:
                     computer = compatible_computers[inp-1]
                     break
 
 
-
 #
 # Re-install the computer configuration
 #
-if computer is not None:
-    print("Installed computer set to: {}".format(computer.name))
+if computer is None:
+    print(get_alienware_device_info())
+else:
     computer_factory.set_installed_computer(computer.name)
+    print("Installed computer set to: {}".format(computer.name))
 
+    if len(compatible_computers) > 1:
+        print("If you want to change it, use the commands 'akbl --model-chooser-gui' or '--model-chooser-cmd'")

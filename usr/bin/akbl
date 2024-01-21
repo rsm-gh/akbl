@@ -19,41 +19,59 @@
 ## This is the libusb patch, some distributions like Debian wheezy does not need it.
 export LD_PRELOAD=/usr/share/AKBL/libusb-1.0.so.0
 
+ROOT_TEXT="This command can only be used by root users."
+
 if [ -z "$1" ]; then
     python3 /usr/share/AKBL/GUI/GUI.py
 
 elif [ -z "$2" ]; then
     case "$1" in
-        --start-daemon)
-            python3 /usr/share/AKBL/Daemon.py
-        ;;
-        --block-testing)
-            python3 /usr/share/AKBL/BlockTesting/BlockTesting.py
-        ;;
+
         --start-indicator)
             setsid python3 /usr/share/AKBL/Indicator/Indicator.py
         ;;
-        --model-chooser)
-            python3 /usr/share/AKBL/ModelChooser/ModelChooser.py
-            
-            if [ "$EUID" -eq 0 ]; then
-                systemctl restart akbl
-            fi
+
+        --start-daemon)
+           if [ "$EUID" -eq 0 ]; then
+              python3 /usr/share/AKBL/Daemon.py
+           else
+              echo "$ROOT_TEXT"
+           fi
         ;;
+
+        --block-testing)
+           if [ "$EUID" -eq 0 ]; then
+              python3 /usr/share/AKBL/BlockTesting/BlockTesting.py
+           else
+              echo "$ROOT_TEXT"
+           fi
+        ;;
+
+        --model-chooser-gui)
+           if [ "$EUID" -eq 0 ]; then
+              python3 /usr/share/AKBL/ModelChooser/ModelChooser.py
+              systemctl restart akbl
+           else
+              echo "$ROOT_TEXT"
+           fi
+        ;;
+        --model-chooser-cmd)
+
+           if [ "$EUID" -eq 0 ]; then
+              python3 /usr/share/AKBL/ModelChooser/cmd.py --force
+              systemctl restart akbl
+           else
+              echo "$ROOT_TEXT"
+           fi
+        ;;
+
         *)
             python3 /usr/share/AKBL/commands.py "$1"
         ;;
     esac
-    
-        
-elif [ -z "$3" ]; then
 
+elif [ -z "$3" ]; then
     case "$1" in
-        # Used for choosing a computer model without restarting the daemon when installing the software...
-        # Todo: verify if this still necessary and why. Shouldn't it be better to restart the daemon with the new computer?
-        --model-chooser)
-            python3 /usr/share/AKBL/ModelChooser/ModelChooser.py
-        ;;
         *)
             python3 /usr/share/AKBL/commands.py "$1" "$2"
         ;;
