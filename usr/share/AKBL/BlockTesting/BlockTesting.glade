@@ -64,17 +64,17 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkImage" id="image21">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-dialog-warning</property>
+    <property name="icon-name">dialog-warning</property>
   </object>
   <object class="GtkImage" id="image22">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-connect</property>
+    <property name="icon-name">network-wired</property>
   </object>
   <object class="GtkImage" id="image25">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="stock">gtk-info</property>
+    <property name="icon-name">dialog-information</property>
   </object>
   <object class="GtkListStore" id="liststore_default_blocks">
     <columns>
@@ -206,8 +206,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkBox" id="box_device">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-left">15</property>
-            <property name="margin-right">15</property>
+            <property name="margin-start">15</property>
+            <property name="margin-end">15</property>
             <property name="margin-top">15</property>
             <property name="margin-bottom">15</property>
             <child>
@@ -250,7 +250,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-left">15</property>
+                <property name="margin-start">15</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkCheckButton" id="checkbutton_hex_format_when_finding">
@@ -258,7 +258,6 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                   </object>
@@ -372,8 +371,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="can-focus">False</property>
-            <property name="margin-left">15</property>
-            <property name="margin-right">15</property>
+            <property name="margin-start">15</property>
+            <property name="margin-end">15</property>
             <property name="margin-top">15</property>
             <property name="margin-bottom">15</property>
             <property name="orientation">vertical</property>
@@ -394,7 +393,6 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
                         <property name="margin-bottom">5</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <signal name="clicked" handler="on_checkbutton_protect_common_blocks_clicked" swapped="no"/>
@@ -573,7 +571,6 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <property name="tooltip-text" translatable="yes">Color 2</property>
-                                <property name="color">#cccc00000000</property>
                                 <property name="rgba">rgb(204,0,0)</property>
                               </object>
                               <packing>
@@ -649,7 +646,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can-focus">True</property>
-                            <property name="margin-left">15</property>
+                            <property name="margin-start">15</property>
+                            <property name="shadow-type">none</property>
                             <signal name="changed" handler="on_entry_block_testing_changed" swapped="no"/>
                           </object>
                           <packing>
@@ -671,7 +669,6 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
-                        <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                       </object>
@@ -709,11 +706,9 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="sensitive">False</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">True</property>
-                            <property name="margin-left">15</property>
+                            <property name="margin-start">15</property>
                             <property name="margin-top">5</property>
                             <property name="image">image21</property>
-                            <property name="xalign">0.51999998092651367</property>
-                            <property name="yalign">0.49000000953674316</property>
                             <signal name="clicked" handler="on_button_block_make_test_clicked" swapped="no"/>
                           </object>
                           <packing>
@@ -805,8 +800,8 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="can-focus">False</property>
-            <property name="margin-left">15</property>
-            <property name="margin-right">15</property>
+            <property name="margin-start">15</property>
+            <property name="margin-end">15</property>
             <property name="margin-top">15</property>
             <property name="margin-bottom">15</property>
             <property name="orientation">vertical</property>
@@ -846,7 +841,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="margin-left">10</property>
+                    <property name="margin-start">10</property>
                     <signal name="clicked" handler="on_button_send_custom_command_clicked" swapped="no"/>
                   </object>
                   <packing>
