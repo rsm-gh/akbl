@@ -32,6 +32,8 @@ from AKBL.utils import (print_warning,
                         string_is_hex_color)
 
 
+from common import IndicatorCodes
+
 class Daemon:
 
     def __init__(self):
@@ -316,12 +318,12 @@ class Daemon:
     @Pyro4.expose
     def indicator_get_state(self):
 
-        print_debug()
+        print_debug("state={}".format(self.__lights_state))
 
         if self.__lights_state:
-            self.__indicator_send_code(100)
+            self.__indicator_send_code(IndicatorCodes.lights_on)
         else:
-            self.__indicator_send_code(150)
+            self.__indicator_send_code(IndicatorCodes.lights_off)
 
     @Pyro4.expose
     def indicator_start(self, uri):

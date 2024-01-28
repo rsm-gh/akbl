@@ -16,5 +16,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-__version__ = "2019.05.26-rev2024"
-DEBUG = True
+class IndicatorCodes:
+    lights_on = 100
+    lights_off = 150
+    daemon_off = 666
