@@ -7,10 +7,6 @@ assignees: ''
 
 ---
 
-IF YOU WANT YOUR BUG TO BE TREATED:
- + FILL ALL THE INFORMATION OF THIS TEMPLATE
- + BEFORE SUBMITTING ANY BUG, DOWNLOAD AND INSTALL THE LAST VERSION OF AKBL
-
 # System information
 
 + Distribution name:
@@ -23,3 +19,8 @@ IF YOU WANT YOUR BUG TO BE TREATED:
 # Bug description
 
 <Add the description of your bug>
+
+# Installation Log
+```
+ADD HERE YOUR INSTALLATION LOG
+```
