@@ -94,19 +94,19 @@ class GUI(Gtk.Window):
         """
             Add the accel groups
         """
-        for _id, shortcut in (('imagemenuitem_apply_configuration', 'a'),
-                              ('imagemenuitem_save', 's'),
-                              ('imagemenuitem_delete', 'd'),
-                              ('imagemenuitem_new', 'n'),
-                              ('imagemenuitem_quit', 'q'),
+        for _id, shortcut in (('menuitem_apply_configuration', 'a'),
+                              ('menuitem_save', 's'),
+                              ('menuitem_delete', 'd'),
+                              ('menuitem_new', 'n'),
+                              ('menuitem_quit', 'q'),
                               ('button_lights_on', 'o'),
                               ('button_lights_off', 'f'),
-                              ('imagemenuitem_export', 'e'),
-                              ('imagemenuitem_import', 'i')):
-            imagemenuitem_apply_configuration = builder.get_object(_id)
+                              ('menuitem_export', 'e'),
+                              ('menuitem_import', 'i')):
+            menuitem_apply_configuration = builder.get_object(_id)
             accel_group = Gtk.AccelGroup()
             self.window_root.add_accel_group(accel_group)
-            imagemenuitem_apply_configuration.add_accelerator('activate',
+            menuitem_apply_configuration.add_accelerator('activate',
                                                               accel_group,
                                                               ord(shortcut),
                                                               Gdk.ModifierType.CONTROL_MASK,
@@ -219,7 +219,6 @@ class GUI(Gtk.Window):
 
             if area.max_commands > 1:
                 add_button = Gtk.Button(label=texts.TEXT_ADD)
-                add_button.set_alignment(0.5, 0.5)
                 add_button.connect('button-press-event', self.on_button_add_zone_clicked, area, box_area)
                 box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
 
@@ -415,24 +414,24 @@ class GUI(Gtk.Window):
     def on_button_new_profile_create_clicked(self, *_):
         self.new_profile()
 
-    def on_imagemenuitem_apply_configuration_activate(self, *_):
+    def on_menuitem_apply_configuration_activate(self, *_):
         threading.Thread(target=self.__on_thread_illuminate_keyboard).start()
 
-    def on_imagemenuitem_save_activate(self, *_):
+    def on_menuitem_save_activate(self, *_):
         threading.Thread(target=self.__on_thread_save_configuration_file).start()
 
-    def on_imagemenuitem_lights_on_activate(self, *_):
+    def on_menuitem_lights_on_activate(self, *_):
         threading.Thread(target=self.__on_thread_illuminate_keyboard).start()
 
-    def on_imagemenuitem_lights_off_activate(self, *_):
+    def on_menuitem_lights_off_activate(self, *_):
         threading.Thread(target=self.__on_thread_turn_lights_off).start()
 
     @staticmethod
-    def on_imagemenuitem_quit_activate(*_):
+    def on_menuitem_quit_activate(*_):
         # self.thread_zones = False
         Gtk.main_quit()
 
-    def on_imagemenuitem_import_activate(self, *_):
+    def on_menuitem_import_activate(self, *_):
         file_path = gtk_file_chooser(parent=self.window_root,
                                      title=texts.TEXT_CHOOSE_A_THEME,
                                      icon_path=self.__paths._icon_file,
@@ -448,7 +447,7 @@ class GUI(Gtk.Window):
             theme_factory.load_from_file(new_path, self.__computer)
             self.populate_liststore_profiles()
 
-    def on_imagemenuitem_export_activate(self, *_):
+    def on_menuitem_export_activate(self, *_):
         folder_path = gtk_folder_chooser(parent=self.window_root,
                                          title=texts.TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
                                          icon_path=self.__paths._icon_file)
@@ -462,11 +461,11 @@ class GUI(Gtk.Window):
 
             shutil.copy(self.__theme.path, new_path)
 
-    def on_imagemenuitem_new_activate(self, *_):
+    def on_menuitem_new_activate(self, *_):
         self.entry_new_profile.set_text('')
         self.window_new_profile.show()
 
-    def on_imagemenuitem_delete_activate(self, *_):
+    def on_menuitem_delete_activate(self, *_):
         if self.checkbutton_delete_warning.get_active():
             if not gtk_dialog_question(self.window_root,
                                        texts.TEXT_CONFIRM_DELETE_CONFIGURATION,
@@ -480,22 +479,22 @@ class GUI(Gtk.Window):
         Gtk.main_quit()
 
     def on_button_apply_clicked(self, *_):
-        self.on_imagemenuitem_apply_configuration_activate()
+        self.on_menuitem_apply_configuration_activate()
 
     def on_button_export_clicked(self, *_):
-        self.on_imagemenuitem_export_activate()
+        self.on_menuitem_export_activate()
 
     def on_button_import_clicked(self, *_):
-        self.on_imagemenuitem_import_activate()
+        self.on_menuitem_import_activate()
 
     def on_button_save_clicked(self, *_):
-        self.on_imagemenuitem_save_activate()
+        self.on_menuitem_save_activate()
 
     def on_button_delete_clicked(self, *_):
-        self.on_imagemenuitem_delete_activate()
+        self.on_menuitem_delete_activate()
 
     def on_button_new_clicked(self, *_):
-        self.on_imagemenuitem_new_activate()
+        self.on_menuitem_new_activate()
 
     def on_entry_new_profile_changed(self, *_):
 
