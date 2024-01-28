@@ -23,7 +23,7 @@ from threading import Thread
 from time import sleep
 gi.require_version('Gtk', '3.0')
 gi.require_version('AyatanaAppIndicator3', '0.1')
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GLib
 from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 from AKBL import texts
@@ -189,7 +189,7 @@ class Indicator:
                     self.__akbl.indicator_get_state()
 
             elif self.__current_code != 666:
-                GObject.idle_add(self.set_code, 666)
+                GLib.idle_add(self.set_code, 666)
 
             else:
                 self.__akbl.reload_address(False)
