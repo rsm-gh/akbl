@@ -22,6 +22,7 @@ import re
 import pwd
 import inspect
 import subprocess
+from datetime import datetime
 
 from AKBL.settings import DEBUG
 
@@ -71,12 +72,16 @@ def __parse_module_name(name):
     return str(name).split("from '", 1)[1].split("'>", 1)[0]
 
 
+def get_datetime():
+    return str(datetime.now()).split(".")[0]
+
 def print_warning(message):
     isp1 = inspect.stack()[1]
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
-    print('\n{}[WARNING]: "{}" {}:{}\n{}'.format(_LIGHT_YELLOW,
+    print('\n{}{} [WARNING]: "{}" {}:{}\n{}'.format(_LIGHT_YELLOW,
+                                                   get_datetime(),
                                                  module_name,
                                                  method_name,
                                                  _RESET,
@@ -96,12 +101,14 @@ def print_debug(message=None, direct_output=False):
     method_name = isp1[3]
 
     if message is None:
-        print('\n{}[DEBUG]: "{}" {}{}'.format(_CYAN,
+        print('\n{}{} [DEBUG]: "{}" {}{}'.format(_CYAN,
+                                                get_datetime(),
                                               module_name,
                                               method_name,
                                               _RESET))
     else:
-        print('\n{}[DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
+        print('\n{}{}[DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
+                                                     get_datetime(),
                                                    module_name,
                                                    method_name,
                                                    _RESET,
@@ -113,7 +120,8 @@ def print_error(message):
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
-    print('\n{}[ERROR]: "{}" {}{}:\n{}'.format(_RED,
+    print('\n{}{} [ERROR]: "{}" {}{}:\n{}'.format(_RED,
+                                               get_datetime(),
                                                module_name,
                                                method_name,
                                                _RESET,
@@ -125,7 +133,8 @@ def print_info(message):
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
-    print('\n{}[INFO]: "{}" {}{}:\n{}'.format(_GREEN,
+    print('\n{}{} [INFO]: "{}" {}{}:\n{}'.format(_GREEN,
+                                                get_datetime(),
                                               module_name,
                                               method_name,
                                               _RESET,
@@ -136,3 +145,4 @@ if __name__ == '__main__':
     print_warning('this is a warning!')
     print_debug('this is a debug message!')
     print_error('this is an error!')
+    print_info("this is an info")
