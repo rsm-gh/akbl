@@ -16,5 +16,11 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-__version__ = "2019.05.26-rev2024"
-DEBUG = True
+import os
+
+__version__ = "2.dev"
+
+if 'DEBUG' in os.environ:
+    DEBUG = os.environ['DEBUG'].lower() == 'true'
+else:
+    DEBUG = False
