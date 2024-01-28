@@ -99,10 +99,10 @@ CCParser instance:
         if self.check_value(value):
             val = self.__config.get(self.__section, value).lower()
             if val in self.__accepted_true_bool:
-                return False
+                return True
 
             elif val in self.__accepted_false_bool:
-                return True
+                return False
 
         return self.__default_bool
 
