@@ -19,6 +19,7 @@
 import os
 import gi
 import Pyro4
+import subprocess
 from time import sleep
 from threading import Thread, current_thread
 gi.require_version('Gtk', '3.0')
@@ -233,7 +234,7 @@ class Indicator:
 
     @staticmethod
     def __on_menuitem_gui(*_):
-        os.system('''setsid setsid akbl''')
+        subprocess.run('akbl')
 
 if __name__ == "__main__":
     _ = ConnectIndicator()
