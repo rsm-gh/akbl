@@ -18,6 +18,7 @@
 
 import os
 import gi
+import sys
 import Pyro4
 import subprocess
 from time import sleep
@@ -32,6 +33,8 @@ from AKBL.Bindings import Bindings
 from AKBL.utils import print_error, print_debug
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+_PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
+sys.path.insert(0, _PROJECT_DIR)
 
 from common import IndicatorCodes
 
