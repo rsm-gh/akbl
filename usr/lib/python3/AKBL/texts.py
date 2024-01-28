@@ -78,10 +78,13 @@ configuration, probably made by an older version.
 Do you want to import it for this user? (yes)
 '''
 
-TEXT_PROFILES = "Profiles"
-TEXT_START_THE_GUI = "Start the GUI"
-TEXT_SWITCH_STATE = "Switch State"
-TEXT_EXIT = "Exit"
+class Texts:
+    class Indicator:
+        profiles = "Profiles"
+        start_gui = "GUI"
+        switch_state = "Switch State"
+        exit = "Exit"
+
 
 TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be established."
 

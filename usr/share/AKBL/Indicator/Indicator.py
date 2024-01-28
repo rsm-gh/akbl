@@ -26,7 +26,7 @@ gi.require_version('AyatanaAppIndicator3', '0.1')
 from gi.repository import Gtk, GLib
 from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
-from AKBL import texts
+from AKBL.texts import Texts
 from AKBL.Bindings import Bindings
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -86,20 +86,20 @@ class Indicator:
 
         self.__menu = Gtk.Menu()
 
-        self.__profiles_menu = Gtk.MenuItem(label=texts.TEXT_PROFILES)
+        item = Gtk.MenuItem(label=Texts.Indicator.start_gui)
+        item.connect('activate', self.__on_menuitem_gui)
+        self.__menu.append(item)
+
+        self.__profiles_menu = Gtk.MenuItem(label=Texts.Indicator.profiles)
         self.__menu.append(self.__profiles_menu)
         self.__submenu_profiles = Gtk.Menu()
         self.__profiles_menu.set_submenu(self.__submenu_profiles)
 
-        item = Gtk.MenuItem(label=texts.TEXT_START_THE_GUI)
-        item.connect('activate', self.__on_menuitem_gui)
-        self.__menu.append(item)
-
-        self.__submenu_switch_state = Gtk.MenuItem(label=texts.TEXT_SWITCH_STATE)
+        self.__submenu_switch_state = Gtk.MenuItem(label=Texts.Indicator.switch_state)
         self.__submenu_switch_state.connect('activate', self.__on_menuitem_change)
         self.__menu.append(self.__submenu_switch_state)
 
-        item = Gtk.MenuItem(label=texts.TEXT_EXIT)
+        item = Gtk.MenuItem(label=Texts.Indicator.exit)
         item.connect('activate', self.__on_menuitem_exit)
         self.__menu.append(item)
 
