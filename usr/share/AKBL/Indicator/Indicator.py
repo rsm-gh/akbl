@@ -19,11 +19,11 @@
 import os
 import gi
 import Pyro4
-import threading
+from threading import Thread
 from time import sleep
 gi.require_version('Gtk', '3.0')
 gi.require_version('AyatanaAppIndicator3', '0.1')
-from gi.repository import Gtk, GObject, Gdk
+from gi.repository import Gtk, GObject
 from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 from AKBL import texts
@@ -39,8 +39,8 @@ class ConnectIndicator:
         self.__pyro_daemon = Pyro4.Daemon()
         self.__uri = self.__pyro_daemon.register(self.__indicator)
 
-        threading.Thread(target=self.__pyro_thread).start()
-        threading.Thread(target=self.connect).start()
+        Thread(target=self.__pyro_thread).start()
+        Thread(target=self.connect).start()
 
     def connect(self):
         # Todo: read the return status of indicator_start
@@ -107,7 +107,7 @@ class Indicator:
         self.__app_indicator.set_menu(self.__menu)
 
         self.set_code(666)
-        threading.Thread(target=self.__daemon_check).start()
+        Thread(target=self.__daemon_check).start()
 
     """
         Public & Pyro Methods
@@ -207,7 +207,7 @@ class Indicator:
 
     def __on_menuitem_exit(self, *_):
         self.__akbl.indicator_kill()
-        self.__parent.pyro_shutdown()
+        self.__parent.shutdown()
         self.__check_daemon = False
         Gtk.main_quit()
 
