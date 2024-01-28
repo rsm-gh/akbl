@@ -51,6 +51,7 @@ def get_alienware_device_info():
 
     return device_info
 
+
 def getuser():
     return pwd.getpwuid(os.geteuid()).pw_name
 
@@ -75,17 +76,18 @@ def __parse_module_name(name):
 def get_datetime():
     return str(datetime.now()).split(".")[0]
 
+
 def print_warning(message):
     isp1 = inspect.stack()[1]
     module_name = __parse_module_name(inspect.getmodule(isp1[0]))
     method_name = isp1[3]
 
     print('\n{}{} [WARNING]: "{}" {}:{}\n{}'.format(_LIGHT_YELLOW,
-                                                   get_datetime(),
-                                                 module_name,
-                                                 method_name,
-                                                 _RESET,
-                                                 str(message).strip()))
+                                                    get_datetime(),
+                                                    module_name,
+                                                    method_name,
+                                                    _RESET,
+                                                    str(message).strip()))
 
 
 def print_debug(message=None, direct_output=False):
@@ -102,17 +104,17 @@ def print_debug(message=None, direct_output=False):
 
     if message is None:
         print('\n{}{} [DEBUG]: "{}" {}{}'.format(_CYAN,
-                                                get_datetime(),
-                                              module_name,
-                                              method_name,
-                                              _RESET))
+                                                 get_datetime(),
+                                                 module_name,
+                                                 method_name,
+                                                 _RESET))
     else:
-        print('\n{}{}[DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
-                                                     get_datetime(),
-                                                   module_name,
-                                                   method_name,
-                                                   _RESET,
-                                                   str(message).strip()))
+        print('\n{}{} [DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
+                                                      get_datetime(),
+                                                      module_name,
+                                                      method_name,
+                                                      _RESET,
+                                                      str(message).strip()))
 
 
 def print_error(message):
@@ -121,11 +123,11 @@ def print_error(message):
     method_name = isp1[3]
 
     print('\n{}{} [ERROR]: "{}" {}{}:\n{}'.format(_RED,
-                                               get_datetime(),
-                                               module_name,
-                                               method_name,
-                                               _RESET,
-                                               str(message).strip()))
+                                                  get_datetime(),
+                                                  module_name,
+                                                  method_name,
+                                                  _RESET,
+                                                  str(message).strip()))
 
 
 def print_info(message):
@@ -134,11 +136,11 @@ def print_info(message):
     method_name = isp1[3]
 
     print('\n{}{} [INFO]: "{}" {}{}:\n{}'.format(_GREEN,
-                                                get_datetime(),
-                                              module_name,
-                                              method_name,
-                                              _RESET,
-                                              str(message).strip()))
+                                                 get_datetime(),
+                                                 module_name,
+                                                 method_name,
+                                                 _RESET,
+                                                 str(message).strip()))
 
 
 if __name__ == '__main__':
