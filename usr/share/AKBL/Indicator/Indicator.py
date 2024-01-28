@@ -19,8 +19,8 @@
 import os
 import gi
 import Pyro4
-from threading import Thread
 from time import sleep
+from threading import Thread, current_thread
 gi.require_version('Gtk', '3.0')
 gi.require_version('AyatanaAppIndicator3', '0.1')
 from gi.repository import Gtk, GLib
@@ -73,7 +73,6 @@ class Indicator:
         # Status variables for the loop
         #
         self.__current_code = IndicatorCodes.daemon_off
-        self.__check_daemon = True
 
         image_dir = os.path.join(os.path.join(_SCRIPT_DIR, "img"))
 
@@ -113,7 +112,12 @@ class Indicator:
         self.__menu.show_all()
         self.__app_indicator.set_menu(self.__menu)
 
-        Thread(target=self.__daemon_check).start()
+        #
+        # Scan Thread
+        #
+
+        self.__thread_scan_daemon = Thread(target=self.__thread_daemon_check)
+        self.__thread_scan_daemon.start()
 
     """
         Public & Pyro Methods
@@ -188,9 +192,10 @@ class Indicator:
         Private methods
     """
 
-    def __daemon_check(self):
+    def __thread_daemon_check(self):
 
-        while self.__check_daemon:
+        t = current_thread()
+        while getattr(t, "do_run", True):
 
             if self.__akbl.ping():
 
@@ -217,8 +222,13 @@ class Indicator:
 
     def __on_menuitem_exit(self, *_):
         self.__akbl.indicator_kill()
-        self.__parent.shutdown()
-        self.__check_daemon = False
+
+        if self.__parent is not None:
+            self.__parent.shutdown()
+
+        self.__thread_scan_daemon.do_run = False
+        self.__thread_scan_daemon.join()
+
         Gtk.main_quit()
 
     @staticmethod
