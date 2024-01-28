@@ -28,8 +28,11 @@ from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 from AKBL.texts import Texts
 from AKBL.Bindings import Bindings
+from AKBL.utils import print_error, print_debug
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+from common import IndicatorCodes
 
 class ConnectIndicator:
 
@@ -38,6 +41,8 @@ class ConnectIndicator:
         self.__indicator = Indicator(self, self.__akbl)
         self.__pyro_daemon = Pyro4.Daemon()
         self.__uri = self.__pyro_daemon.register(self.__indicator)
+
+        print_debug("URI={}".format(self.__uri))
 
         Thread(target=self.__pyro_thread).start()
         Thread(target=self.connect).start()
@@ -67,12 +72,14 @@ class Indicator:
 
         # Status variables for the loop
         #
-        self.__current_code = None
+        self.__current_code = IndicatorCodes.daemon_off
         self.__check_daemon = True
 
         image_dir = os.path.join(os.path.join(_SCRIPT_DIR, "img"))
 
         self.__icon_no_daemon = os.path.join(image_dir, 'icon-no-daemon.png')
+        self.__icon_lights_on = os.path.join(image_dir, 'icon-on.png')
+        self.__icon_lights_off = os.path.join(image_dir, 'icon-off.png')
 
         # GUI stuff
         #
@@ -106,7 +113,6 @@ class Indicator:
         self.__menu.show_all()
         self.__app_indicator.set_menu(self.__menu)
 
-        self.set_code(666)
         Thread(target=self.__daemon_check).start()
 
     """
@@ -115,46 +121,47 @@ class Indicator:
 
     @Pyro4.expose
     def ping(self):
-        pass
+        print_debug()
 
     @Pyro4.expose
-    def set_code(self, val):
-        """
-            Codes:
+    def set_code(self, indicator_code):
 
-                100: Lights On
-                150: Lights Off
-                666: Daemon Off
-        """
+        print_debug("indicator_code={}".format(indicator_code))
 
         try:
-            val = int(val)
+            indicator_code = int(indicator_code)
         except Exception:
-            print("AKBL-Indicator: Wrong code {}".format(val))
+            print_error("wrong indicator code {}".format(indicator_code))
             return
 
-        if val == self.__current_code:
+        if indicator_code == self.__current_code:
             return
 
-        self.__current_code = val
+        self.__current_code = indicator_code
 
-        if val in (100, 150):
-            if val == 100:
-                self.__app_indicator.set_icon_full(self.__icon_no_daemon,"On")
+        if indicator_code in (IndicatorCodes.lights_on, IndicatorCodes.lights_off):
+            if indicator_code == IndicatorCodes.lights_on:
+                self.__app_indicator.set_icon_full(self.__icon_lights_on, Texts.Indicator.lights_on)
 
-            elif val == 150:
-                self.__app_indicator.set_icon_full(self.__icon_no_daemon, "Off")
+            elif indicator_code == IndicatorCodes.lights_off:
+                self.__app_indicator.set_icon_full(self.__icon_lights_off, Texts.Indicator.lights_off)
 
             for children in self.__menu.get_children():
                 children.set_sensitive(True)
 
-        elif val == 666:
-            self.__app_indicator.set_icon_full(self.__icon_no_daemon, "No Daemon")
+        elif indicator_code == IndicatorCodes.daemon_off:
+            self.__app_indicator.set_icon_full(self.__icon_no_daemon, Texts.Indicator.no_daemon)
             self.__submenu_switch_state.set_sensitive(False)
             self.__profiles_menu.set_sensitive(False)
 
+        else:
+            print_error("wrong indicator code {}".format(indicator_code))
+            return
+
     @Pyro4.expose
     def load_profiles(self, items, current, state):
+
+        print_debug("current={}, state={}, items={}".format(current, state, items))
 
         for children in self.__submenu_profiles.get_children():
             self.__submenu_profiles.remove(children)
@@ -172,6 +179,9 @@ class Indicator:
 
     @Pyro4.expose
     def set_profile(self, _, item):
+
+        print_debug("item={}".format(item))
+
         self.__akbl.set_profile(item)
 
     """
@@ -184,12 +194,12 @@ class Indicator:
 
             if self.__akbl.ping():
 
-                if self.__current_code == 666:
+                if self.__current_code == IndicatorCodes.daemon_off:
                     self.__parent.connect()
                     self.__akbl.indicator_get_state()
 
-            elif self.__current_code != 666:
-                GLib.idle_add(self.set_code, 666)
+            elif self.__current_code != IndicatorCodes.daemon_off:
+                GLib.idle_add(self.set_code, IndicatorCodes.daemon_off)
 
             else:
                 self.__akbl.reload_address(False)

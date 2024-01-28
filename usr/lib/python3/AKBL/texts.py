@@ -84,6 +84,9 @@ class Texts:
         start_gui = "GUI"
         switch_state = "Switch State"
         exit = "Exit"
+        lights_on = "On"
+        lights_off = "Off"
+        no_daemon = "No Daemon"
 
 
 TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be established."
