@@ -31,6 +31,10 @@ elif [ -z "$2" ]; then
             setsid python3 /usr/share/AKBL/Indicator/Indicator.py
         ;;
 
+        --start-white-indicator)
+            setsid python3 /usr/share/AKBL/Indicator/Indicator.py --white
+        ;;
+
         --start-daemon)
            if [ "$EUID" -eq 0 ]; then
               python3 /usr/share/AKBL/Daemon.py

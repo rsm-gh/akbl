@@ -40,9 +40,9 @@ from common import IndicatorCodes
 
 class ConnectIndicator:
 
-    def __init__(self):
+    def __init__(self, white=False):
         self.__akbl = Bindings()
-        self.__indicator = Indicator(self, self.__akbl)
+        self.__indicator = Indicator(self, self.__akbl, white)
         self.__pyro_daemon = Pyro4.Daemon()
         self.__uri = self.__pyro_daemon.register(self.__indicator)
 
@@ -65,7 +65,7 @@ class ConnectIndicator:
 
 class Indicator:
 
-    def __init__(self, parent, akbl=None):
+    def __init__(self, parent, akbl=None, white=False):
 
         self.__parent = parent
 
@@ -80,9 +80,14 @@ class Indicator:
 
         image_dir = os.path.join(os.path.join(_SCRIPT_DIR, "img"))
 
-        self.__icon_no_daemon = os.path.join(image_dir, 'icon-no-daemon.png')
-        self.__icon_lights_on = os.path.join(image_dir, 'icon-on.png')
-        self.__icon_lights_off = os.path.join(image_dir, 'icon-off.png')
+        if white:
+            suffix = "-white"
+        else:
+            suffix = ""
+
+        self.__icon_no_daemon = os.path.join(image_dir, 'icon-no-daemon{}.png'.format(suffix))
+        self.__icon_lights_on = os.path.join(image_dir, 'icon-on{}.png'.format(suffix))
+        self.__icon_lights_off = os.path.join(image_dir, 'icon-off{}.png'.format(suffix))
 
         # GUI stuff
         #
@@ -240,5 +245,6 @@ class Indicator:
         subprocess.run('akbl')
 
 if __name__ == "__main__":
-    _ = ConnectIndicator()
+    white_icon = '--white' in sys.argv
+    _ = ConnectIndicator(white_icon)
     Gtk.main()

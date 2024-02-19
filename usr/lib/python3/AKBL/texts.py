@@ -33,6 +33,7 @@ Usage:
     --model-chooser-cmd               Launch the model chooser from a CMD.
     
     --start-indicator                 Start the indicator.
+    --start-white-indicator           Start the indicator (with white icons).
     
     --start-daemon                    Start the daemon.
     --daemon-is-on                    Return weather the daemon is running or not.
