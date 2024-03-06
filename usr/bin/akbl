@@ -22,7 +22,7 @@
 ROOT_TEXT="This command can only be used by root users."
 
 if [ -z "$1" ]; then
-    python3 /usr/share/AKBL/GUI/GUI.py
+    python3 /usr/share/AKBL/GUI/main.py
 
 elif [ -z "$2" ]; then
     case "$1" in
