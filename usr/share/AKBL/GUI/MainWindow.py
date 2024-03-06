@@ -16,8 +16,6 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
-import gi
 import os
 import sys
 import shutil
@@ -25,8 +23,6 @@ import threading
 from time import sleep
 from copy import deepcopy
 from traceback import format_exc
-
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 
 import AKBL.texts as texts
@@ -39,8 +35,7 @@ from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-_PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
-sys.path.insert(0, _PROJECT_DIR)
+sys.path.insert(0, os.path.dirname(_SCRIPT_DIR))
 
 from GUI.ZoneWidget import ZoneWidget
 from GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
@@ -50,9 +45,9 @@ from gtk_utils import (gtk_dialog_question,
                        gtk_folder_chooser)
 
 
-class GUI(Gtk.Window):
+class MainWindow:
 
-    def __init__(self):
+    def __init__(self, application):
 
         self.__bindings = Bindings()
         self.__paths = Paths()
@@ -91,6 +86,8 @@ class GUI(Gtk.Window):
         for glade_object in glade_object_names:
             setattr(self, glade_object, builder.get_object(glade_object))
 
+        self.window_root.set_application(application)
+
         """
             Add the accel groups
         """
@@ -107,10 +104,10 @@ class GUI(Gtk.Window):
             accel_group = Gtk.AccelGroup()
             self.window_root.add_accel_group(accel_group)
             menuitem_apply_configuration.add_accelerator('activate',
-                                                              accel_group,
-                                                              ord(shortcut),
-                                                              Gdk.ModifierType.CONTROL_MASK,
-                                                              Gtk.AccelFlags.VISIBLE)
+                                                         accel_group,
+                                                         ord(shortcut),
+                                                         Gdk.ModifierType.CONTROL_MASK,
+                                                         Gtk.AccelFlags.VISIBLE)
 
         self.__ccp = CCParser(self.__paths._configuration_file, 'GUI Configuration')
 
@@ -126,7 +123,7 @@ class GUI(Gtk.Window):
         #   Load a configuration
         #
         self.__computer = computer_factory.get_installed_computer()
-        if self.__computer is None: #todo: display message install computer model
+        if self.__computer is None:  # todo: display message install computer model
             self.__computer = Computer()
 
         self.label_computer_model.set_text(self.__computer.name)
@@ -173,6 +170,9 @@ class GUI(Gtk.Window):
         # It must be called after show_all() or it wont work.
         if not self.checkbutton_profile_buttons.get_active():
             self.box_profile_buttons.hide()
+
+    def present(self):
+        self.window_root.present()
 
     def populate_box_areas(self):
         """
@@ -255,7 +255,7 @@ class GUI(Gtk.Window):
         self.__bindings.reload_configurations()
 
         sleep(0.5)
-        
+
         GLib.idle_add(self.label_user_message.set_text, ' ')
 
     def on_zonewidget_updated(self, zone_widget):
@@ -288,11 +288,6 @@ class GUI(Gtk.Window):
         if self.checkbutton_autosave.get_active():
             threading.Thread(target=self.__on_thread_save_configuration_file).start()
 
-    def __on_thread_turn_lights_off(self):
-        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_SHUTTING_LIGHTS_OFF)
-        self.__bindings.set_lights(False)
-        GLib.idle_add(self.label_user_message.set_text, "")
-
     def new_profile(self):
         text = self.entry_new_profile.get_text()
 
@@ -306,6 +301,11 @@ class GUI(Gtk.Window):
         self.populate_liststore_profiles()
 
         self.__bindings.reload_configurations()
+
+    def __on_thread_turn_lights_off(self):
+        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_SHUTTING_LIGHTS_OFF)
+        self.__bindings.set_lights(False)
+        GLib.idle_add(self.label_user_message.set_text, "")
 
     def __on_thread_illuminate_keyboard(self):
 
@@ -426,10 +426,9 @@ class GUI(Gtk.Window):
     def on_menuitem_lights_off_activate(self, *_):
         threading.Thread(target=self.__on_thread_turn_lights_off).start()
 
-    @staticmethod
-    def on_menuitem_quit_activate(*_):
+    def on_menuitem_quit_activate(self, *_):
         # self.thread_zones = False
-        Gtk.main_quit()
+        self.window_root.close()
 
     def on_menuitem_import_activate(self, *_):
         file_path = gtk_file_chooser(parent=self.window_root,
@@ -522,8 +521,3 @@ class GUI(Gtk.Window):
                 return
 
         self.button_new_profile_create.set_sensitive(True)
-
-
-if __name__ == "__main__":
-    _ = GUI()
-    Gtk.main()

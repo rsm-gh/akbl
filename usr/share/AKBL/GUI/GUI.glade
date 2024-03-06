@@ -209,6 +209,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="title" translatable="yes">AKBL</property>
     <property name="window-position">center</property>
     <property name="icon">../icon.png</property>
+    <property name="gravity">center</property>
     <signal name="destroy" handler="on_window_root_destroy" swapped="no"/>
     <child>
       <object class="GtkBox" id="box">
