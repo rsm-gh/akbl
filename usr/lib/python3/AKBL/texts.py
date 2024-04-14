@@ -68,16 +68,16 @@ TEXT_LICENSE = '''
 TEXT_ADD = "Add"
 
 TEXT_CHOOSE_A_FOLDER_TO_EXPORT = "Choose a folder to export the theme"
-TEXT_CHOOSE_A_THEME = "Choose an alienware-kbl theme"
+TEXT_CHOOSE_A_THEME = "Choose an AKBL theme"
 TEXT_THEME_ALREADY_EXISTS = '''There's already a theme with this filename,
 do you want to overwrite it?'''
 
-
-TEXT_COPY_CONFIG = '''It seems that there was an existing alienware-kbl
+TEXT_COPY_CONFIG = '''It seems that there was an existing AKBL
 configuration, probably made by an older version.
 
 Do you want to import it for this user? (yes)
 '''
+
 
 class Texts:
     class Indicator:
@@ -90,9 +90,8 @@ class Texts:
         no_daemon = "No Daemon"
 
 
-TEXT_ERROR_DAEMON_OFF = "The daemon is off or the connection couldn't be established."
-
-TEXT_WRONG_ARGUMENT = '''akbl: wrong argument. use "akbl --help"'''
+TEXT_ERROR_DAEMON_OFF = "Error: The daemon is off or the connection couldn't be established."
+TEXT_WRONG_ARGUMENT = '''Error: wrong argument. use "akbl --help"'''
 
 TEXT_APPLYING_CONFIGURATION = "Applying the configuration.."
 

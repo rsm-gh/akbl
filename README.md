@@ -31,7 +31,7 @@
 # Highlights
 
 * 2022: **AKBL is not actively developed.** I almost stopped the development because I changed my latptop, so I have major limitations for using and testing the software.
-* 2019: Many users with recent alienware computers are facing issues, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues.
+* 2019: Many users with recent Alienware computers are facing issues, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues.
 
 # Software Features
 
@@ -110,10 +110,15 @@ The Python bindings allow modifying the computer lights by using other program s
 1. Download the [stable branch](https://github.com/rsm-gh/akbl/archive/stable.zip).
 2. Install the dependencies:
 
-    * Debian based distributions: `apt-get install systemd libgtk-3-0 libgtk-3-dev gir1.2-ayatanaappindicator3-0.1 python3 python3-gi python3-cairo python3-usb python3-serpent python3-pyro4`.
+    * Debian based distributions:
+      + Core: `systemd usbutils python3 python3-usb python3-pyro4`.
+      + GUI: `libgtk-3-0 libgtk-3-dev python3-gi python3-cairo` and `gir1.2-ayatanaappindicator3-0.1` for the app indicator.
 
-    * ArchLinux: `pacman -Suy systemd gtk3 python python-gobject python-cairo python-pyusb python-serpent python-pyro` also `gir1.2-ayatanaappindicator3-0.1` is necessary for the app indicator, such dependency seems to be in the AUR.
-
+    * ArchLinux:
+       + Core: `systemd usbutils python python-pyusb python-pyro`.
+       + GUI:  `webkit2gtk python-gobject python-cairo`) `gir1.2-ayatanaappindicator3-0.1` from the AUR for the app indicator.
+      
+    
 3. Execute the setup file.
 
 # F.A.Q.
