@@ -31,8 +31,8 @@ from AKBL.utils import (print_warning,
                         print_debug,
                         string_is_hex_color)
 
-
 from common import IndicatorCodes
+
 
 class Daemon:
 
@@ -42,12 +42,13 @@ class Daemon:
 
         if self.__computer is None:
             print("Error, no computer configuration is installed.", flush=True)
-        else:
-            print("Starting the computer configuration '{}'.".format(self.__computer.name), flush=True)
+            exit(1)
+
+        print("Starting the computer configuration '{}'.".format(self.__computer.name), flush=True)
 
         self.__controller = Controller(self.__computer)
 
-        # Todo: Why save blocks in true and false?
+        #                                  Save, BLock
         self.__computer_blocks_to_save = ((True, self.__computer.block_load_on_boot),
                                           (False, self.__computer.block_load_on_boot))
 
