@@ -30,7 +30,7 @@
 
 # Highlights
 
-* 2022: **AKBL is not actively developed.** I almost stopped the development because I changed my latptop, so I have major limitations for using and testing the software.
+* 2022: **AKBL is not actively developed.** I almost stopped the development because I changed my laptop, so I have major limitations for using and testing the software.
 * 2019: Many users with recent Alienware computers are facing issues, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues.
 
 # Software Features
@@ -208,7 +208,7 @@ For the moment, the themes need to be saved before applying them. Any unsaved ch
 ### What's the function of the tempo button / clock icon / right-top corner button?
 
 That button manages the speed of the theme in the following cases:
-  * When the section of a theme (keyboard-left, keyboard-right, etc..) has multiple zones.
+  * When the section of a theme (keyboard-left, keyboard-right, etc...) has multiple zones.
   * When some zone has the morph (gradient) mode.
   * When some zone has the blink mode.
 
