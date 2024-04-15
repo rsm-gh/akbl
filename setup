@@ -26,7 +26,7 @@ NUMBER_OF_STEPS=5 			# installation steps
 # Set the scripts permissions
 #
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd "$DIR"
+cd "$DIR" || exit
 chmod a+x ./remove
 
 #
@@ -48,8 +48,8 @@ function install_files(){
       rm -rf "$DIR$1/__pycache__"
     fi
 
-    install -d "$1"
-    install -D "$DIR$1/"* "$1"
+    install -d "$1" |& grep -v "omitting directory"
+    install -D "$DIR$1/"* "$1" |& grep -v "omitting directory"
     
 }
 
@@ -58,7 +58,6 @@ install_files "/usr/bin"
 install_files "/usr/share/applications"
 install_files "/usr/share/AKBL"
 install_files "/usr/share/AKBL/test"
-install_files "/usr/share/AKBL/launch"
 install_files "/usr/share/AKBL/computers"
 install_files "/usr/share/AKBL/GUI"
 install_files "/usr/share/AKBL/GUI/ColorChooserToolbar"
