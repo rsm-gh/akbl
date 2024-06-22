@@ -24,6 +24,7 @@ from time import sleep
 from copy import deepcopy
 from traceback import format_exc
 from gi.repository import Gtk, Gdk, GLib
+from gi.repository.GdkPixbuf import Pixbuf
 
 import AKBL.texts as texts
 from AKBL.Paths import Paths
@@ -49,6 +50,7 @@ class MainWindow:
 
     def __init__(self, application):
 
+        self.__application = application
         self.__bindings = Bindings()
         self.__paths = Paths()
         self.__response = None
@@ -86,7 +88,8 @@ class MainWindow:
         for glade_object in glade_object_names:
             setattr(self, glade_object, builder.get_object(glade_object))
 
-        self.window_root.set_application(application)
+        self.window_root.connect('delete-event', self.quit)
+        self.window_root.set_application(self.__application)
 
         """
             Add the accel groups
@@ -165,6 +168,11 @@ class MainWindow:
         self.checkbutton_delete_warning.set_active(self.__ccp.get_bool_defval('delete_warning', True))
 
         self.populate_box_areas()
+
+        icon_path = "/home/rsm/Documents/Software/akbl/usr/share/AKBL/icon.png"
+        icon_pixbuf = Pixbuf.new_from_file(icon_path)
+        self.window_root.set_icon(icon_pixbuf)
+
         self.window_root.show_all()
 
         # It must be called after show_all() or it wont work.
@@ -173,6 +181,9 @@ class MainWindow:
 
     def present(self):
         self.window_root.present()
+
+    def quit(self, *_):
+        self.__application.quit()
 
     def populate_box_areas(self):
         """
@@ -427,8 +438,7 @@ class MainWindow:
         threading.Thread(target=self.__on_thread_turn_lights_off).start()
 
     def on_menuitem_quit_activate(self, *_):
-        # self.thread_zones = False
-        self.window_root.close()
+        self.quit()
 
     def on_menuitem_import_activate(self, *_):
         file_path = gtk_file_chooser(parent=self.window_root,
