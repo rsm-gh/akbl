@@ -19,6 +19,7 @@
 import os
 import sys
 import gi
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
@@ -41,4 +42,5 @@ class AKBLApp(Gtk.Application):
 
 
 app = AKBLApp(application_id="com.senties-martinelli.AKBL")
-app.run(sys.argv)
+app_status = app.run(sys.argv)
+sys.exit(app_status)

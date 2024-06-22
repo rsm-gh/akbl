@@ -473,10 +473,6 @@ class MainWindow:
 
         threading.Thread(target=self.__on_thread_delete_current_configuration).start()
 
-    @staticmethod
-    def on_window_root_destroy(*_):
-        Gtk.main_quit()
-
     def on_button_apply_clicked(self, *_):
         self.on_menuitem_apply_configuration_activate()
 
