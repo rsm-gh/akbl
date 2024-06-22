@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=AKBL
+Exec=akbl
+Terminal=false
+Type=Application
+Icon=/usr/share/AKBL/icon.png
+Categories=Settings;

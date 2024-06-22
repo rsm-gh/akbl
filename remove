@@ -77,10 +77,9 @@ function remove_dir(){
     fi
 }
 
-# for old versions "alienware-kbl.desktop"
 remove_file "/usr/share/applications/AKBL.desktop"
+remove_file "/usr/share/applications/com.senties-martinelli.AKBL.desktop"
 remove_file "/usr/bin/akbl"
-remove_file "/usr/share/applications/AKBL.desktop"
 remove_file "/usr/lib/systemd/system/AKBL.service"
 remove_dir  "/usr/share/AKBL"
 remove_dir  "/usr/share/doc/AKBL"
