@@ -111,6 +111,8 @@ if [ -f /bin/systemctl ]; then
     systemctl enable akbl
     systemctl restart akbl
     sleep 2
+    ping=$(akbl --ping)
+    echo "Pinging akbl... $ping"
 else
 	echo -e "\e[00;31m Warning: systemd seems to be missing. The daemon will have to be manually launched.\e[00m"
 fi
