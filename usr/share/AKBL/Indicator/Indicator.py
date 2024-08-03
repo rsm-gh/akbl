@@ -227,7 +227,7 @@ class Indicator:
                 GLib.idle_add(self.set_code, IndicatorCodes._daemon_off)
 
             else:
-                self.__akbl.reload_address(False)
+                self.__akbl.reload_address(verbose=False)
 
             sleep(1)
 
