@@ -22,16 +22,16 @@ from traceback import format_exc
 
 import Pyro4
 
-from AKBL.Bindings import Bindings
+
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
+from AKBL.Bindings import Bindings
+from AKBL.settings import IndicatorCodes
 from AKBL.utils import string_is_hex_color
 from AKBL.Engine.Controller import Controller
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
 from AKBL.console import print_warning, print_error, print_info, print_debug
-
-from common import IndicatorCodes
 
 
 class Daemon:
@@ -185,7 +185,7 @@ class Daemon:
                 self.__controller.apply_config()
 
             self.__lights_state = False
-            self.__indicator_send_code(IndicatorCodes.lights_off)
+            self.__indicator_send_code(IndicatorCodes._lights_off)
         else:
             self.__illuminate_keyboard()
 
@@ -331,10 +331,10 @@ class Daemon:
 
         if value in (False, 'False', 'false'):
             self.__lights_state = False
-            self.__indicator_send_code(IndicatorCodes.lights_off)
+            self.__indicator_send_code(IndicatorCodes._lights_off)
         else:
             self.__lights_state = True
-            self.__indicator_send_code(IndicatorCodes.lights_on)
+            self.__indicator_send_code(IndicatorCodes._lights_on)
 
     """
         Indicator Bindings
@@ -361,9 +361,9 @@ class Daemon:
         print_debug("state={}".format(self.__lights_state))
 
         if self.__lights_state:
-            self.__indicator_send_code(IndicatorCodes.lights_on)
+            self.__indicator_send_code(IndicatorCodes._lights_on)
         else:
-            self.__indicator_send_code(IndicatorCodes.lights_off)
+            self.__indicator_send_code(IndicatorCodes._lights_off)
 
     @Pyro4.expose
     def disconnect_indicator(self) -> None:
@@ -409,7 +409,7 @@ class Daemon:
         # Update the Indicator
         #
         if self.__pyro_indicator is not None:
-            self.__indicator_send_code(IndicatorCodes.lights_on)
+            self.__indicator_send_code(IndicatorCodes._lights_on)
             try:
                 self.__pyro_indicator.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
                                                     self.__theme.name,

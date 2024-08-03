@@ -17,3 +17,9 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 __version__ = "2.240803"
+
+
+class IndicatorCodes:
+    _lights_on = 100
+    _lights_off = 150
+    _daemon_off = 666

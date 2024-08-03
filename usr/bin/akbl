@@ -37,7 +37,7 @@ elif [ -z "$2" ]; then
 
         --start-daemon)
            if [ "$EUID" -eq 0 ]; then
-              python3 /usr/share/AKBL/Daemon.py
+              python3 /usr/lib/python3/AKBL/Daemon.py
            else
               echo "$ROOT_TEXT"
            fi
