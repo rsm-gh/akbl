@@ -62,7 +62,7 @@ class Daemon:
 
         self.__theme = None
         self.__lights_state = False
-        self.__pyro = None
+        self.__pyro_indicator = None
         self.reload_configurations(self.__user)
 
     """
@@ -92,11 +92,11 @@ class Daemon:
             _, profile_name = theme_factory.get_last_configuration()
             self.__theme = theme_factory.get_theme_by_name(profile_name)
 
-        if self.__pyro and indicator:
+        if self.__pyro_indicator is not None and indicator:
             try:
-                self.__pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
-                                          self.__theme.name,
-                                          self.__lights_state)
+                self.__pyro_indicator.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
+                                                    self.__theme.name,
+                                                    self.__lights_state)
             except Exception:
                 print_error(format_exc())
 
@@ -325,7 +325,22 @@ class Daemon:
     """
 
     @Pyro4.expose
-    def indicator_get_state(self) -> None:
+    def connect_indicator(self, uri: str) -> None:
+        """Connect the Daemon with the Indicator."""
+
+        print_debug()
+
+        try:
+            self.__pyro_indicator = Pyro4.Proxy(uri)
+            self.reload_configurations(self.__user)
+        except Exception:
+            print_warning("Failed initialization")
+            print(format_exc())
+            self.__pyro_indicator = None
+
+    @Pyro4.expose
+    def update_indicator(self) -> None:
+        """Update the status lights on/off of the indicator."""
 
         print_debug("state={}".format(self.__lights_state))
 
@@ -335,21 +350,9 @@ class Daemon:
             self.__indicator_send_code(IndicatorCodes.lights_off)
 
     @Pyro4.expose
-    def indicator_start(self, uri: str) -> None:
-
-        print_debug()
-
-        try:
-            self.__pyro = Pyro4.Proxy(str(uri))
-            self.reload_configurations(self.__user)
-        except Exception:
-            print_warning("Failed initialization")
-            print(format_exc())
-            self.__pyro = False
-
-    @Pyro4.expose
-    def indicator_kill(self) -> None:
-        self.__pyro = False
+    def disconnect_indicator(self) -> None:
+        """Disconnect the Daemon from the Indicator."""
+        self.__pyro_indicator = None
 
     """
         Private Methods
@@ -389,12 +392,12 @@ class Daemon:
 
         # Update the Indicator
         #
-        if self.__pyro:
+        if self.__pyro_indicator is not None:
             self.__indicator_send_code(IndicatorCodes.lights_on)
             try:
-                self.__pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
-                                          self.__theme.name,
-                                          self.__lights_state)
+                self.__pyro_indicator.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
+                                                    self.__theme.name,
+                                                    self.__lights_state)
             except Exception:
                 print_error(format_exc())
 
@@ -406,9 +409,9 @@ class Daemon:
 
         print_debug("code={}".format(code))
 
-        if self.__pyro:
+        if self.__pyro_indicator is not None:
             try:
-                self.__pyro.set_code(code)
+                self.__pyro_indicator.set_code(code)
             except Exception:
                 print_error(format_exc())
 
