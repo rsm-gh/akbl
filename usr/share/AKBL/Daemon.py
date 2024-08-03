@@ -326,7 +326,7 @@ class Daemon:
 
     @Pyro4.expose
     def connect_indicator(self, uri: str) -> None:
-        """Connect the Daemon with the Indicator."""
+        """Connect the Daemon to the Indicator."""
 
         print_debug()
 
@@ -340,7 +340,7 @@ class Daemon:
 
     @Pyro4.expose
     def update_indicator(self) -> None:
-        """Update the status lights on/off of the indicator."""
+        """Update the status (lights on/off) of the indicator."""
 
         print_debug("state={}".format(self.__lights_state))
 
