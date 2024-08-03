@@ -63,18 +63,18 @@ def print_debug(message=None, direct_output=False):
     method_name = isp1[3]
 
     if message is None:
-        print('\n{}{} [_DEBUG]: "{}" {}{}'.format(_CYAN,
-                                                  __datetime_str(),
-                                                  module_name,
-                                                  method_name,
-                                                  _RESET))
+        print('\n{}{} [DEBUG]: "{}" {}{}'.format(_CYAN,
+                                                 __datetime_str(),
+                                                 module_name,
+                                                 method_name,
+                                                 _RESET))
     else:
-        print('\n{}{} [_DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
-                                                       __datetime_str(),
-                                                       module_name,
-                                                       method_name,
-                                                       _RESET,
-                                                       str(message).strip()))
+        print('\n{}{} [DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
+                                                      __datetime_str(),
+                                                      module_name,
+                                                      method_name,
+                                                      _RESET,
+                                                      str(message).strip()))
 
 
 def print_error(message):
