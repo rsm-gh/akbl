@@ -12,14 +12,17 @@ License: LGPL3
 Files: usr/share/AKBL/libusb-1.0.so.0
 
 Copyright: Copyright (C) 2014-2022, 2024 Rafael Senties Martinelli
+License: MIT
+Files:
+    usr/lib/python3/AKBL/CCParser.py
+
+Copyright: Copyright (C) 2014-2022, 2024 Rafael Senties Martinelli
 License: GPL-3
 Files:
 	README.md
 	remove
 	setup
-
 	usr/bin/akbl
-
     usr/lib/python3/AKBL/Computer/factory.py
     usr/lib/python3/AKBL/Theme/factory.py
     usr/lib/python3/AKBL/Bindings.py
