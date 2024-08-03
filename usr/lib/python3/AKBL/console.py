@@ -34,7 +34,7 @@ _GREEN = "\033[0;32m"
 _RESET = "\033[0;0m"
 _LIGHT_YELLOW = "\033[0;93m"
 
-_DEBUG = 'DEBUG' in os.environ and os.environ['_DEBUG'].lower() == 'true'
+_DEBUG = 'DEBUG' in os.environ and os.environ['DEBUG'].lower() == 'true'
 
 
 def print_warning(message):
