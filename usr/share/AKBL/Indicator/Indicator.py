@@ -54,9 +54,9 @@ class ConnectIndicator:
         Thread(target=self.connect).start()
 
     def connect(self):
-        # Todo: read the return status of indicator_start
+        # Todo: read the return status of connect_indicator
         sleep(0.5)
-        return self.__akbl.indicator_start(self.__uri)
+        return self.__akbl.connect_indicator(self.__uri)
 
     def shutdown(self):
         self.__pyro_daemon.shutdown()
@@ -219,7 +219,7 @@ class Indicator:
 
                 if self.__current_code == IndicatorCodes.daemon_off:
                     self.__parent.connect()
-                    self.__akbl.indicator_get_state()
+                    self.__akbl.update_indicator()
 
             elif self.__current_code != IndicatorCodes.daemon_off:
                 GLib.idle_add(self.set_code, IndicatorCodes.daemon_off)
@@ -239,7 +239,7 @@ class Indicator:
         self.__akbl.switch_lights()
 
     def __on_menuitem_exit(self, *_):
-        self.__akbl.indicator_kill()
+        self.__akbl.disconnect_indicator()
 
         if self.__parent is not None:
             self.__parent.shutdown()

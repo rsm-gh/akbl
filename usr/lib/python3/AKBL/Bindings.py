@@ -198,17 +198,17 @@ class Bindings:
         self.__pyro = None
         return False
 
-    def indicator_start(self, uri: str) -> None:
-        """Start the AKBL indicator."""
-        return self.__command('indicator_start', uri)
+    def connect_indicator(self, uri: str) -> None:
+        """Connect the Daemon with the Indicator."""
+        return self.__command('connect_indicator', uri)
 
-    def indicator_get_state(self) -> None:
-        """Request that the AKBL indicator reports its state."""
-        return self.__command('indicator_get_state')
+    def update_indicator(self) -> None:
+        """Update the status lights on/off of the indicator."""
+        return self.__command('update_indicator')
 
-    def indicator_kill(self) -> None:
-        """Kill the AKBL indicator."""
-        return self.__command('indicator_kill')
+    def disconnect_indicator(self) -> None:
+        """Disconnect the Daemon from the Indicator."""
+        return self.__command('disconnect_indicator')
 
     """
         Private methods
