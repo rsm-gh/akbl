@@ -163,15 +163,9 @@ class Indicator:
         self.__submenu_profiles.show_all()
 
     @Pyro4.expose
-    def set_code(self, indicator_code: str | int) -> None:
+    def set_code(self, indicator_code: int) -> None:
 
-        print_debug("indicator_code={} of type={}".format(indicator_code, type(indicator_code)))
-
-        try:
-            indicator_code = int(indicator_code)
-        except Exception:
-            print_error("wrong indicator code {}".format(indicator_code))
-            return
+        print_debug("indicator_code={}".format(indicator_code))
 
         enable_gui = None
 
@@ -208,7 +202,7 @@ class Indicator:
             self.__profiles_menu.set_sensitive(enable_gui)
 
     @Pyro4.expose
-    def set_profile(self, _widget, profile_name: str) -> None:
+    def set_profile(self, _widget: object, profile_name: str) -> None:
         print_debug("profile_name={}".format(profile_name))
         self.__akbl.set_profile(profile_name)
 
