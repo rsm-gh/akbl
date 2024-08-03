@@ -18,7 +18,7 @@
 
 import os
 
-from AKBL.utils import print_warning
+from AKBL.console import print_warning
 
 _MISSING_ZONE_COLOR = "#0000FF"
 

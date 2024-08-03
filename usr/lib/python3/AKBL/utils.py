@@ -20,18 +20,7 @@
 import os
 import re
 import pwd
-import inspect
 import subprocess
-from datetime import datetime
-
-from AKBL.settings import DEBUG
-
-_RED = "\033[1;31m"
-_BLUE = "\033[1;34m"
-_CYAN = "\033[1;36m"
-_GREEN = "\033[0;32m"
-_RESET = "\033[0;0m"
-_LIGHT_YELLOW = "\033[0;93m"
 
 
 def get_alienware_device_info():
@@ -65,86 +54,3 @@ def string_is_hex_color(string):
 
 def rgb_to_hex(rgb):
     return '#%02x%02x%02x' % (int(rgb[0]), int(rgb[1]), int(rgb[2]))
-
-
-def __parse_module_name(name):
-    """ Used for the 'print' functions """
-
-    return str(name).split("from '", 1)[1].split("'>", 1)[0]
-
-
-def get_datetime():
-    return str(datetime.now()).split(".")[0]
-
-
-def print_warning(message):
-    isp1 = inspect.stack()[1]
-    module_name = __parse_module_name(inspect.getmodule(isp1[0]))
-    method_name = isp1[3]
-
-    print('\n{}{} [WARNING]: "{}" {}:{}\n{}'.format(_LIGHT_YELLOW,
-                                                    get_datetime(),
-                                                    module_name,
-                                                    method_name,
-                                                    _RESET,
-                                                    str(message).strip()))
-
-
-def print_debug(message=None, direct_output=False):
-    if not DEBUG:  # Displaying debug messages on the production version has been
-        return  # removed since printing all the data slows the communication with the hardware.
-
-    if direct_output:
-        print(message)
-        return
-
-    isp1 = inspect.stack()[1]
-    module_name = __parse_module_name(inspect.getmodule(isp1[0]))
-    method_name = isp1[3]
-
-    if message is None:
-        print('\n{}{} [DEBUG]: "{}" {}{}'.format(_CYAN,
-                                                 get_datetime(),
-                                                 module_name,
-                                                 method_name,
-                                                 _RESET))
-    else:
-        print('\n{}{} [DEBUG]: "{}" {}:{}\n{}'.format(_CYAN,
-                                                      get_datetime(),
-                                                      module_name,
-                                                      method_name,
-                                                      _RESET,
-                                                      str(message).strip()))
-
-
-def print_error(message):
-    isp1 = inspect.stack()[1]
-    module_name = __parse_module_name(inspect.getmodule(isp1[0]))
-    method_name = isp1[3]
-
-    print('\n{}{} [ERROR]: "{}" {}{}:\n{}'.format(_RED,
-                                                  get_datetime(),
-                                                  module_name,
-                                                  method_name,
-                                                  _RESET,
-                                                  str(message).strip()))
-
-
-def print_info(message):
-    isp1 = inspect.stack()[1]
-    module_name = __parse_module_name(inspect.getmodule(isp1[0]))
-    method_name = isp1[3]
-
-    print('\n{}{} [INFO]: "{}" {}{}:\n{}'.format(_GREEN,
-                                                 get_datetime(),
-                                                 module_name,
-                                                 method_name,
-                                                 _RESET,
-                                                 str(message).strip()))
-
-
-if __name__ == '__main__':
-    print_warning('this is a warning!')
-    print_debug('this is a debug message!')
-    print_error('this is an error!')
-    print_info("this is an info")

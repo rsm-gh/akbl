@@ -11,12 +11,13 @@ Copyright: Taken from a ubuntu build in 2015, http://www.libusb.info
 License: LGPL3
 Files: usr/share/AKBL/libusb-1.0.so.0
 
-Copyright: Copyright (C) 2014-2022, 2024 Rafael Senties Martinelli
+Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli
 License: MIT
 Files:
     usr/lib/python3/AKBL/CCParser.py
+    usr/lib/python3/AKBL/console.py
 
-Copyright: Copyright (C) 2014-2022, 2024 Rafael Senties Martinelli
+Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli
 License: GPL-3
 Files:
 	README.md
@@ -56,7 +57,7 @@ Files:
 	usr/share/doc/AKBL/Programming/*
 	usr/share/doc/AKBL/BusData/Summary
 
-Copyright: Copyright (C) 2014-2022, 2024 Rafael Senties Martinelli.
+Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli.
            Copyright (C) 2011-2012 the pyAlienFX team.
 License: GPL-3
 Files:

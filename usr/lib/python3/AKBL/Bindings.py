@@ -23,7 +23,7 @@ import getpass
 from traceback import format_exc
 
 from AKBL.Paths import Paths
-from AKBL.utils import print_error, print_warning
+from AKBL.console import print_error, print_warning
 
 
 class Bindings:
