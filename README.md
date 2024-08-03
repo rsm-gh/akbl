@@ -51,6 +51,8 @@ The GUI is designed to be easy and comfortable to use, it will allow you to easi
 It allows starting the GUI, turning the lights On/Off, and choosing profiles. By default, it is not enabled, but it can be added to the start session of a user with the command `akbl --start-indicator`.
 
 ## Default commands
+The program comes with some default commands for those who don't know about programming.
+These commands can be easily added to hotkeys.
 
 ```
 Usage:
@@ -59,9 +61,9 @@ Usage:
 
  Options:
 
-    --switch                          Switch the computer lights on/off.
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
+    --switch                          Switch the computer lights on/off.
     --set-profile <profile_name>      Turn on the selected profile.
     
     --model-chooser-gui               Launch the model chooser from a GUI.
@@ -71,7 +73,7 @@ Usage:
     --start-white-indicator           Start the indicator (with white icons).
     
     --start-daemon                    Start the daemon.
-    --daemon-is-on                    Return weather the daemon is running or not.
+    --ping                            Return weather the daemon is running or not.
     
     --block-testing                   Launch the block testing window.
     
@@ -81,7 +83,6 @@ Usage:
 
  *If no option is introduced the graphical interface is launched.
 ```
-The program comes with some default commands for those who don't know about programming. These commands can be easily added to hotkeys.
 
 ## Python Bindings
 
@@ -297,7 +298,7 @@ if lights_test:
     print('switch lights', akbl.switch_lights())
 
 if profiles_test:
-    for profile_name in akbl.get_profile_names():
+    for profile_name in akbl.get_profiles_name():
         print('set profile:', profile_name, akbl.set_profile(profile_name))
         time.sleep(5)
 
@@ -488,13 +489,13 @@ Then with the time, I realized that PyAlienFX was kinda dead, and I was having f
 
 # About & Credits
 
-This software is the work of libre software hackers of the GNU/Linux community. It does not depend on any corporation, and its code is licensed GPL3.
+This software is the work of libre-software hackers of the GNU/Linux community. It does not depend on any corporation, and its code is licensed GPL3.
 
 ### AKBL
 
 * Rafael Senties Martinelli
 
-AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the proprietary content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX, but the code/concept that allows communicating with the hardware stills the same.
+AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the proprietary content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX, but the code/concept that allows communicating with the hardware stills is the same.
 
 ## PyALienFX
 

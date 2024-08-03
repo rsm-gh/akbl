@@ -40,7 +40,7 @@ def process_args(args):
     elif arg1 in ('--version', '-v'):
         print(__version__)
 
-    elif arg1 == '--daemon-is-on':
+    elif arg1 == '--ping':
         print(akbl_bindings.ping())
 
     elif arg1 in ('--off', '--on', '--switch', '--set-profile'):

@@ -24,10 +24,10 @@ Usage:
 
  Options:
 
-    --switch                          Switch the computer lights on/off.
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
-    --set-profile <profile_name>      Turn on the selected profile.
+    --switch                          Switch the computer lights on/off.
+    --set-profile <profile_name>      Set (on) the selected profile.
     
     --model-chooser-gui               Launch the model chooser from a GUI.
     --model-chooser-cmd               Launch the model chooser from a CMD.
@@ -35,8 +35,8 @@ Usage:
     --start-indicator                 Start the indicator.
     --start-white-indicator           Start the indicator (with white icons).
     
-    --start-daemon                    Start the daemon.
-    --daemon-is-on                    Return weather the daemon is running or not.
+    --start-daemon                    Start the Daemon.
+    --ping                            Ping the Daemon.
     
     --block-testing                   Launch the block testing window.
     
