@@ -55,6 +55,7 @@ class CCParser(object):
         self.__default_string = ''
         self.__default_int = 0
         self.__default_float = 0.0
+        self.__default_list = []
 
         self.__accepted_true_bool = ['true', 'yes']
         self.__accepted_false_bool = ['false', 'no']
@@ -202,6 +203,24 @@ CCParser instance:
 
         return self.__default_string
 
+    def get_list(self, value):
+        """
+            If the value exists, return the integer corresponding to the string,
+            If it does not exist, or it cannot be converted to an integer, return the default integer.
+        """
+        if self.check_value(value):
+            val = self.__config.get(self.__section, value)
+
+            try:
+                val = val.split("|")
+            except Exception:
+                if self.__debug:
+                    print(traceback.format_exc())
+            else:
+                return val
+
+        return self.__default_list
+
     def get_bool_defval(self, value, default):
         """
             If the value exists, return the boolean
@@ -283,6 +302,9 @@ CCParser instance:
     def get_default_int(self):
         return self.__default_int
 
+    def get_default_list(self):
+        return self.__default_list
+
     def get_section(self):
         return self.__section
 
@@ -336,3 +358,10 @@ CCParser instance:
             By default, it returns 0
         """
         self.__default_int = int_value
+
+    def set_default_list(self, value):
+        """
+            Set the default integer to return when a value does not exist.
+            By default, it returns 0
+        """
+        self.__default_list = value
