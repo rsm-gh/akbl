@@ -22,7 +22,6 @@ from AKBL.Bindings import Bindings
 
 AKBLConnection = Bindings()
 
-
 if not AKBLConnection.ping():
     print("The connection with the daemon is off")
 else:
@@ -54,7 +53,7 @@ else:
 
     if profiles_test:
         print("\nTesting user profiles")
-        for profile_name in AKBLConnection.get_profile_names():
+        for profile_name in AKBLConnection.get_profiles_name():
             print('\tset profile:', profile_name, AKBLConnection.set_profile(profile_name))
             time.sleep(5)
 
@@ -63,7 +62,7 @@ else:
 
     if modes_test:
         print("\nModes test")
-        print('\tset_colors fixed', AKBLConnection.set_colors('fixed', 100, color1))            
+        print('\tset_colors fixed', AKBLConnection.set_colors('fixed', 100, color1))
         time.sleep(5)
         print('\tset_colors blink', AKBLConnection.set_colors('blink', 100, color1))
         time.sleep(5)
@@ -72,18 +71,17 @@ else:
 
     if speed_test:
         print("\nSpeed test on mode blink")
-        print('\tset_colors: speed=1', AKBLConnection.set_colors('blink',1,color2))
+        print('\tset_colors: speed=1', AKBLConnection.set_colors('blink', 1, color2))
         time.sleep(5)
-        print('\tset_colors: speed=100', AKBLConnection.set_colors('blink',100,color2))
+        print('\tset_colors: speed=100', AKBLConnection.set_colors('blink', 100, color2))
         time.sleep(5)
-        print('\tset_colors: speed=255', AKBLConnection.set_colors('blink',255,color2))
+        print('\tset_colors: speed=255', AKBLConnection.set_colors('blink', 255, color2))
         time.sleep(5)
-
 
     if colors_multiple_test:
         print("\nMultiple colors test")
-        colors1 = ('#FF0000','#FFFF00','#3F33FF') # red, yellow, #blue
-        colors2 = ('#FF0000','#FFFF00','#3F33FF')
+        colors1 = ['#FF0000', '#FFFF00', '#3F33FF']  # red, yellow, #blue
+        colors2 = ['#FF0000', '#FFFF00', '#3F33FF']
 
         print('\tset_colors: multiple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
         time.sleep(15)

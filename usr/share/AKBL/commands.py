@@ -22,8 +22,8 @@ import AKBL.texts as texts
 from AKBL.Bindings import Bindings
 from AKBL.settings import __version__
 
-def process_args(args):
 
+def process_args(args):
     if len(args) < 2:
         print(texts.TEXT_WRONG_ARGUMENT)
         return
@@ -31,10 +31,10 @@ def process_args(args):
     akbl_bindings = Bindings()
     arg1 = str(args[1])
 
-    if arg1 in ('--help','-h'):
+    if arg1 in ('--help', '-h'):
         print(texts.TEXT_HELP)
 
-    elif arg1 in ('--license','-l'):
+    elif arg1 in ('--license', '-l'):
         print(texts.TEXT_LICENSE)
 
     elif arg1 in ('--version', '-v'):
@@ -43,7 +43,7 @@ def process_args(args):
     elif arg1 == '--daemon-is-on':
         print(akbl_bindings.ping())
 
-    elif arg1 in ('--off', '--on', '--change', '--set-profile'):
+    elif arg1 in ('--off', '--on', '--switch', '--set-profile'):
 
         if not akbl_bindings.ping():
             print(texts.TEXT_ERROR_DAEMON_OFF)
@@ -54,7 +54,7 @@ def process_args(args):
         elif arg1 == '--on':
             akbl_bindings.set_lights(True)
 
-        elif arg1 == '--change':
+        elif arg1 == '--switch':
             akbl_bindings.switch_lights()
 
         elif arg1 == '--set-profile':
@@ -69,4 +69,3 @@ def process_args(args):
 
 if __name__ == '__main__':
     process_args(sys.argv)
-

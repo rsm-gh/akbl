@@ -78,7 +78,7 @@ class Indicator:
 
         # Status variables for the loop
         #
-        self.__current_code = None  # the first status shall be obtained by the daemon loop
+        self.__current_code = -1
 
         image_dir = os.path.join(os.path.join(_SCRIPT_DIR, "img"))
 
@@ -126,7 +126,6 @@ class Indicator:
         #
         # Scan Thread
         #
-
         self.__thread_scan_daemon = Thread(target=self.__thread_daemon_check)
         self.__thread_scan_daemon.start()
 
@@ -171,9 +170,10 @@ class Indicator:
 
         match indicator_code:
             case self.__current_code:
-                pass
+                print_debug("Exit", direct_output=True)
 
             case IndicatorCodes.lights_on:
+                print_debug("Lights on", direct_output=True)
 
                 if self.__current_code == IndicatorCodes.daemon_off:
                     enable_gui = True
@@ -182,6 +182,7 @@ class Indicator:
                 self.__app_indicator.set_icon_full(self.__icon_lights_on, Texts.Indicator.lights_on)
 
             case IndicatorCodes.lights_off:
+                print_debug("Lights Off", direct_output=True)
 
                 if self.__current_code == IndicatorCodes.daemon_off:
                     enable_gui = True
@@ -190,6 +191,8 @@ class Indicator:
                 self.__app_indicator.set_icon_full(self.__icon_lights_off, Texts.Indicator.lights_off)
 
             case IndicatorCodes.daemon_off:
+                print_debug("Daemon off", direct_output=True)
+
                 enable_gui = False
                 self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_no_daemon, Texts.Indicator.no_daemon)
@@ -217,7 +220,7 @@ class Indicator:
 
             if self.__akbl.ping():
 
-                if self.__current_code == IndicatorCodes.daemon_off:
+                if self.__current_code in (IndicatorCodes.daemon_off, -1):
                     self.__parent.connect()
                     self.__akbl.update_indicator()
 

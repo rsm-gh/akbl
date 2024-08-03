@@ -111,7 +111,7 @@ class Daemon:
         self.set_lights(user, not self.__lights_state)
 
     @Pyro4.expose
-    def set_profile(self, user: str, profile_name: str):
+    def set_profile(self, user: str, profile_name: str) -> bool:
         """
             Activate a profile.
 
@@ -137,16 +137,15 @@ class Daemon:
         return False
 
     @Pyro4.expose
-    def set_lights(self, user: str, state: str | bool) -> None:
-        """
-            Turn the lights on or off, 'state' can be a boolean or a string.
-        """
+    def set_lights(self, user: str, state: bool) -> None:
+        """Set the lights on or off."""
+
         print_debug("user={} state={}".format(user, state))
 
         if user != self.__user:
             self.reload_configurations(user)
 
-        if state in (False, 'False', 'false'):
+        if state is False:
 
             areas_to_keep_on = self.__ccp.get_str_defval('areas_to_keep_on', '')
 
@@ -294,11 +293,25 @@ class Daemon:
     @Pyro4.expose
     def get_computer_name(self) -> str:
         print_debug()
+
+        if self.__computer is None:
+            return ""
+
         return self.__computer.name
 
     @Pyro4.expose
-    def get_computer_info(self) -> tuple[any, any, any, any]:
+    def get_computer_info(self) -> tuple[str, str, str, str]:
+        """
+            :rtype: tuple(str: computer name,
+                          str: vendor id,
+                          str: product id,
+                          str: device information)
+        """
         print_debug()
+
+        if self.__computer is None:
+            return "", "", "", ""
+
         return (self.__computer.name,
                 self.__computer.vendor_id,
                 self.__computer.product_id,
@@ -328,7 +341,7 @@ class Daemon:
     def connect_indicator(self, uri: str) -> None:
         """Connect the Daemon to the Indicator."""
 
-        print_debug()
+        print_debug("uri:", uri)
 
         try:
             self.__pyro_indicator = Pyro4.Proxy(uri)
