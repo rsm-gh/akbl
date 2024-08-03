@@ -27,17 +27,15 @@ class Paths:
 
     def __init__(self, user=getuser()):
 
-        ## System
-        ##
+        # System
+        #
         self._akbl_share_dir = '/usr/share/AKBL'
         self._computers_configuration_dir = "/usr/share/AKBL/computers"
         self._default_computer_file = '/etc/AKBL/default_computer.ini'
         self._daemon_pyro_file = '/etc/AKBL/pyro-address'
 
-        ## User
-        ##
-
-
+        # User
+        #
         if user == 'root':
             self._configuration_file = '/root/.config/akbl.ini'
             self._profiles_dir = '/root/.local/share/akbl/'
@@ -51,9 +49,8 @@ class Paths:
             if os.path.exists(old_location):
                 os.rename(old_location, location)
 
-
-        ## GUI & Others
-        ##
+        # GUI & Others
+        #
         self._icon_file = os.path.join(self._akbl_share_dir, 'icon.png')
 
         """

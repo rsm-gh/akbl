@@ -29,8 +29,8 @@ from AKBL.console import print_debug, print_warning, print_error
 
 _SOFTWARE_PATHS = Paths()
 
-def get_compatible_computers():
 
+def get_compatible_computers():
     driver = Driver()
 
     compatible_computers = []
@@ -129,7 +129,6 @@ def get_installed_computers():
 
 
 def get_installed_computer():
-
     if not os.path.exists(_SOFTWARE_PATHS._default_computer_file):
         return None
 
@@ -137,7 +136,6 @@ def get_installed_computer():
 
 
 def set_installed_computer(computer_name):
-
     computer = None
     for inst_computer in get_installed_computers():
         if inst_computer.name == computer_name:
@@ -155,6 +153,7 @@ def set_installed_computer(computer_name):
         f.write(installed_data)
 
     return True
+
 
 def get_installed_computer_by_name(name):
     for computer in get_installed_computers():

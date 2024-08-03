@@ -20,17 +20,16 @@
 class Command:
 
     def __init__(self, legend, command):
-
         self.__legend = legend
-        self.__command = command  #[int(item) for item in packet]
+        self.__command = command  # [int(item) for item in packet]
 
     def __str__(self):
-        formatted_package = "packet="+':'.join(str(item) for item in self.__command)
-        return formatted_package+"\t legend={}".format(self.__legend)
+        formatted_package = "packet=" + ':'.join(str(item) for item in self.__command)
+        return formatted_package + "\t legend={}".format(self.__legend)
 
     def __iter__(self):
         for item in self.__command:
             yield item
-            
+
     def __len__(self):
         return len(self.__command)

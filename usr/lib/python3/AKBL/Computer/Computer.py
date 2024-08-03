@@ -20,6 +20,7 @@
 
 from AKBL.console import print_warning
 
+
 class Computer:
 
     def __init__(self):
@@ -68,38 +69,39 @@ class Computer:
         self.block_battery_sleeping = 7
         self.block_battery_power = 8
         self.block_battery_critical = 9
-        
+
         self.region_all_but_power = 1023999
-        
+
     def __str__(self):
-        attributes = '\n'.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items() if not attribute.startswith('_')])
-        regions = '\nregions:\n'+'\n'.join([str(region) for region in self.__regions])
-    
-        return attributes+regions
-        
+        attributes = '\n'.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items() if
+                                not attribute.startswith('_')])
+        regions = '\nregions:\n' + '\n'.join([str(region) for region in self.__regions])
+
+        return attributes + regions
+
     def get_regions(self):
         return self.__regions
-        
+
     def get_regions_name(self):
         return [region.name for region in self.__regions]
-    
+
     def get_region_by_name(self, region_name):
         for region in self.__regions:
             if region_name == region.name:
                 return region
-            
+
         return None
 
     def add_region(self, new_region):
-        
+
         for region in self.__regions:
-                        
+
             if region.name == new_region.name:
                 print_warning("Duplicated region id={}".format(region.name))
                 return
-            
+
             elif region.hex_id == new_region.hex_id:
                 print_warning("Duplicated region block={}".format(region.hex_id))
                 return
-            
+
         self.__regions.append(new_region)

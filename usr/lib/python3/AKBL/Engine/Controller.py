@@ -21,6 +21,7 @@ from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Constructor import Constructor
 from AKBL.console import print_warning, print_error, print_debug
 
+
 class Controller:
 
     def __init__(self, computer):
@@ -70,14 +71,14 @@ class Controller:
             return
 
         self.__driver.take_over()
-        
+
         constructor = Constructor(self.__computer)
         constructor.set_get_status()
         constructor.set_reset_area(res_cmd)
-        
+
         while not self.__device_is_ready():
             self.__driver.write_constructor(constructor)
-                
+
         return True
 
     def add_speed_line(self, speed):
@@ -97,7 +98,8 @@ class Controller:
 
         elif mode == 'morph':
             if right_color is None:
-                print_warning('trying to set `morph` mode without a `right_color`.The `fixed` mode will be used instead.')
+                print_warning(
+                    'trying to set `morph` mode without a `right_color`.The `fixed` mode will be used instead.')
                 self.__constructor.add_light_zone(area_hex_id, left_color)
             else:
                 self.__constructor.add_morph_zone(area_hex_id, left_color, right_color)
@@ -129,18 +131,18 @@ class Controller:
         # Write the current constructor
         #
         self.__driver.write_constructor(self.__constructor)
-        
+
     def __device_is_ready(self):
 
         if self.__driver is None or self.__computer is None:
             print_error("Calling device ready with no driver and computer.")
-            return True # To stop the loops.
-        
+            return True  # To stop the loops.
+
         self.__driver.take_over()
-        
+
         constructor = Constructor(self.__computer)
         constructor.set_get_status()
-        
+
         self.__driver.write_constructor(constructor)
         msg = self.__driver.read_device(constructor)
         return msg[0] == self.__computer.state_ready

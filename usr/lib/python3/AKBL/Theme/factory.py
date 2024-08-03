@@ -24,8 +24,6 @@ from AKBL.utils import string_is_hex_color
 from AKBL.console import print_warning, print_debug
 from AKBL.Theme.Theme import Theme, _MISSING_ZONE_COLOR
 
-
-
 _AVAILABLE_THEMES = {}
 
 
@@ -213,12 +211,10 @@ def load_from_file(path, computer):
                 zone.get_left_color(),
                 zone.get_right_color())
 
-
     if warning_text != "":
         print_warning(warning_text)
 
-
-    #print_debug(theme)
+    # print_debug(theme)
 
     #
     # Add the configuration
