@@ -31,13 +31,12 @@ from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 from AKBL.texts import Texts
 from AKBL.Bindings import Bindings
+from AKBL.settings import IndicatorCodes
 from AKBL.console import print_error, print_debug
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 _PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
 sys.path.insert(0, _PROJECT_DIR)
-
-from common import IndicatorCodes
 
 
 class ConnectIndicator:
@@ -172,25 +171,25 @@ class Indicator:
             case self.__current_code:
                 print_debug("Exit", direct_output=True)
 
-            case IndicatorCodes.lights_on:
+            case IndicatorCodes._lights_on:
                 print_debug("Lights on", direct_output=True)
 
-                if self.__current_code == IndicatorCodes.daemon_off:
+                if self.__current_code == IndicatorCodes._daemon_off:
                     enable_gui = True
 
                 self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_lights_on, Texts.Indicator.lights_on)
 
-            case IndicatorCodes.lights_off:
+            case IndicatorCodes._lights_off:
                 print_debug("Lights Off", direct_output=True)
 
-                if self.__current_code == IndicatorCodes.daemon_off:
+                if self.__current_code == IndicatorCodes._daemon_off:
                     enable_gui = True
 
                 self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_lights_off, Texts.Indicator.lights_off)
 
-            case IndicatorCodes.daemon_off:
+            case IndicatorCodes._daemon_off:
                 print_debug("Daemon off", direct_output=True)
 
                 enable_gui = False
@@ -220,12 +219,12 @@ class Indicator:
 
             if self.__akbl.ping():
 
-                if self.__current_code in (IndicatorCodes.daemon_off, -1):
+                if self.__current_code in (IndicatorCodes._daemon_off, -1):
                     self.__parent.connect()
                     self.__akbl.update_indicator()
 
-            elif self.__current_code != IndicatorCodes.daemon_off:
-                GLib.idle_add(self.set_code, IndicatorCodes.daemon_off)
+            elif self.__current_code != IndicatorCodes._daemon_off:
+                GLib.idle_add(self.set_code, IndicatorCodes._daemon_off)
 
             else:
                 self.__akbl.reload_address(False)
