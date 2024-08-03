@@ -28,29 +28,24 @@ from AKBL.console import print_error, print_warning
 
 class Bindings:
 
-    def __init__(self):
+    def __init__(self, verbose=False):
         self.__pyro_address = ""
         self.__pyro_daemon = None
         self.__user = getpass.getuser()
         self.__paths = Paths(self.__user)
-        self.reload_address()
+        self.reload_address(verbose=verbose)
 
     """
         General Bindings
     """
 
     def ping(self) -> bool:
-        """Check if the Daemon is connected."""
+        """Check if the Daemon is connected and ready to execute commands."""
 
-        if self.__pyro_daemon is not None:
-            try:
-                self.__pyro_daemon.ping()
-            except Exception:
-                pass
-            else:
-                return True
-
-        return False
+        try:
+            return self.__pyro_daemon.ping()
+        except Exception:
+            return False
 
     def get_address(self) -> str:
         """Return the current URI of the Daemon."""

@@ -43,6 +43,14 @@ elif [ -z "$2" ]; then
            fi
         ;;
 
+        --start-fake-daemon)
+           if [ "$EUID" -eq 0 ]; then
+              python3 /usr/lib/python3/AKBL/Daemon.py --fake
+           else
+              echo "$ROOT_TEXT"
+           fi
+        ;;
+
         --block-testing)
            if [ "$EUID" -eq 0 ]; then
               python3 /usr/share/AKBL/BlockTesting/BlockTesting.py

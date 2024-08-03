@@ -17,22 +17,30 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import sys
+
 from AKBL.Engine.Driver import Driver
+from AKBL.Computer.Computer import Computer
 from AKBL.Engine.Constructor import Constructor
 from AKBL.console import print_warning, print_error, print_debug
 
 
 class Controller:
 
-    def __init__(self, computer):
+    def __init__(self, computer: Computer, fake=False):
 
         self.__driver = None
         self.__computer = None
         self.__constructor = None
 
         self.set_computer(computer)
+        if not self.is_ready() and not fake:
+            sys.exit(1)
 
-    def set_computer(self, computer):
+    def is_ready(self) -> bool:
+        return self.__driver is not None and self.__constructor is not None
+
+    def set_computer(self, computer: Computer) -> bool:
         self.__computer = computer
 
         driver = Driver()
@@ -50,25 +58,27 @@ class Controller:
         print_error("The computer '{}' is not supported by this hardware.".format(self.__computer.name))
         return False
 
-    def get_computer(self):
+    def get_computer(self) -> None | Computer:
         return self.__computer
 
-    def get_device_information(self):
-        if self.__driver is not None:
-            return self.__driver.device_information()
+    def get_device_information(self) -> str:
+        if self.__driver is None:
+            return ""
 
-    def erase_config(self):
+        return self.__driver.device_information()
+
+    def clear_constructor(self) -> None:
         if self.__constructor is not None:
             self.__constructor.clear()
 
-    def add_block_line(self, save, block):
+    def add_block_line(self, save, block) -> None:
         if self.__constructor is not None:
             self.__constructor.set_block(save, block)
 
-    def add_reset_line(self, res_cmd):
+    def add_reset_line(self, res_cmd) -> bool:
 
-        if self.__driver is None or self.__computer is None:
-            return
+        if not self.is_ready():
+            return False
 
         self.__driver.take_over()
 
@@ -81,11 +91,11 @@ class Controller:
 
         return True
 
-    def add_speed_line(self, speed):
+    def add_speed_line(self, speed: int) -> None:
         if self.__constructor is not None:
             self.__constructor.set_speed(speed)
 
-    def add_color_line(self, area_hex_id, mode, left_color, right_color=None):
+    def add_color_line(self, area_hex_id, mode, left_color, right_color=None) -> None:
 
         if self.__constructor is None:
             return
@@ -106,17 +116,17 @@ class Controller:
         else:
             print_warning('wrong mode=`{}`'.format(mode))
 
-    def end_colors_line(self):
+    def end_colors_line(self) -> None:
         if self.__constructor is not None:
             self.__constructor.set_end_colors_line()
 
-    def end_block_line(self):
+    def end_block_line(self) -> None:
         if self.__constructor is not None:
             self.__constructor.set_end_block_line()
 
-    def apply_config(self):
+    def apply_config(self) -> None:
 
-        if self.__driver is None or self.__computer is None:
+        if not self.is_ready():
             return
 
         # Wait until is OK to write.
@@ -132,7 +142,7 @@ class Controller:
         #
         self.__driver.write_constructor(self.__constructor)
 
-    def __device_is_ready(self):
+    def __device_is_ready(self) -> bool:
 
         if self.__driver is None or self.__computer is None:
             print_error("Calling device ready with no driver and computer.")
