@@ -262,8 +262,6 @@ class Bindings:
                 These colors are used for the morph mode.
                 It can be a single hex_color or a list of hex_colors.
                 It must have the same number of items than left_colors.
-            :rtype: None in case of an error.
-            :rtype: Bool
         """
 ```
 
