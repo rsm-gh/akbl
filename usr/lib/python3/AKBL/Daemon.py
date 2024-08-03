@@ -36,8 +36,9 @@ from AKBL.console import print_warning, print_error, print_info, print_debug
 
 class Daemon:
 
-    def __init__(self):
+    def __init__(self, fake=False):
 
+        self.__fake = fake
         self.__computer = computer_factory.get_installed_computer()
 
         if self.__computer is None:
@@ -46,7 +47,7 @@ class Daemon:
 
         print("Starting the computer configuration '{}'.".format(self.__computer.name), flush=True)
 
-        self.__controller = Controller(self.__computer)
+        self.__controller = Controller(self.__computer, fake=fake)
 
         #                                  Save, BLock
         self.__computer_blocks_to_save = ((True, self.__computer.block_load_on_boot),
@@ -73,8 +74,14 @@ class Daemon:
     """
 
     @Pyro4.expose
-    def ping(self) -> None:
+    def ping(self) -> bool:
+        """Check if the Daemon ready to execute commands."""
         print_debug()
+
+        if self.__fake:
+            return True
+
+        return self.__controller.is_ready()
 
     @Pyro4.expose
     def reload_configurations(self,
@@ -154,7 +161,7 @@ class Daemon:
 
             if areas_to_keep_on == '':
 
-                self.__controller.erase_config()
+                self.__controller.clear_constructor()
 
                 for save, block in self.__computer_blocks_to_save:
                     self.__controller.add_block_line(save, block)
@@ -169,7 +176,7 @@ class Daemon:
 
                 areas_to_keep_on = areas_to_keep_on.split('|')
 
-                self.__controller.erase_config()
+                self.__controller.clear_constructor()
                 for save, block in self.__computer_blocks_to_save:
 
                     self.__controller.add_block_line(save, block)
@@ -242,7 +249,7 @@ class Daemon:
                         "The colors argument must only contain hex colors. The color={} is not valid.".format(color))
                     return False
 
-        self.__controller.erase_config()
+        self.__controller.clear_constructor()
 
         for save, block in self.__computer_blocks_to_save:
 
@@ -385,7 +392,7 @@ class Daemon:
         # Illuminate the computer lights
         #
 
-        self.__controller.erase_config()
+        self.__controller.clear_constructor()
 
         for save, block in self.__computer_blocks_to_save:
 
@@ -432,10 +439,10 @@ class Daemon:
                 print_error(format_exc())
 
 
-def main():
+def main(fake=False):
     os.chdir(os.path.dirname(os.path.realpath(__file__)))  # todo: why is this necessary?
 
-    akbl_daemon = Daemon()
+    akbl_daemon = Daemon(fake=fake)
     pyro_daemon = Pyro4.Daemon()
     pyro_uri = str(pyro_daemon.register(akbl_daemon))
     pyro_uri_file = Paths()._daemon_pyro_file
@@ -448,9 +455,9 @@ def main():
 
 if __name__ == "__main__":
 
-    akbl = Bindings()
-    if akbl.ping():
+    AKBL = Bindings()
+    if AKBL.ping():
         print("Error: The Daemon is already running.")
         sys.exit(1)
 
-    main()
+    main(fake="--fake" in sys.argv)

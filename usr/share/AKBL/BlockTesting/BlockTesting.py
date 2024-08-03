@@ -260,7 +260,7 @@ class BlockTesting(Gtk.Window):
 
             #   Test
             #
-            self.__controller.erase_config()
+            self.__controller.clear_constructor()
 
             for save, block in self.__computer_blocks_to_save:
                 self.__controller.add_block_line(save=save, block=block)
@@ -279,7 +279,7 @@ class BlockTesting(Gtk.Window):
     def on_button_block_testing_lights_off_clicked(self, *_):
         try:
 
-            self.__controller.erase_config()
+            self.__controller.clear_constructor()
 
             for save, block in self.__computer_blocks_to_save:
                 self.__controller.add_block_line(save, block)
