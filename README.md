@@ -59,7 +59,7 @@ Usage:
 
  Options:
 
-    --change                          Change the computer lights on/off.
+    --switch                          Switch the computer lights on/off.
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
     --set-profile <profile_name>      Turn on the selected profile.
@@ -219,57 +219,51 @@ That button manages the speed of the theme in the following cases:
 ```python
 class Bindings:
        
-    def reload_address(self):
+    def ping(self) -> bool:
+        """Check if the Daemon is connected."""
+            
+    def switch_lights(self) -> None:
+        """Switch the lights on or off."""
+
+    def reload_address(self, verbose=True) -> bool:
         """
-            It tries to make a connection with the Daemon, and it returns True or False.
+            Reload the pyro address, and try to make a connection with the Daemon.
+
+            :param bool verbose: Add additional information in case of an error.
         """
-   
-    def ping(self):
-        """
-            It checks if the Daemon is connected, and it returns True or False.
-        """
-   
-    def get_address(self):
-        """
-            It returns the current URI of the Daemon.
-        """
-   
-    def get_profile_names(self):
-        """
-            It returns a list of the existing profile names.
-        """
+    
+    def get_address(self) -> str:
+        """Return the current URI of the Daemon."""
+        
+    def get_profiles_name(self) -> list[str]:
+        """Return a list of the existing profile names."""
        
-    def set_profile(self, profile):
-        """
-            Set a profile from the existing profiles.
-           
-            + 'Profile' is the profile name.
-        """
-       
-    def switch_lights(self):
-           """
-            Toggle on/off the lights of the keyboard.
-           """
+    def get_computer_name(self) -> str:
+        """Get the computer name set by AKBL."""
+        
+    def set_profile(self, profile_name: str) -> bool:
+        """Set a profile by name."""
    
-    def set_lights(self, state):
-        """
-            Turn the lights on or off.
-           
-            + 'state' can be a boolean or a string
-        """
+    def set_lights(self, state: bool) -> None:
+        """Set the lights on or off."""
        
-    def set_colors(self, mode, speed, colors1, colors2=None):
+    def set_colors(self,
+                   mode: str,
+                   speed: int,
+                   left_colors: str | list[str],
+                   right_colors: None | str | list[str] = None) -> bool:
         """
-            Change the colors and the mode of the keyboard.
-           
-            + The available modes are: 'fixed', 'morph' and 'blink',
-                'fixed' and 'blink' only take 'colors1'.
-               
-            + Speed must be an integer. 1 =< speed =< 256
-           
-            + Colors1 and colors2 can be a single hex_color or a list
-                of hex_colors. If both arguments are used, they must
-                have the same number of items.
+            Change the lights colors and mode.
+
+            :param str mode: Can be fixed, morph, or blink.
+            :param int speed: Speed of the theme, 1 =< speed >= 256.
+            :param str|list[str] left_colors: It can be a single hex_color or a list of hex_colors.
+            :param None|str|list[str] right_colors:
+                These colors are used for the morph mode.
+                It can be a single hex_color or a list of hex_colors.
+                It must have the same number of items than left_colors.
+            :rtype: None in case of an error.
+            :rtype: Bool
         """
 ```
 

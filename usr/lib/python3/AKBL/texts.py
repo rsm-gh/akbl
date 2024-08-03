@@ -24,7 +24,7 @@ Usage:
 
  Options:
 
-    --change                          Change the computer lights on/off.
+    --switch                          Switch the computer lights on/off.
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
     --set-profile <profile_name>      Turn on the selected profile.

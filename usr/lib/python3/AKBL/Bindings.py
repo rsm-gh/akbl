@@ -29,8 +29,8 @@ from AKBL.console import print_error, print_warning
 class Bindings:
 
     def __init__(self):
-        self.__address = None
-        self.__pyro = None
+        self.__pyro_address = ""
+        self.__pyro_daemon = None
         self.__user = getpass.getuser()
         self.__paths = Paths(self.__user)
         self.reload_address()
@@ -42,9 +42,9 @@ class Bindings:
     def ping(self) -> bool:
         """Check if the Daemon is connected."""
 
-        if self.__pyro is not None:
+        if self.__pyro_daemon is not None:
             try:
-                self.__pyro.ping()
+                self.__pyro_daemon.ping()
             except Exception:
                 pass
             else:
@@ -52,17 +52,12 @@ class Bindings:
 
         return False
 
-    def get_address(self) -> str | None:
-        """
-            Return the current URI of the Daemon.
+    def get_address(self) -> str:
+        """Return the current URI of the Daemon."""
 
-            :rtype: None if the Daemon is not connected.
-            :rtype: Str if the Daemon is/was connected.
-        """
+        return self.__pyro_address
 
-        return self.__address
-
-    def get_profile_names(self) -> list[str]:
+    def get_profiles_name(self) -> list[str]:
         """Return a list of the existing profile names."""
 
         if not os.path.exists(self.__paths._profiles_dir):
@@ -102,78 +97,74 @@ class Bindings:
 
         return names
 
-    def set_profile(self, profile_name: str) -> None | bool:
-        """
-            Activate a profile.
-            
-            :param str profile_name: Is the profile to be set.
-            :rtype: None in case of an error.
-            :rtype: Bool
-        """
+    def set_profile(self, profile_name: str) -> bool:
+        """Set a profile by name."""
 
-        return self.__command('set_profile', profile_name)
+        profile_set = self.__command('set_profile', profile_name)
+
+        if profile_set is None:
+            profile_set = False
+
+        return profile_set
 
     def switch_lights(self) -> None:
-        """Toggle on/off the lights of the keyboard."""
+        """Switch the lights on or off."""
 
         return self.__command('switch_lights')
 
-    def set_lights(self, state: bool | str) -> None:
-        """
-            Turn the lights on or off.
-            
-            :param bool|str state: Status to be set.
-            :rtype: None
-        """
+    def set_lights(self, state: bool) -> None:
+        """Set the lights on or off."""
 
-        return self.__command('set_lights', state)
+        self.__command('set_lights', state)
 
     def set_colors(self,
                    mode: str,
                    speed: int,
                    left_colors: str | list[str],
-                   right_colors: None | str | list[str] = None) -> None | bool:
+                   right_colors: None | str | list[str] = None) -> bool:
         """
-            Change the colors and the mode of the keyboard.
+            Change the lights colors and mode.
 
             :param str mode: Can be fixed, morph, or blink.
             :param int speed: Speed of the theme, 1 =< speed >= 256.
             :param str|list[str] left_colors: It can be a single hex_color or a list of hex_colors.
-            :param None|str|list[str] right_colors: It can be a single hex_color or a list of hex_colors.
-            If used, it must have the same number of items than left_colors.
+            :param None|str|list[str] right_colors:
+                These colors are used for the morph mode.
+                It can be a single hex_color or a list of hex_colors.
+                It must have the same number of items than left_colors.
             :rtype: None in case of an error.
             :rtype: Bool
         """
 
-        return self.__command('set_colors', mode, speed, left_colors, right_colors)
+        status = self.__command('set_colors', mode, speed, left_colors, right_colors)
 
-    def get_computer_name(self) -> None | str:
-        """
-            Get the computer name set by AKBL.
+        if status is None:
+            status = False
 
-            :rtype: None in case of an error.
-            :rtype: Str
-        """
-        return self.__command('get_computer_name')
+        return status
+
+    def get_computer_name(self) -> str:
+        """Get the computer name set by AKBL."""
+
+        name = self.__command('get_computer_name')
+        if name is None:
+            name = ""
+
+        return name
 
     """
         Admin bindings.
     """
 
     def reload_configurations(self) -> None:
-        """
-            Reload the configurations for the current user.
-
-            :rtype: None
-        """
-        return self.__command('reload_configurations')
+        """Reload the configurations for the current user."""
+        self.__command('reload_configurations')
 
     def reload_address(self, verbose=True) -> bool:
         """
-            Try to make a connection with the Daemon.
+            Reload the pyro address, and try to make a connection with the Daemon.
 
             :param bool verbose: Add additional information in case of an error.
-            :rtype: Bool
         """
 
         if not self.ping() and os.path.exists(self.__paths._daemon_pyro_file):
@@ -189,26 +180,26 @@ class Bindings:
                 if verbose:
                     print_error(format_exc())
             else:
-                self.__address = address
-                self.__pyro = pyro
+                self.__pyro_address = address
+                self.__pyro_daemon = pyro
 
                 return True
 
-        self.__address = None
-        self.__pyro = None
+        self.__pyro_address = ""
+        self.__pyro_daemon = None
         return False
 
     def connect_indicator(self, uri: str) -> None:
         """Connect the Daemon with the Indicator."""
-        return self.__command('connect_indicator', uri)
+        self.__command('connect_indicator', uri)
 
     def update_indicator(self) -> None:
-        """Update the status lights on/off of the indicator."""
-        return self.__command('update_indicator')
+        """Update the status (lights on/off) of the indicator."""
+        self.__command('update_indicator')
 
     def disconnect_indicator(self) -> None:
         """Disconnect the Daemon from the Indicator."""
-        return self.__command('disconnect_indicator')
+        self.__command('disconnect_indicator')
 
     """
         Private methods
@@ -219,13 +210,13 @@ class Bindings:
         if command in ('set_profile', 'set_lights', 'switch_lights', 'reload_configurations'):
             args = [self.__user] + list(args)
 
-        if self.__address is None:
+        if self.__pyro_address == "":
             self.reload_address()
 
-        if self.__address is not None and self.__pyro is not None:
+        if self.__pyro_address != "" and self.__pyro_daemon is not None:
 
             try:
-                return getattr(self.__pyro, command)(*args)
+                return getattr(self.__pyro_daemon, command)(*args)
 
             except Exception:
 
