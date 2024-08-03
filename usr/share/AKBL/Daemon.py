@@ -73,11 +73,14 @@ class Daemon:
     """
 
     @Pyro4.expose
-    def ping(self):
+    def ping(self) -> None:
         print_debug()
 
     @Pyro4.expose
-    def reload_configurations(self, user, indicator=True, set_default=True):
+    def reload_configurations(self,
+                              user: str,
+                              indicator: bool = True,
+                              set_default: bool = True) -> None:
 
         print_debug("user={} indicator={} set_default={}".format(user, indicator, set_default))
 
@@ -105,36 +108,39 @@ class Daemon:
     """
 
     @Pyro4.expose
-    def set_profile(self, user, profile):
-        """
-            Set a profile from the existing profiles.
+    def switch_lights(self, user: str):
+        """Toggle on/off the lights of the keyboard."""
+        print_debug("user={}".format(user))
+        self.set_lights(user, not self.__lights_state)
 
-            + 'Profile' is the profile name
+    @Pyro4.expose
+    def set_profile(self, user: str, profile_name: str):
+        """
+            Activate a profile.
+
+            :param str user: Name of the user.
+            :param str profile_name: Is the profile to be set.
+            :rtype: None in case of an error.
+            :rtype: Bool
         """
 
-        print_debug("user={} profile={}".format(user, profile))
+        print_debug("user={} theme_name={}".format(user, profile_name))
 
         if user != self.__user:
             self.__user = user
             self.__paths = Paths(user)
 
-        self.reload_configurations(user, False, False)
+        self.reload_configurations(user, indicator=False, set_default=False)
 
-        if profile in theme_factory._AVAILABLE_THEMES.keys():
-            self.__theme = theme_factory._AVAILABLE_THEMES[profile]
+        if profile_name in theme_factory._AVAILABLE_THEMES.keys():
+            self.__theme = theme_factory._AVAILABLE_THEMES[profile_name]
             self.__illuminate_keyboard()
+            return True
+
+        return False
 
     @Pyro4.expose
-    def switch_lights(self, user):
-        """
-            If the lights are on, put them off
-            or if the lights are off, put them on
-        """
-        print_debug("user={}".format(user))
-        self.set_lights(user, not self.__lights_state)
-
-    @Pyro4.expose
-    def set_lights(self, user, state):
+    def set_lights(self, user: str, state: str | bool) -> None:
         """
             Turn the lights on or off, 'state' can be a boolean or a string.
         """
@@ -180,38 +186,42 @@ class Daemon:
                 self.__controller.apply_config()
 
             self.__lights_state = False
-            self.__indicator_send_code(150)
+            self.__indicator_send_code(IndicatorCodes.lights_off)
         else:
             self.__illuminate_keyboard()
 
     @Pyro4.expose
-    def set_colors(self, mode, speed, left_colors, right_colors=None):
+    def set_colors(self,
+                   mode: str,
+                   speed: int,
+                   left_colors: str | list[str],
+                   right_colors: None | str | list[str] = None) -> bool:
         """
             Change the colors and the mode of the keyboard.
 
-            + The available modes are: 'fixed', 'morph', 'blink'
-                'fixed' and 'blink' only takes left_colors
-
-            + Speed must be an integer. 1 =< speed =< 256
-
-            + Left_colors and right_colors can be a single hex color or a list of hex_colors.
-              If both arguments are used, they must have the same number of items.
+            :param str mode: Can be fixed, morph, or blink.
+            :param int speed: Speed of the theme, 1 =< speed >= 256.
+            :param str|list[str] left_colors: It can be a single hex_color or a list of hex_colors.
+            :param None|str|list[str] right_colors: It can be a single hex_color or a list of hex_colors.
+            If provided, it must have the same number of items than left_colors.
+            :rtype: None in case of an error.
+            :rtype: Bool
         """
 
         print_debug("mode={} speed={} left_colors={} right_colors={}".format(mode, speed, left_colors, right_colors))
 
         if mode not in ('fixed', 'morph', 'blink'):
             print_warning("Wrong mode" + str(mode))
-            return
+            return False
         elif not isinstance(speed, int):
             print_warning("The speed argument must be an integer.")
-            return
+            return False
         elif speed > 255:
             print_warning("The speed argument exceeds the limit > 255.")
-            return
+            return False
         elif speed < 1:
             print_warning("The speed argument must be >= 1.")
-            return
+            return False
 
         if not isinstance(left_colors, list) and not isinstance(left_colors, tuple):
             left_colors = [left_colors]
@@ -224,14 +234,14 @@ class Daemon:
 
         if len(left_colors) != len(right_colors):
             print_warning("The colors lists must have the same length.")
-            return
+            return False
 
         for color_list in (left_colors, right_colors):
             for color in color_list:
                 if not string_is_hex_color(color):
                     print_warning(
                         "The colors argument must only contain hex colors. The color={} is not valid.".format(color))
-                    return
+                    return False
 
         self.__controller.erase_config()
 
@@ -278,18 +288,19 @@ class Daemon:
         self.__controller.apply_config()
 
         self.__lights_state = True
+        return True
 
     """
         Bindings for the graphical interphase
     """
 
     @Pyro4.expose
-    def get_computer_name(self):
+    def get_computer_name(self) -> str:
         print_debug()
         return self.__computer.name
 
     @Pyro4.expose
-    def get_computer_info(self):
+    def get_computer_info(self) -> tuple[any, any, any, any]:
         print_debug()
         return (self.__computer.name,
                 self.__computer.vendor_id,
@@ -297,7 +308,7 @@ class Daemon:
                 self.__controller.get_device_information())
 
     @Pyro4.expose
-    def modify_lights_state(self, value):
+    def modify_lights_state(self, value) -> None:
         """
             This method does not change the lights of the keyboard,
             it only updates the daemon and the indicator
@@ -307,17 +318,17 @@ class Daemon:
 
         if value in (False, 'False', 'false'):
             self.__lights_state = False
-            self.__indicator_send_code(150)
+            self.__indicator_send_code(IndicatorCodes.lights_off)
         else:
             self.__lights_state = True
-            self.__indicator_send_code(100)
+            self.__indicator_send_code(IndicatorCodes.lights_on)
 
     """
         Indicator Bindings
     """
 
     @Pyro4.expose
-    def indicator_get_state(self):
+    def indicator_get_state(self) -> None:
 
         print_debug("state={}".format(self.__lights_state))
 
@@ -327,7 +338,7 @@ class Daemon:
             self.__indicator_send_code(IndicatorCodes.lights_off)
 
     @Pyro4.expose
-    def indicator_start(self, uri):
+    def indicator_start(self, uri: str) -> None:
 
         print_debug()
 
@@ -340,14 +351,14 @@ class Daemon:
             self.__pyro = False
 
     @Pyro4.expose
-    def indicator_kill(self):
+    def indicator_kill(self) -> None:
         self.__pyro = False
 
     """
         Private Methods
     """
 
-    def __illuminate_keyboard(self):
+    def __illuminate_keyboard(self) -> None:
 
         print_debug()
 
@@ -382,7 +393,7 @@ class Daemon:
         # Update the Indicator
         #
         if self.__pyro:
-            self.__indicator_send_code(100)
+            self.__indicator_send_code(IndicatorCodes.lights_on)
             try:
                 self.__pyro.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
                                           self.__theme.name,
@@ -394,13 +405,13 @@ class Daemon:
         #
         self.__lights_state = True
 
-    def __indicator_send_code(self, value):
+    def __indicator_send_code(self, code: int) -> None:
 
-        print_debug("value={}".format(value))
+        print_debug("code={}".format(code))
 
         if self.__pyro:
             try:
-                self.__pyro.set_code(value)
+                self.__pyro.set_code(code)
             except Exception:
                 print_error(format_exc())
 

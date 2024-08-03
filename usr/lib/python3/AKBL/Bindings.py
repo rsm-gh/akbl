@@ -25,6 +25,7 @@ from traceback import format_exc
 from AKBL.Paths import Paths
 from AKBL.utils import print_error, print_warning
 
+
 class Bindings:
 
     def __init__(self):
@@ -34,52 +35,12 @@ class Bindings:
         self.__paths = Paths(self.__user)
         self.reload_address()
 
-    def __command(self, command, *args):
-        """
-            Send a command to the daemon and return a tuple containing (boolean, response).
-            The boolean indicates if the command was successful or not.
-            The response contains the information returned by the command.
-        """
-        if command in ('set_profile', 'set_lights', 'switch_lights', 'reload_configurations'):
-            args = [self.__user] + list(args)
+    """
+        General Bindings
+    """
 
-        if self.__address is None:
-            self.reload_address()
-
-        if self.__address is not None and self.__pyro is not None:
-
-            try:
-                return getattr(self.__pyro, command)(*args)
-
-            except Exception:
-
-                try:
-                    #
-                    # I ignore why this has to be inside an exception. Its like if there was a problem printing format_exc().
-                    # The bug happens when reducing the following scenario:
-                    #    1) There is a launched indicator.
-                    #    2) The software is re-installed.
-                    #    3) The user tries to close the indicator by using the "Exit" button.
-                    #
-
-                    if len(args) > 0:
-                        print_error(
-                            "Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)),
-                                                                      str(format_exc())))
-                    else:
-                        print_error("Command={}\n{}\n".format(command, str(format_exc())))
-
-                except Exception:
-                    print_error("NO TRACEBACK: Command={}\n".format(command))
-        else:
-            print_warning("The daemon is off.")
-
-        return None
-
-    def ping(self):
-        """
-            Check if the Daemon is connected and return `True` or `False`.
-        """
+    def ping(self) -> bool:
+        """Check if the Daemon is connected."""
 
         if self.__pyro is not None:
             try:
@@ -91,17 +52,18 @@ class Bindings:
 
         return False
 
-    def get_address(self):
+    def get_address(self) -> str | None:
         """
-            Returns the current URI of the Daemon.
+            Return the current URI of the Daemon.
+
+            :rtype: None if the Daemon is not connected.
+            :rtype: Str if the Daemon is/was connected.
         """
 
         return self.__address
 
-    def get_profile_names(self):
-        """
-            Return a list of the existing profile names.
-        """
+    def get_profile_names(self) -> list[str]:
+        """Return a list of the existing profile names."""
 
         if not os.path.exists(self.__paths._profiles_dir):
             return []
@@ -140,60 +102,78 @@ class Bindings:
 
         return names
 
-    def set_profile(self, profile_name):
+    def set_profile(self, profile_name: str) -> None | bool:
         """
-            Set a profile from the existing profiles.
+            Activate a profile.
             
-            + 'Profile' is the profile name.
+            :param str profile_name: Is the profile to be set.
+            :rtype: None in case of an error.
+            :rtype: Bool
         """
 
         return self.__command('set_profile', profile_name)
 
-    def switch_lights(self):
-        """
-            Toggle on/off the lights of the keyboard.
-        """
+    def switch_lights(self) -> None:
+        """Toggle on/off the lights of the keyboard."""
 
         return self.__command('switch_lights')
 
-    def set_lights(self, state):
+    def set_lights(self, state: bool | str) -> None:
         """
             Turn the lights on or off.
             
-            + 'state' can be a boolean or a string
+            :param bool|str state: Status to be set.
+            :rtype: None
         """
 
         return self.__command('set_lights', state)
 
-    def set_colors(self, mode, speed, colors1, colors2=None):
+    def set_colors(self,
+                   mode: str,
+                   speed: int,
+                   left_colors: str | list[str],
+                   right_colors: None | str | list[str] = None) -> None | bool:
         """
             Change the colors and the mode of the keyboard.
-            
-            + The available modes are: 'fixed', 'morph' and 'blink',
-              'fixed' and 'blink' only take `colors1`.
-                
-            + Speed must be an integer. 1 =< speed >= 256
-            
-            + Colors1 and colors2 can be a single hex_color or a list
-              of hex_colors. If both arguments are used, they must
-              have the same number of items.
+
+            :param str mode: Can be fixed, morph, or blink.
+            :param int speed: Speed of the theme, 1 =< speed >= 256.
+            :param str|list[str] left_colors: It can be a single hex_color or a list of hex_colors.
+            :param None|str|list[str] right_colors: It can be a single hex_color or a list of hex_colors.
+            If used, it must have the same number of items than left_colors.
+            :rtype: None in case of an error.
+            :rtype: Bool
         """
 
-        return self.__command('set_colors', mode, speed, colors1, colors2)
+        return self.__command('set_colors', mode, speed, left_colors, right_colors)
 
-    def get_computer_name(self):
+    def get_computer_name(self) -> None | str:
+        """
+            Get the computer name set by AKBL.
+
+            :rtype: None in case of an error.
+            :rtype: Str
+        """
         return self.__command('get_computer_name')
 
     """
         Admin bindings.
     """
 
-    def reload_configurations(self):
+    def reload_configurations(self) -> None:
+        """
+            Reload the configurations for the current user.
+
+            :rtype: None
+        """
         return self.__command('reload_configurations')
 
-    def reload_address(self, display_the_error=True):
+    def reload_address(self, verbose=True) -> bool:
         """
-            It tries to make a connection with the Daemon, and it returns True or False.
+            Try to make a connection with the Daemon.
+
+            :param bool verbose: Add additional information in case of an error.
+            :rtype: Bool
         """
 
         if not self.ping() and os.path.exists(self.__paths._daemon_pyro_file):
@@ -206,7 +186,7 @@ class Bindings:
                 pyro.ping()
 
             except Exception:
-                if display_the_error:
+                if verbose:
                     print_error(format_exc())
             else:
                 self.__address = address
@@ -218,11 +198,57 @@ class Bindings:
         self.__pyro = None
         return False
 
-    def indicator_start(self, uri):
+    def indicator_start(self, uri: str) -> None:
+        """Start the AKBL indicator."""
         return self.__command('indicator_start', uri)
 
-    def indicator_get_state(self):
+    def indicator_get_state(self) -> None:
+        """Request that the AKBL indicator reports its state."""
         return self.__command('indicator_get_state')
 
-    def indicator_kill(self):
+    def indicator_kill(self) -> None:
+        """Kill the AKBL indicator."""
         return self.__command('indicator_kill')
+
+    """
+        Private methods
+    """
+
+    def __command(self, command: str, *args):
+        """Send a command to the daemon."""
+        if command in ('set_profile', 'set_lights', 'switch_lights', 'reload_configurations'):
+            args = [self.__user] + list(args)
+
+        if self.__address is None:
+            self.reload_address()
+
+        if self.__address is not None and self.__pyro is not None:
+
+            try:
+                return getattr(self.__pyro, command)(*args)
+
+            except Exception:
+
+                try:
+                    #
+                    # I ignore why this has to be inside an exception.
+                    # Its like if there was a problem printing format_exc().
+                    # The bug happens when reducing the following scenario:
+                    #    1) There is a launched indicator.
+                    #    2) The software is re-installed.
+                    #    3) The user tries to close the indicator by using the "Exit" button.
+                    #
+
+                    if len(args) > 0:
+                        print_error(
+                            "Command={}, arguments=[{}]\n{}\n".format(command, ','.join((str(arg) for arg in args)),
+                                                                      str(format_exc())))
+                    else:
+                        print_error("Command={}\n{}\n".format(command, str(format_exc())))
+
+                except Exception:
+                    print_error("NO TRACEBACK: Command={}\n".format(command))
+        else:
+            print_warning("The daemon is off.")
+
+        return None

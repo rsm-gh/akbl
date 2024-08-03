@@ -23,6 +23,7 @@ import Pyro4
 import subprocess
 from time import sleep
 from threading import Thread, current_thread
+
 gi.require_version('Gtk', '3.0')
 gi.require_version('AyatanaAppIndicator3', '0.1')
 from gi.repository import Gtk, GLib
@@ -37,6 +38,7 @@ _PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
 sys.path.insert(0, _PROJECT_DIR)
 
 from common import IndicatorCodes
+
 
 class ConnectIndicator:
 
@@ -133,13 +135,37 @@ class Indicator:
     """
 
     @Pyro4.expose
-    def ping(self):
+    def ping(self) -> None:
         print_debug()
 
     @Pyro4.expose
-    def set_code(self, indicator_code):
+    def load_profiles(self,
+                      profiles_name: list[str],
+                      current_profile: str,
+                      state: bool) -> None:
 
-        print_debug("indicator_code={}".format(indicator_code))
+        print_debug("current_profile={}, state={}, profiles_name={}".format(current_profile,
+                                                                            state,
+                                                                            profiles_name))
+
+        for children in self.__submenu_profiles.get_children():
+            self.__submenu_profiles.remove(children)
+
+        for profile_name in sorted(profiles_name):
+            submenu = Gtk.CheckMenuItem(label=profile_name)
+
+            if profile_name == current_profile and state:
+                submenu.set_active(True)
+
+            submenu.connect('toggled', self.set_profile, profile_name)
+            self.__submenu_profiles.append(submenu)
+
+        self.__submenu_profiles.show_all()
+
+    @Pyro4.expose
+    def set_code(self, indicator_code: str | int) -> None:
+
+        print_debug("indicator_code={} of type={}".format(indicator_code, type(indicator_code)))
 
         try:
             indicator_code = int(indicator_code)
@@ -147,55 +173,35 @@ class Indicator:
             print_error("wrong indicator code {}".format(indicator_code))
             return
 
-        if indicator_code == self.__current_code:
-            return
+        match indicator_code:
+            case self.__current_code:
+                pass
 
-        self.__current_code = indicator_code
-
-        if indicator_code in (IndicatorCodes.lights_on, IndicatorCodes.lights_off):
-            if indicator_code == IndicatorCodes.lights_on:
+            case IndicatorCodes.lights_on:
+                self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_lights_on, Texts.Indicator.lights_on)
+                for children in self.__menu.get_children():
+                    children.set_sensitive(True)
 
-            elif indicator_code == IndicatorCodes.lights_off:
+            case IndicatorCodes.lights_off:
+                self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_lights_off, Texts.Indicator.lights_off)
+                for children in self.__menu.get_children():
+                    children.set_sensitive(True)
 
-            for children in self.__menu.get_children():
-                children.set_sensitive(True)
+            case IndicatorCodes.daemon_off:
+                self.__current_code = indicator_code
+                self.__app_indicator.set_icon_full(self.__icon_no_daemon, Texts.Indicator.no_daemon)
+                self.__submenu_switch_state.set_sensitive(False)
+                self.__profiles_menu.set_sensitive(False)
 
-        elif indicator_code == IndicatorCodes.daemon_off:
-            self.__app_indicator.set_icon_full(self.__icon_no_daemon, Texts.Indicator.no_daemon)
-            self.__submenu_switch_state.set_sensitive(False)
-            self.__profiles_menu.set_sensitive(False)
-
-        else:
-            print_error("wrong indicator code {}".format(indicator_code))
-            return
-
-    @Pyro4.expose
-    def load_profiles(self, items, current, state):
-
-        print_debug("current={}, state={}, items={}".format(current, state, items))
-
-        for children in self.__submenu_profiles.get_children():
-            self.__submenu_profiles.remove(children)
-
-        for item in sorted(items):
-            submenu = Gtk.CheckMenuItem(label=item)
-
-            if item == current and state:
-                submenu.set_active(True)
-
-            submenu.connect('toggled', self.set_profile, item)
-            self.__submenu_profiles.append(submenu)
-
-        self.__submenu_profiles.show_all()
+            case _:
+                print_error("wrong indicator code {}".format(indicator_code))
 
     @Pyro4.expose
-    def set_profile(self, _, item):
-
-        print_debug("item={}".format(item))
-
-        self.__akbl.set_profile(item)
+    def set_profile(self, _widget, profile_name: str) -> None:
+        print_debug("profile_name={}".format(profile_name))
+        self.__akbl.set_profile(profile_name)
 
     """
         Private methods
@@ -243,6 +249,7 @@ class Indicator:
     @staticmethod
     def __on_menuitem_gui(*_):
         subprocess.run('akbl')
+
 
 if __name__ == "__main__":
     white_icon = '--white' in sys.argv
