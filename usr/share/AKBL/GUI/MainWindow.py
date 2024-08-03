@@ -28,7 +28,7 @@ from gi.repository.GdkPixbuf import Pixbuf
 
 import AKBL.texts as texts
 from AKBL.Paths import Paths
-from AKBL.utils import print_error
+from AKBL.console import print_error
 from AKBL.Bindings import Bindings
 from AKBL.CCParser import CCParser
 from AKBL.Computer.Computer import Computer

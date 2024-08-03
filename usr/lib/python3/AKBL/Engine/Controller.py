@@ -19,7 +19,7 @@
 
 from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Constructor import Constructor
-from AKBL.utils import print_warning, print_error, print_debug
+from AKBL.console import print_warning, print_error, print_debug
 
 class Controller:
 

@@ -18,7 +18,8 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 from AKBL.Engine.Command import Command
-from AKBL.utils import print_error, print_warning, rgb_to_hex
+from AKBL.utils import rgb_to_hex
+from AKBL.console import print_error, print_warning
 
 class Constructor:
 

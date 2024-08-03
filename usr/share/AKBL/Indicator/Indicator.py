@@ -31,7 +31,7 @@ from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 from AKBL.texts import Texts
 from AKBL.Bindings import Bindings
-from AKBL.utils import print_error, print_debug
+from AKBL.console import print_error, print_debug
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 _PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
