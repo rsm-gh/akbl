@@ -20,15 +20,14 @@ import os
 import Pyro4
 from traceback import format_exc
 
+from common import IndicatorCodes
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
+from AKBL.utils import string_is_hex_color
 from AKBL.Engine.Controller import Controller
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
-from AKBL.utils import string_is_hex_color
 from AKBL.console import print_warning, print_error, print_info, print_debug
-
-from common import IndicatorCodes
 
 
 class Daemon:
