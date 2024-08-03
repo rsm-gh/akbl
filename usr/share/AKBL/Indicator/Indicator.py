@@ -78,7 +78,7 @@ class Indicator:
 
         # Status variables for the loop
         #
-        self.__current_code = IndicatorCodes.daemon_off
+        self.__current_code = None  # the first status shall be obtained by the daemon loop
 
         image_dir = os.path.join(os.path.join(_SCRIPT_DIR, "img"))
 
@@ -173,30 +173,39 @@ class Indicator:
             print_error("wrong indicator code {}".format(indicator_code))
             return
 
+        enable_gui = None
+
         match indicator_code:
             case self.__current_code:
                 pass
 
             case IndicatorCodes.lights_on:
+
+                if self.__current_code == IndicatorCodes.daemon_off:
+                    enable_gui = True
+
                 self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_lights_on, Texts.Indicator.lights_on)
-                for children in self.__menu.get_children():
-                    children.set_sensitive(True)
 
             case IndicatorCodes.lights_off:
+
+                if self.__current_code == IndicatorCodes.daemon_off:
+                    enable_gui = True
+
                 self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_lights_off, Texts.Indicator.lights_off)
-                for children in self.__menu.get_children():
-                    children.set_sensitive(True)
 
             case IndicatorCodes.daemon_off:
+                enable_gui = False
                 self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_no_daemon, Texts.Indicator.no_daemon)
-                self.__submenu_switch_state.set_sensitive(False)
-                self.__profiles_menu.set_sensitive(False)
 
             case _:
                 print_error("wrong indicator code {}".format(indicator_code))
+
+        if enable_gui is not None:
+            self.__submenu_switch_state.set_sensitive(enable_gui)
+            self.__profiles_menu.set_sensitive(enable_gui)
 
     @Pyro4.expose
     def set_profile(self, _widget, profile_name: str) -> None:
