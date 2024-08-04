@@ -17,7 +17,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-TEXT_HELP = '''
+_TEXT_HELP = '''
 Usage:
 
     akbl <option>
@@ -47,7 +47,7 @@ Usage:
  *If no option is introduced the graphical interface is launched.
 '''
 
-TEXT_LICENSE = '''
+_TEXT_LICENSE = '''
   Copyright (C) 2014-2019, 2024 Rafael Senties Martinelli.
                 2011-2012 the pyAlienFX team.
 
@@ -65,14 +65,14 @@ TEXT_LICENSE = '''
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  '''
 
-TEXT_ADD = "Add"
+_TEXT_ADD = "Add"
 
-TEXT_CHOOSE_A_FOLDER_TO_EXPORT = "Choose a folder to export the theme"
-TEXT_CHOOSE_A_THEME = "Choose an AKBL theme"
-TEXT_THEME_ALREADY_EXISTS = '''There's already a theme with this filename,
+_TEXT_CHOOSE_A_FOLDER_TO_EXPORT = "Choose a folder to export the theme"
+_TEXT_CHOOSE_A_THEME = "Choose an AKBL theme"
+_TEXT_THEME_ALREADY_EXISTS = '''There's already a theme with this filename,
 do you want to overwrite it?'''
 
-TEXT_COPY_CONFIG = '''It seems that there was an existing AKBL
+_TEXT_COPY_CONFIG = '''It seems that there was an existing AKBL
 configuration, probably made by an older version.
 
 Do you want to import it for this user? (yes)
@@ -90,23 +90,14 @@ class Texts:
         no_daemon = "No Daemon"
 
 
-TEXT_ERROR_DAEMON_OFF = "Error: The daemon is off or the connection couldn't be established."
-TEXT_WRONG_ARGUMENT = '''Error: wrong argument. use "akbl --help"'''
-
-TEXT_APPLYING_CONFIGURATION = "Applying the configuration.."
-
-TEXT_SHUTTING_LIGHTS_OFF = "Shutting the lights off.."
-
-TEXT_TURNING_LIGHTS_ON = "Turning the lights on.."
-
-TEXT_THE_GUI_NEEDS_ROOT = "The graphical interface needs to be run as root."
-
-TEXT_GUI_CANT_DAEMON_OFF = "The GUI can not start because the daemon is off."
-
-TEXT_SAVING_THE_CONFIGURATION = "Saving the configuration.."
-
-TEXT_CONFIGURATION_DELETED = "The configuration has been deleted.."
-
-TEXT_CONFIRM_DELETE_CONFIGURATION = "Are you sure that you want to\n delete this configuration?"
-
-TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED = "You have reached the maximum number of Zones for the {}."
+_TEXT_ERROR_DAEMON_OFF = "Error: The daemon is off or the connection couldn't be established."
+_TEXT_WRONG_ARGUMENT = '''Error: wrong argument. use "akbl --help"'''
+_TEXT_APPLYING_CONFIGURATION = "Applying the configuration.."
+_TEXT_SHUTTING_LIGHTS_OFF = "Shutting the lights off.."
+_TEXT_TURNING_LIGHTS_ON = "Turning the lights on.."
+_TEXT_THE_GUI_NEEDS_ROOT = "The graphical interface needs to be run as root."
+_TEXT_GUI_CANT_DAEMON_OFF = "The GUI can not start because the daemon is off."
+_TEXT_SAVING_THE_CONFIGURATION = "Saving the configuration.."
+_TEXT_CONFIGURATION_DELETED = "The configuration has been deleted.."
+_TEXT_CONFIRM_DELETE_CONFIGURATION = "Are you sure that you want to\n delete this configuration?"
+_TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED = "You have reached the maximum number of Zones for the {}."
