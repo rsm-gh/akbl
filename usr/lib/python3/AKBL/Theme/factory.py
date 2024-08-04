@@ -31,7 +31,7 @@ def get_theme_by_name(name):
     return _AVAILABLE_THEMES[name]
 
 
-def load_profiles(computer, folder_path):
+def load_themes(computer, folder_path):
     global _AVAILABLE_THEMES
     _AVAILABLE_THEMES = {}
 

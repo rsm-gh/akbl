@@ -89,24 +89,27 @@ class Daemon:
                               indicator: bool = True,
                               set_default: bool = True) -> None:
 
-        print_debug("user={} indicator={} set_default={}".format(user, indicator, set_default))
+        print_debug("user={}, indicator={}, set_default={}".format(user, indicator, set_default))
 
         if user != self.__user:
             self.__user = user
             self.__paths = Paths(user)
             self.__ccp.set_configuration_path(self.__paths._configuration_file)
 
-        theme_factory.load_profiles(self.__computer, self.__paths._profiles_dir)
+        theme_factory.load_themes(self.__computer, self.__paths._profiles_dir)
+        user_themes = list(theme_factory._AVAILABLE_THEMES.keys())
+        print_debug("user={}, themes={}".format(self.__user, user_themes), direct_output=True)
 
         if set_default:
             _, theme_name = theme_factory.get_last_configuration()
             self.__theme = theme_factory.get_theme_by_name(theme_name)
+            print_debug("default theme={}".format(self.__theme.name), direct_output=True)
 
         if self.__pyro_indicator is not None and indicator:
             try:
-                self.__pyro_indicator.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
-                                                    self.__theme.name,
-                                                    self.__lights_state)
+                self.__pyro_indicator.load_themes(user_themes,
+                                                  self.__theme.name,
+                                                  self.__lights_state)
             except Exception:
                 print_error(format_exc())
 
@@ -348,25 +351,25 @@ class Daemon:
     """
 
     @Pyro4.expose
-    def connect_indicator(self, uri: str) -> None:
+    def connect_indicator(self, user:str, uri: str) -> None:
         """Connect the Daemon to the Indicator."""
 
-        print_debug("uri:", uri)
+        print_debug("uri: {}".format(uri))
 
         try:
             self.__pyro_indicator = Pyro4.Proxy(uri)
         except Exception:
             self.__pyro_indicator = None
             print_warning("Failed to initialize the indicator")
-            print(format_exc())
+            print_warning(format_exc(), direct_output=True)
         else:
-            self.reload_configurations(self.__user, indicator=True)
+            self.reload_configurations(user, indicator=True)
 
     @Pyro4.expose
     def update_indicator(self) -> None:
         """Update the status (lights on/off) of the indicator."""
 
-        print_debug("state={}".format(self.__lights_state))
+        print_debug("lights state={}".format(self.__lights_state))
 
         if self.__lights_state:
             self.__indicator_send_code(IndicatorCodes._lights_on)
@@ -376,6 +379,7 @@ class Daemon:
     @Pyro4.expose
     def disconnect_indicator(self) -> None:
         """Disconnect the Daemon from the Indicator."""
+        print_debug()
         self.__pyro_indicator = None
 
     """
@@ -419,9 +423,9 @@ class Daemon:
         if self.__pyro_indicator is not None:
             self.__indicator_send_code(IndicatorCodes._lights_on)
             try:
-                self.__pyro_indicator.load_profiles(theme_factory._AVAILABLE_THEMES.keys(),
-                                                    self.__theme.name,
-                                                    self.__lights_state)
+                self.__pyro_indicator.load_themes(theme_factory._AVAILABLE_THEMES.keys(),
+                                                  self.__theme.name,
+                                                  self.__lights_state)
             except Exception:
                 print_error(format_exc())
 

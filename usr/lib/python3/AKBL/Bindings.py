@@ -195,7 +195,7 @@ class Bindings:
 
     def __command(self, command: str, *args):
         """Send a command to the daemon."""
-        if command in ('set_theme', 'set_lights', 'switch_lights', 'reload_configurations'):
+        if command in ('set_theme', 'set_lights', 'switch_lights', 'reload_configurations','connect_indicator'):
             args = [self.__user] + list(args)
 
         if self.__pyro_address == "":

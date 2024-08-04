@@ -131,7 +131,7 @@ class MainWindow:
 
         self.label_computer_model.set_text(self.__computer.name)
 
-        self.__theme = theme_factory.load_profiles(self.__computer, self.__paths._profiles_dir)
+        self.__theme = theme_factory.load_themes(self.__computer, self.__paths._profiles_dir)
 
         self.populate_liststore_profiles()
 
