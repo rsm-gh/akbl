@@ -22,7 +22,6 @@ from traceback import format_exc
 
 import Pyro4
 
-
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
 from AKBL.Bindings import Bindings
@@ -74,9 +73,10 @@ class Daemon:
     """
 
     @Pyro4.expose
-    def ping(self) -> bool:
+    def ping(self, sender: str = "Anonymous") -> bool:
         """Check if the Daemon ready to execute commands."""
         print_debug()
+        print_debug(sender, direct_output=True)
 
         if self.__fake:
             return True
@@ -355,11 +355,12 @@ class Daemon:
 
         try:
             self.__pyro_indicator = Pyro4.Proxy(uri)
-            self.reload_configurations(self.__user)
         except Exception:
-            print_warning("Failed initialization")
-            print(format_exc())
             self.__pyro_indicator = None
+            print_warning("Failed to initialize the indicator")
+            print(format_exc())
+        else:
+            self.reload_configurations(self.__user, indicator=True)
 
     @Pyro4.expose
     def update_indicator(self) -> None:

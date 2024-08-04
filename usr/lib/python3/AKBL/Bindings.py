@@ -39,11 +39,11 @@ class Bindings:
         General Bindings
     """
 
-    def ping(self) -> bool:
+    def ping(self, sender: str = "Bindings") -> bool:
         """Check if the Daemon is connected and ready to execute commands."""
 
         try:
-            return self.__pyro_daemon.ping()
+            return self.__pyro_daemon.ping(sender=sender+":"+self.__pyro_address)
         except Exception:
             return False
 

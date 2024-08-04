@@ -217,7 +217,7 @@ class Indicator:
         t = current_thread()
         while getattr(t, "do_run", True):
 
-            if self.__akbl.ping():
+            if self.__akbl.ping(sender="Indicator"):
 
                 if self.__current_code in (IndicatorCodes._daemon_off, -1):
                     self.__parent.connect()
