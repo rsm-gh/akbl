@@ -137,10 +137,10 @@ class Indicator:
         print_debug()
 
     @Pyro4.expose
-    def load_profiles(self,
-                      profiles_name: list[str],
-                      current_profile: str,
-                      state: bool) -> None:
+    def load_themes(self,
+                    profiles_name: list[str],
+                    current_profile: str,
+                    state: bool) -> None:
 
         print_debug("current_profile={}, state={}, profiles_name={}".format(current_profile,
                                                                             state,
