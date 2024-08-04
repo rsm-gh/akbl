@@ -42,7 +42,7 @@ sys.path.insert(0, _PROJECT_DIR)
 class ConnectIndicator:
 
     def __init__(self, white=False):
-        self.__akbl = Bindings()
+        self.__akbl = Bindings(sender="Indicator")
         self.__indicator = Indicator(self, self.__akbl, white)
         self.__pyro_daemon = Pyro4.Daemon()
         self.__uri = self.__pyro_daemon.register(self.__indicator)
@@ -71,7 +71,7 @@ class Indicator:
         self.__parent = parent
 
         if akbl is None:
-            self.__akbl = Bindings()
+            self.__akbl = Bindings(sender="Indicator")
         else:
             self.__akbl = akbl
 
@@ -217,7 +217,7 @@ class Indicator:
         t = current_thread()
         while getattr(t, "do_run", True):
 
-            if self.__akbl.ping(sender="Indicator"):
+            if self.__akbl.ping():
 
                 if self.__current_code in (IndicatorCodes._daemon_off, -1):
                     self.__parent.connect()

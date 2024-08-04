@@ -460,7 +460,7 @@ def main(fake=False):
 
 if __name__ == "__main__":
 
-    AKBL = Bindings()
+    AKBL = Bindings(sender="Daemon")
     if AKBL.ping():
         print("Error: The Daemon is already running.")
         sys.exit(1)

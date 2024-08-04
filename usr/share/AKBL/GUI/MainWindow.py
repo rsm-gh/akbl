@@ -51,7 +51,7 @@ class MainWindow:
     def __init__(self, application):
 
         self.__application = application
-        self.__bindings = Bindings()
+        self.__bindings = Bindings(sender="GUI")
         self.__paths = Paths()
         self.__response = None
         self.__speed = -1
