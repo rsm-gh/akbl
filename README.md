@@ -217,8 +217,8 @@ That button manages the speed of the theme in the following cases:
 ```python
 class Bindings:
        
-    def ping(self) -> bool:
-        """Check if the Daemon is connected."""
+    def ping(self, sender: str = "Bindings") -> bool:
+        """Check if the Daemon is connected and ready to execute commands."""
             
     def switch_lights(self) -> None:
         """Switch the lights on or off."""
