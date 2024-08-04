@@ -42,10 +42,10 @@ class Daemon:
         self.__computer = computer_factory.get_installed_computer()
 
         if self.__computer is None:
-            print("Error, no computer configuration is installed.", flush=True)
+            print_error("Error, no computer configuration is installed.")
             exit(1)
 
-        print("Starting the computer configuration '{}'.".format(self.__computer.name), flush=True)
+        print_info("Starting the computer configuration '{}'.".format(self.__computer.name))
 
         self.__controller = Controller(self.__computer, fake=fake)
 
