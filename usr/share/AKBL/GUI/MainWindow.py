@@ -19,12 +19,12 @@
 import os
 import sys
 import shutil
-import threading
 from time import sleep
 from copy import deepcopy
 from traceback import format_exc
 from gi.repository import Gtk, Gdk, GLib
 from gi.repository.GdkPixbuf import Pixbuf
+from threading import Thread, current_thread
 
 import AKBL.texts as texts
 from AKBL.Paths import Paths
@@ -71,10 +71,14 @@ class MainWindow:
             'checkbutton_profile_buttons',
             'checkbutton_delete_warning',
             'menuitem_off_areas',
+            'menuitem_apply_configuration',
+            'button_lights_on',
+            'button_lights_off',
             'liststore_profiles',
             'combobox_profiles',
             'tempobutton',
             'label_computer_model',
+            'label_daemon_off',
             'box_profile_buttons',
             'horizontal_main_box',
             'box_area_labels',
@@ -178,10 +182,20 @@ class MainWindow:
         if not self.checkbutton_profile_buttons.get_active():
             self.box_profile_buttons.hide()
 
+        #
+        # Start the thread to scan the Daemon
+        #
+        self.__thread_scan_daemon = Thread(target=self.__thread_daemon_check)
+        self.__thread_scan_daemon.start()
+
     def present(self):
         self.window_root.present()
 
     def quit(self, *_):
+
+        self.__thread_scan_daemon.do_run = False
+        self.__thread_scan_daemon.join()
+
         self.__application.quit()
 
     def populate_box_areas(self):
@@ -277,7 +291,7 @@ class MainWindow:
                                  mode=zone_widget.get_mode())
 
         if self.checkbutton_autosave.get_active():
-            threading.Thread(target=self.__on_thread_save_configuration_file).start()
+            Thread(target=self.__on_thread_save_configuration_file).start()
 
     def on_zonewidget_request_delete(self, zone_widget):
 
@@ -296,7 +310,7 @@ class MainWindow:
         #
         #
         if self.checkbutton_autosave.get_active():
-            threading.Thread(target=self.__on_thread_save_configuration_file).start()
+            Thread(target=self.__on_thread_save_configuration_file).start()
 
     def new_profile(self):
         text = self.entry_new_profile.get_text()
@@ -311,6 +325,32 @@ class MainWindow:
         self.populate_liststore_profiles()
 
         self.__bindings.reload_configurations()
+
+    def __thread_daemon_check(self):
+
+        akbl_status = None
+
+        t = current_thread()
+        while getattr(t, "do_run", True):
+
+            status = self.__bindings.ping()
+
+            if akbl_status != status:
+                akbl_status = status
+
+                if akbl_status:
+                    GLib.idle_add(self.label_daemon_off.hide)
+                else:
+                    GLib.idle_add(self.label_daemon_off.show)
+
+                GLib.idle_add(self.menuitem_apply_configuration.set_sensitive, akbl_status)
+                GLib.idle_add(self.button_lights_on.set_sensitive, akbl_status)
+                GLib.idle_add(self.button_lights_off.set_sensitive, akbl_status)
+
+            if not status:
+                self.__bindings.reload_address(verbose=False)
+
+            sleep(1)
 
     def __on_thread_turn_lights_off(self):
         GLib.idle_add(self.label_user_message.set_text, texts._TEXT_SHUTTING_LIGHTS_OFF)
@@ -411,7 +451,7 @@ class MainWindow:
         self.__theme.set_speed(255 - value)
 
         if self.checkbutton_autosave.get_active():
-            threading.Thread(target=self.__on_thread_save_configuration_file).start()
+            Thread(target=self.__on_thread_save_configuration_file).start()
 
     def on_combobox_profiles_changed(self, widget, *_):
         tree_iter = widget.get_active_iter()
@@ -425,16 +465,16 @@ class MainWindow:
         self.new_profile()
 
     def on_menuitem_apply_configuration_activate(self, *_):
-        threading.Thread(target=self.__on_thread_illuminate_keyboard).start()
+        Thread(target=self.__on_thread_illuminate_keyboard).start()
 
     def on_menuitem_save_activate(self, *_):
-        threading.Thread(target=self.__on_thread_save_configuration_file).start()
+        Thread(target=self.__on_thread_save_configuration_file).start()
 
     def on_menuitem_lights_on_activate(self, *_):
-        threading.Thread(target=self.__on_thread_illuminate_keyboard).start()
+        Thread(target=self.__on_thread_illuminate_keyboard).start()
 
     def on_menuitem_lights_off_activate(self, *_):
-        threading.Thread(target=self.__on_thread_turn_lights_off).start()
+        Thread(target=self.__on_thread_turn_lights_off).start()
 
     def on_menuitem_quit_activate(self, *_):
         self.quit()
@@ -480,7 +520,7 @@ class MainWindow:
                                        icon=self.__paths._icon_file):
                 return
 
-        threading.Thread(target=self.__on_thread_delete_current_configuration).start()
+        Thread(target=self.__on_thread_delete_current_configuration).start()
 
     def on_button_apply_clicked(self, *_):
         self.on_menuitem_apply_configuration_activate()
