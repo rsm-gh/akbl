@@ -241,8 +241,8 @@ class MainWindow:
 
         self.liststore_profiles.clear()
 
-        for profile_name in sorted(theme_factory._AVAILABLE_THEMES.keys()):
-            self.liststore_profiles.append([profile_name])
+        for theme_name in sorted(theme_factory._AVAILABLE_THEMES.keys()):
+            self.liststore_profiles.append([theme_name])
 
         row, _ = theme_factory.get_last_configuration()
 
@@ -418,8 +418,8 @@ class MainWindow:
         tree_iter = widget.get_active_iter()
         if tree_iter is not None:
             model = widget.get_model()
-            profile_name = model[tree_iter][0]
-            self.__theme = theme_factory._AVAILABLE_THEMES[profile_name]
+            theme_name = model[tree_iter][0]
+            self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
             self.populate_box_areas()
 
     def on_button_new_profile_create_clicked(self, *_):

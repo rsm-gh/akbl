@@ -99,8 +99,8 @@ class Daemon:
         theme_factory.load_profiles(self.__computer, self.__paths._profiles_dir)
 
         if set_default:
-            _, profile_name = theme_factory.get_last_configuration()
-            self.__theme = theme_factory.get_theme_by_name(profile_name)
+            _, theme_name = theme_factory.get_last_configuration()
+            self.__theme = theme_factory.get_theme_by_name(theme_name)
 
         if self.__pyro_indicator is not None and indicator:
             try:
@@ -121,17 +121,17 @@ class Daemon:
         self.set_lights(user, not self.__lights_state)
 
     @Pyro4.expose
-    def set_profile(self, user: str, profile_name: str) -> bool:
+    def set_theme(self, user: str, theme_name: str) -> bool:
         """
             Activate a profile.
 
             :param str user: Name of the user.
-            :param str profile_name: Is the profile to be set.
+            :param str theme_name: Is the profile to be set.
             :rtype: None in case of an error.
             :rtype: Bool
         """
 
-        print_debug("user={} theme_name={}".format(user, profile_name))
+        print_debug("user={} theme_name={}".format(user, theme_name))
 
         if user != self.__user:
             self.__user = user
@@ -139,8 +139,8 @@ class Daemon:
 
         self.reload_configurations(user, indicator=False, set_default=False)
 
-        if profile_name in theme_factory._AVAILABLE_THEMES.keys():
-            self.__theme = theme_factory._AVAILABLE_THEMES[profile_name]
+        if theme_name in theme_factory._AVAILABLE_THEMES.keys():
+            self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
             self.__illuminate_keyboard()
             return True
 

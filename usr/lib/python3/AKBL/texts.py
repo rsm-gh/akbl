@@ -27,7 +27,7 @@ Usage:
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
     --switch                          Switch the computer lights on/off.
-    --set-profile <profile_name>      Set (on) the selected profile.
+    --set-theme <theme_name>          Set the selected theme (on).
     
     --model-chooser-gui               Launch the model chooser from a GUI.
     --model-chooser-cmd               Launch the model chooser from a CMD.

@@ -43,7 +43,7 @@ def process_args(args):
     elif arg1 == '--ping':
         print(akbl_bindings.ping())
 
-    elif arg1 in ('--off', '--on', '--switch', '--set-profile'):
+    elif arg1 in ('--off', '--on', '--switch', '--set-theme'):
 
         if not akbl_bindings.ping():
             print(texts.TEXT_ERROR_DAEMON_OFF)
@@ -57,11 +57,11 @@ def process_args(args):
         elif arg1 == '--switch':
             akbl_bindings.switch_lights()
 
-        elif arg1 == '--set-profile':
+        elif arg1 == '--set-theme':
             if len(args) != 3:
                 print(texts.TEXT_WRONG_ARGUMENT)
             else:
-                akbl_bindings.set_profile(args[2])
+                akbl_bindings.set_theme(args[2])
 
     else:
         print(texts.TEXT_WRONG_ARGUMENT)

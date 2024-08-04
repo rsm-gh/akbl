@@ -61,7 +61,7 @@ Usage:
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
     --switch                          Switch the computer lights on/off.
-    --set-profile <profile_name>      Turn on the selected profile.
+    --set-theme <theme_name>      Turn on the selected profile.
     
     --model-chooser-gui               Launch the model chooser from a GUI.
     --model-chooser-cmd               Launch the model chooser from a CMD.
@@ -116,8 +116,7 @@ The Python bindings allow modifying the computer lights by using other program s
     * ArchLinux:
        + Core: `systemd usbutils python python-pyusb python-pyro`.
        + GUI:  `webkit2gtk python-gobject python-cairo`) `gir1.2-ayatanaappindicator3-0.1` from the AUR for the app indicator.
-      
-    
+
 3. Execute the setup file.
 
 # F.A.Q.
@@ -230,14 +229,14 @@ class Bindings:
     def get_address(self) -> str:
         """Return the current URI of the Daemon."""
         
-    def get_profiles_name(self) -> list[str]:
-        """Return a list of the existing profile names."""
+    def get_themes_name(self) -> list[str]:
+        """Return a list of the existing user themes."""
        
     def get_computer_name(self) -> str:
         """Get the computer name set by AKBL."""
         
-    def set_profile(self, profile_name: str) -> bool:
-        """Set a profile by name."""
+    def set_theme(self, theme_name: str) -> bool:
+        """Set a theme by name."""
    
     def set_lights(self, state: bool) -> None:
         """Set the lights on or off."""
@@ -292,8 +291,8 @@ if lights_test:
     print('switch lights', akbl.switch_lights())
 
 if profiles_test:
-    for profile_name in akbl.get_profiles_name():
-        print('set profile:', profile_name, akbl.set_profile(profile_name))
+    for theme_name in akbl.get_themes_name():
+        print('set profile:', theme_name, akbl.set_theme(theme_name))
         time.sleep(5)
 
 color1 = '#F7F200'
