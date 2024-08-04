@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=AKBL Indicator
+Exec=akbl --start-indicator
+Terminal=false
+Type=Application
+Icon=/usr/share/AKBL/Indicator/img/icon-on.png
+Categories=Settings;

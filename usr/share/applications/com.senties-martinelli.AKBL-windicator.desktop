@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=AKBL Indicator (white)
+Exec=akbl --start-white-indicator
+Terminal=false
+Type=Application
+Icon=/usr/share/AKBL/Indicator/img/icon-on-white.png
+Categories=Settings;
