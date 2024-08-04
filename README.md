@@ -51,9 +51,6 @@ The GUI is designed to be easy and comfortable to use, it will allow you to easi
 It allows starting the GUI, turning the lights On/Off, and choosing profiles. By default, it is not enabled, but it can be added to the start session of a user with the command `akbl --start-indicator`.
 
 ## Default commands
-The program comes with some default commands for those who don't know about programming.
-These commands can be easily added to hotkeys.
-
 ```
 Usage:
 
@@ -83,7 +80,8 @@ Usage:
 
  *If no option is introduced the graphical interface is launched.
 ```
-
+The program comes with some default commands for those who don't know about programming.
+These commands can be easily added to hotkeys.
 ## Python Bindings
 
 ```python
