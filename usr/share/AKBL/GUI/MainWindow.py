@@ -72,6 +72,7 @@ class MainWindow:
             'checkbutton_delete_warning',
             'menuitem_off_areas',
             'menuitem_apply_configuration',
+            'button_apply',
             'button_lights_on',
             'button_lights_off',
             'liststore_profiles',
@@ -326,6 +327,7 @@ class MainWindow:
                 GLib.idle_add(self.menuitem_apply_configuration.set_sensitive, akbl_status)
                 GLib.idle_add(self.button_lights_on.set_sensitive, akbl_status)
                 GLib.idle_add(self.button_lights_off.set_sensitive, akbl_status)
+                GLib.idle_add(self.button_apply.set_sensitive, akbl_status)
 
             if not status:
                 self.__bindings.reload_address(verbose=False)

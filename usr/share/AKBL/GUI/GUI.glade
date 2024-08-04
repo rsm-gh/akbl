@@ -77,7 +77,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="can-focus">False</property>
     <property name="tooltip-text" translatable="yes">Import Theme
      (ctrl-i)</property>
-    <property name="icon-name">mail-send-receive</property>
+    <property name="icon-name">document-open</property>
     <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image28">
@@ -85,7 +85,8 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="can-focus">False</property>
     <property name="tooltip-text" translatable="yes">Export Theme
      (ctrl-e)</property>
-    <property name="icon-name">mail-send</property>
+    <property name="icon-name">document-save-as</property>
+    <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
@@ -430,6 +431,27 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="label_daemon_off">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="margin-left">10</property>
+                <property name="margin-start">10</property>
+                <property name="label" translatable="yes">[DAEMON OFF: It is not possible to change the lights or to apply any theme]</property>
+                <property name="justify">center</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                  <attribute name="foreground" value="#ffff00000000"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label_computer_model">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -441,7 +463,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -580,7 +602,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="tooltip-text" translatable="yes">Adjust the speed of the theme.</property>
                 <property name="orientation">vertical</property>
                 <property name="value">1</property>
-                <property name="size">button</property>
+                <property name="size">large-toolbar</property>
                 <property name="adjustment">adjustment_tempo</property>
                 <property name="icons">appointment-soon</property>
                 <property name="use-symbolic">False</property>
@@ -618,24 +640,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label_daemon_off">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
-            <property name="margin-start">10</property>
-            <property name="hexpand">True</property>
-            <property name="label" translatable="yes">The Daemon is off. It is not possible to change the lights or to apply any theme.</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-              <attribute name="foreground" value="#ffff00000000"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkBox" id="horizontal_main_box">
