@@ -262,26 +262,6 @@ class MainWindow:
         self.combobox_profiles.set_active(row)
         self.__speed = self.__theme.get_speed()
 
-    def __on_thread_delete_current_configuration(self):
-
-        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_CONFIGURATION_DELETED)
-
-        theme_factory._AVAILABLE_THEMES.pop(self.__theme.name)
-
-        if os.path.exists(self.__theme.path):
-            os.remove(self.__theme.path)
-
-        if len(theme_factory._AVAILABLE_THEMES.keys()) == 0:
-            theme_factory.create_default_profile(self.__computer, self.__paths._profiles_dir)
-
-        GLib.idle_add(self.populate_liststore_profiles)
-
-        self.__bindings.reload_configurations()
-
-        sleep(0.5)
-
-        GLib.idle_add(self.label_user_message.set_text, ' ')
-
     def on_zonewidget_updated(self, zone_widget):
 
         self.__theme.modify_zone(area_name=zone_widget.get_area_name(),
@@ -351,6 +331,26 @@ class MainWindow:
                 self.__bindings.reload_address(verbose=False)
 
             sleep(1)
+
+    def __on_thread_delete_current_configuration(self):
+
+        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_CONFIGURATION_DELETED)
+
+        theme_factory._AVAILABLE_THEMES.pop(self.__theme.name)
+
+        if os.path.exists(self.__theme.path):
+            os.remove(self.__theme.path)
+
+        if len(theme_factory._AVAILABLE_THEMES.keys()) == 0:
+            theme_factory.create_default_profile(self.__computer, self.__paths._profiles_dir)
+
+        GLib.idle_add(self.populate_liststore_profiles)
+
+        self.__bindings.reload_configurations()
+
+        sleep(0.5)
+
+        GLib.idle_add(self.label_user_message.set_text, ' ')
 
     def __on_thread_turn_lights_off(self):
         GLib.idle_add(self.label_user_message.set_text, texts._TEXT_SHUTTING_LIGHTS_OFF)

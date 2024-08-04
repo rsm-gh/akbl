@@ -45,7 +45,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="can-focus">False</property>
     <property name="tooltip-text" translatable="yes">Apply Theme
      (ctrl-a)</property>
-    <property name="icon-name">applications-graphics</property>
+    <property name="icon-name">view-refresh</property>
     <property name="icon_size">3</property>
   </object>
   <object class="GtkImage" id="image13">
