@@ -52,8 +52,8 @@ class Bindings:
 
         return self.__pyro_address
 
-    def get_profiles_name(self) -> list[str]:
-        """Return a list of the existing profile names."""
+    def get_themes_name(self) -> list[str]:
+        """Return a list of the existing user themes."""
 
         if not os.path.exists(self.__paths._profiles_dir):
             return []
@@ -92,15 +92,14 @@ class Bindings:
 
         return names
 
-    def set_profile(self, profile_name: str) -> bool:
-        """Set a profile by name."""
+    def set_theme(self, theme_name: str) -> bool:
+        """Set a theme by name."""
 
-        profile_set = self.__command('set_profile', profile_name)
+        status = self.__command('set_theme', theme_name)
+        if status is None:
+            status = False
 
-        if profile_set is None:
-            profile_set = False
-
-        return profile_set
+        return status
 
     def switch_lights(self) -> None:
         """Switch the lights on or off."""
@@ -196,7 +195,7 @@ class Bindings:
 
     def __command(self, command: str, *args):
         """Send a command to the daemon."""
-        if command in ('set_profile', 'set_lights', 'switch_lights', 'reload_configurations'):
+        if command in ('set_theme', 'set_lights', 'switch_lights', 'reload_configurations'):
             args = [self.__user] + list(args)
 
         if self.__pyro_address == "":

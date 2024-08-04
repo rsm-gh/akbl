@@ -67,7 +67,7 @@ def create_default_profile(computer, theme_path):
 def get_last_configuration():
     max_time = None
     profile_numb = 0
-    profile_name = None
+    theme_name = None
 
     for num, key in enumerate(sorted(_AVAILABLE_THEMES.keys())):
 
@@ -77,9 +77,9 @@ def get_last_configuration():
         if max_time is None or profile._time > max_time:
             max_time = profile._time
             profile_numb = num
-            profile_name = profile.name
+            theme_name = profile.name
 
-    return profile_numb, profile_name
+    return profile_numb, theme_name
 
 
 def load_from_file(path, computer):

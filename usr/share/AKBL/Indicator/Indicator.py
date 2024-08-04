@@ -149,13 +149,13 @@ class Indicator:
         for children in self.__submenu_profiles.get_children():
             self.__submenu_profiles.remove(children)
 
-        for profile_name in sorted(profiles_name):
-            submenu = Gtk.CheckMenuItem(label=profile_name)
+        for theme_name in sorted(profiles_name):
+            submenu = Gtk.CheckMenuItem(label=theme_name)
 
-            if profile_name == current_profile and state:
+            if theme_name == current_profile and state:
                 submenu.set_active(True)
 
-            submenu.connect('toggled', self.set_profile, profile_name)
+            submenu.connect('toggled', self.set_theme, theme_name)
             self.__submenu_profiles.append(submenu)
 
         self.__submenu_profiles.show_all()
@@ -204,9 +204,9 @@ class Indicator:
             self.__profiles_menu.set_sensitive(enable_gui)
 
     @Pyro4.expose
-    def set_profile(self, _widget: object, profile_name: str) -> None:
-        print_debug("profile_name={}".format(profile_name))
-        self.__akbl.set_profile(profile_name)
+    def set_theme(self, _widget: object, theme_name: str) -> None:
+        print_debug("theme_name={}".format(theme_name))
+        self.__akbl.set_theme(theme_name)
 
     """
         Private methods

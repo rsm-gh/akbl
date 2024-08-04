@@ -53,8 +53,8 @@ else:
 
     if profiles_test:
         print("\nTesting user profiles")
-        for profile_name in AKBLConnection.get_profiles_name():
-            print('\tset profile:', profile_name, AKBLConnection.set_profile(profile_name))
+        for theme_name in AKBLConnection.get_themes_name():
+            print('\tset profile:', theme_name, AKBLConnection.set_theme(theme_name))
             time.sleep(5)
 
     color1 = '#F7F200'
