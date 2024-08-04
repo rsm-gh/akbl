@@ -226,12 +226,8 @@ class Bindings:
     def switch_lights(self) -> None:
         """Switch the lights on or off."""
 
-    def reload_address(self, verbose=True) -> bool:
-        """
-            Reload the pyro address, and try to make a connection with the Daemon.
-
-            :param bool verbose: Add additional information in case of an error.
-        """
+    def reload_address(self, verbose=False) -> bool:
+        """Reload the pyro address, and try to make a connection with the Daemon."""
     
     def get_address(self) -> str:
         """Return the current URI of the Daemon."""

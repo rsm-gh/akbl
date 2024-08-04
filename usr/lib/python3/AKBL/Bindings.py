@@ -28,12 +28,12 @@ from AKBL.console import print_error, print_warning
 
 class Bindings:
 
-    def __init__(self, verbose=False):
+    def __init__(self):
         self.__pyro_address = ""
         self.__pyro_daemon = None
         self.__user = getpass.getuser()
         self.__paths = Paths(self.__user)
-        self.reload_address(verbose=verbose)
+        self.reload_address()
 
     """
         General Bindings
@@ -153,12 +153,8 @@ class Bindings:
         """Reload the configurations for the current user."""
         self.__command('reload_configurations')
 
-    def reload_address(self, verbose=True) -> bool:
-        """
-            Reload the pyro address, and try to make a connection with the Daemon.
-
-            :param bool verbose: Add additional information in case of an error.
-        """
+    def reload_address(self, verbose=False) -> bool:
+        """Reload the pyro address, and try to make a connection with the Daemon."""
 
         if not self.ping() and os.path.exists(self.__paths._daemon_pyro_file):
 
