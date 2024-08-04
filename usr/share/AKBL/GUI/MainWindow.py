@@ -169,9 +169,8 @@ class MainWindow:
 
         self.populate_box_areas()
 
-        #icon_path = "/home/rsm/Documents/Software/akbl/usr/share/AKBL/icon.png"
-        #icon_pixbuf = Pixbuf.new_from_file(icon_path)
-        #self.window_root.set_icon(icon_pixbuf)
+        icon_pixbuf = Pixbuf.new_from_file(self.__paths._icon_file)
+        self.window_root.set_icon(icon_pixbuf)
 
         self.window_root.show_all()
 
