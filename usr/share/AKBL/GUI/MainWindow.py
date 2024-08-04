@@ -229,7 +229,7 @@ class MainWindow:
                     break
 
             if area.max_commands > 1:
-                add_button = Gtk.Button(label=texts.TEXT_ADD)
+                add_button = Gtk.Button(label=texts._TEXT_ADD)
                 add_button.connect('button-press-event', self.on_button_add_zone_clicked, area, box_area)
                 box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
 
@@ -251,7 +251,7 @@ class MainWindow:
 
     def __on_thread_delete_current_configuration(self):
 
-        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_CONFIGURATION_DELETED)
+        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_CONFIGURATION_DELETED)
 
         theme_factory._AVAILABLE_THEMES.pop(self.__theme.name)
 
@@ -314,13 +314,13 @@ class MainWindow:
         self.__bindings.reload_configurations()
 
     def __on_thread_turn_lights_off(self):
-        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_SHUTTING_LIGHTS_OFF)
+        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_SHUTTING_LIGHTS_OFF)
         self.__bindings.set_lights(False)
         GLib.idle_add(self.label_user_message.set_text, "")
 
     def __on_thread_illuminate_keyboard(self):
 
-        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_APPLYING_CONFIGURATION)
+        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_APPLYING_CONFIGURATION)
 
         # This is to make the program recognize the last profile that has been used, patch #12
         try:
@@ -336,7 +336,7 @@ class MainWindow:
         GLib.idle_add(self.label_user_message.set_text, '')
 
     def __on_thread_save_configuration_file(self):
-        GLib.idle_add(self.label_user_message.set_text, texts.TEXT_SAVING_THE_CONFIGURATION)
+        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_SAVING_THE_CONFIGURATION)
         self.__theme.save()
         GLib.idle_add(self.label_user_message.set_text, '')
 
@@ -382,7 +382,7 @@ class MainWindow:
         nb_of_zone_widgets = sum(1 for child in area_box.get_children() if isinstance(child, ZoneWidget))
 
         if nb_of_zone_widgets >= area.max_commands:
-            gtk_dialog_info(self.window_root, texts.TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED.format(area.description))
+            gtk_dialog_info(self.window_root, texts._TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED.format(area.description))
             return
 
         zone_widget = ZoneWidget(area_name=area.name,
@@ -442,14 +442,14 @@ class MainWindow:
 
     def on_menuitem_import_activate(self, *_):
         file_path = gtk_file_chooser(parent=self.window_root,
-                                     title=texts.TEXT_CHOOSE_A_THEME,
+                                     title=texts._TEXT_CHOOSE_A_THEME,
                                      icon_path=self.__paths._icon_file,
                                      filters=(("AKBL theme", '*.cfg'),))
 
         if file_path:
             new_path = self.__paths._profiles_dir + os.path.basename(file_path)
 
-            if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, texts.TEXT_THEME_ALREADY_EXISTS):
+            if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
                 return
 
             shutil.copy(file_path, new_path)
@@ -458,14 +458,14 @@ class MainWindow:
 
     def on_menuitem_export_activate(self, *_):
         folder_path = gtk_folder_chooser(parent=self.window_root,
-                                         title=texts.TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
+                                         title=texts._TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
                                          icon_path=self.__paths._icon_file)
 
         if folder_path:
             new_path = '{}/{}.cfg'.format(folder_path, self.__theme.name)
 
             if os.path.exists(new_path) and not gtk_dialog_question(
-                    self.window_root, texts.TEXT_THEME_ALREADY_EXISTS):
+                    self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
                 return
 
             shutil.copy(self.__theme.path, new_path)
@@ -477,7 +477,7 @@ class MainWindow:
     def on_menuitem_delete_activate(self, *_):
         if self.checkbutton_delete_warning.get_active():
             if not gtk_dialog_question(self.window_root,
-                                       texts.TEXT_CONFIRM_DELETE_CONFIGURATION,
+                                       texts._TEXT_CONFIRM_DELETE_CONFIGURATION,
                                        icon=self.__paths._icon_file):
                 return
 

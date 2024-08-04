@@ -25,17 +25,17 @@ from AKBL.settings import __version__
 
 def process_args(args):
     if len(args) < 2:
-        print(texts.TEXT_WRONG_ARGUMENT)
+        print(texts._TEXT_WRONG_ARGUMENT)
         return
 
     akbl_bindings = Bindings(sender="CMD")
     arg1 = str(args[1])
 
     if arg1 in ('--help', '-h'):
-        print(texts.TEXT_HELP)
+        print(texts._TEXT_HELP)
 
     elif arg1 in ('--license', '-l'):
-        print(texts.TEXT_LICENSE)
+        print(texts._TEXT_LICENSE)
 
     elif arg1 in ('--version', '-v'):
         print(__version__)
@@ -46,7 +46,7 @@ def process_args(args):
     elif arg1 in ('--off', '--on', '--switch', '--set-theme'):
 
         if not akbl_bindings.ping():
-            print(texts.TEXT_ERROR_DAEMON_OFF)
+            print(texts._TEXT_ERROR_DAEMON_OFF)
 
         elif arg1 == '--off':
             akbl_bindings.set_lights(False)
@@ -59,12 +59,12 @@ def process_args(args):
 
         elif arg1 == '--set-theme':
             if len(args) != 3:
-                print(texts.TEXT_WRONG_ARGUMENT)
+                print(texts._TEXT_WRONG_ARGUMENT)
             else:
                 akbl_bindings.set_theme(args[2])
 
     else:
-        print(texts.TEXT_WRONG_ARGUMENT)
+        print(texts._TEXT_WRONG_ARGUMENT)
 
 
 if __name__ == '__main__':
