@@ -28,7 +28,7 @@ def process_args(args):
         print(texts.TEXT_WRONG_ARGUMENT)
         return
 
-    akbl_bindings = Bindings()
+    akbl_bindings = Bindings(sender="CMD")
     arg1 = str(args[1])
 
     if arg1 in ('--help', '-h'):

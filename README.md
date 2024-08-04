@@ -217,7 +217,7 @@ That button manages the speed of the theme in the following cases:
 ```python
 class Bindings:
        
-    def ping(self, sender: str = "Bindings") -> bool:
+    def ping(self) -> bool:
         """Check if the Daemon is connected and ready to execute commands."""
             
     def switch_lights(self) -> None:
@@ -292,7 +292,7 @@ if lights_test:
 
 if profiles_test:
     for theme_name in akbl.get_themes_name():
-        print('set profile:', theme_name, akbl.set_theme(theme_name))
+        print('set theme:', theme_name, akbl.set_theme(theme_name))
         time.sleep(5)
 
 color1 = '#F7F200'

@@ -28,7 +28,9 @@ from AKBL.console import print_error, print_warning
 
 class Bindings:
 
-    def __init__(self):
+    def __init__(self, sender: str = "Bindings"):
+
+        self.__sender = sender
         self.__pyro_address = ""
         self.__pyro_daemon = None
         self.__user = getpass.getuser()
@@ -39,11 +41,11 @@ class Bindings:
         General Bindings
     """
 
-    def ping(self, sender: str = "Bindings") -> bool:
+    def ping(self) -> bool:
         """Check if the Daemon is connected and ready to execute commands."""
 
         try:
-            return self.__pyro_daemon.ping(sender=sender+":"+self.__pyro_address)
+            return self.__pyro_daemon.ping(sender=self.__sender + ":" + self.__pyro_address)
         except Exception:
             return False
 
@@ -162,7 +164,7 @@ class Bindings:
 
             try:
                 pyro = Pyro4.Proxy(address)
-                pyro.ping()
+                pyro.ping(sender=self.__sender + ":" + self.__pyro_address)
 
             except Exception:
                 if verbose:
@@ -195,7 +197,7 @@ class Bindings:
 
     def __command(self, command: str, *args):
         """Send a command to the daemon."""
-        if command in ('set_theme', 'set_lights', 'switch_lights', 'reload_configurations','connect_indicator'):
+        if command in ('set_theme', 'set_lights', 'switch_lights', 'reload_configurations', 'connect_indicator'):
             args = [self.__user] + list(args)
 
         if self.__pyro_address == "":
