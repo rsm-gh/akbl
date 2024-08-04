@@ -44,8 +44,8 @@ class DebugCodes:
     _debug = 3
 
 
-if 'DEBUG' in os.environ:
-    match os.environ['DEBUG'].lower():
+if 'PRINT' in os.environ:
+    match os.environ['PRINT'].lower():
         case "error":
             _DEBUG = DebugCodes._error
         case "warning":
