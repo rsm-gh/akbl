@@ -42,8 +42,8 @@ sys.path.insert(0, _PROJECT_DIR)
 class ConnectIndicator:
 
     def __init__(self, white=False):
-        self.__akbl = Bindings(sender="Indicator")
-        self.__indicator = Indicator(self, self.__akbl, white)
+        self.__bindings = Bindings(sender="Indicator")
+        self.__indicator = Indicator(self, self.__bindings, white)
         self.__pyro_daemon = Pyro4.Daemon()
         self.__uri = self.__pyro_daemon.register(self.__indicator)
 
@@ -55,7 +55,7 @@ class ConnectIndicator:
     def connect(self):
         # Todo: read the return status of connect_indicator
         sleep(0.5)
-        return self.__akbl.connect_indicator(self.__uri)
+        return self.__bindings.connect_indicator(self.__uri)
 
     def shutdown(self):
         self.__pyro_daemon.shutdown()
@@ -71,9 +71,9 @@ class Indicator:
         self.__parent = parent
 
         if akbl is None:
-            self.__akbl = Bindings(sender="Indicator")
+            self.__bindings = Bindings(sender="Indicator")
         else:
-            self.__akbl = akbl
+            self.__bindings = akbl
 
         # Status variables for the loop
         #
@@ -206,7 +206,7 @@ class Indicator:
     @Pyro4.expose
     def set_theme(self, _widget: object, theme_name: str) -> None:
         print_debug("theme_name={}".format(theme_name))
-        self.__akbl.set_theme(theme_name)
+        self.__bindings.set_theme(theme_name)
 
     """
         Private methods
@@ -217,31 +217,31 @@ class Indicator:
         t = current_thread()
         while getattr(t, "do_run", True):
 
-            if self.__akbl.ping():
+            if self.__bindings.ping():
 
                 if self.__current_code in (IndicatorCodes._daemon_off, -1):
                     self.__parent.connect()
-                    self.__akbl.update_indicator()
+                    self.__bindings.update_indicator()
 
             elif self.__current_code != IndicatorCodes._daemon_off:
                 GLib.idle_add(self.set_code, IndicatorCodes._daemon_off)
 
             else:
-                self.__akbl.reload_address(verbose=False)
+                self.__bindings.reload_address(verbose=False)
 
             sleep(1)
 
     def __on_menuitem_off(self, *_):
-        self.__akbl.set_lights(False)
+        self.__bindings.set_lights(False)
 
     def __on_menuitem_on(self, *_):
-        self.__akbl.set_lights(True)
+        self.__bindings.set_lights(True)
 
     def __on_menuitem_change(self, *_):
-        self.__akbl.switch_lights()
+        self.__bindings.switch_lights()
 
     def __on_menuitem_exit(self, *_):
-        self.__akbl.disconnect_indicator()
+        self.__bindings.disconnect_indicator()
 
         if self.__parent is not None:
             self.__parent.shutdown()
