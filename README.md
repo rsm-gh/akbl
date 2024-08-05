@@ -219,13 +219,13 @@ class Bindings:
        
     def ping(self) -> bool:
         """Check if the Daemon is connected and ready to execute commands."""
-            
-    def switch_lights(self) -> None:
-        """Switch the lights on or off."""
 
     def reload_address(self, verbose=False) -> bool:
         """Reload the pyro address, and try to make a connection with the Daemon."""
         
+    def switch_lights(self) -> None:
+        """Switch the lights on or off."""
+
     def get_themes_name(self) -> list[str]:
         """Return a list of the existing user themes."""
        
