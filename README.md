@@ -70,7 +70,7 @@ Usage:
     --start-white-indicator           Start the indicator (with white icons).
     
     --start-daemon                    Start the daemon.
-    --ping                            Return weather the daemon is running or not.
+    --ping                            Check if the Daemon is connected and ready to execute commands.
     
     --block-testing                   Launch the block testing window.
     

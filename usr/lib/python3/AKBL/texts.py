@@ -36,7 +36,7 @@ Usage:
     --start-white-indicator           Start the indicator (with white icons).
     
     --start-daemon                    Start the Daemon.
-    --ping                            Ping the Daemon.
+    --ping                            Check if the Daemon is connected and ready to execute commands.
     
     --block-testing                   Launch the block testing window.
     
