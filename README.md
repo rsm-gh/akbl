@@ -61,7 +61,7 @@ Usage:
     --on                              Turn on the computer lights.
     --off                             Turn off the computer lights.
     --switch                          Switch the computer lights on/off.
-    --set-theme <theme_name>      Turn on the selected profile.
+    --set-theme <theme_name>          Set the selected theme (on).
     
     --model-chooser-gui               Launch the model chooser from a GUI.
     --model-chooser-cmd               Launch the model chooser from a CMD.
@@ -97,7 +97,7 @@ while True:
     random_hex_color = '#%02X%02X%02X' % (r(), r(), r())
 
     # Set the color in mode fixed
-    akbl.set_colors('fixed', 100, random_hex_color)
+    akbl.set_fixed_mode([random_hex_color], 100)
 
     # Wait 2 seconds
     time.sleep(2)     
@@ -241,21 +241,37 @@ class Bindings:
     def set_lights(self, state: bool) -> None:
         """Set the lights on or off."""
        
-    def set_colors(self,
-                   mode: str,
-                   speed: int,
-                   left_colors: str | list[str],
-                   right_colors: None | str | list[str] = None) -> bool:
+    def set_fixed_mode(self, colors: list[str], speed: int = 1) -> bool:
         """
-            Change the lights colors and mode.
+            Change all the light zones, with the fixed mode. Each color of the list will
+            be set in all the zones, and it will move to the next value depending on the speed.
 
-            :param str mode: Can be fixed, morph, or blink.
-            :param int speed: Speed of the theme, 1 =< speed >= 256.
-            :param str|list[str] left_colors: It can be a single hex_color or a list of hex_colors.
-            :param None|str|list[str] right_colors:
-                These colors are used for the morph mode.
-                It can be a single hex_color or a list of hex_colors.
-                It must have the same number of items than left_colors.
+            If only one color is provided, the lights will remain at one single color and the speed
+            will not have any effect.
+
+            :param list[str] colors: A list of Hex colors.
+            :param int speed: Speed for switching each zone to the next color, 1 =< speed >= 256.
+        """
+
+    def set_blink_mode(self, colors: list[str], speed: int = 50) -> bool:
+        """
+            Change all the light zones, with the blink mode. Each color of the list will
+            be set in all the zones, and it will blink depending on the speed.
+
+            :param list[str] colors: A list of Hex colors.
+            :param int speed: Speed for blinking, 1 =< speed >= 256.
+        """
+
+    def set_morph_mode(self,
+                       colors: list[Tuple[str, str]],
+                       speed: int = 50) -> bool:
+        """
+            Change all the light zones, with the morph mode. Each color pair of the list will
+            be set in all the zones, and it will create a gradient from the first color, to
+            the second color, depending on the speed.
+
+            :param list[tuple(str, str)] colors: A list of lists containing two values of Hex colors.
+            :param int speed: Speed for switching each zone to the next color, 1 =< speed >= 256.
         """
 ```
 
@@ -275,7 +291,7 @@ akbl = Bindings()
 
 lights_test = True
 profiles_test = True
-colors_test = True
+modes_test = True
 speed_test = True
 colors_multiple_test = True
 
@@ -295,33 +311,39 @@ if profiles_test:
         print('set theme:', theme_name, akbl.set_theme(theme_name))
         time.sleep(5)
 
-color1 = '#F7F200'
-color2 = '#0018FF'
+    single_colors = ['#F7F200']
+    morph_colors = [('#F7F200', '#ff0000')]
 
-if colors_test:
-    print('set_colors blink', akbl.set_colors('blink', 100, color2))
+if modes_test:
+    print("\nModes test")
+    print('\tset_colors fixed', akbl.set_fixed_mode(single_colors, 100))
     time.sleep(5)
-    print('set_colors fixed', akbl.set_colors('fixed', 100, color1))
+    print('\tset_colors blink', akbl.set_blink_mode(single_colors, 100))
     time.sleep(5)
-    print('set_colors morph', akbl.set_colors('morph', 100, color1, color2))
+    print('\tset_colors morph', akbl.set_morph_mode(morph_colors, 100))
+    time.sleep(5)
 
 if speed_test:
-    print('set_colors blink', akbl.set_colors('blink', 1, color2))
+    print("\nSpeed test on mode blink")
+    print('\tset_colors: speed=1', akbl.set_blink_mode(single_colors, 1))
     time.sleep(5)
-    print('set_colors blink', akbl.set_colors('blink', 100, color2))
+    print('\tset_colors: speed=100', akbl.set_blink_mode(single_colors, 100))
     time.sleep(5)
-    print('set_colors blink', akbl.set_colors('blink', 256, color2))
+    print('\tset_colors: speed=255', akbl.set_blink_mode(single_colors, 255))
     time.sleep(5)
 
 if colors_multiple_test:
-    colors1 = '#0600FF'
-    colors2 = '#FF00E5'
+    print("\nMultiple colors test")
+    single_colors = ['#FF0000', '#FFFF00', '#3F33FF']  # red, yellow, #blue
+    morph_colors = [('#FF0000', '#3F33FF'),
+                    ('#FFFF00', '#3F33FF'),
+                    ('#FF0000', '#3F33FF')]
 
-    print('set_colors multiple blink', akbl.set_colors('blink', 100, colors2))
-    time.sleep(5)
-    print('set_colors multiple morph', akbl.set_colors('morph', 100, colors1, colors2))
-    time.sleep(5)
-    print('set_colors multiple fixed', akbl.set_colors('fixed', 100, colors1))
+    print('\tset_colors: multiple fixed', akbl.set_fixed_mode(single_colors, 100))
+    time.sleep(15)
+    print('\tset_colors: multiple blink', akbl.set_blink_mode(single_colors, 100))
+    time.sleep(15)
+    print('\tset_colors: multiple morph', akbl.set_morph_mode(morph_colors, 100))
 ```
 
 ### Changing the keyboard colors by checking the CPU Temperature
@@ -401,7 +423,7 @@ if __name__ == '__main__':
         temp_color = temperature_to_color(max_temp)
 
         # Request AKBL to set the color
-        akbl.set_colors('blink', 100, temp_color)
+        akbl.set_blink_mode([temp_color], 100)
 
         # Wait and check again in X seconds
         time.sleep(5)
