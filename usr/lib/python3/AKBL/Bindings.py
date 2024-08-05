@@ -50,11 +50,6 @@ class Bindings:
         except Exception:
             return False
 
-    def get_address(self) -> str:
-        """Return the current URI of the Daemon."""
-
-        return self.__pyro_address
-
     def get_themes_name(self) -> list[str]:
         """Return a list of the existing user themes."""
 

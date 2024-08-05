@@ -225,9 +225,6 @@ class Bindings:
 
     def reload_address(self, verbose=False) -> bool:
         """Reload the pyro address, and try to make a connection with the Daemon."""
-    
-    def get_address(self) -> str:
-        """Return the current URI of the Daemon."""
         
     def get_themes_name(self) -> list[str]:
         """Return a list of the existing user themes."""
@@ -311,8 +308,8 @@ if profiles_test:
         print('set theme:', theme_name, akbl.set_theme(theme_name))
         time.sleep(5)
 
-    single_colors = ['#F7F200']
-    morph_colors = [('#F7F200', '#ff0000')]
+single_colors = ['#F7F200']
+morph_colors = [('#F7F200', '#ff0000')]
 
 if modes_test:
     print("\nModes test")
