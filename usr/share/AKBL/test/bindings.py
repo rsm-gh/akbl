@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2018 Rafael Senties Martinelli.
+#  Copyright (C) 2018, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -20,71 +20,74 @@
 import time
 from AKBL.Bindings import Bindings
 
-AKBLConnection = Bindings()
+akbl = Bindings()
 
-if not AKBLConnection.ping():
+if not akbl.ping():
     print("The connection with the daemon is off")
-else:
-    """
-        Each command is called as:
+    exit()
 
-            print( <command_name>, <command> )
+"""
+    Each command is called as:
 
-        To check if the commands succeed. You don't
-        really need to do this in your code!
-    """
+        print( <command_name>, <command> )
 
-    lights_test = True
-    profiles_test = True
-    modes_test = True
-    speed_test = True
-    colors_multiple_test = True
+    To check if the commands succeed. You don't
+    really need to do this in your code!
+"""
 
-    if lights_test:
-        print("Switching lights test")
-        print('\tlights off:', AKBLConnection.set_lights(False))
-        time.sleep(2)
-        print('\tlights on:', AKBLConnection.set_lights(True))
-        time.sleep(2)
-        print('\tswitch lights:', AKBLConnection.switch_lights())
-        time.sleep(2)
-        print('\tswitch lights:', AKBLConnection.switch_lights())
-        time.sleep(2)
+lights_test = True
+profiles_test = True
+modes_test = True
+speed_test = True
+colors_multiple_test = True
 
-    if profiles_test:
-        print("\nTesting user profiles")
-        for theme_name in AKBLConnection.get_themes_name():
-            print('\tset profile:', theme_name, AKBLConnection.set_theme(theme_name))
-            time.sleep(5)
+if lights_test:
+    print("Switching lights test")
+    print('\tlights off:', akbl.set_lights(False))
+    time.sleep(2)
+    print('\tlights on:', akbl.set_lights(True))
+    time.sleep(2)
+    print('\tswitch lights:', akbl.switch_lights())
+    time.sleep(2)
+    print('\tswitch lights:', akbl.switch_lights())
+    time.sleep(2)
 
-    color1 = '#F7F200'
-    color2 = '#ff0000'
-
-    if modes_test:
-        print("\nModes test")
-        print('\tset_colors fixed', AKBLConnection.set_colors('fixed', 100, color1))
-        time.sleep(5)
-        print('\tset_colors blink', AKBLConnection.set_colors('blink', 100, color1))
-        time.sleep(5)
-        print('\tset_colors morph', AKBLConnection.set_colors('morph', 100, color1, color2))
+if profiles_test:
+    print("\nTesting user profiles")
+    for theme_name in akbl.get_themes_name():
+        print('\tset profile:', theme_name, akbl.set_theme(theme_name))
         time.sleep(5)
 
-    if speed_test:
-        print("\nSpeed test on mode blink")
-        print('\tset_colors: speed=1', AKBLConnection.set_colors('blink', 1, color2))
-        time.sleep(5)
-        print('\tset_colors: speed=100', AKBLConnection.set_colors('blink', 100, color2))
-        time.sleep(5)
-        print('\tset_colors: speed=255', AKBLConnection.set_colors('blink', 255, color2))
-        time.sleep(5)
+single_colors = ['#F7F200']
+morph_colors = [('#F7F200', '#ff0000')]
 
-    if colors_multiple_test:
-        print("\nMultiple colors test")
-        colors1 = ['#FF0000', '#FFFF00', '#3F33FF']  # red, yellow, #blue
-        colors2 = ['#FF0000', '#FFFF00', '#3F33FF']
+if modes_test:
+    print("\nModes test")
+    print('\tset_colors fixed', akbl.set_fixed_mode(single_colors, 100))
+    time.sleep(5)
+    print('\tset_colors blink', akbl.set_blink_mode(single_colors, 100))
+    time.sleep(5)
+    print('\tset_colors morph', akbl.set_morph_mode(morph_colors, 100))
+    time.sleep(5)
 
-        print('\tset_colors: multiple fixed', AKBLConnection.set_colors('fixed', 100, colors1))
-        time.sleep(15)
-        print('\tset_colors: multiple blink', AKBLConnection.set_colors('blink', 100, colors1))
-        time.sleep(15)
-        print('\tset_colors: multiple morph', AKBLConnection.set_colors('morph', 100, colors1, colors2))
+if speed_test:
+    print("\nSpeed test on mode blink")
+    print('\tset_colors: speed=1', akbl.set_blink_mode(single_colors, 1))
+    time.sleep(5)
+    print('\tset_colors: speed=100', akbl.set_blink_mode(single_colors, 100))
+    time.sleep(5)
+    print('\tset_colors: speed=255', akbl.set_blink_mode(single_colors, 255))
+    time.sleep(5)
+
+if colors_multiple_test:
+    print("\nMultiple colors test")
+    single_colors = ['#FF0000', '#FFFF00', '#3F33FF']  # red, yellow, #blue
+    morph_colors = [('#FF0000', '#3F33FF'),
+                    ('#FFFF00', '#3F33FF'),
+                    ('#FF0000', '#3F33FF')]
+
+    print('\tset_colors: multiple fixed', akbl.set_fixed_mode(single_colors, 100))
+    time.sleep(15)
+    print('\tset_colors: multiple blink', akbl.set_blink_mode(single_colors, 100))
+    time.sleep(15)
+    print('\tset_colors: multiple morph', akbl.set_morph_mode(morph_colors, 100))

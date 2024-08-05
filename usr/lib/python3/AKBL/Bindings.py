@@ -20,6 +20,7 @@
 import os
 import Pyro4
 import getpass
+from typing import Tuple
 from traceback import format_exc
 
 from AKBL.Paths import Paths
@@ -113,24 +114,66 @@ class Bindings:
 
         self.__command('set_lights', state)
 
-    def set_colors(self,
-                   mode: str,
-                   speed: int,
-                   left_colors: str | list[str],
-                   right_colors: None | str | list[str] = None) -> bool:
+    def set_fixed_mode(self, colors: list[str], speed: int = 1) -> bool:
         """
-            Change the lights colors and mode.
+            Change all the light zones, with the fixed mode. Each color of the list will
+            be set in all the zones, and it will move to the next value depending on the speed.
 
-            :param str mode: Can be fixed, morph, or blink.
-            :param int speed: Speed of the theme, 1 =< speed >= 256.
-            :param str|list[str] left_colors: It can be a single hex_color or a list of hex_colors.
-            :param None|str|list[str] right_colors:
-                These colors are used for the morph mode.
-                It can be a single hex_color or a list of hex_colors.
-                It must have the same number of items than left_colors.
+            If only one color is provided, the lights will remain at one single color and the speed
+            will not have any effect.
+
+            :param list[str] colors: A list of Hex colors.
+            :param int speed: Speed for switching each zone to the next color, 1 =< speed >= 256.
         """
 
-        status = self.__command('set_colors', mode, speed, left_colors, right_colors)
+        if len(colors) == 0:
+            raise ValueError("The list of colors can not be empty.")
+
+        status = self.__command('set_colors', 'fixed', speed, colors, None)
+        if status is None:
+            status = False
+        return status
+
+    def set_blink_mode(self, colors: list[str], speed: int = 50) -> bool:
+        """
+            Change all the light zones, with the blink mode. Each color of the list will
+            be set in all the zones, and it will blink depending on the speed.
+
+            :param list[str] colors: A list of Hex colors.
+            :param int speed: Speed for blinking, 1 =< speed >= 256.
+        """
+
+        if len(colors) == 0:
+            raise ValueError("The list of colors can not be empty.")
+
+        status = self.__command('set_colors', 'blink', speed, colors, None)
+        if status is None:
+            status = False
+        return status
+
+    def set_morph_mode(self,
+                       colors: list[Tuple[str, str]],
+                       speed: int = 50) -> bool:
+        """
+            Change all the light zones, with the morph mode. Each color pair of the list will
+            be set in all the zones, and it will create a gradient from the first color, to
+            the second color, depending on the speed.
+
+            :param list[tuple(str, str)] colors: A list of lists containing two values of Hex colors.
+            :param int speed: Speed for switching each zone to the next color, 1 =< speed >= 256.
+        """
+
+        if len(colors) == 0:
+            raise ValueError("The list of colors can not be empty.")
+
+        left_colors = []
+        right_colors = []
+
+        for left_color, right_color in colors:
+            left_colors.append(left_color)
+            right_colors.append(right_color)
+
+        status = self.__command('set_colors', "morph", speed, left_colors, right_colors)
 
         if status is None:
             status = False
