@@ -125,14 +125,7 @@ class Daemon:
 
     @Pyro4.expose
     def set_theme(self, user: str, theme_name: str) -> bool:
-        """
-            Activate a profile.
-
-            :param str user: Name of the user.
-            :param str theme_name: Is the profile to be set.
-            :rtype: None in case of an error.
-            :rtype: Bool
-        """
+        """Set a theme by name."""
 
         print_debug("user={} theme_name={}".format(user, theme_name))
 
@@ -342,22 +335,6 @@ class Daemon:
                 self.__computer.product_id,
                 self.__controller.get_device_information())
 
-    @Pyro4.expose
-    def modify_lights_state(self, value) -> None:
-        """
-            This method does not change the lights of the keyboard,
-            it only updates the daemon and the indicator
-        """
-
-        print_debug("value={}".format(value))
-
-        if value in (False, 'False', 'false'):
-            self.__lights_state = False
-            self.__indicator_send_code(IndicatorCodes._lights_off)
-        else:
-            self.__lights_state = True
-            self.__indicator_send_code(IndicatorCodes._lights_on)
-
     """
         Indicator Bindings
     """
@@ -429,8 +406,9 @@ class Daemon:
         #
         # Mark the current theme as "last used"
         #
-        print_debug("Mark theme as last used... path={}".format(self.__theme.path), direct_output=True)
-        os.utime(self.__theme.path, None)
+        if os.path.exists(self.__theme.path):
+            print_debug("Mark theme as last used... path={}".format(self.__theme.path), direct_output=True)
+            os.utime(self.__theme.path, None)
 
         # Update the Indicator
         #
