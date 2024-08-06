@@ -24,6 +24,7 @@ from typing import Tuple
 from traceback import format_exc
 
 from AKBL.Paths import Paths
+from AKBL.Theme.Theme import Theme
 from AKBL.console import print_error, print_warning
 
 
@@ -99,9 +100,20 @@ class Bindings:
 
         return status
 
+    @Pyro4.expose
+    def set_theme_obj(self, theme_obj: Theme) -> None:
+        """
+            Set a theme from an AKBL Theme object.
+            This is only for experimented AKBL users.
+        """
+        if not isinstance(theme_obj, Theme):
+            raise ValueError("Not a valid theme object={}".format(type(theme_obj)))
+
+        self.__command('set_theme_obj', theme_obj)
+
     def switch_lights(self) -> None:
         """Switch the lights on or off."""
-        return self.__command('switch_lights')
+        self.__command('switch_lights')
 
     def set_lights(self, state: bool) -> None:
         """Set the lights on or off."""

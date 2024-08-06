@@ -16,6 +16,12 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+"""
+    You must be very careful with this API because it runs as admin.
+    The 'user' sender parameter can be faked. Currently, any user can hack this API
+        and "os.utime()" any file of the system.
+"""
+
 import os
 import sys
 from traceback import format_exc
@@ -28,6 +34,7 @@ from AKBL.Bindings import Bindings
 from AKBL.settings import IndicatorCodes
 from AKBL.utils import string_is_hex_color
 from AKBL.Engine.Controller import Controller
+from AKBL.Theme.Theme import Theme
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
 from AKBL.console import print_warning, print_error, print_info, print_debug
@@ -135,12 +142,24 @@ class Daemon:
 
         self.reload_configurations(user, indicator=False, set_default=False)
 
-        if theme_name in theme_factory._AVAILABLE_THEMES.keys():
-            self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
-            self.__illuminate_keyboard()
-            return True
+        if theme_name not in theme_factory._AVAILABLE_THEMES.keys():
+            print_warning("The theme is not in the user list.")
+            return False
 
-        return False
+        self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
+        self.__illuminate_keyboard()
+        return True
+
+    @Pyro4.expose
+    def set_theme_obj(self, theme_obj: Theme) -> None:
+        """Set a theme from an AKBL Theme object."""
+
+        if not isinstance(theme_obj, Theme):
+            print_warning("Not a valid theme object={}".format(type(theme_obj)))
+            return
+
+        self.__theme = theme_obj
+        self.__illuminate_keyboard()
 
     @Pyro4.expose
     def set_lights(self, user: str, state: bool) -> None:
