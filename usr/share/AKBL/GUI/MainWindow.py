@@ -21,16 +21,15 @@ import sys
 import shutil
 from time import sleep
 from copy import deepcopy
-from traceback import format_exc
 from gi.repository import Gtk, Gdk, GLib
 from gi.repository.GdkPixbuf import Pixbuf
 from threading import Thread, current_thread
 
 import AKBL.texts as texts
 from AKBL.Paths import Paths
-from AKBL.console import print_error
 from AKBL.Bindings import Bindings
 from AKBL.CCParser import CCParser
+from AKBL.console import print_warning
 from AKBL.Computer.Computer import Computer
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
@@ -549,19 +548,16 @@ class MainWindow:
 
     def __on_thread_illuminate_keyboard(self):
 
+        if not os.path.exists(self.__theme.path):
+            print_warning("The theme does not exist.")
+            return
+
+        elif self.__theme.name == "":
+            print_warning("The theme must have a name.")
+            return
+
         GLib.idle_add(self.label_user_message.set_text, texts._TEXT_APPLYING_CONFIGURATION)
-
-        # This is to make the program recognize the last profile that has been used, patch #12
-        try:
-            os.utime(self.__theme.path, None)
-        except Exception:
-            print_error(
-                'It was not possible to os.utime the profile path: \n{}\n{}'.format(self.__theme.path, format_exc()))
-
-        self.__bindings.reload_configurations()
-
-        self.__bindings.set_lights(True)
-
+        self.__bindings.set_theme(self.__theme.name)
         GLib.idle_add(self.label_user_message.set_text, '')
 
     def __on_thread_save_configuration_file(self):
