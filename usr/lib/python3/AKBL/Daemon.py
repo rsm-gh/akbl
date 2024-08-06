@@ -34,7 +34,6 @@ from AKBL.Bindings import Bindings
 from AKBL.settings import IndicatorCodes
 from AKBL.utils import string_is_hex_color
 from AKBL.Engine.Controller import Controller
-from AKBL.Theme.Theme import Theme
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
 from AKBL.console import print_warning, print_error, print_info, print_debug
@@ -149,17 +148,6 @@ class Daemon:
         self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
         self.__illuminate_keyboard()
         return True
-
-    @Pyro4.expose
-    def set_theme_obj(self, theme_obj: Theme) -> None:
-        """Set a theme from an AKBL Theme object."""
-
-        if not isinstance(theme_obj, Theme):
-            print_warning("Not a valid theme object={}".format(type(theme_obj)))
-            return
-
-        self.__theme = theme_obj
-        self.__illuminate_keyboard()
 
     @Pyro4.expose
     def set_lights(self, user: str, state: bool) -> None:
