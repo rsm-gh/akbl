@@ -101,7 +101,6 @@ class Bindings:
 
     def switch_lights(self) -> None:
         """Switch the lights on or off."""
-
         return self.__command('switch_lights')
 
     def set_lights(self, state: bool) -> None:
