@@ -199,6 +199,20 @@ class MainWindow:
 
         self.__application.quit()
 
+    def new_profile(self):
+        text = self.entry_new_profile.get_text()
+
+        self.window_new_profile.hide()
+
+        clone = deepcopy(theme_factory._AVAILABLE_THEMES[self.__theme.name])
+        clone.name = text
+        clone.path = '{}{}.cfg'.format(self.__paths._profiles_dir, text)
+        clone.save()
+        theme_factory._AVAILABLE_THEMES[clone.name] = clone
+        self.populate_liststore_profiles()
+
+        self.__bindings.reload_configurations()
+
     def populate_box_areas(self):
         """
             This will add all the Areas and Zones to the graphical interphase.
@@ -263,6 +277,58 @@ class MainWindow:
         self.combobox_profiles.set_active(row)
         self.__speed = self.__theme.get_speed()
 
+    def on_toolbar_colorlist_changed(self, *_):
+        hex_colors = self.__color_chooser_toolbar.get_hex_colors()
+        self.__ccp.write("toolbar_colors", hex_colors)
+
+    def on_tempobutton_value_changed(self, _, value):
+
+        self.__theme.set_speed(255 - value)
+
+        if self.checkbutton_autosave.get_active():
+            Thread(target=self.__on_thread_save_configuration_file).start()
+
+    def on_combobox_profiles_changed(self, widget, *_):
+        tree_iter = widget.get_active_iter()
+        if tree_iter is not None:
+            model = widget.get_model()
+            theme_name = model[tree_iter][0]
+            self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
+            self.populate_box_areas()
+
+    def on_entry_new_profile_changed(self, *_):
+
+        text = self.entry_new_profile.get_text()
+
+        # Check for invalid names
+        #
+        if text == '':
+            self.button_new_profile_create.set_sensitive(False)
+            return
+
+        invalid_names = os.listdir(self.__paths._profiles_dir)
+        for name in invalid_names:
+            if name == text:
+                self.button_new_profile_create.set_sensitive(False)
+                return
+
+            elif text == name[:-4]:
+                self.button_new_profile_create.set_sensitive(False)
+                return
+
+        for name in theme_factory._AVAILABLE_THEMES.keys():
+            if name == text:
+                self.button_new_profile_create.set_sensitive(False)
+                return
+
+        self.button_new_profile_create.set_sensitive(True)
+
+    def on_checkbox_turnoff_areas_changed(self, *_):
+        areas_to_keep_on = (self.__areas_description_dict[checkbox.get_label()]
+                            for checkbox in self.__menu_turn_off_areas.get_children() if checkbox.get_active())
+
+        self.__ccp.write('areas_to_keep_on', '|'.join(areas_to_keep_on))
+
     def on_zonewidget_updated(self, zone_widget):
 
         self.__theme.modify_zone(area_name=zone_widget.get_area_name(),
@@ -293,19 +359,141 @@ class MainWindow:
         if self.checkbutton_autosave.get_active():
             Thread(target=self.__on_thread_save_configuration_file).start()
 
-    def new_profile(self):
-        text = self.entry_new_profile.get_text()
+    def on_checkbutton_delete_warning_activate(self, *_):
+        self.__ccp.write('delete_warning', self.checkbutton_delete_warning.get_active())
 
+    def on_checkbutton_autosave_activate(self, *_):
+        self.__ccp.write('auto_save', self.checkbutton_autosave.get_active())
+
+    def on_checkbutton_profile_buttons_activate(self, *_):
+        if self.checkbutton_profile_buttons.get_active():
+            self.box_profile_buttons.show()
+            self.__ccp.write('profile_buttons', True)
+        else:
+            self.box_profile_buttons.hide()
+            self.__ccp.write('profile_buttons', False)
+
+    def on_menuitem_apply_configuration_activate(self, *_):
+        Thread(target=self.__on_thread_illuminate_keyboard).start()
+
+    def on_menuitem_save_activate(self, *_):
+        Thread(target=self.__on_thread_save_configuration_file).start()
+
+    def on_menuitem_lights_on_activate(self, *_):
+        Thread(target=self.__on_thread_illuminate_keyboard).start()
+
+    def on_menuitem_lights_off_activate(self, *_):
+        Thread(target=self.__on_thread_turn_lights_off).start()
+
+    def on_menuitem_quit_activate(self, *_):
+        self.quit()
+
+    def on_menuitem_import_activate(self, *_):
+        file_path = gtk_file_chooser(parent=self.window_root,
+                                     title=texts._TEXT_CHOOSE_A_THEME,
+                                     icon_path=self.__paths._icon_file,
+                                     filters=(("AKBL theme", '*.cfg'),))
+
+        if file_path:
+            new_path = self.__paths._profiles_dir + os.path.basename(file_path)
+
+            if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
+                return
+
+            shutil.copy(file_path, new_path)
+            theme_factory.load_from_file(new_path, self.__computer)
+            self.populate_liststore_profiles()
+
+    def on_menuitem_export_activate(self, *_):
+        folder_path = gtk_folder_chooser(parent=self.window_root,
+                                         title=texts._TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
+                                         icon_path=self.__paths._icon_file)
+
+        if folder_path:
+            new_path = '{}/{}.cfg'.format(folder_path, self.__theme.name)
+
+            if os.path.exists(new_path) and not gtk_dialog_question(
+                    self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
+                return
+
+            shutil.copy(self.__theme.path, new_path)
+
+    def on_menuitem_new_activate(self, *_):
+        self.entry_new_profile.set_text('')
+        self.window_new_profile.show()
+
+    def on_menuitem_delete_activate(self, *_):
+        if self.checkbutton_delete_warning.get_active():
+            if not gtk_dialog_question(self.window_root,
+                                       texts._TEXT_CONFIRM_DELETE_CONFIGURATION,
+                                       icon=self.__paths._icon_file):
+                return
+
+        Thread(target=self.__on_thread_delete_current_configuration).start()
+
+    def on_button_new_profile_create_clicked(self, *_):
+        self.new_profile()
+
+    def on_button_reset_toolbar_colors_activate(self, *_):
+        self.__color_chooser_toolbar.reset_colors()
+
+    def on_button_about_activate(self, *_):
+        self.__response = self.window_about.run()
+        self.window_about.hide()
+
+    def on_button_new_profile_cancel_clicked(self, *_):
         self.window_new_profile.hide()
 
-        clone = deepcopy(theme_factory._AVAILABLE_THEMES[self.__theme.name])
-        clone.name = text
-        clone.path = '{}{}.cfg'.format(self.__paths._profiles_dir, text)
-        clone.save()
-        theme_factory._AVAILABLE_THEMES[clone.name] = clone
-        self.populate_liststore_profiles()
+    def on_button_add_zone_clicked(self, button, _, area, area_box):
+        """
+            This button is not in glade, it is dynamically generated.
+        """
 
-        self.__bindings.reload_configurations()
+        nb_of_zone_widgets = sum(1 for child in area_box.get_children() if isinstance(child, ZoneWidget))
+
+        if nb_of_zone_widgets >= area.max_commands:
+            gtk_dialog_info(self.window_root, texts._TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED.format(area.description))
+            return
+
+        zone_widget = ZoneWidget(area_name=area.name,
+                                 left_color=self.__color_chooser_toolbar.get_current_hex_color(),
+                                 right_color=self.__color_chooser_toolbar.get_current_hex_color(),
+                                 mode='fixed',
+                                 column=nb_of_zone_widgets,
+                                 get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
+
+        zone_widget.connect("updated", self.on_zonewidget_updated)
+        zone_widget.connect("request-delete", self.on_zonewidget_request_delete)
+
+        #
+        # Update the configuration
+        #
+        area.add_zone(zone_widget)
+
+        #
+        # Update the GUI
+        #
+        area_box.remove(button)
+        area_box.pack_start(child=zone_widget, expand=False, fill=False, padding=5)
+        area_box.pack_start(child=button, expand=False, fill=False, padding=5)
+
+    def on_button_apply_clicked(self, *_):
+        self.on_menuitem_apply_configuration_activate()
+
+    def on_button_export_clicked(self, *_):
+        self.on_menuitem_export_activate()
+
+    def on_button_import_clicked(self, *_):
+        self.on_menuitem_import_activate()
+
+    def on_button_save_clicked(self, *_):
+        self.on_menuitem_save_activate()
+
+    def on_button_delete_clicked(self, *_):
+        self.on_menuitem_delete_activate()
+
+    def on_button_new_clicked(self, *_):
+        self.on_menuitem_new_activate()
 
     def __thread_daemon_check(self):
 
@@ -380,191 +568,3 @@ class MainWindow:
         GLib.idle_add(self.label_user_message.set_text, texts._TEXT_SAVING_THE_CONFIGURATION)
         self.__theme.save()
         GLib.idle_add(self.label_user_message.set_text, '')
-
-    def on_toolbar_colorlist_changed(self, *_):
-        hex_colors = self.__color_chooser_toolbar.get_hex_colors()
-        self.__ccp.write("toolbar_colors", hex_colors)
-
-    def on_button_reset_toolbar_colors_activate(self, *_):
-        self.__color_chooser_toolbar.reset_colors()
-
-    def on_checkbox_turnoff_areas_changed(self, *_):
-        areas_to_keep_on = (self.__areas_description_dict[checkbox.get_label()]
-                            for checkbox in self.__menu_turn_off_areas.get_children() if checkbox.get_active())
-
-        self.__ccp.write('areas_to_keep_on', '|'.join(areas_to_keep_on))
-
-    def on_checkbutton_delete_warning_activate(self, *_):
-        self.__ccp.write('delete_warning', self.checkbutton_delete_warning.get_active())
-
-    def on_checkbutton_autosave_activate(self, *_):
-        self.__ccp.write('auto_save', self.checkbutton_autosave.get_active())
-
-    def on_checkbutton_profile_buttons_activate(self, *_):
-        if self.checkbutton_profile_buttons.get_active():
-            self.box_profile_buttons.show()
-            self.__ccp.write('profile_buttons', True)
-        else:
-            self.box_profile_buttons.hide()
-            self.__ccp.write('profile_buttons', False)
-
-    def on_button_about_activate(self, *_):
-        self.__response = self.window_about.run()
-        self.window_about.hide()
-
-    def on_button_new_profile_cancel_clicked(self, *_):
-        self.window_new_profile.hide()
-
-    def on_button_add_zone_clicked(self, button, _, area, area_box):
-        """
-            This button is not in glade, it is dynamically generated.
-        """
-
-        nb_of_zone_widgets = sum(1 for child in area_box.get_children() if isinstance(child, ZoneWidget))
-
-        if nb_of_zone_widgets >= area.max_commands:
-            gtk_dialog_info(self.window_root, texts._TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED.format(area.description))
-            return
-
-        zone_widget = ZoneWidget(area_name=area.name,
-                                 left_color=self.__color_chooser_toolbar.get_current_hex_color(),
-                                 right_color=self.__color_chooser_toolbar.get_current_hex_color(),
-                                 mode='fixed',
-                                 column=nb_of_zone_widgets,
-                                 get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
-
-        zone_widget.connect("updated", self.on_zonewidget_updated)
-        zone_widget.connect("request-delete", self.on_zonewidget_request_delete)
-
-        #
-        # Update the configuration
-        #
-        area.add_zone(zone_widget)
-
-        #
-        # Update the GUI
-        #
-        area_box.remove(button)
-        area_box.pack_start(child=zone_widget, expand=False, fill=False, padding=5)
-        area_box.pack_start(child=button, expand=False, fill=False, padding=5)
-
-    def on_tempobutton_value_changed(self, _, value):
-
-        self.__theme.set_speed(255 - value)
-
-        if self.checkbutton_autosave.get_active():
-            Thread(target=self.__on_thread_save_configuration_file).start()
-
-    def on_combobox_profiles_changed(self, widget, *_):
-        tree_iter = widget.get_active_iter()
-        if tree_iter is not None:
-            model = widget.get_model()
-            theme_name = model[tree_iter][0]
-            self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
-            self.populate_box_areas()
-
-    def on_button_new_profile_create_clicked(self, *_):
-        self.new_profile()
-
-    def on_menuitem_apply_configuration_activate(self, *_):
-        Thread(target=self.__on_thread_illuminate_keyboard).start()
-
-    def on_menuitem_save_activate(self, *_):
-        Thread(target=self.__on_thread_save_configuration_file).start()
-
-    def on_menuitem_lights_on_activate(self, *_):
-        Thread(target=self.__on_thread_illuminate_keyboard).start()
-
-    def on_menuitem_lights_off_activate(self, *_):
-        Thread(target=self.__on_thread_turn_lights_off).start()
-
-    def on_menuitem_quit_activate(self, *_):
-        self.quit()
-
-    def on_menuitem_import_activate(self, *_):
-        file_path = gtk_file_chooser(parent=self.window_root,
-                                     title=texts._TEXT_CHOOSE_A_THEME,
-                                     icon_path=self.__paths._icon_file,
-                                     filters=(("AKBL theme", '*.cfg'),))
-
-        if file_path:
-            new_path = self.__paths._profiles_dir + os.path.basename(file_path)
-
-            if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
-                return
-
-            shutil.copy(file_path, new_path)
-            theme_factory.load_from_file(new_path, self.__computer)
-            self.populate_liststore_profiles()
-
-    def on_menuitem_export_activate(self, *_):
-        folder_path = gtk_folder_chooser(parent=self.window_root,
-                                         title=texts._TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
-                                         icon_path=self.__paths._icon_file)
-
-        if folder_path:
-            new_path = '{}/{}.cfg'.format(folder_path, self.__theme.name)
-
-            if os.path.exists(new_path) and not gtk_dialog_question(
-                    self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
-                return
-
-            shutil.copy(self.__theme.path, new_path)
-
-    def on_menuitem_new_activate(self, *_):
-        self.entry_new_profile.set_text('')
-        self.window_new_profile.show()
-
-    def on_menuitem_delete_activate(self, *_):
-        if self.checkbutton_delete_warning.get_active():
-            if not gtk_dialog_question(self.window_root,
-                                       texts._TEXT_CONFIRM_DELETE_CONFIGURATION,
-                                       icon=self.__paths._icon_file):
-                return
-
-        Thread(target=self.__on_thread_delete_current_configuration).start()
-
-    def on_button_apply_clicked(self, *_):
-        self.on_menuitem_apply_configuration_activate()
-
-    def on_button_export_clicked(self, *_):
-        self.on_menuitem_export_activate()
-
-    def on_button_import_clicked(self, *_):
-        self.on_menuitem_import_activate()
-
-    def on_button_save_clicked(self, *_):
-        self.on_menuitem_save_activate()
-
-    def on_button_delete_clicked(self, *_):
-        self.on_menuitem_delete_activate()
-
-    def on_button_new_clicked(self, *_):
-        self.on_menuitem_new_activate()
-
-    def on_entry_new_profile_changed(self, *_):
-
-        text = self.entry_new_profile.get_text()
-
-        # Check for invalid names
-        #
-        if text == '':
-            self.button_new_profile_create.set_sensitive(False)
-            return
-
-        invalid_names = os.listdir(self.__paths._profiles_dir)
-        for name in invalid_names:
-            if name == text:
-                self.button_new_profile_create.set_sensitive(False)
-                return
-
-            elif text == name[:-4]:
-                self.button_new_profile_create.set_sensitive(False)
-                return
-
-        for name in theme_factory._AVAILABLE_THEMES.keys():
-            if name == text:
-                self.button_new_profile_create.set_sensitive(False)
-                return
-
-        self.button_new_profile_create.set_sensitive(True)
