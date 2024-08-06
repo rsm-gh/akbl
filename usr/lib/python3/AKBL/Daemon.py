@@ -172,10 +172,10 @@ class Daemon:
 
                 self.__controller.apply_config()
             else:
-                """
-                    To turn off the lights but let some areas on, instead of sending the command "all the lights off",
-                    some areas are set to black color.
-                """
+                #
+                # To turn off the lights but let some areas on, instead of sending
+                # the command "all the lights off", some areas are set to black color.
+                #
 
                 areas_to_keep_on = areas_to_keep_on.split('|')
 
@@ -203,22 +203,27 @@ class Daemon:
     def set_colors(self,
                    mode: str,
                    speed: int,
-                   left_colors: str | list[str],
-                   right_colors: None | str | list[str] = None) -> bool:
+                   left_colors: list[str],
+                   right_colors: None | list[str] = None) -> bool:
         """
             Change the colors and the mode of the keyboard.
 
             :param str mode: Can be fixed, morph, or blink.
             :param int speed: Speed of the theme, 1 =< speed >= 256.
-            :param str|list[str] left_colors: It can be a single hex_color or a list of hex_colors.
-            :param None|str|list[str] right_colors: It can be a single hex_color or a list of hex_colors.
-            If provided, it must have the same number of items than left_colors.
-            :rtype: None in case of an error.
-            :rtype: Bool
+            :param list[str] left_colors: A list of hex_colors.
+            :param None|list[str] right_colors:
+                It will be used only of the modes are 'morph' or 'fixed'.
+                It must be a list of hex_colors, with the same length as left_colors.
+
+
+            #TODO: Check why right_colors is in blink mode?
         """
 
         print_debug("mode={} speed={} left_colors={} right_colors={}".format(mode, speed, left_colors, right_colors))
 
+        #
+        # Args checks
+        #
         if mode not in ('fixed', 'morph', 'blink'):
             print_warning("Wrong mode" + str(mode))
             return False
@@ -231,17 +236,21 @@ class Daemon:
         elif speed < 1:
             print_warning("The speed argument must be >= 1.")
             return False
-
-        if not isinstance(left_colors, list) and not isinstance(left_colors, tuple):
-            left_colors = [left_colors]
+        elif not isinstance(left_colors, list):
+            print_warning("left_colors is not a list.")
+            return False
+        elif len(left_colors) == 0:
+            print_warning("left_colors can not be empty.")
+            return False
 
         if right_colors is None:
             right_colors = left_colors
 
-        elif not isinstance(right_colors, list) and not isinstance(right_colors, tuple):
-            right_colors = [right_colors]
+        elif not isinstance(right_colors, list):
+            print_warning("right_colors is not a list.")
+            return False
 
-        if len(left_colors) != len(right_colors):
+        elif len(left_colors) != len(right_colors):
             print_warning("The colors lists must have the same length.")
             return False
 
@@ -252,6 +261,9 @@ class Daemon:
                         "The colors argument must only contain hex colors. The color={} is not valid.".format(color))
                     return False
 
+        #
+        # Set the mode
+        #
         self.__controller.clear_constructor()
 
         for save, block in self.__computer_blocks_to_save:
@@ -351,7 +363,7 @@ class Daemon:
     """
 
     @Pyro4.expose
-    def connect_indicator(self, user:str, uri: str) -> None:
+    def connect_indicator(self, user: str, uri: str) -> None:
         """Connect the Daemon to the Indicator."""
 
         print_debug("uri: {}".format(uri))
@@ -390,15 +402,11 @@ class Daemon:
 
         print_debug()
 
-        # Find the last theme that has been used
-        #
-        os.utime(self.__theme.path, None)
-
         # Illuminate the computer lights
         #
+        print_debug("Sending commands to the controller...", direct_output=True)
 
         self.__controller.clear_constructor()
-
         for save, block in self.__computer_blocks_to_save:
 
             self.__controller.add_block_line(save=save, block=block)
@@ -418,9 +426,16 @@ class Daemon:
 
         self.__controller.apply_config()
 
+        #
+        # Mark the current theme as "last used"
+        #
+        print_debug("Mark theme as last used... path={}".format(self.__theme.path), direct_output=True)
+        os.utime(self.__theme.path, None)
+
         # Update the Indicator
         #
         if self.__pyro_indicator is not None:
+            print_debug("Sending update to the indicator...".format(self.__theme.path), direct_output=True)
             self.__indicator_send_code(IndicatorCodes._lights_on)
             try:
                 self.__pyro_indicator.load_themes(theme_factory._AVAILABLE_THEMES.keys(),
