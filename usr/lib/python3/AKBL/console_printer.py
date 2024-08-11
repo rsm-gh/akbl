@@ -53,7 +53,7 @@ class DebugCodes:
 
 
 if 'PRINT' in os.environ:
-    match os.environ['PRINT']:
+    match os.environ['PRINT'].replace("'", "").replace('"', ""):
         case DebugCodes.Error._text:
             _DEBUG = DebugCodes.Error._value
         case DebugCodes.Warning._text:
