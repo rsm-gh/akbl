@@ -312,16 +312,15 @@ CCParser instance:
         return self.__ini_path
 
     def set_configuration_path(self, ini_path):
-        """
-            Set the path to the configuration file.
-        """
+        """Set the path to the configuration file."""
         if isinstance(ini_path, str):
             self.__ini_path = ini_path
             if not os.path.exists(ini_path):
-                print("CCParser Warning: the path to the configuration file does not exists\n")
+                print("CCParser Warning: the path to the configuration file does not exists")
         else:
             print("CCParser Warning: The path is not valid.\n")
             self.__ini_path = ''
+        print(ini_path)
 
     def set_section(self, section):
         """

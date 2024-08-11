@@ -29,7 +29,7 @@ import AKBL.texts as texts
 from AKBL.Paths import Paths
 from AKBL.Bindings import Bindings
 from AKBL.CCParser import CCParser
-from AKBL.console import print_warning
+from AKBL.console_printer import print_warning
 from AKBL.Computer.Computer import Computer
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
@@ -210,7 +210,7 @@ class MainWindow:
         theme_factory._AVAILABLE_THEMES[clone.name] = clone
         self.populate_liststore_profiles()
 
-        self.__bindings.reload_configurations()
+        self.__bindings.reload_themes()
 
     def populate_box_areas(self):
         """
@@ -535,7 +535,7 @@ class MainWindow:
 
         GLib.idle_add(self.populate_liststore_profiles)
 
-        self.__bindings.reload_configurations()
+        self.__bindings.reload_themes()
 
         sleep(0.5)
 

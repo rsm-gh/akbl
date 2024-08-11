@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2018, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -21,7 +21,7 @@ import os
 from AKBL.Theme.Area import Area
 from AKBL.Theme.Zone import Zone
 from AKBL.utils import string_is_hex_color
-from AKBL.console import print_warning, print_debug
+from AKBL.console_printer import print_warning, print_debug
 from AKBL.Theme.Theme import Theme, _MISSING_ZONE_COLOR
 
 _AVAILABLE_THEMES = {}
@@ -88,117 +88,97 @@ def load_from_file(path, computer):
     with open(path, encoding='utf-8', mode='rt') as f:
         lines = f.readlines()
 
-    area_found, left_color, right_color, mode, = False, False, False, False
-
+    area = None
+    left_color = ""
+    right_color = ""
+    mode = ""
     imported_areas = []
     supported_region_names = computer.get_regions_name()
-    # print_debug('supported_region_names=`{}`'.format(supported_region_names))
+    print_debug(f'supported_region_names={supported_region_names}', direct_output=True)
 
     theme = Theme(computer)
     theme.path = path
 
     # Parse the configuration file
     #
-    for line in lines:
-        if line.strip():
-            variables = line.strip().split('=')
+    for i, line in enumerate(lines, 1):
 
-            if len(variables) == 2:
+        line = line.strip()
+        if line == "" or line.startswith("#"):
+            continue
 
-                var_name = variables[0]
-                var_arg = variables[1]
+        line_data = line.split('=')
+        if len(line_data) != 2:
+            continue
 
-                if var_name == 'name':
-                    if var_arg == '':
-                        name = os.path.basename(path)
-                    else:
-                        name = var_arg
+        var_name = line_data[0]
+        var_arg = line_data[1]
 
-                    if name.endswith('.cfg'):
-                        name = name[:-4]
+        match var_name:
+            case 'name':
+                if var_arg == '':
+                    name = os.path.basename(path)
+                else:
+                    name = var_arg
 
-                    theme.name = name
+                if name.endswith('.cfg'):
+                    name = name[:-4]
 
-                elif var_name == 'speed':
-                    theme.set_speed(var_arg)
+                theme.name = name
 
-                elif var_name == 'area':
-                    area_name = var_arg
+            case 'speed':
+                theme.set_speed(var_arg)
 
-                    if area_name in supported_region_names:
-                        area_found = True
-                        imported_areas.append(area_name)
-                        region = computer.get_region_by_name(area_name)
-                        area = Area(region)
-                        theme.add_area(area)
-                    else:
-                        area_found = False
-                        print_warning("area.name `{}` not listed on computer regions names".format(area_name))
+            case 'area':
+                if var_arg in supported_region_names:
+                    imported_areas.append(var_arg)
+                    region = computer.get_region_by_name(var_arg)
+                    area = Area(region)
+                    theme.add_area(area)
+                else:
+                    area = None
+                    print_warning(f"line {i}, area.name {var_arg} not listed on computer regions names")
 
-                elif var_name in ('type', 'mode'):  # `type`is to give support to old themes
-                    mode = var_arg
-                    if mode not in ('fixed', 'morph', 'blink'):
-                        default_mode = computer.default_mode
-                        print_warning(
-                            'wrong mode=`{}` when importing theme. Using default mode=`{}`'.format(mode, default_mode))
-                        mode = default_mode
+            case 'mode':
+                mode = var_arg
+                if mode not in ('fixed', 'morph', 'blink'):
+                    print_warning(
+                        f'line {i}, wrong mode={mode} when importing theme. Using default mode={computer.default_mode}')
+                    mode = computer.default_mode
 
-                # `color` & `color1`are to give support to old themes
-                elif var_name in ('color', 'color1', 'left_color'):
+            case 'left_color':
+                if string_is_hex_color(var_arg):
+                    left_color = var_arg
+                else:
+                    print_warning(f"line {i}, un-valid left_color value={var_arg}")
 
-                    if string_is_hex_color(var_arg):
-                        left_color = var_arg
-                    else:
+            case 'right_color':
+                if string_is_hex_color(var_arg):
+                    right_color = var_arg
+                else:
+                    print_warning(f"line {i}, un-valid right_color value={var_arg}")
 
-                        if area_found:
-                            area_name = area.name
-                        else:
-                            area_name = "?"
+        if area is not None and left_color != "" and right_color != "" and mode != "":
+            print_debug(f'Area={area.name}, adding Zone mode={mode}, left_color={left_color}, right_color={right_color}',
+                        direct_output=True)
 
-                        print_warning(
-                            "Wrong left hex_color={} for area={}, the default hex_color= will be used instead.".format(
-                                left_color,
-                                area_name,
-                                _MISSING_ZONE_COLOR))
-                        left_color = _MISSING_ZONE_COLOR
+            zone = Zone(mode=mode, left_color=left_color, right_color=right_color)
+            area.add_zone(zone)
 
-                elif var_name in ('color2', 'right_color'):  # `color2` is to give support to old themes
-
-                    if string_is_hex_color(var_arg):
-                        right_color = var_arg
-                    else:
-
-                        if area_found:
-                            area_name = area.name
-                        else:
-                            area_name = "?"
-
-                        print_warning(
-                            "Wrong left hex_color={} for area={}, the default hex_color={} will be used instead.".format(
-                                right_color,
-                                area_name,
-                                _MISSING_ZONE_COLOR))
-                        right_color = _MISSING_ZONE_COLOR
-
-                if area_found and left_color and right_color and mode:
-                    # print_debug('adding Zone to Area, mode=`{}`, left_color=`{}`, right_color=`{}`'.format(mode, left_color, right_color))
-
-                    zone = Zone(mode=mode, left_color=left_color, right_color=right_color)
-                    area.add_zone(zone)
-
-                    left_color, right_color, mode = False, False, False
+            left_color = ""
+            right_color = ""
+            mode = ""
 
     # Add areas in case they be missing
     #
     warning_text = ""
-
     for area_name in supported_region_names:
         if area_name not in imported_areas:
             region = computer.get_region_by_name(area_name)
             area = Area(region)
 
             theme.add_area(area)
-            warning_text += 'Adding missing Area="{}"\n'.format(area_name)
+            warning_text += f'Adding missing Area="{area_name}"\n'
 
             zone = Zone(mode=computer.default_mode,
                         left_color=_MISSING_ZONE_COLOR,
@@ -206,15 +186,10 @@ def load_from_file(path, computer):
 
             area.add_zone(zone)
 
-            warning_text += 'Adding Zone to the previous area, mode="{}" left_color="{}" right_color="{}"\n'.format(
-                zone.get_mode(),
-                zone.get_left_color(),
-                zone.get_right_color())
+            warning_text += f'Adding Zone to the previous area, mode="{zone.get_mode()}" left_color="{zone.get_left_color()}" right_color="{zone.get_right_color()}"\n'
 
     if warning_text != "":
         print_warning(warning_text)
-
-    # print_debug(theme)
 
     #
     # Add the configuration

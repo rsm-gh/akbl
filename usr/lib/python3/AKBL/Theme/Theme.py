@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2018, 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -18,7 +18,7 @@
 
 import os
 
-from AKBL.console import print_warning
+from AKBL.console_printer import print_warning
 
 _MISSING_ZONE_COLOR = "#0000FF"
 
@@ -58,7 +58,7 @@ class Theme:
         if area.name not in self.__areas.keys():
             self.__areas[area.name] = area
         else:
-            print_warning('Duplicated area "{}", "{}"'.format(area.name, self.__areas.keys()))
+            print_warning(f'Duplicated area "{area.name}", {self.__areas.keys()}')
 
     def modify_zone(self, area_name, column, left_color, right_color, mode):
         zone = self.__areas[area_name].get_zone(column)
@@ -83,27 +83,26 @@ class Theme:
 
     def __str__(self):
 
-        theme_text = '''
+        theme_text = f'''
 #############################################
-#####     AKBL configuration theme      #####
+#####            AKBL theme             #####
 #############################################
 
-name={}
-speed={}
-\n'''.format(self.name, self.__speed)
+name={self.name}
+speed={self.__speed}
+\n'''
 
         for area in sorted(self.__areas.values(), key=lambda x: x.name):
-            theme_text += '''
-********************************************
-area={}
-
-'''.format(area.name)
+            theme_text += f'''
+################### AREA #####################
+area={area.name}
+\n'''
 
             for zone in area.get_zones():
-                theme_text += '''
-mode={}
-left_color={}
-right_color={}
-'''.format(zone.get_mode(), zone.get_left_color(), zone.get_right_color())
+                theme_text += f'''
+mode={zone.get_mode()}
+left_color={zone.get_left_color()}
+right_color={zone.get_right_color()}
+'''
 
         return theme_text

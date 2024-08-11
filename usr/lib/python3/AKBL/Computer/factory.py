@@ -25,7 +25,7 @@ from AKBL.Paths import Paths
 from AKBL.Engine.Driver import Driver
 from AKBL.Computer.Region import Region
 from AKBL.Computer.Computer import Computer
-from AKBL.console import print_debug, print_warning, print_error
+from AKBL.console_printer import print_debug, print_warning, print_error
 
 _SOFTWARE_PATHS = Paths()
 

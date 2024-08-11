@@ -24,7 +24,7 @@ from typing import Tuple
 from traceback import format_exc
 
 from AKBL.Paths import Paths
-from AKBL.console import print_error, print_warning
+from AKBL.console_printer import print_error, print_warning
 
 
 class Bindings:
@@ -187,9 +187,9 @@ class Bindings:
         Admin bindings.
     """
 
-    def reload_configurations(self) -> None:
+    def reload_themes(self) -> None:
         """Reload the configurations for the current user."""
-        self.__command('reload_configurations')
+        self.__command('reload_themes')
 
     def reload_address(self, verbose=False) -> bool:
         """Reload the pyro address, and try to make a connection with the Daemon."""
@@ -234,7 +234,7 @@ class Bindings:
 
     def __command(self, command: str, *args):
         """Send a command to the daemon."""
-        if command in ('set_theme', 'set_lights', 'switch_lights', 'reload_configurations', 'connect_indicator'):
+        if command in ('set_theme', 'set_lights', 'switch_lights', 'reload_themes', 'connect_indicator'):
             args = [self.__user] + list(args)
 
         if self.__pyro_address == "":
