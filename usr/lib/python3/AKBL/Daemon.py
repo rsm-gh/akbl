@@ -95,7 +95,7 @@ class Daemon:
                       indicator: bool = True,
                       set_default: bool = True) -> None:
 
-        print_debug("user={}, indicator={}, set_default={}".format(user, indicator, set_default))
+        print_debug(f"user={user}, indicator={indicator}, set_default={set_default}")
 
         if user != self.__user:
             self.__user = user
@@ -104,12 +104,12 @@ class Daemon:
 
         theme_factory.load_themes(self.__computer, self.__paths._profiles_dir)
         user_themes = list(theme_factory._AVAILABLE_THEMES.keys())
-        print_debug("user={}, themes={}".format(self.__user, user_themes), direct_output=True)
+        print_debug(f"user={self.__user}, themes={user_themes}", direct_output=True)
 
         if set_default:
             _, theme_name = theme_factory.get_last_configuration()
             self.__theme = theme_factory.get_theme_by_name(theme_name)
-            print_debug("default theme={}".format(self.__theme.name), direct_output=True)
+            print_debug(f"default theme={self.__theme.name}", direct_output=True)
 
         if self.__pyro_indicator is not None and indicator:
             try:
@@ -126,14 +126,14 @@ class Daemon:
     @Pyro4.expose
     def switch_lights(self, user: str):
         """Toggle on/off the lights of the keyboard."""
-        print_debug("user={}".format(user))
+        print_debug(f"user={user}")
         self.set_lights(user, not self.__lights_state)
 
     @Pyro4.expose
     def set_theme(self, user: str, theme_name: str) -> bool:
         """Set a theme by name."""
 
-        print_debug("user={} theme_name={}".format(user, theme_name))
+        print_debug(f"user={user} theme_name={theme_name}")
 
         if user != self.__user:
             self.__user = user
@@ -153,7 +153,7 @@ class Daemon:
     def set_lights(self, user: str, state: bool) -> None:
         """Set the lights on or off."""
 
-        print_debug("user={} state={}".format(user, state))
+        print_debug(f"user={user} state={state}")
 
         if user != self.__user:
             self.reload_themes(user)
@@ -219,7 +219,7 @@ class Daemon:
             #TODO: Check why right_colors is in blink mode?
         """
 
-        print_debug("mode={} speed={} left_colors={} right_colors={}".format(mode, speed, left_colors, right_colors))
+        print_debug(f"mode={mode} speed={speed} left_colors={left_colors} right_colors={right_colors}")
 
         #
         # Args checks
@@ -257,8 +257,7 @@ class Daemon:
         for color_list in (left_colors, right_colors):
             for color in color_list:
                 if not string_is_hex_color(color):
-                    print_warning(
-                        "The colors argument must only contain hex colors. The color={} is not valid.".format(color))
+                    print_warning(f"The colors argument must only contain hex colors. The color={color} is not valid.")
                     return False
 
         #
@@ -276,9 +275,7 @@ class Daemon:
                 for i, (left_color, right_color) in enumerate(zip(left_colors, right_colors)):
 
                     if i + 1 > region.max_commands:
-                        print_warning(
-                            "The number of maximum commands for the region={} have been exceed. The loop was stopped at {}.".format(
-                                region.name, i + 1))
+                        print_warning(f"The number of maximum commands for the region={region.name} have been exceed. The loop was stopped at {i+1}.")
                         break
 
                     if mode == 'blink':
@@ -286,18 +283,14 @@ class Daemon:
                             self.__controller.add_color_line(region.hex_id, 'blink', left_color, right_color)
                         else:
                             self.__controller.add_color_line(region.hex_id, 'fixed', left_color)
-                            print_warning(
-                                "The mode=blink is not supported for the region={}, the mode=fixed will be used instead.".format(
-                                    region.name))
+                            print_warning(f"The mode=blink is not supported for the region={region.name}, the mode=fixed will be used instead.")
 
                     elif mode == 'morph':
                         if region.can_morph:
                             self.__controller.add_color_line(region.hex_id, 'morph', left_color, right_color)
                         else:
                             self.__controller.add_color_line(region.hex_id, 'fixed', left_color)
-                            print_warning(
-                                "The mode=morph is not supported for the region={}, the mode=fixed will be used instead.".format(
-                                    region.name))
+                            print_warning(f"The mode=morph is not supported for the region={region.name}, the mode=fixed will be used instead.")
 
                     else:
                         self.__controller.add_color_line(region.hex_id, 'fixed', left_color)
@@ -365,7 +358,7 @@ class Daemon:
     def update_indicator(self) -> None:
         """Update the status (lights on/off) of the indicator."""
 
-        print_debug("lights state={}".format(self.__lights_state))
+        print_debug(f"lights state={self.__lights_state}")
 
         if self.__lights_state:
             self.__indicator_send_code(IndicatorCodes._lights_on)
@@ -414,13 +407,13 @@ class Daemon:
         # Mark the current theme as "last used"
         #
         if os.path.exists(self.__theme.path):
-            print_debug("Mark theme as last used... path={}".format(self.__theme.path), direct_output=True)
+            print_debug(f"Mark theme as last used... path={self.__theme.path}", direct_output=True)
             os.utime(self.__theme.path, None)
 
         # Update the Indicator
         #
         if self.__pyro_indicator is not None:
-            print_debug("Sending update to the indicator...".format(self.__theme.path), direct_output=True)
+            print_debug("Sending update to the indicator...", direct_output=True)
             self.__indicator_send_code(IndicatorCodes._lights_on)
             try:
                 self.__pyro_indicator.load_themes(theme_factory._AVAILABLE_THEMES.keys(),
@@ -435,7 +428,7 @@ class Daemon:
 
     def __indicator_send_code(self, code: int) -> None:
 
-        print_debug("code={}".format(code))
+        print_debug(f"code={code}")
 
         if self.__pyro_indicator is not None:
             try:
@@ -451,7 +444,7 @@ def main(fake=False):
     pyro_daemon = Pyro4.Daemon()
     pyro_uri = str(pyro_daemon.register(akbl_daemon))
     pyro_uri_file = Paths()._daemon_pyro_file
-    print_info('Registering URI="{}"\nUpdating "{}"'.format(pyro_uri, pyro_uri_file))
+    print_info(f'Registering URI={pyro_uri}\nUpdating {pyro_uri_file}')
     with open(pyro_uri_file, encoding='utf-8', mode='wt') as f:
         f.write(pyro_uri)
 
