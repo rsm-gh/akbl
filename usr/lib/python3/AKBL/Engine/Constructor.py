@@ -19,7 +19,7 @@
 
 from AKBL.Engine.Command import Command
 from AKBL.utils import rgb_to_hex
-from AKBL.console import print_error, print_warning
+from AKBL.console_printer import print_error, print_warning
 
 
 class Constructor:

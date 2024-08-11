@@ -32,7 +32,7 @@ from gi.repository import AyatanaAppIndicator3 as AppIndicator
 from AKBL.texts import Texts
 from AKBL.Bindings import Bindings
 from AKBL.settings import IndicatorCodes
-from AKBL.console import print_error, print_debug
+from AKBL.console_printer import print_error, print_debug
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 _PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
@@ -151,9 +151,7 @@ class Indicator:
 
         for theme_name in sorted(profiles_name):
             submenu = Gtk.CheckMenuItem(label=theme_name)
-
-            if theme_name == current_profile and state:
-                submenu.set_active(True)
+            submenu.set_active(theme_name == current_profile and state)
 
             submenu.connect('toggled', self.set_theme, theme_name)
             self.__submenu_profiles.append(submenu)
@@ -166,6 +164,7 @@ class Indicator:
         print_debug("indicator_code={}".format(indicator_code))
 
         enable_gui = None
+        children_state = None
 
         match indicator_code:
             case self.__current_code:
@@ -177,6 +176,7 @@ class Indicator:
                 if self.__current_code == IndicatorCodes._daemon_off:
                     enable_gui = True
 
+                children_state = True
                 self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_lights_on, Texts.Indicator.lights_on)
 
@@ -186,6 +186,7 @@ class Indicator:
                 if self.__current_code == IndicatorCodes._daemon_off:
                     enable_gui = True
 
+                children_state = False
                 self.__current_code = indicator_code
                 self.__app_indicator.set_icon_full(self.__icon_lights_off, Texts.Indicator.lights_off)
 
@@ -202,6 +203,10 @@ class Indicator:
         if enable_gui is not None:
             self.__submenu_switch_state.set_sensitive(enable_gui)
             self.__profiles_menu.set_sensitive(enable_gui)
+
+        if children_state is False:
+            for children in self.__submenu_profiles.get_children():
+                children.set_active(children_state)
 
     @Pyro4.expose
     def set_theme(self, _widget: object, theme_name: str) -> None:

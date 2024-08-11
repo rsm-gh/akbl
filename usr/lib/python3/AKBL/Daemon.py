@@ -36,7 +36,7 @@ from AKBL.utils import string_is_hex_color
 from AKBL.Engine.Controller import Controller
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
-from AKBL.console import print_warning, print_error, print_info, print_debug
+from AKBL.console_printer import print_warning, print_error, print_info, print_debug
 
 
 class Daemon:
@@ -72,7 +72,7 @@ class Daemon:
         self.__theme = None
         self.__lights_state = False
         self.__pyro_indicator = None
-        self.reload_configurations(self.__user)
+        self.reload_themes(self.__user)
 
     """
         General Bindings
@@ -90,10 +90,10 @@ class Daemon:
         return self.__controller.is_ready()
 
     @Pyro4.expose
-    def reload_configurations(self,
-                              user: str,
-                              indicator: bool = True,
-                              set_default: bool = True) -> None:
+    def reload_themes(self,
+                      user: str,
+                      indicator: bool = True,
+                      set_default: bool = True) -> None:
 
         print_debug("user={}, indicator={}, set_default={}".format(user, indicator, set_default))
 
@@ -139,7 +139,7 @@ class Daemon:
             self.__user = user
             self.__paths = Paths(user)
 
-        self.reload_configurations(user, indicator=False, set_default=False)
+        self.reload_themes(user, indicator=False, set_default=False)
 
         if theme_name not in theme_factory._AVAILABLE_THEMES.keys():
             print_warning("The theme is not in the user list.")
@@ -156,7 +156,7 @@ class Daemon:
         print_debug("user={} state={}".format(user, state))
 
         if user != self.__user:
-            self.reload_configurations(user)
+            self.reload_themes(user)
 
         if state is False:
 
@@ -359,7 +359,7 @@ class Daemon:
             print_warning("Failed to initialize the indicator")
             print_warning(format_exc(), direct_output=True)
         else:
-            self.reload_configurations(user, indicator=True)
+            self.reload_themes(user, indicator=True)
 
     @Pyro4.expose
     def update_indicator(self) -> None:
