@@ -159,7 +159,7 @@ def load_from_file(path, computer):
                     print_warning(f"line {i}, un-valid right_color value={var_arg}")
 
         if area is not None and left_color != "" and right_color != "" and mode != "":
-            print_debug(f'Area={area.name}, adding Zone mode={mode}, left_color={left_color}, right_color={right_color}',
+            print_debug(f'Area={area.name}, loading Zone mode={mode}, left_color={left_color}, right_color={right_color}',
                         direct_output=True)
 
             zone = Zone(mode=mode, left_color=left_color, right_color=right_color)
