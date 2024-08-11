@@ -26,13 +26,15 @@
 import os
 import traceback
 import configparser
+from typing import Any
+from copy import deepcopy
 
-__version__ = '0.6.4'
+__version__ = '0.6.5'
 
 
 class CCParser(object):
 
-    def __init__(self, ini_path='', section='', debug=False):
+    def __init__(self, ini_path: str = '', section: str = '', debug=False):
         """
             To init CCParser you can enter a path and a section.
             If you don't know them, you can leave them empty.
@@ -57,12 +59,14 @@ class CCParser(object):
         self.__default_float = 0.0
         self.__default_list = []
 
-        self.__accepted_true_bool = ['true', 'yes']
-        self.__accepted_false_bool = ['false', 'no']
+        self.__list_separator = "|"
+
+        self.__accepted_true_bool = ('true', 'yes')
+        self.__accepted_false_bool = ('false', 'no')
 
         self.__version__ = __version__
 
-    def print_info(self):
+    def print_info(self) -> None:
         print('''
 CCParser instance:
  Configuration Path: {}
@@ -79,7 +83,7 @@ CCParser instance:
            self.get_default_str()
            ))
 
-    def check_value(self, value):
+    def check_value(self, value: str) -> bool:
         """
             return False if the value does not exist.
             return True if the value exists.
@@ -97,7 +101,7 @@ CCParser instance:
 
         return False
 
-    def write(self, value_name, value):
+    def write(self, value_name: str, value: Any) -> None:
         """
             Write the value name and its value.
 
@@ -120,7 +124,6 @@ CCParser instance:
                 print("CCParser Warning: reading damaged file or file without section")
                 print(traceback.format_exc())
                 print()
-                return False
 
             if not self.__config.has_section(self.__section):
                 self.__config.add_section(self.__section)
@@ -134,7 +137,7 @@ CCParser instance:
             print("Configuration Path: " + str(self.get_configuration_path()))
             print()
 
-    def get_bool(self, value):
+    def get_bool(self, value: str) -> bool:
         """
             If the value exists, return the boolean
             corresponding to the string.
@@ -152,7 +155,7 @@ CCParser instance:
 
         return self.__default_bool
 
-    def get_float(self, value):
+    def get_float(self, value: str) -> float:
         """
             If the value exists, return the float
             corresponding to the string.
@@ -172,7 +175,7 @@ CCParser instance:
 
         return self.__default_float
 
-    def get_int(self, value):
+    def get_int(self, value: str) -> int:
         """
             If the value exists, return the integer
             corresponding to the string.
@@ -193,7 +196,7 @@ CCParser instance:
 
         return self.__default_int
 
-    def get_str(self, value):
+    def get_str(self, value: str) -> str:
         """
             If the value exists, return the string,
             otherwise return the default string.
@@ -203,25 +206,25 @@ CCParser instance:
 
         return self.__default_string
 
-    def get_list(self, value):
+    def get_list(self, value: str) -> list:
         """
-            If the value exists, return the integer corresponding to the string,
-            If it does not exist, or it cannot be converted to an integer, return the default integer.
+            If the value exists, return a list.,
+            If it does not exist, or it cannot be converted to a list, return the default list.
         """
         if self.check_value(value):
             val = self.__config.get(self.__section, value)
 
             try:
-                val = val.split("|")
+                val = val.split(self.__list_separator)
             except Exception:
                 if self.__debug:
                     print(traceback.format_exc())
             else:
                 return val
 
-        return self.__default_list
+        return deepcopy(self.__default_list)
 
-    def get_bool_defval(self, value, default):
+    def get_bool_defval(self, value: str, default: bool) -> bool:
         """
             If the value exists, return the boolean
             corresponding to the string.
@@ -240,7 +243,7 @@ CCParser instance:
 
         return default
 
-    def get_float_defval(self, value, default):
+    def get_float_defval(self, value: str, default: float) -> float:
         """
             If the value exists, return the float
             corresponding to the string.
@@ -260,7 +263,7 @@ CCParser instance:
 
         return default
 
-    def get_int_defval(self, value, default):
+    def get_int_defval(self, value: str, default: int) -> int:
         """
             If the value exists, return the integer
             corresponding to the string.
@@ -280,7 +283,7 @@ CCParser instance:
 
         return default
 
-    def get_str_defval(self, value, default):
+    def get_str_defval(self, value: str, default: str) -> str:
         """
             If the value exists, return the string,
             if it does not exist, return the second argument.
@@ -290,28 +293,32 @@ CCParser instance:
 
         return default
 
-    def get_default_bool(self):
+    def get_default_bool(self) -> bool:
         return self.__default_bool
 
-    def get_default_float(self):
+    def get_default_float(self) -> float:
         return self.__default_float
 
-    def get_default_str(self):
+    def get_default_str(self) -> str:
         return self.__default_string
 
-    def get_default_int(self):
+    def get_default_int(self) -> int:
         return self.__default_int
 
-    def get_default_list(self):
-        return self.__default_list
+    def get_default_list(self) -> list:
+        return deepcopy(self.__default_list)
 
-    def get_section(self):
+    def get_section(self) -> str:
         return self.__section
 
-    def get_configuration_path(self):
+    def get_configuration_path(self) -> str:
         return self.__ini_path
 
-    def set_configuration_path(self, ini_path):
+    def get_list_separator(self) -> str:
+        """Get the separator used when splitting strings to get list values."""
+        return self.__list_separator
+
+    def set_configuration_path(self, ini_path: str) -> None:
         """Set the path to the configuration file."""
         if isinstance(ini_path, str):
             self.__ini_path = ini_path
@@ -322,45 +329,47 @@ CCParser instance:
             self.__ini_path = ''
         print(ini_path)
 
-    def set_section(self, section):
+    def set_section(self, section: str) -> None:
         """
             Set the section to check for values.
         """
-        section = str(section)
         self.__section = section
 
-    def set_default_float(self, float_value):
+    def set_default_float(self, value: float) -> None:
         """
             Set the default float to return when a value does not exist.
             By default, it returns 0.0
         """
-        self.__default_float = float_value
+        self.__default_float = value
 
-    def set_default_string(self, str_value):
+    def set_default_string(self, value: str) -> None:
         """
             Set the default string to return when a value does not exist.
             By default, it returns an empty string.
         """
+        self.__default_string = value
 
-        self.__default_string = str_value
-
-    def set_default_bool(self, bool_value):
+    def set_default_bool(self, value: bool) -> None:
         """
             Set the default boolean to return when a value does not exist.
             By default, it returns false
         """
-        self.__default_bool = bool_value
+        self.__default_bool = value
 
-    def set_default_int(self, int_value):
+    def set_default_int(self, value: int) -> None:
         """
             Set the default integer to return when a value does not exist.
             By default, it returns 0
         """
-        self.__default_int = int_value
+        self.__default_int = value
 
-    def set_default_list(self, value):
+    def set_default_list(self, value: list) -> None:
         """
             Set the default integer to return when a value does not exist.
             By default, it returns 0
         """
-        self.__default_list = value
+        self.__default_list = deepcopy(value)
+
+    def set_list_separator(self, separator: str) -> None:
+        """Set the separator used when splitting strings to get list values."""
+        self.__list_separator = separator
