@@ -113,9 +113,7 @@ def __print_message(message: str, code_type: int, isp1: inspect.FrameInfo, direc
             print(message, flush=True)
             return
 
-        back_to = False
     else:
-        back_to = True
         __LAST_OUTPUT_FUNC_DATA = function_data
 
     match code_type:
