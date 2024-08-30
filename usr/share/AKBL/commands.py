@@ -16,12 +16,16 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+"""
+    This module prints directly to the user. console_printer should not be used !
+"""
+
+
 import sys
 
 import AKBL.texts as texts
 from AKBL.Bindings import Bindings
 from AKBL.settings import __version__
-from AKBL.console_printer import print_warning, print_error
 
 
 def process_args(args):
@@ -48,7 +52,7 @@ def process_args(args):
         case '--off' | '--on' | '--switch' | '--set-theme':
 
             if not akbl_bindings.ping():
-                print_warning(texts._TEXT_ERROR_DAEMON_OFF)
+                print(texts._TEXT_ERROR_DAEMON_OFF)
                 return
 
             match arg1:
@@ -63,14 +67,14 @@ def process_args(args):
 
                 case '--set-theme':
                     if len(args) != 3:
-                        print_error(texts._TEXT_WRONG_ARGUMENT)
+                        print(texts._TEXT_WRONG_ARGUMENT)
                     else:
                         akbl_bindings.set_theme(args[2])
                 case _:
-                    print_error(texts._TEXT_WRONG_ARGUMENT)
+                    print(texts._TEXT_WRONG_ARGUMENT)
 
         case _:
-            print_error(texts._TEXT_WRONG_ARGUMENT)
+            print(texts._TEXT_WRONG_ARGUMENT)
 
 
 if __name__ == '__main__':
