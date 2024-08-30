@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2017 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2014 Rafael Senties Martinelli.
 #                2011-2012 the pyAlienFX team.
 #
 #
@@ -22,13 +22,13 @@
 class Region:
 
     def __init__(self,
-                 name=None,
-                 description=None,
-                 hex_id=None,
-                 max_commands=0,
-                 can_blink=False,
-                 can_morph=False,
-                 can_light=False):
+                 name: str = None,
+                 description: str = None,
+                 hex_id: int = None,
+                 max_commands: int = 0,
+                 can_blink: bool = False,
+                 can_morph: bool = False,
+                 can_light: bool = False):
         self.name = name
         self.description = description
         self.hex_id = hex_id
@@ -38,20 +38,12 @@ class Region:
         self.max_commands = max_commands
 
     def __str__(self):
-        region_description = '''
-    name={}
-    description={}
-    hex_id={}
-    can_light={}
-    can_blink={}
-    can_morph={}
-    max_commands={}
-'''.format(self.name,
-           self.description,
-           self.hex_id,
-           self.can_light,
-           self.can_blink,
-           self.can_morph,
-           self.max_commands)
-
-        return region_description
+        return f'''
+    name={self.name}
+    description={self.description}
+    hex_id={self.hex_id}
+    can_light={self.can_light}
+    can_blink={self.can_blink}
+    can_morph={self.can_morph}
+    max_commands={self.max_commands}
+'''

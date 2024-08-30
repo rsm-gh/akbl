@@ -129,7 +129,7 @@ class MainWindow:
 
         #   Load a configuration
         #
-        self.__computer = computer_factory.get_installed_computer()
+        self.__computer = computer_factory.get_default_computer()
         if self.__computer is None:  # todo: display message install computer model
             self.__computer = Computer()
 
