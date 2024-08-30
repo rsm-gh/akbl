@@ -232,7 +232,7 @@ class MainWindow:
             area_label = Gtk.Label()
             area_label.set_text(area.description)
             area_label.set_xalign(0)
-            area_label.set_size_request(width=100, height=112.5)
+            area_label.set_size_request(width=100, height=112)
             self.box_area_labels.pack_start(child=area_label, expand=False, fill=False, padding=0)
             self.box_area_labels.show_all()
 
@@ -271,7 +271,7 @@ class MainWindow:
         for theme_name in sorted(theme_factory._AVAILABLE_THEMES.keys()):
             self.liststore_profiles.append([theme_name])
 
-        row, _ = theme_factory.get_last_configuration()
+        row, _ = theme_factory.get_last_theme()
 
         self.combobox_profiles.set_active(row)
         self.__speed = self.__theme.get_speed()
@@ -400,7 +400,7 @@ class MainWindow:
                 return
 
             shutil.copy(file_path, new_path)
-            theme_factory.load_from_file(new_path, self.__computer)
+            theme_factory.load_theme_from_file(self.__computer, new_path)
             self.populate_liststore_profiles()
 
     def on_menuitem_export_activate(self, *_):
@@ -531,7 +531,7 @@ class MainWindow:
             os.remove(self.__theme.path)
 
         if len(theme_factory._AVAILABLE_THEMES.keys()) == 0:
-            theme_factory.create_default_profile(self.__computer, self.__paths._profiles_dir)
+            theme_factory.create_default_theme(self.__computer, self.__paths._profiles_dir)
 
         GLib.idle_add(self.populate_liststore_profiles)
 

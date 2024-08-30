@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #                2011-2012 the pyAlienFX team.
 #
 #
@@ -18,18 +18,19 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+from AKBL.Computer.Region import Region
 from AKBL.console_printer import print_warning
 
 
 class Computer:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         self.name = '<Default>'
         self.default_mode = 'fixed'
         self.default_speed = 1
         self.configuration_path = ""
-        self.__regions = []
+        self.__regions = {}
 
         self.vendor_id = 6268
         self.product_id = None
@@ -72,36 +73,34 @@ class Computer:
 
         self.region_all_but_power = 1023999
 
-    def __str__(self):
+    def __str__(self) -> str:
         attributes = '\n'.join(['{}={}'.format(attribute, value) for attribute, value in self.__dict__.items() if
                                 not attribute.startswith('_')])
         regions = '\nregions:\n' + '\n'.join([str(region) for region in self.__regions])
 
         return attributes + regions
 
-    def get_regions(self):
-        return self.__regions
+    def add_region(self, new_region: Region) -> None:
 
-    def get_regions_name(self):
-        return [region.name for region in self.__regions]
+        if new_region.name in self.__regions:
+            print_warning("Duplicated region name={}".format(new_region.name))
+            return
 
-    def get_region_by_name(self, region_name):
-        for region in self.__regions:
-            if region_name == region.name:
-                return region
-
-        return None
-
-    def add_region(self, new_region):
-
-        for region in self.__regions:
-
-            if region.name == new_region.name:
-                print_warning("Duplicated region id={}".format(region.name))
-                return
-
-            elif region.hex_id == new_region.hex_id:
+        for region in self.__regions.values():
+            if region.hex_id == new_region.hex_id:
                 print_warning("Duplicated region block={}".format(region.hex_id))
                 return
 
-        self.__regions.append(new_region)
+        self.__regions[new_region.name] = new_region
+
+    def get_regions(self) -> list[Region]:
+        return list(self.__regions.values())
+
+    def get_regions_name(self) -> list[str]:
+        return list(self.__regions.keys())
+
+    def get_region_by_name(self, region_name: str) -> None | Region:
+        try:
+            return self.__regions[region_name]
+        except KeyError:
+            return None

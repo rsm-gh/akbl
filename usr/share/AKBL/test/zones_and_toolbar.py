@@ -19,6 +19,7 @@
 import os
 import gi
 import sys
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
@@ -29,12 +30,12 @@ sys.path.insert(0, _PROJECT_DIR)
 from GUI.ZoneWidget import ZoneWidget
 from GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
 
+
 class DialogWindow(Gtk.Window):
 
     def __init__(self):
-        
         Gtk.Window.__init__(self, title="Dialog Example")
-        
+
         self.set_size_request(width=900, height=600)
         box = Gtk.VBox()
         grid = Gtk.Grid()
@@ -42,16 +43,15 @@ class DialogWindow(Gtk.Window):
         viewport.add(grid)
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.add(viewport)
-        
+
         self.color_chooser_toolbar = ColorChooserToolbar(self)
         self.color_chooser_toolbar.connect('colorlist-changed', self.on_toolbar_colorlist_changed)
-        
-        
+
         box.pack_start(child=self.color_chooser_toolbar, expand=False, fill=True, padding=10)
         box.pack_start(child=scrolled_window, expand=True, fill=True, padding=0)
-        
+
         self.add(box)
-        
+
         # Add the Zone objects to be tested
         #
         for row_index in range(2):
@@ -61,32 +61,32 @@ class DialogWindow(Gtk.Window):
                                     mode='fixed',
                                     column=0,
                                     get_color_callback=self.color_chooser_toolbar.get_current_rgba)
-            
+
             grid.attach(child=fixed_zone, left=0, top=row_index, width=1, height=1)
-            
+
             blink_zone = ZoneWidget(area_name='',
                                     left_color='#020202',
                                     right_color='#020202',
                                     mode='blink',
                                     column=1,
                                     get_color_callback=self.color_chooser_toolbar.get_current_rgba)
-            
+
             grid.add(blink_zone)
-            
+
             morph_zone = ZoneWidget(area_name='',
                                     left_color='#020202',
                                     right_color='#020202',
                                     mode='morph',
                                     column=2,
                                     get_color_callback=self.color_chooser_toolbar.get_current_rgba)
-            
+
             grid.add(morph_zone)
-            
+
     @staticmethod
     def on_toolbar_colorlist_changed(_):
         print("The toolbar colorlist changed.")
-            
-            
+
+
 # Launch the interface
 #
 
@@ -94,5 +94,3 @@ win = DialogWindow()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
 Gtk.main()
-
-    

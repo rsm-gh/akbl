@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2019, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #                2011-2012 the pyAlienFX team.
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 import usb
 from traceback import format_exc
 
+from AKBL.Engine import Constructor
 from AKBL.console_printer import print_debug, print_error
 
 
@@ -40,9 +41,9 @@ class Driver:
         self.__read_value = 257
         self.__read_index = 0
 
-    def load_device(self, id_vendor, id_product):
+    def load_device(self, id_vendor: int, id_product: int) -> None:
 
-        print_debug("id_vendor={}, id_product={}".format(id_vendor, id_product))
+        print_debug(f"id_vendor={id_vendor}, id_product={id_product}")
 
         try:
             self.__usb_device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
@@ -50,20 +51,20 @@ class Driver:
             self.__usb_device = None
             print_error(format_exc())
 
-        print_debug('usb_device={}'.format(self.__usb_device), direct_output=True)
+        print_debug(f'usb_device={self.__usb_device}', direct_output=True)
 
         if self.__usb_device is not None:
             self.take_over()
 
-    def has_device(self):
+    def has_device(self) -> None | bool:
         if self.__usb_device is None:
             return False
         return True
 
-    def device_information(self):
+    def device_information(self) -> str:
         return str(self.__usb_device)
 
-    def write_constructor(self, constructor):
+    def write_constructor(self, constructor: Constructor) -> None:
         # Todo: read the status?
 
         print_debug('\n'.join(str(request) for request in constructor))
@@ -76,12 +77,12 @@ class Driver:
                                                          self.__send_index,
                                                          command)
 
-                print_debug("command output={}".format(status))
+                print_debug(f"command output={status}")
 
         except Exception:
             print_error(format_exc())
 
-    def read_device(self, constructor):
+    def read_device(self, constructor: Constructor) -> None | int:
 
         print_debug(constructor)
 
@@ -96,11 +97,11 @@ class Driver:
             print_error(format_exc())
             return None
 
-        print_debug("msg={}".format(msg))
+        print_debug(f"msg={msg}")
 
         return msg
 
-    def take_over(self):
+    def take_over(self) -> None:
 
         print_debug()
 

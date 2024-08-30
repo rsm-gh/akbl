@@ -19,6 +19,7 @@
 import os
 import sys
 import gi
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
@@ -33,7 +34,7 @@ sys.path.insert(0, PROJECT_DIR)
 from gtk_utils import gtk_dialog_question
 
 _EMPTY_MODEL = "<NONE>"
-_SOFTWARE_PATHS = Paths()
+_AKBL_PATHS = Paths()
 _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT = '''
 No computer model is chosen. If you quit without
 choosing a computer the software will not work. 
@@ -41,9 +42,11 @@ choosing a computer the software will not work.
 Do you want to go back?
 '''
 
+
 class ModelChooser(Gtk.Window):
 
     def __init__(self):
+        super().__init__()
 
         """
             Glade
@@ -78,9 +81,9 @@ class ModelChooser(Gtk.Window):
         for inst_computer in computer_factory.get_all_computers():
 
             if inst_computer in compatible_computers:
-                    self.liststore_hardware_comp.append([inst_computer.name,
-                                                         inst_computer.name == installed_computer_name,
-                                                         True])
+                self.liststore_hardware_comp.append([inst_computer.name,
+                                                     inst_computer.name == installed_computer_name,
+                                                     True])
             else:
                 self.liststore_hardware_not_comp.append([inst_computer.name])
 
@@ -91,7 +94,6 @@ class ModelChooser(Gtk.Window):
         for i, _ in enumerate(self.liststore_hardware_comp):
             iter_row = self.liststore_hardware_comp.get_iter(i)
             self.liststore_hardware_comp.set_value(iter_row, 1, i == clicked_row)
-
 
     @staticmethod
     def __get_default_computer_name():
@@ -126,9 +128,8 @@ class ModelChooser(Gtk.Window):
         # Warn the user that no computer is installed
         #
         if installed_computer_name == _EMPTY_MODEL:
-            if gtk_dialog_question(None, _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, icon=_SOFTWARE_PATHS._icon_file):
+            if gtk_dialog_question(None, _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, icon=_AKBL_PATHS._icon_file):
                 return
-
 
         #
         # Print the computer model
@@ -138,11 +139,12 @@ class ModelChooser(Gtk.Window):
         #
         # Quit the application
         #
-        
+
         Gtk.main_quit()
 
     def on_window_destroy(self, *_):
         self._on_button_close_clicked()
+
 
 if __name__ == "__main__":
     _ = ModelChooser()

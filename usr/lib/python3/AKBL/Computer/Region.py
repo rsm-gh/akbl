@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2014 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #                2011-2012 the pyAlienFX team.
 #
 #
@@ -22,13 +22,13 @@
 class Region:
 
     def __init__(self,
-                 name: str = None,
-                 description: str = None,
-                 hex_id: int = None,
-                 max_commands: int = 0,
-                 can_blink: bool = False,
-                 can_morph: bool = False,
-                 can_light: bool = False):
+                 name: str,
+                 description: str,
+                 hex_id: int,
+                 max_commands: int,
+                 can_blink: bool,
+                 can_morph: bool,
+                 can_light: bool):
         self.name = name
         self.description = description
         self.hex_id = hex_id

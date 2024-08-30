@@ -74,10 +74,13 @@ def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filt
     if filters is None:
         filters = []
 
-    window = Gtk.FileChooserDialog(title, parent, Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL,
-                                                                               Gtk.ResponseType.CANCEL,
-                                                                               Gtk.STOCK_OPEN,
-                                                                               Gtk.ResponseType.OK))
+    window = Gtk.FileChooserDialog(title,
+                                   parent,
+                                   Gtk.FileChooserAction.OPEN,
+                                   (Gtk.STOCK_CANCEL,
+                                               Gtk.ResponseType.CANCEL,
+                                               Gtk.STOCK_OPEN,
+                                               Gtk.ResponseType.OK))
 
     window.set_default_response(Gtk.ResponseType.NONE)
     window.set_transient_for(parent)

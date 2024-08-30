@@ -27,13 +27,13 @@ from AKBL.Computer.Region import Region
 from AKBL.Computer.Computer import Computer
 from AKBL.console_printer import print_debug, print_warning, print_error
 
-_SOFTWARE_PATHS = Paths()
+_AKBL_PATHS = Paths()
 
 
 def get_all_computers() -> list[Computer]:
     computers = []
 
-    path = Paths()._computers_configuration_dir
+    path = _AKBL_PATHS._computers_configuration_dir
 
     for file_name in os.listdir(path):
         if file_name.endswith(".ini"):
@@ -129,10 +129,10 @@ def get_computer_by_path(file_path: str) -> None | Computer:
 
 
 def get_default_computer() -> None | Computer:
-    if not os.path.exists(_SOFTWARE_PATHS._default_computer_file):
+    if not os.path.exists(_AKBL_PATHS._default_computer_file):
         return None
 
-    return get_computer_by_path(_SOFTWARE_PATHS._default_computer_file)
+    return get_computer_by_path(_AKBL_PATHS._default_computer_file)
 
 
 def set_default_computer(computer_name: str):
@@ -148,5 +148,5 @@ def set_default_computer(computer_name: str):
     with open(computer.configuration_path, 'r') as f:
         installed_data = f.read()
 
-    with open(_SOFTWARE_PATHS._default_computer_file, 'w') as f:
+    with open(_AKBL_PATHS._default_computer_file, 'w') as f:
         f.write(installed_data)

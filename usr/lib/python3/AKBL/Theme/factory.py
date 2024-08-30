@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -22,16 +22,17 @@ from AKBL.Theme.Area import Area
 from AKBL.Theme.Zone import Zone
 from AKBL.utils import string_is_hex_color
 from AKBL.console_printer import print_warning, print_debug
+from AKBL.Computer.Computer import Computer
 from AKBL.Theme.Theme import Theme, _MISSING_ZONE_COLOR
 
 _AVAILABLE_THEMES = {}
 
 
-def get_theme_by_name(name):
+def get_theme_by_name(name) -> Theme:
     return _AVAILABLE_THEMES[name]
 
 
-def load_themes(computer, folder_path):
+def load_themes(computer: Computer, folder_path: str = None) -> Theme:
     global _AVAILABLE_THEMES
     _AVAILABLE_THEMES = {}
 
@@ -44,19 +45,19 @@ def load_themes(computer, folder_path):
 
         for file_name in files:
             if file_name.endswith('.cfg'):
-                load_from_file(folder_path + file_name, computer)
+                load_theme_from_file(computer, folder_path + file_name)
 
-    # Add the default profile
+    # Add the default theme
     #
     if len(_AVAILABLE_THEMES.keys()) <= 0:
-        theme = create_default_profile(computer, folder_path)
+        theme = create_default_theme(computer, folder_path)
     else:
         theme = list(_AVAILABLE_THEMES.values())[0]
 
     return theme
 
 
-def create_default_profile(computer, theme_path):
+def create_default_theme(computer: Computer, theme_path: str = None) -> Theme:
     theme = Theme(computer)
     copy_theme(theme, 'Default', theme_path + 'Default.cfg')
     theme.save()
@@ -64,7 +65,7 @@ def create_default_profile(computer, theme_path):
     return theme
 
 
-def get_last_configuration():
+def get_last_theme() -> tuple[int, None | Theme]:
     max_time = None
     profile_numb = 0
     theme_name = None
@@ -82,7 +83,7 @@ def get_last_configuration():
     return profile_numb, theme_name
 
 
-def load_from_file(path, computer):
+def load_theme_from_file(computer: Computer, path: str) -> Theme:
     print_debug('path="{}"'.format(path))
 
     with open(path, encoding='utf-8', mode='rt') as f:
@@ -127,7 +128,7 @@ def load_from_file(path, computer):
                 theme.name = name
 
             case 'speed':
-                theme.set_speed(var_arg)
+                theme.set_speed(int(var_arg))
 
             case 'area':
                 if var_arg in supported_region_names:
@@ -159,10 +160,13 @@ def load_from_file(path, computer):
                     print_warning(f"line {i}, un-valid right_color value={var_arg}")
 
         if area is not None and left_color != "" and right_color != "" and mode != "":
-            print_debug(f'Area={area.name}, loading Zone mode={mode}, left_color={left_color}, right_color={right_color}',
-                        direct_output=True)
+            print_debug(
+                f'Area={area.name}, loading Zone mode={mode}, left_color={left_color}, right_color={right_color}',
+                direct_output=True)
 
-            zone = Zone(mode=mode, left_color=left_color, right_color=right_color)
+            zone = Zone(mode=mode,
+                        left_color=left_color,
+                        right_color=right_color)
             area.add_zone(zone)
 
             left_color = ""
@@ -195,12 +199,15 @@ def load_from_file(path, computer):
     # Add the configuration
     #
     _AVAILABLE_THEMES[theme.name] = theme
+    return theme
 
 
-def copy_theme(theme, name, path, speed=1):
-    theme.name = name
-    theme.set_speed(speed)
-    theme.path = path
+def copy_theme(theme: Theme, name: str, path: str) -> Theme:
+
+    new_theme = Theme(computer=theme._computer)
+    new_theme.name = name
+    new_theme.set_speed(theme.get_speed())
+    new_theme.path = path
 
     for region in theme._computer.get_regions():
         area = Area(region)
@@ -212,3 +219,4 @@ def copy_theme(theme, name, path, speed=1):
         theme.add_area(area)
 
     _AVAILABLE_THEMES[theme.name] = theme
+    return new_theme

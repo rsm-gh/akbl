@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2019, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #                2011-2012 the pyAlienFX team.
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ from AKBL.console_printer import print_warning, print_error, print_debug
 
 class Controller:
 
-    def __init__(self, computer: Computer, fake=False):
+    def __init__(self, computer: Computer, fake=False) -> None:
 
         self.__driver = None
         self.__computer = None

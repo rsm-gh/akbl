@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2016, 2018, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2016-2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -23,7 +23,7 @@ import pwd
 import subprocess
 
 
-def get_alienware_device_info():
+def get_alienware_device_info() -> str:
     cmd = subprocess.run("lsusb", stdout=subprocess.PIPE)
     device_info = cmd.stdout.decode('utf-8', errors="ignore")
 
@@ -41,16 +41,16 @@ def get_alienware_device_info():
     return device_info
 
 
-def getuser():
+def getuser() -> str:
     return pwd.getpwuid(os.geteuid()).pw_name
 
 
-def string_is_hex_color(string):
+def string_is_hex_color(string) -> bool:
     if isinstance(string, str) and re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', string):
         return True
 
     return False
 
 
-def rgb_to_hex(rgb):
+def rgb_to_hex(rgb) -> str:
     return '#%02x%02x%02x' % (int(rgb[0]), int(rgb[1]), int(rgb[2]))

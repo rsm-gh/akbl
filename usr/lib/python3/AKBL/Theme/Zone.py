@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #                2011-2012 the pyAlienFX team.
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,10 @@ from AKBL.console_printer import print_warning
 
 class Zone:
 
-    def __init__(self, left_color, right_color, mode, hex_id=1):
+    def __init__(self,
+                 left_color: str,
+                 right_color: str,
+                 mode: str, hex_id=1):
 
         self.__mode = ''
         self.__left_color = ''
@@ -34,47 +37,37 @@ class Zone:
         self.set_right_color(right_color)
 
     def __str__(self):
+        return f'''
+        hex_id={self.__hex_id}
+        mode={self.__mode}
+        left_color={self.__left_color}
+        right_color={self.__right_color}
+        '''
 
-        zone_description = '''
-        hex_id={}
-        mode={}
-        left_color={}
-        right_color={}
-        '''.format(self.__hex_id,
-                   self.__mode,
-                   self.__left_color,
-                   self.__right_color)
-
-        return zone_description
-
-    def set_hex_id(self, hex_id):
+    def set_hex_id(self, hex_id: int) -> None:
         self.__hex_id = hex_id
 
-    def set_left_color(self, color):
+    def set_left_color(self, color: str) -> None:
         self.__left_color = color
 
-    def set_right_color(self, color):
+    def set_right_color(self, color: str) -> None:
         self.__right_color = color
 
-    def set_mode(self, mode):
+    def set_mode(self, mode: str) -> None:
+        match mode:
+            case 'fixed' | 'morph' | 'blink':
+                self.__mode = mode
+            case _:
+                print_warning('wrong mode=`{}`'.format(mode))
 
-        if mode == 'fixed':
-            self.__mode = 'fixed'
-        elif mode == 'morph':
-            self.__mode = 'morph'
-        elif mode == 'blink':
-            self.__mode = 'blink'
-        else:
-            print_warning('wrong mode=`{}`'.format(mode))
-
-    def get_hex_id(self):
+    def get_hex_id(self) -> int:
         return self.__hex_id
 
-    def get_mode(self):
+    def get_mode(self) -> str:
         return self.__mode
 
-    def get_left_color(self):
+    def get_left_color(self) -> str:
         return self.__left_color
 
-    def get_right_color(self):
+    def get_right_color(self) -> str:
         return self.__right_color

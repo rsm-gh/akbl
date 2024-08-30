@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2018, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2015-2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -107,7 +107,7 @@ class Daemon:
         print_debug(f"user={self.__user}, themes={user_themes}", direct_output=True)
 
         if set_default:
-            _, theme_name = theme_factory.get_last_configuration()
+            _, theme_name = theme_factory.get_last_theme()
             self.__theme = theme_factory.get_theme_by_name(theme_name)
             print_debug(f"default theme={self.__theme.name}", direct_output=True)
 

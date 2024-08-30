@@ -17,13 +17,14 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
 class Command:
 
-    def __init__(self, legend: str, command: list[int]):
+    def __init__(self, legend: str, command: list[int]) -> None:
         self.__legend = legend
         self.__command = command
 
-    def __str__(self):
+    def __str__(self) -> str:
         formatted_package = "packet=" + ':'.join(str(item) for item in self.__command)
         return formatted_package + "\t legend={}".format(self.__legend)
 
@@ -31,5 +32,5 @@ class Command:
         for item in self.__command:
             yield item
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.__command)
