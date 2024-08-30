@@ -108,7 +108,7 @@ def gtk_file_chooser(parent, title='', icon_path=None, default_folder=None, filt
         return False
 
 
-def gtk_folder_chooser(parent, title='', icon_path=None, default_folder=None):
+def gtk_folder_chooser(parent, title='', icon_path=None, default_folder=None) -> None | str:
     window = Gtk.FileChooserDialog(
         title,
         parent,
@@ -129,4 +129,4 @@ def gtk_folder_chooser(parent, title='', icon_path=None, default_folder=None):
         return folder_path
     else:
         window.destroy()
-        return False
+        return None

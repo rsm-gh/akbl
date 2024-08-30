@@ -408,7 +408,7 @@ class MainWindow:
                                          title=texts._TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
                                          icon_path=self.__paths._icon_file)
 
-        if folder_path:
+        if folder_path is not None:
             new_path = '{}/{}.cfg'.format(folder_path, self.__theme.name)
 
             if os.path.exists(new_path) and not gtk_dialog_question(
