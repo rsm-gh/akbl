@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2016, 2018, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -21,6 +21,7 @@ import sys
 import AKBL.texts as texts
 from AKBL.Bindings import Bindings
 from AKBL.settings import __version__
+from AKBL.console_printer import print_warning, print_error
 
 
 def process_args(args):
@@ -31,40 +32,45 @@ def process_args(args):
     akbl_bindings = Bindings(sender="CMD")
     arg1 = str(args[1])
 
-    if arg1 in ('--help', '-h'):
-        print(texts._TEXT_HELP)
+    match arg1:
+        case '--help' | '-h':
+            print(texts._TEXT_HELP)
 
-    elif arg1 in ('--license', '-l'):
-        print(texts._TEXT_LICENSE)
+        case '--license' | '-l':
+            print(texts._TEXT_LICENSE)
 
-    elif arg1 in ('--version', '-v'):
-        print(__version__)
+        case '--version' | '-v':
+            print(__version__)
 
-    elif arg1 == '--ping':
-        print(akbl_bindings.ping())
+        case '--ping':
+            print(akbl_bindings.ping())
 
-    elif arg1 in ('--off', '--on', '--switch', '--set-theme'):
+        case '--off' | '--on' | '--switch' | '--set-theme':
 
-        if not akbl_bindings.ping():
-            print(texts._TEXT_ERROR_DAEMON_OFF)
+            if not akbl_bindings.ping():
+                print_warning(texts._TEXT_ERROR_DAEMON_OFF)
+                return
 
-        elif arg1 == '--off':
-            akbl_bindings.set_lights(False)
+            match arg1:
+                case '--off':
+                    akbl_bindings.set_lights(False)
 
-        elif arg1 == '--on':
-            akbl_bindings.set_lights(True)
+                case '--on':
+                    akbl_bindings.set_lights(True)
 
-        elif arg1 == '--switch':
-            akbl_bindings.switch_lights()
+                case '--switch':
+                    akbl_bindings.switch_lights()
 
-        elif arg1 == '--set-theme':
-            if len(args) != 3:
-                print(texts._TEXT_WRONG_ARGUMENT)
-            else:
-                akbl_bindings.set_theme(args[2])
+                case '--set-theme':
+                    if len(args) != 3:
+                        print_error(texts._TEXT_WRONG_ARGUMENT)
+                    else:
+                        akbl_bindings.set_theme(args[2])
+                case _:
+                    print_error(texts._TEXT_WRONG_ARGUMENT)
 
-    else:
-        print(texts._TEXT_WRONG_ARGUMENT)
+        case _:
+            print_error(texts._TEXT_WRONG_ARGUMENT)
 
 
 if __name__ == '__main__':
