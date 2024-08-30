@@ -3,7 +3,7 @@
 #
 # MIT License
 #
-#  Copyright (C) 2018, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2018-2024 Rafael Senties Martinelli.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -77,21 +77,21 @@ def print_error(message: str, direct_output=False) -> None:
                     direct_output=direct_output)
 
 
-def print_warning(message: str, direct_output=False):
+def print_warning(message: str, direct_output=False) -> None:
     __print_message(message=message,
                     code_type=DebugCodes.Warning._value,
                     isp1=inspect.stack()[1],
                     direct_output=direct_output)
 
 
-def print_info(message: str, direct_output=False):
+def print_info(message: str, direct_output=False) -> None:
     __print_message(message=message,
                     code_type=DebugCodes.Info._value,
                     isp1=inspect.stack()[1],
                     direct_output=direct_output)
 
 
-def print_debug(message: str = "", direct_output=False):
+def print_debug(message: str = "", direct_output=False) -> None:
     __print_message(message=message,
                     code_type=DebugCodes.Debug._value,
                     isp1=inspect.stack()[1],

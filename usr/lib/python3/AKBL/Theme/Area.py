@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2018 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #                2011-2012 the pyAlienFX team.
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -19,11 +19,12 @@
 
 
 from AKBL.Computer.Region import Region
+from AKBL.Theme.Zone import Zone
 
 
 class Area(Region):
 
-    def __init__(self, region):
+    def __init__(self, region) -> None:
         super().__init__(name=region.name,
                          description=region.description,
                          hex_id=region.hex_id,
@@ -35,7 +36,7 @@ class Area(Region):
         self.__current_zone_hex_id = self.hex_id
         self.__zones = []
 
-    def __str__(self):
+    def __str__(self) -> str:
 
         zones_description = ""
         for zone in self.__zones:
@@ -54,21 +55,18 @@ class Area(Region):
 {zones_description}
 '''
 
-    def get_zone(self, column_index):
+    def get_zone(self, column_index: int) -> Zone:
         return self.__zones[column_index]
 
-    def get_zones(self):
+    def get_zones(self) -> list[Zone]:
         return self.__zones
 
-    def get_number_of_zones(self):
-        return len(self.__zones)
-
-    def add_zone(self, zone):
+    def add_zone(self, zone: Zone) -> None:
         zone.set_hex_id(self.__current_zone_hex_id)
         self.__zones.append(zone)
         self.__current_zone_hex_id += 1
 
-    def remove_zone(self, column_index):
+    def remove_zone(self, column_index: int) -> None:
         zone = self.__zones[column_index]
         self.__zones.remove(zone)
         self.__current_zone_hex_id = self.hex_id

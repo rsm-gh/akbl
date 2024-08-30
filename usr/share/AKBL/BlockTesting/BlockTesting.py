@@ -42,10 +42,11 @@ _TEXT_DEVICE_FOUND = '''[Device found]: Vendor ID: {}\t Product ID: {}\n'''
 _TEXT_BLOCK_TEST = '''[TEST]: zone: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
 _TEXT_BLOCK_LIGHTS_OFF = '''[Command]: Lights off'''
 
+
 class BlockTesting(Gtk.Window):
 
     def __init__(self):
-
+        super().__init__()
         self.__computer = Computer()
         self.__driver = Driver()
         self.__controller = None
@@ -155,7 +156,6 @@ class BlockTesting(Gtk.Window):
             self.entry_id_product.set_sensitive(True)
             return
 
-
         gtk_dialog_info(self.window_block_testing, "The connection was successful.")
         self.button_connect.set_active(False)
 
@@ -178,7 +178,7 @@ class BlockTesting(Gtk.Window):
         row_index = 0
         for attr_name, attr_value in sorted(vars(self.__computer).items()):
             if not attr_name.startswith("_") and isinstance(attr_value, int):
-                label = Gtk.Label(attr_name)
+                label = Gtk.Label(label=attr_name)
                 label.set_xalign(0)
 
                 adjustment = Gtk.Adjustment(0, 0, 9999999999999, 1, 1, 0)
@@ -203,8 +203,6 @@ class BlockTesting(Gtk.Window):
             self.entry_id_product.set_sensitive(False)
             gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_DEVICE_FOUND.format(vendor, product))
             self.combobox_default_blocks.set_active(0)
-
-
 
     def on_button_send_custom_command_clicked(self, *_):
 
@@ -271,7 +269,6 @@ class BlockTesting(Gtk.Window):
                 self.__controller.end_block_line()
 
             self.__controller.apply_config()
-
 
         except Exception:
             gtk_append_text_to_buffer(self.textbuffer_block_testing, '\n' + format_exc() + '\n')

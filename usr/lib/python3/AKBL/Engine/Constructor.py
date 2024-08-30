@@ -28,7 +28,7 @@ class Constructor:
     def __init__(self,
                  computer: Computer,
                  save: bool = False,
-                 block: int = 1):
+                 block: int = 1) -> None:
 
         self.__computer = computer
         self.__commands = []
@@ -36,7 +36,7 @@ class Constructor:
         self.__hex_id = 1
         self.__save = save
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "Constructor: computer.name={}, hex_id={}, block={}, _save={}".format(self.__computer.name,
                                                                                      self.__hex_id,
                                                                                      self.__block,
@@ -45,6 +45,10 @@ class Constructor:
     def __iter__(self):
         for command in self.__commands:
             yield command
+
+    def clear(self) -> None:
+        self.__commands.clear()
+        self.__hex_id = 1
 
     def get_first_command(self) -> None | int:
 
@@ -58,14 +62,16 @@ class Constructor:
 
         self.__save_line()
         self.__add_zone(area_hex_id=area_hex_id,
-                        color=color,
+                        left_color=color,
+                        right_color=None,
                         legend=legend,
                         cmd_color_type=self.__computer.command_set_color)
 
     def add_blink_zone(self, area_hex_id: int, color: list[int] | str) -> None:
         legend = "add_blink_zone:color={}, hex_id={}".format(color, area_hex_id)
         self.__add_zone(area_hex_id=area_hex_id,
-                        color=color,
+                        left_color=color,
+                        right_color=None,
                         legend=legend,
                         cmd_color_type=self.__computer.command_set_blink_color)
 
@@ -74,28 +80,15 @@ class Constructor:
                        left_color: list[int] | str,
                        right_color: list[int] | str) -> None:
 
-        self.__save_line()
-
         legend = '''add_morph_zone: left_color={}, right_color={}, hex_id={}'''.format(left_color,
                                                                                        right_color,
                                                                                        area_hex_id)
 
-        parsed_area_hex_id = self.__adapt_area_hex_id(area_hex_id)
-        adapted_left_color = self.__adapt_left_color(left_color)
-        adapted_right_color = self.__adapt_right_color(right_color)
-
-        cmd = self.__get_cmd()
-        cmd[0] = self.__computer.start_byte
-        cmd[1] = self.__computer.command_set_morph_color
-        cmd[2] = self.__hex_id
-        cmd[3] = parsed_area_hex_id[0]
-        cmd[4] = parsed_area_hex_id[1]
-        cmd[5] = parsed_area_hex_id[2]
-        cmd[6] = adapted_left_color[0]
-        cmd[7] = adapted_left_color[1] + adapted_right_color[0]
-        cmd[8] = adapted_right_color[1]
-
-        self.__commands.append(Command(legend, cmd))
+        self.__add_zone(area_hex_id=area_hex_id,
+                        left_color=left_color,
+                        right_color=right_color,
+                        legend=legend,
+                        cmd_color_type=self.__computer.command_set_morph_color)
 
     def set_block(self, save: bool, block: int) -> None:
         self.__save = save
@@ -185,20 +178,17 @@ class Constructor:
 
         self.__commands.append(Command(legend, cmd))
 
-    def clear(self) -> None:
-        self.__commands.clear()
-        self.__hex_id = 1
-
     def __add_zone(self,
                    area_hex_id: int,
-                   color: str,
+                   left_color: str,
+                   right_color: None | str,
                    legend: str,
                    cmd_color_type: int) -> None:
 
         self.__save_line()
 
         parsed_area_hex_id = self.__adapt_area_hex_id(area_hex_id)
-        adapted_left_color = self.__adapt_left_color(color)
+        adapted_left_color = self.__adapt_left_color(left_color)
 
         cmd = self.__get_cmd()
         cmd[0] = self.__computer.start_byte
@@ -208,7 +198,13 @@ class Constructor:
         cmd[4] = parsed_area_hex_id[1]
         cmd[5] = parsed_area_hex_id[2]
         cmd[6] = adapted_left_color[0]
-        cmd[7] = adapted_left_color[1]
+
+        if right_color is None:
+            cmd[7] = adapted_left_color[1]
+        else:
+            adapted_right_color = self.__adapt_right_color(right_color)
+            cmd[7] = adapted_left_color[1] + adapted_right_color[0]
+            cmd[8] = adapted_right_color[1]
 
         self.__commands.append(Command(legend, cmd))
 
