@@ -68,14 +68,14 @@ class ModelChooser(Gtk.Window):
 
     def __populate_liststores(self):
 
-        installed_computer_name = self.__get_installed_computer_name()
+        installed_computer_name = self.__get_default_computer_name()
 
         self.liststore_hardware_comp.clear()
         self.liststore_hardware_not_comp.clear()
 
         compatible_computers = computer_factory.get_compatible_computers()
 
-        for inst_computer in computer_factory.get_installed_computers():
+        for inst_computer in computer_factory.get_all_computers():
 
             if inst_computer in compatible_computers:
                     self.liststore_hardware_comp.append([inst_computer.name,
@@ -94,9 +94,9 @@ class ModelChooser(Gtk.Window):
 
 
     @staticmethod
-    def __get_installed_computer_name():
+    def __get_default_computer_name():
 
-        default_computer = computer_factory.get_installed_computer()
+        default_computer = computer_factory.get_default_computer()
 
         if default_computer is None:
             return _EMPTY_MODEL
@@ -114,13 +114,13 @@ class ModelChooser(Gtk.Window):
 
             if self.liststore_hardware_comp.get_value(iter_row, 1):
                 computer_model = self.liststore_hardware_comp.get_value(iter_row, 0)
-                computer_factory.set_installed_computer(computer_model)
+                computer_factory.set_default_computer(computer_model)
                 break
 
         #
         # Retrieve the installed configuration
         #
-        installed_computer_name = self.__get_installed_computer_name()
+        installed_computer_name = self.__get_default_computer_name()
 
         #
         # Warn the user that no computer is installed

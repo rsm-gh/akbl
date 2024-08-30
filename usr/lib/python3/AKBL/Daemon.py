@@ -44,7 +44,7 @@ class Daemon:
     def __init__(self, fake=False):
 
         self.__fake = fake
-        self.__computer = computer_factory.get_installed_computer()
+        self.__computer = computer_factory.get_default_computer()
 
         if self.__computer is None:
             print_error("Error, no computer configuration is installed.")

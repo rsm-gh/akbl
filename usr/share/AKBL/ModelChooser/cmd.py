@@ -20,7 +20,7 @@ import sys
 from AKBL.utils import get_alienware_device_info
 import AKBL.Computer.factory as computer_factory
 
-computer = computer_factory.get_installed_computer()
+computer = computer_factory.get_default_computer()
 compatible_computers = computer_factory.get_compatible_computers()
 
 force = False
@@ -68,7 +68,7 @@ if computer is None or force:
 if computer is None:
     print(get_alienware_device_info())
 else:
-    computer_factory.set_installed_computer(computer.name)
+    computer_factory.set_default_computer(computer.name)
     print("Installed computer set to: {}".format(computer.name))
 
     if len(compatible_computers) > 1:

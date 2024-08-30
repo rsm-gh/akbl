@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2018-2019, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2018-2024 Rafael Senties Martinelli.
 #
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -30,12 +30,42 @@ from AKBL.console_printer import print_debug, print_warning, print_error
 _SOFTWARE_PATHS = Paths()
 
 
-def get_compatible_computers():
+def get_all_computers() -> list[Computer]:
+    computers = []
+
+    path = Paths()._computers_configuration_dir
+
+    for file_name in os.listdir(path):
+        if file_name.endswith(".ini"):
+
+            file_path = os.path.join(path, file_name)
+
+            computer = get_computer_by_path(file_path)
+
+            if computer is None:
+                continue
+
+            add = True
+            for added_computer in computers:
+                if computer.name == added_computer:
+                    print_warning("Computer name already exists={}".format(computer.name))
+                    add = False
+                    break
+
+            if add:
+                computers.append(computer)
+
+    computers.sort(key=lambda cmp: cmp.name)
+
+    return computers
+
+
+def get_compatible_computers() -> list[Computer]:
     driver = Driver()
 
     compatible_computers = []
 
-    for installed_computer in get_installed_computers():
+    for installed_computer in get_all_computers():
         driver.load_device(installed_computer.vendor_id, installed_computer.product_id)
 
         if driver.has_device():
@@ -44,7 +74,7 @@ def get_compatible_computers():
     return compatible_computers
 
 
-def get_installed_computer_by_path(file_path):
+def get_computer_by_path(file_path: str) -> None | Computer:
     print_debug("Reading {}".format(file_path))
 
     computer = Computer()
@@ -81,13 +111,13 @@ def get_installed_computer_by_path(file_path):
         if section.startswith("REGION"):
 
             try:
-                region = Region(config[section]["ID"],
-                                config[section]["DESCRIPTION"],
-                                int(config[section]["BLOCK"]),
-                                int(config[section]["SUPPORTED_COMMANDS"]),
-                                config[section]["CAN_BLINK"] == "True",
-                                config[section]["CAN_MORPH"] == "True",
-                                config[section]["CAN_LIGHT"] == "True")
+                region = Region(name=config[section]["ID"],
+                                description=config[section]["DESCRIPTION"],
+                                hex_id=int(config[section]["BLOCK"]),
+                                max_commands=int(config[section]["SUPPORTED_COMMANDS"]),
+                                can_blink=config[section]["CAN_BLINK"].lower() == "true",
+                                can_morph=config[section]["CAN_MORPH"].lower() == "true",
+                                can_light=config[section]["CAN_LIGHT"].lower() == "true")
 
                 computer.add_region(region)
 
@@ -98,66 +128,25 @@ def get_installed_computer_by_path(file_path):
     return computer
 
 
-def get_installed_computers():
-    computers = []
-
-    path = Paths()._computers_configuration_dir
-
-    for file_name in os.listdir(path):
-        if file_name.endswith(".ini"):
-
-            file_path = os.path.join(path, file_name)
-
-            computer = get_installed_computer_by_path(file_path)
-
-            if computer is None:
-                continue
-
-            add = True
-            for added_computer in computers:
-                if computer.name == added_computer:
-                    print_warning("Computer name already exists={}".format(computer.name))
-                    add = False
-                    break
-
-            if add:
-                computers.append(computer)
-
-    computers.sort(key=lambda cmp: cmp.name)
-
-    return computers
-
-
-def get_installed_computer():
+def get_default_computer() -> None | Computer:
     if not os.path.exists(_SOFTWARE_PATHS._default_computer_file):
         return None
 
-    return get_installed_computer_by_path(_SOFTWARE_PATHS._default_computer_file)
+    return get_computer_by_path(_SOFTWARE_PATHS._default_computer_file)
 
 
-def set_installed_computer(computer_name):
+def set_default_computer(computer_name: str):
     computer = None
-    for inst_computer in get_installed_computers():
+    for inst_computer in get_all_computers():
         if inst_computer.name == computer_name:
             computer = inst_computer
             break
 
     if computer is None:
         print_warning("Computer name '{}' not found.".format(computer_name))
-        return False
 
     with open(computer.configuration_path, 'r') as f:
         installed_data = f.read()
 
     with open(_SOFTWARE_PATHS._default_computer_file, 'w') as f:
         f.write(installed_data)
-
-    return True
-
-
-def get_installed_computer_by_name(name):
-    for computer in get_installed_computers():
-        if computer.name == name:
-            return computer
-
-    return None

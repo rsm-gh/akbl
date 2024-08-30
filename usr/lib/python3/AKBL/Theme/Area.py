@@ -41,28 +41,18 @@ class Area(Region):
         for zone in self.__zones:
             zones_description += str(zone)
 
-        area_description = '''
-    name={}
-    description={}
-    hex_id={}
-    current_zone_hex_id={}
-    can_light={}
-    can_blink={}
-    can_morph={}
-    max_commands={}
+        return f'''
+    name={self.name}
+    description={self.description}
+    hex_id={self.hex_id}
+    current_zone_hex_id={self.__current_zone_hex_id}
+    can_light={self.can_light}
+    can_blink={self.can_blink}
+    can_morph={self.can_morph}
+    max_commands={self.max_commands}
     zones:
-{}
-'''.format(self.name,
-           self.description,
-           self.hex_id,
-           self.__current_zone_hex_id,
-           self.can_light,
-           self.can_blink,
-           self.can_morph,
-           self.max_commands,
-           zones_description)
-
-        return area_description
+{zones_description}
+'''
 
     def get_zone(self, column_index):
         return self.__zones[column_index]
