@@ -30,7 +30,6 @@ class Theme:
 
         self.name = ''
         self.path = ''
-        self._time = None
         self._computer = computer
         self.__areas = {}
         self.__speed = 1
@@ -45,8 +44,8 @@ class Theme:
         """
         self.__speed = int(speed)
 
-    def get_areas(self) -> tuple[Area]:
-        return tuple([area for area in sorted(self.__areas.values(), key=lambda x: x.name)])
+    def get_areas(self) -> tuple[Area, ...]:
+        return tuple([area for area in sorted(self.__areas.keys())])
 
     def get_area_by_name(self, area_name: str) -> None | Area:
 
@@ -56,10 +55,10 @@ class Theme:
         return None
 
     def add_area(self, area: Area) -> None:
-        if area.name not in self.__areas.keys():
-            self.__areas[area.name] = area
+        if area._name not in self.__areas:
+            self.__areas[area._name] = area
         else:
-            print_warning(f'Duplicated area "{area.name}", {self.__areas.keys()}')
+            print_warning(f'Duplicated area "{area._name}"')
 
     def modify_zone(self,
                     area_name: str,
@@ -76,16 +75,16 @@ class Theme:
         area = self.__areas[area_name]
         area.remove_zone(column)
 
-    def update_time(self) -> None:
+    def get_time(self) -> None | float:
         if os.path.exists(self.path):
-            self._time = os.path.getmtime(self.path)
+            return os.path.getmtime(self.path)
+
+        return None
 
     def save(self) -> None:
 
         with open(self.path, encoding='utf-8', mode='w') as f:
             f.write(self.__str__())
-
-        self.update_time()
 
     def __str__(self):
 
@@ -98,10 +97,10 @@ name={self.name}
 speed={self.__speed}
 \n'''
 
-        for area in sorted(self.__areas.values(), key=lambda x: x.name):
+        for area in sorted(self.__areas.values(), key=lambda x: x._name):
             theme_text += f'''
 ################### AREA #####################
-area={area.name}
+area={area._name}
 \n'''
 
             for zone in area.get_zones():

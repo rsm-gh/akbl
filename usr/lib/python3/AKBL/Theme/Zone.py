@@ -17,6 +17,7 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+from AKBL.utils import string_is_hex_color
 from AKBL.console_printer import print_warning
 
 
@@ -25,7 +26,8 @@ class Zone:
     def __init__(self,
                  left_color: str,
                  right_color: str,
-                 mode: str, hex_id=1):
+                 mode: str,
+                 hex_id: int = 1):
 
         self.__mode = ''
         self.__left_color = ''
@@ -45,20 +47,29 @@ class Zone:
         '''
 
     def set_hex_id(self, hex_id: int) -> None:
-        self.__hex_id = hex_id
+        if hex_id > 0:
+            self.__hex_id = hex_id
+        else:
+            print_warning(f"wrong hex_id={hex_id}")
 
     def set_left_color(self, color: str) -> None:
-        self.__left_color = color
+        if string_is_hex_color(color):
+            self.__left_color = color
+        else:
+            print_warning(f"wrong color={color}")
 
     def set_right_color(self, color: str) -> None:
-        self.__right_color = color
+        if string_is_hex_color(color):
+            self.__right_color = color
+        else:
+            print_warning(f"wrong color={color}")
 
     def set_mode(self, mode: str) -> None:
         match mode:
             case 'fixed' | 'morph' | 'blink':
                 self.__mode = mode
             case _:
-                print_warning('wrong mode=`{}`'.format(mode))
+                print_warning(f"wrong mode='{mode}'")
 
     def get_hex_id(self) -> int:
         return self.__hex_id

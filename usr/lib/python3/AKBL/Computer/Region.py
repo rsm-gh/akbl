@@ -29,21 +29,21 @@ class Region:
                  can_blink: bool,
                  can_morph: bool,
                  can_light: bool):
-        self.name = name
-        self.description = description
-        self.hex_id = hex_id
-        self.can_light = can_light
-        self.can_blink = can_blink
-        self.can_morph = can_morph
-        self.max_commands = max_commands
+        self._name = name
+        self._description = description
+        self._hex_id = hex_id
+        self._can_light = can_light
+        self._can_blink = can_blink
+        self._can_morph = can_morph
+        self._max_commands = max_commands
 
     def __str__(self):
         return f'''
-    name={self.name}
-    description={self.description}
-    hex_id={self.hex_id}
-    can_light={self.can_light}
-    can_blink={self.can_blink}
-    can_morph={self.can_morph}
-    max_commands={self.max_commands}
+    name={self._name}
+    description={self._description}
+    hex_id={self._hex_id}
+    can_light={self._can_light}
+    can_blink={self._can_blink}
+    can_morph={self._can_morph}
+    max_commands={self._max_commands}
 '''

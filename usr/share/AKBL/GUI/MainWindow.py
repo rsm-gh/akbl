@@ -146,7 +146,7 @@ class MainWindow:
         # Add the areas to the "menuitem_off_areas"
         #
         self.__menu_turn_off_areas = Gtk.Menu()
-        self.__areas_description_dict = dict((area.description, area.name) for area in self.__theme.get_areas())
+        self.__areas_description_dict = dict((area._description, area._name) for area in self.__theme.get_areas())
 
         active_configuration_areas = self.__ccp.get_str_defval('areas_to_keep_on', '').split('|')
 
@@ -230,7 +230,7 @@ class MainWindow:
         for area in self.__theme.get_areas():
 
             area_label = Gtk.Label()
-            area_label.set_text(area.description)
+            area_label.set_text(area._description)
             area_label.set_xalign(0)
             area_label.set_size_request(width=100, height=112)
             self.box_area_labels.pack_start(child=area_label, expand=False, fill=False, padding=0)
@@ -240,7 +240,7 @@ class MainWindow:
 
             for column_index, zone in enumerate(area.get_zones()):
 
-                zone_widget = ZoneWidget(area_name=area.name,
+                zone_widget = ZoneWidget(area_name=area._name,
                                          left_color=zone.get_left_color(),
                                          right_color=zone.get_right_color(),
                                          mode=zone.get_mode(),
@@ -252,10 +252,10 @@ class MainWindow:
 
                 box_area.pack_start(child=zone_widget, expand=False, fill=False, padding=5)
 
-                if column_index + 1 >= area.max_commands:
+                if column_index + 1 >= area._max_commands:
                     break
 
-            if area.max_commands > 1:
+            if area._max_commands > 1:
                 add_button = Gtk.Button(label=texts._TEXT_ADD)
                 add_button.connect('button-press-event', self.on_button_add_zone_clicked, area, box_area)
                 box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
@@ -450,11 +450,11 @@ class MainWindow:
 
         nb_of_zone_widgets = sum(1 for child in area_box.get_children() if isinstance(child, ZoneWidget))
 
-        if nb_of_zone_widgets >= area.max_commands:
-            gtk_dialog_info(self.window_root, texts._TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED.format(area.description))
+        if nb_of_zone_widgets >= area._max_commands:
+            gtk_dialog_info(self.window_root, texts._TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED.format(area._description))
             return
 
-        zone_widget = ZoneWidget(area_name=area.name,
+        zone_widget = ZoneWidget(area_name=area._name,
                                  left_color=self.__color_chooser_toolbar.get_current_hex_color(),
                                  right_color=self.__color_chooser_toolbar.get_current_hex_color(),
                                  mode='fixed',

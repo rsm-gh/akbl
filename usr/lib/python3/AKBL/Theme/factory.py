@@ -25,16 +25,21 @@ from AKBL.console_printer import print_warning, print_debug
 from AKBL.Computer.Computer import Computer
 from AKBL.Theme.Theme import Theme, _MISSING_ZONE_COLOR
 
-_AVAILABLE_THEMES = {}
+_AVAILABLE_THEMES = []  # It can not be a dictionary, because the theme name can change.
 
 
-def get_theme_by_name(name) -> Theme:
-    return _AVAILABLE_THEMES[name]
+def get_theme_by_name(name) -> None | Theme:
+
+    for theme in _AVAILABLE_THEMES:
+        if theme.name == name:
+            return theme
+
+    return None
 
 
 def load_themes(computer: Computer, folder_path: str = None) -> Theme:
     global _AVAILABLE_THEMES
-    _AVAILABLE_THEMES = {}
+    _AVAILABLE_THEMES = []
 
     # Load the existing _AVAILABLE_THEMES
     #
@@ -45,14 +50,19 @@ def load_themes(computer: Computer, folder_path: str = None) -> Theme:
 
         for file_name in files:
             if file_name.endswith('.cfg'):
-                load_theme_from_file(computer, folder_path + file_name)
+                theme = load_theme_from_file(computer, folder_path + file_name)
+
+                if get_theme_by_name(theme.name) is None:
+                    _AVAILABLE_THEMES.append(theme)
+                else:
+                    print_warning(f"Skipping duplicate theme name={theme.name}")
 
     # Add the default theme
     #
-    if len(_AVAILABLE_THEMES.keys()) <= 0:
+    if len(_AVAILABLE_THEMES) == 0:
         theme = create_default_theme(computer, folder_path)
     else:
-        theme = list(_AVAILABLE_THEMES.values())[0]
+        theme = _AVAILABLE_THEMES[0]
 
     return theme
 
@@ -66,19 +76,18 @@ def create_default_theme(computer: Computer, theme_path: str = None) -> Theme:
 
 
 def get_last_theme() -> tuple[int, None | Theme]:
-    max_time = None
+    max_time = 0
     profile_numb = 0
     theme_name = None
 
-    for num, key in enumerate(sorted(_AVAILABLE_THEMES.keys())):
+    for num, theme in enumerate(_AVAILABLE_THEMES):
 
-        profile = _AVAILABLE_THEMES[key]
-        profile.update_time()
+        theme_time = theme.get_time()
 
-        if max_time is None or profile._time > max_time:
-            max_time = profile._time
+        if theme_time > max_time:
+            max_time = theme_time
             profile_numb = num
-            theme_name = profile.name
+            theme_name = theme.name
 
     return profile_numb, theme_name
 
@@ -138,7 +147,7 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
                     theme.add_area(area)
                 else:
                     area = None
-                    print_warning(f"line {i}, area.name {var_arg} not listed on computer regions names")
+                    print_warning(f"line {i}, area._name {var_arg} not listed on computer regions names")
 
             case 'mode':
                 mode = var_arg
@@ -161,7 +170,7 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
 
         if area is not None and left_color != "" and right_color != "" and mode != "":
             print_debug(
-                f'Area={area.name}, loading Zone mode={mode}, left_color={left_color}, right_color={right_color}',
+                f'Area={area._name}, loading Zone mode={mode}, left_color={left_color}, right_color={right_color}',
                 direct_output=True)
 
             zone = Zone(mode=mode,
@@ -195,10 +204,6 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
     if warning_text != "":
         print_warning(warning_text)
 
-    #
-    # Add the configuration
-    #
-    _AVAILABLE_THEMES[theme.name] = theme
     return theme
 
 
@@ -206,8 +211,8 @@ def copy_theme(theme: Theme, name: str, path: str) -> Theme:
 
     new_theme = Theme(computer=theme._computer)
     new_theme.name = name
-    new_theme.set_speed(theme.get_speed())
     new_theme.path = path
+    new_theme.set_speed(theme.get_speed())
 
     for region in theme._computer.get_regions():
         area = Area(region)
