@@ -82,16 +82,16 @@ class Computer:
 
     def add_region(self, new_region: Region) -> None:
 
-        if new_region.name in self.__regions:
-            print_warning("Duplicated region name={}".format(new_region.name))
+        if new_region._name in self.__regions:
+            print_warning("Duplicated region name={}".format(new_region._name))
             return
 
         for region in self.__regions.values():
-            if region.hex_id == new_region.hex_id:
-                print_warning("Duplicated region block={}".format(region.hex_id))
+            if region._hex_id == new_region._hex_id:
+                print_warning("Duplicated region block={}".format(region._hex_id))
                 return
 
-        self.__regions[new_region.name] = new_region
+        self.__regions[new_region._name] = new_region
 
     def get_regions(self) -> list[Region]:
         return list(self.__regions.values())

@@ -187,7 +187,7 @@ class Daemon:
                     self.__controller.add_speed_line(1)
 
                     for area in self.__theme.get_areas():
-                        if area.name not in areas_to_keep_on:
+                        if area._name not in areas_to_keep_on:
                             for zone in area.get_zones():
                                 self.__controller.add_color_line(zone.get_hex_id(), 'fixed', '#000000', '#000000')
                             self.__controller.end_colors_line()
@@ -274,26 +274,26 @@ class Daemon:
             for region in self.__computer.get_regions():
                 for i, (left_color, right_color) in enumerate(zip(left_colors, right_colors)):
 
-                    if i + 1 > region.max_commands:
-                        print_warning(f"The number of maximum commands for the region={region.name} have been exceed. The loop was stopped at {i+1}.")
+                    if i + 1 > region._max_commands:
+                        print_warning(f"The number of maximum commands for the region={region._name} have been exceed. The loop was stopped at {i+1}.")
                         break
 
                     if mode == 'blink':
-                        if region.can_blink:
-                            self.__controller.add_color_line(region.hex_id, 'blink', left_color, right_color)
+                        if region._can_blink:
+                            self.__controller.add_color_line(region._hex_id, 'blink', left_color, right_color)
                         else:
-                            self.__controller.add_color_line(region.hex_id, 'fixed', left_color)
-                            print_warning(f"The mode=blink is not supported for the region={region.name}, the mode=fixed will be used instead.")
+                            self.__controller.add_color_line(region._hex_id, 'fixed', left_color)
+                            print_warning(f"The mode=blink is not supported for the region={region._name}, the mode=fixed will be used instead.")
 
                     elif mode == 'morph':
-                        if region.can_morph:
-                            self.__controller.add_color_line(region.hex_id, 'morph', left_color, right_color)
+                        if region._can_morph:
+                            self.__controller.add_color_line(region._hex_id, 'morph', left_color, right_color)
                         else:
-                            self.__controller.add_color_line(region.hex_id, 'fixed', left_color)
-                            print_warning(f"The mode=morph is not supported for the region={region.name}, the mode=fixed will be used instead.")
+                            self.__controller.add_color_line(region._hex_id, 'fixed', left_color)
+                            print_warning(f"The mode=morph is not supported for the region={region._name}, the mode=fixed will be used instead.")
 
                     else:
-                        self.__controller.add_color_line(region.hex_id, 'fixed', left_color)
+                        self.__controller.add_color_line(region._hex_id, 'fixed', left_color)
 
                 self.__controller.end_colors_line()
 
