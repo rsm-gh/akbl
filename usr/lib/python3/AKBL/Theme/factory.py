@@ -26,76 +26,50 @@ from AKBL.Computer.Computer import Computer
 from AKBL.Theme.Theme import Theme
 from AKBL.settings import _MISSING_ZONE_COLOR
 
-_AVAILABLE_THEMES = []  # It can not be a dictionary, because the theme name can change.
 
-
-def get_theme_names():
-    names = [theme.get_name() for theme in _AVAILABLE_THEMES]
+def get_theme_names(path):
+    names = [filename[:-4] for filename in os.listdir(path) if filename.endswith('.cfg')]
     names.sort()
+    #  names = [theme.get_name() for theme in _AVAILABLE_THEMES]
+    #  names.sort()
     return names
 
 
-def get_theme_by_name(name) -> None | Theme:
-    for theme in _AVAILABLE_THEMES:
-        if theme.get_name() == name:
-            return theme
+def get_theme_by_name(computer: Computer,
+                      themes_dir: str,
+                      theme_name: str) -> None | Theme:
+    if not theme_name.endswith('.cfg'):
+        theme_name += ".cfg"
 
-    return None
+    theme_path = os.path.join(themes_dir, theme_name)
 
+    if not os.path.exists(theme_path):
+        return None
 
-def load_themes(computer: Computer, folder_path: str = None) -> Theme:
-    global _AVAILABLE_THEMES
-    _AVAILABLE_THEMES = []
-
-    # Load the existing _AVAILABLE_THEMES
-    #
-    if not os.path.exists(folder_path):
-        os.mkdir(folder_path)
-    else:
-        files = os.listdir(folder_path)
-
-        for file_name in files:
-            if file_name.endswith('.cfg'):
-                theme = load_theme_from_file(computer, folder_path + file_name)
-
-                if get_theme_by_name(theme.get_name()) is None:
-                    _AVAILABLE_THEMES.append(theme)
-                else:
-                    print_warning(f"Skipping duplicate theme name={theme.get_name()}")
-
-    # Add the default theme
-    #
-    if len(_AVAILABLE_THEMES) == 0:
-        theme = create_default_theme(computer, folder_path)
-    else:
-        theme = _AVAILABLE_THEMES[0]
-
-    return theme
+    return load_theme_from_file(computer, theme_path)
 
 
-def create_default_theme(computer: Computer, theme_path: str = None) -> Theme:
+def create_default_theme(computer: Computer, theme_dir: str = None) -> Theme:
     theme = Theme(computer)
-    copy_theme(theme, theme_path + 'Default.cfg')
+    copy_theme(theme, os.path.join(theme_dir, 'Default.cfg'))
     theme.save()
 
     return theme
 
 
-def get_last_theme() -> tuple[int, None | Theme]:
+def get_last_theme_name(path) -> None | str:
     max_time = 0
-    profile_numb = 0
     theme_name = None
 
-    for num, theme in enumerate(_AVAILABLE_THEMES):
+    for filename in os.listdir(path):
+        if filename.endswith(".cfg"):
+            full_path = os.path.join(path, filename)
+            theme_time = os.path.getmtime(full_path)
+            if theme_time > max_time:
+                max_time = theme_time
+                theme_name = filename
 
-        theme_time = theme.get_time()
-
-        if theme_time > max_time:
-            max_time = theme_time
-            profile_numb = num
-            theme_name = theme.get_name()
-
-    return profile_numb, theme_name
+    return theme_name
 
 
 def load_theme_from_file(computer: Computer, path: str) -> Theme:
@@ -113,7 +87,7 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
     print_debug(f'supported_region_names={supported_region_names}', direct_output=True)
 
     theme = Theme(computer)
-    theme.path = path
+    theme.set_path(path)
 
     # Parse the configuration file
     #
@@ -204,10 +178,8 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
 
 
 def copy_theme(theme: Theme, path: str) -> Theme:
-    global _AVAILABLE_THEMES
-
     new_theme = Theme(computer=theme._computer)
-    new_theme.path = path
+    new_theme.set_path(path)
     new_theme.set_speed(theme.get_speed())
 
     for region in theme._computer.get_regions():
@@ -218,7 +190,5 @@ def copy_theme(theme: Theme, path: str) -> Theme:
 
         area.add_item(areaitem)
         theme.add_area(area)
-
-    _AVAILABLE_THEMES.append(theme)
 
     return new_theme

@@ -53,10 +53,10 @@ class Bindings:
     def get_themes_name(self) -> list[str]:
         """Return a list of the existing user themes."""
 
-        if not os.path.exists(self.__paths._profiles_dir):
+        if not os.path.exists(self.__paths._themes_dir):
             return []
 
-        filenames = os.listdir(self.__paths._profiles_dir)
+        filenames = os.listdir(self.__paths._themes_dir)
         if len(filenames) == 0:
             return []
 
@@ -64,7 +64,7 @@ class Bindings:
         for filename in filenames:
             if filename.endswith('.cfg'):
 
-                path = self.__paths._profiles_dir + filename
+                path = self.__paths._themes_dir + filename
 
                 with open(path, mode='rt', encoding='utf-8') as f:
                     lines = f.readlines()

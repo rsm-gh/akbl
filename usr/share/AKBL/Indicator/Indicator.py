@@ -29,9 +29,11 @@ gi.require_version('AyatanaAppIndicator3', '0.1')
 from gi.repository import Gtk, GLib
 from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
+from AKBL.Paths import Paths
 from AKBL.texts import Texts
 from AKBL.Bindings import Bindings
 from AKBL.settings import IndicatorCodes
+from AKBL.Theme import factory
 from AKBL.console_printer import print_error, print_debug
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -69,6 +71,7 @@ class Indicator:
     def __init__(self, parent, akbl=None, white=False):
 
         self.__parent = parent
+        self.__paths = Paths()
 
         if akbl is None:
             self.__bindings = Bindings(sender="Indicator")
@@ -138,18 +141,15 @@ class Indicator:
 
     @Pyro4.expose
     def load_themes(self,
-                    profiles_name: list[str],
                     current_profile: str,
                     state: bool) -> None:
 
-        print_debug("current_profile={}, state={}, profiles_name={}".format(current_profile,
-                                                                            state,
-                                                                            profiles_name))
+        print_debug(f"current_profile={current_profile}, state={state}")
 
         for children in self.__submenu_profiles.get_children():
             self.__submenu_profiles.remove(children)
 
-        for theme_name in sorted(profiles_name):
+        for theme_name in factory.get_theme_names(self.__paths._themes_dir):
             submenu = Gtk.CheckMenuItem(label=theme_name)
             submenu.set_active(theme_name == current_profile and state)
 

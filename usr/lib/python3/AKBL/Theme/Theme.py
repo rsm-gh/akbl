@@ -21,7 +21,7 @@ import os
 from AKBL.console_printer import print_warning
 from AKBL.Theme.Area import Area
 
-from console_printer import print_error
+from AKBL.console_printer import print_error
 
 
 class Theme:
@@ -90,17 +90,11 @@ right_color={areaitem.get_right_color()}
     def get_name(self) -> str:
         return self.__name
 
-    def get_time(self) -> None | float:
-        if os.path.exists(self.__path):
-            return os.path.getmtime(self.__path)
-
-        return None
-
     def get_speed(self) -> int:
         return self.__speed
 
     def get_areas(self) -> tuple[Area, ...]:
-        return tuple([area for area in sorted(self.__areas.keys())])
+        return tuple([area for area in self.__areas.values()])
 
     def get_area_by_name(self, area_name: str) -> None | Area:
         if area_name in self.__areas:
