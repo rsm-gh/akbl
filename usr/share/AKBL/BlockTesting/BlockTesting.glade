@@ -168,7 +168,7 @@ along with AKBL.  If not, see <http://www.gnu.org/licenses/>.
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="liststore_profiles">
+  <object class="GtkListStore" id="liststore_themes">
     <columns>
       <!-- column-name name -->
       <column type="gchararray"/>

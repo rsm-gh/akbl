@@ -196,7 +196,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="liststore_profiles">
+  <object class="GtkListStore" id="liststore_themes">
     <columns>
       <!-- column-name name -->
       <column type="gchararray"/>
@@ -579,7 +579,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes">Theme Selection</property>
                 <property name="margin-end">5</property>
-                <property name="model">liststore_profiles</property>
+                <property name="model">liststore_themes</property>
                 <signal name="changed" handler="on_combobox_profiles_changed" swapped="no"/>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext1"/>

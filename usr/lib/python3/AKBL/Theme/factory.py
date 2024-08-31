@@ -17,6 +17,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
+from copy import deepcopy
 
 from AKBL.Theme.Area import Area
 from AKBL.Theme.AreaItem import AreaItem
@@ -75,6 +76,12 @@ def get_last_theme_name(path) -> None | str:
 def load_theme_from_file(computer: Computer, path: str) -> Theme:
     print_debug('path="{}"'.format(path))
 
+    theme = Theme(computer)
+    theme.set_path(path)
+
+    # Parse the configuration file
+    #
+
     with open(path, encoding='utf-8', mode='rt') as f:
         lines = f.readlines()
 
@@ -86,11 +93,6 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
     supported_region_names = computer.get_regions_name()
     print_debug(f'supported_region_names={supported_region_names}', direct_output=True)
 
-    theme = Theme(computer)
-    theme.set_path(path)
-
-    # Parse the configuration file
-    #
     for i, line in enumerate(lines, 1):
 
         line = line.strip()
@@ -182,13 +184,7 @@ def copy_theme(theme: Theme, path: str) -> Theme:
     new_theme.set_path(path)
     new_theme.set_speed(theme.get_speed())
 
-    for region in theme._computer.get_regions():
-        area = Area(region)
-        areaitem = AreaItem(mode=theme._computer.default_mode,
-                            left_color=_MISSING_ZONE_COLOR,
-                            right_color=_MISSING_ZONE_COLOR)
-
-        area.add_item(areaitem)
-        theme.add_area(area)
+    for area in theme.get_areas():
+        new_theme.add_area(deepcopy(area))
 
     return new_theme

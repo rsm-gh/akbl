@@ -61,7 +61,7 @@ class Constructor:
         legend = '''add_light_areaitem: left_color={}, hex_id={}'''.format(color, area_hex_id)
 
         self.__save_line()
-        self.__add_areaitem(area_hex_id=area_hex_id,
+        self.__add_item(area_hex_id=area_hex_id,
                             left_color=color,
                             right_color=None,
                             legend=legend,
@@ -69,7 +69,7 @@ class Constructor:
 
     def add_blink_areaitem(self, area_hex_id: int, color: list[int] | str) -> None:
         legend = "add_blink_areaitem:color={}, hex_id={}".format(color, area_hex_id)
-        self.__add_areaitem(area_hex_id=area_hex_id,
+        self.__add_item(area_hex_id=area_hex_id,
                             left_color=color,
                             right_color=None,
                             legend=legend,
@@ -84,7 +84,7 @@ class Constructor:
                                                                                            right_color,
                                                                                            area_hex_id)
 
-        self.__add_areaitem(area_hex_id=area_hex_id,
+        self.__add_item(area_hex_id=area_hex_id,
                             left_color=left_color,
                             right_color=right_color,
                             legend=legend,
@@ -178,7 +178,7 @@ class Constructor:
 
         self.__commands.append(Command(legend, cmd))
 
-    def __add_areaitem(self,
+    def __add_item(self,
                        area_hex_id: int,
                        left_color: str,
                        right_color: None | str,

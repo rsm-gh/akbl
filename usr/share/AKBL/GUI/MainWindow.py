@@ -52,7 +52,6 @@ class MainWindow:
         self.__bindings = Bindings(sender="GUI")
         self.__paths = Paths()
         self.__response = None
-        self.__speed = -1
 
         # Glade
         #
@@ -73,7 +72,7 @@ class MainWindow:
             'button_apply',
             'button_lights_on',
             'button_lights_off',
-            'liststore_profiles',
+            'liststore_themes',
             'combobox_profiles',
             'tempobutton',
             'label_computer_model',
@@ -139,10 +138,10 @@ class MainWindow:
             self.__theme = theme_factory.create_default_theme(self.__computer, self.__paths._themes_dir)
         else:
             self.__theme = theme_factory.get_theme_by_name(self.__computer,
-                                                           theme_name,
-                                                           self.__paths._themes_dir)
+                                                           self.__paths._themes_dir,
+                                                           theme_name)
 
-        self.populate_liststore_profiles()
+        self.populate_liststore_themes()
 
         """
             Extra GUI initialization
@@ -203,15 +202,6 @@ class MainWindow:
 
         self.__application.quit()
 
-    def new_profile(self):
-
-        self.window_new_profile.hide()
-        new_path = f'{self.__paths._themes_dir}{self.entry_new_profile.get_text()}.cfg'
-        theme_factory.copy_theme(self.__theme, new_path)
-
-        self.populate_liststore_profiles()
-        self.__bindings.reload_themes()
-
     def populate_box_areas(self):
         """
             This will add all the Areas and AreaItems to the graphical interphase.
@@ -238,14 +228,14 @@ class MainWindow:
 
             box_area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
-            for column_index, areaitem in enumerate(area.get_areaitems()):
+            for column_index, areaitem in enumerate(area.get_items()):
 
                 areaitem_widget = AreaItemWidget(area_name=area._name,
-                                         left_color=areaitem.get_left_color(),
-                                         right_color=areaitem.get_right_color(),
-                                         mode=areaitem.get_mode(),
-                                         column=column_index,
-                                         get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
+                                                 left_color=areaitem.get_left_color(),
+                                                 right_color=areaitem.get_right_color(),
+                                                 mode=areaitem.get_mode(),
+                                                 column=column_index,
+                                                 get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
 
                 areaitem_widget.connect("updated", self.on_areaitemwidget_updated)
                 areaitem_widget.connect("request-delete", self.on_areaitemwidget_request_delete)
@@ -257,30 +247,29 @@ class MainWindow:
 
             if area._max_commands > 1:
                 add_button = Gtk.Button(label=texts._TEXT_ADD)
-                add_button.connect('button-press-event', self.on_button_add_areaitem_clicked, area, box_area)
+                add_button.connect('button-press-event', self.on_button_add_item_clicked, area, box_area)
                 box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
 
             self.box_areas.pack_start(child=box_area, expand=False, fill=False, padding=5)
 
         self.box_areas.show_all()
 
-    def populate_liststore_profiles(self):
+    def populate_liststore_themes(self, select: str = None):
 
-        self.liststore_profiles.clear()
+        self.liststore_themes.clear()
 
-        last_theme_name = theme_factory.get_last_theme_name(self.__paths._themes_dir)
-        available_themes = theme_factory.get_theme_names(self.__paths._themes_dir)
+        theme_names = theme_factory.get_theme_names(self.__paths._themes_dir)
 
-        active_row = -1
-        for i, theme_name in enumerate(available_themes):
-            self.liststore_profiles.append([theme_name])
-            if theme_name == last_theme_name:
+        if select is None:
+            select = theme_factory.get_last_theme_name(self.__paths._themes_dir)
+
+        active_row = 0
+        for i, theme_name in enumerate(theme_names):
+            self.liststore_themes.append([theme_name])
+            if theme_name == select:
                 active_row = i
 
-        if active_row > -1:
-            self.combobox_profiles.set_active(active_row)
-
-        self.__speed = self.__theme.get_speed()
+        self.combobox_profiles.set_active(active_row)
 
     def on_toolbar_colorlist_changed(self, *_):
         hex_colors = self.__color_chooser_toolbar.get_hex_colors()
@@ -301,6 +290,8 @@ class MainWindow:
             self.__theme = theme_factory.get_theme_by_name(self.__computer,
                                                            self.__paths._themes_dir,
                                                            theme_name)
+
+            self.tempobutton.set_value(self.__theme.get_speed())
             self.populate_box_areas()
 
     def on_entry_new_profile_changed(self, *_):
@@ -338,10 +329,10 @@ class MainWindow:
     def on_areaitemwidget_updated(self, areaitem_widget):
 
         self.__theme.modify_areaitem(area_name=areaitem_widget.get_area_name(),
-                                 column=areaitem_widget.get_column(),
-                                 left_color=areaitem_widget.get_left_color(),
-                                 right_color=areaitem_widget.get_right_color(),
-                                 mode=areaitem_widget.get_mode())
+                                     column=areaitem_widget.get_column(),
+                                     left_color=areaitem_widget.get_left_color(),
+                                     right_color=areaitem_widget.get_right_color(),
+                                     mode=areaitem_widget.get_mode())
 
         if self.checkbutton_autosave.get_active():
             Thread(target=self.__on_thread_save_configuration_file).start()
@@ -400,15 +391,17 @@ class MainWindow:
                                      icon_path=self.__paths._icon_file,
                                      filters=(("AKBL theme", '*.cfg'),))
 
-        if file_path:
-            new_path = self.__paths._themes_dir + os.path.basename(file_path)
+        if not file_path:
+            return
 
-            if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
-                return
+        new_path = self.__paths._themes_dir + os.path.basename(file_path)
 
-            shutil.copy(file_path, new_path)
-            theme_factory.load_theme_from_file(self.__computer, new_path)
-            self.populate_liststore_profiles()
+        if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
+            return
+
+        shutil.copy(file_path, new_path)
+        theme = theme_factory.load_theme_from_file(self.__computer, new_path)
+        self.populate_liststore_themes(select=theme.get_name())
 
     def on_menuitem_export_activate(self, *_):
         folder_path = gtk_folder_chooser(parent=self.window_root,
@@ -438,7 +431,13 @@ class MainWindow:
         Thread(target=self.__on_thread_delete_current_configuration).start()
 
     def on_button_new_profile_create_clicked(self, *_):
-        self.new_profile()
+        self.window_new_profile.hide()
+        new_path = f'{self.__paths._themes_dir}{self.entry_new_profile.get_text()}.cfg'
+        new_theme = theme_factory.copy_theme(self.__theme, new_path)
+        new_theme.save()
+
+        self.populate_liststore_themes(select=new_theme.get_name())
+        self.__bindings.reload_themes()
 
     def on_button_reset_toolbar_colors_activate(self, *_):
         self.__color_chooser_toolbar.reset_colors()
@@ -450,7 +449,7 @@ class MainWindow:
     def on_button_new_profile_cancel_clicked(self, *_):
         self.window_new_profile.hide()
 
-    def on_button_add_areaitem_clicked(self, button, _, area, area_box):
+    def on_button_add_item_clicked(self, button, _, area, area_box):
         """
             This button is not in glade, it is dynamically generated.
         """
@@ -462,11 +461,11 @@ class MainWindow:
             return
 
         areaitem_widget = AreaItemWidget(area_name=area._name,
-                                 left_color=self.__color_chooser_toolbar.get_current_hex_color(),
-                                 right_color=self.__color_chooser_toolbar.get_current_hex_color(),
-                                 mode='fixed',
-                                 column=nb_of_areaitem_widgets,
-                                 get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
+                                         left_color=self.__color_chooser_toolbar.get_current_hex_color(),
+                                         right_color=self.__color_chooser_toolbar.get_current_hex_color(),
+                                         mode='fixed',
+                                         column=nb_of_areaitem_widgets,
+                                         get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
 
         areaitem_widget.connect("updated", self.on_areaitemwidget_updated)
         areaitem_widget.connect("request-delete", self.on_areaitemwidget_request_delete)
@@ -474,7 +473,7 @@ class MainWindow:
         #
         # Update the configuration
         #
-        area.add_areaitem(areaitem_widget)
+        area.add_item(areaitem_widget)
 
         #
         # Update the GUI
@@ -538,7 +537,7 @@ class MainWindow:
         if len(theme_factory.get_theme_names(self.__paths._themes_dir)) == 0:
             theme_factory.create_default_theme(self.__computer, self.__paths._themes_dir)
 
-        GLib.idle_add(self.populate_liststore_profiles)
+        GLib.idle_add(self.populate_liststore_themes)
 
         self.__bindings.reload_themes()
 
