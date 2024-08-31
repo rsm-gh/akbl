@@ -38,13 +38,13 @@ class Paths:
         #
         if user == 'root':
             self._configuration_file = '/root/.config/akbl.ini'
-            self._profiles_dir = '/root/.local/share/akbl/'
+            self._themes_dir = '/root/.local/share/akbl/'
         else:
             self._configuration_file = '/home/{}/.config/akbl.ini'.format(user)
-            self._profiles_dir = '/home/{}/.local/share/akbl/'.format(user)
+            self._themes_dir = '/home/{}/.local/share/akbl/'.format(user)
 
         # The paths went renamed from "alienware-kbl" to "akbl", this will migrate the data.
-        for location in (self._configuration_file, self._profiles_dir):
+        for location in (self._configuration_file, self._themes_dir):
             old_location = location.replace("akbl", "alienware-kbl")
             if os.path.exists(old_location):
                 os.rename(old_location, location)
@@ -72,7 +72,7 @@ class Paths:
         #
         # Create the user folders
         #
-        for dir_path in (os.path.dirname(self._configuration_file), self._profiles_dir):
+        for dir_path in (os.path.dirname(self._configuration_file), self._themes_dir):
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
 

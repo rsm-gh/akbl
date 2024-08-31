@@ -134,7 +134,13 @@ class MainWindow:
 
         self.label_computer_model.set_text(self.__computer.name)
 
-        self.__theme = theme_factory.load_themes(self.__computer, self.__paths._profiles_dir)
+        theme_name = theme_factory.get_last_theme_name(self.__paths._themes_dir)
+        if theme_name is None:
+            self.__theme = theme_factory.create_default_theme(self.__computer, self.__paths._themes_dir)
+        else:
+            self.__theme = theme_factory.get_theme_by_name(self.__computer,
+                                                           theme_name,
+                                                           self.__paths._themes_dir)
 
         self.populate_liststore_profiles()
 
@@ -200,7 +206,7 @@ class MainWindow:
     def new_profile(self):
 
         self.window_new_profile.hide()
-        new_path = f'{self.__paths._profiles_dir}{self.entry_new_profile.get_text()}.cfg'
+        new_path = f'{self.__paths._themes_dir}{self.entry_new_profile.get_text()}.cfg'
         theme_factory.copy_theme(self.__theme, new_path)
 
         self.populate_liststore_profiles()
@@ -262,12 +268,18 @@ class MainWindow:
 
         self.liststore_profiles.clear()
 
-        for theme in sorted(theme_factory._AVAILABLE_THEMES, key=lambda x: x.get_name()):
-            self.liststore_profiles.append([theme.get_name()])
+        last_theme_name = theme_factory.get_last_theme_name(self.__paths._themes_dir)
+        available_themes = theme_factory.get_theme_names(self.__paths._themes_dir)
 
-        row, _ = theme_factory.get_last_theme()
+        active_row = -1
+        for i, theme_name in enumerate(available_themes):
+            self.liststore_profiles.append([theme_name])
+            if theme_name == last_theme_name:
+                active_row = i
 
-        self.combobox_profiles.set_active(row)
+        if active_row > -1:
+            self.combobox_profiles.set_active(active_row)
+
         self.__speed = self.__theme.get_speed()
 
     def on_toolbar_colorlist_changed(self, *_):
@@ -286,7 +298,9 @@ class MainWindow:
         if tree_iter is not None:
             model = widget.get_model()
             theme_name = model[tree_iter][0]
-            self.__theme = theme_factory.get_theme_by_name(theme_name)
+            self.__theme = theme_factory.get_theme_by_name(self.__computer,
+                                                           self.__paths._themes_dir,
+                                                           theme_name)
             self.populate_box_areas()
 
     def on_entry_new_profile_changed(self, *_):
@@ -299,7 +313,7 @@ class MainWindow:
             self.button_new_profile_create.set_sensitive(False)
             return
 
-        invalid_names = os.listdir(self.__paths._profiles_dir)
+        invalid_names = os.listdir(self.__paths._themes_dir)
         for name in invalid_names:
             if name == text:
                 self.button_new_profile_create.set_sensitive(False)
@@ -309,7 +323,7 @@ class MainWindow:
                 self.button_new_profile_create.set_sensitive(False)
                 return
 
-        if theme_factory.get_theme_by_name(text) is not None:
+        if text in theme_factory.get_theme_names(self.__paths._themes_dir):
             self.button_new_profile_create.set_sensitive(False)
             return
 
@@ -387,7 +401,7 @@ class MainWindow:
                                      filters=(("AKBL theme", '*.cfg'),))
 
         if file_path:
-            new_path = self.__paths._profiles_dir + os.path.basename(file_path)
+            new_path = self.__paths._themes_dir + os.path.basename(file_path)
 
             if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
                 return
@@ -518,13 +532,11 @@ class MainWindow:
 
         GLib.idle_add(self.label_user_message.set_text, texts._TEXT_CONFIGURATION_DELETED)
 
-        theme_factory._AVAILABLE_THEMES.remove(self.__theme)
-
         if os.path.exists(self.__theme.get_path()):
             os.remove(self.__theme.get_path())
 
-        if len(theme_factory._AVAILABLE_THEMES) == 0:
-            theme_factory.create_default_theme(self.__computer, self.__paths._profiles_dir)
+        if len(theme_factory.get_theme_names(self.__paths._themes_dir)) == 0:
+            theme_factory.create_default_theme(self.__computer, self.__paths._themes_dir)
 
         GLib.idle_add(self.populate_liststore_profiles)
 

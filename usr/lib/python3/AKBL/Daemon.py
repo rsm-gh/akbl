@@ -32,8 +32,9 @@ from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
 from AKBL.Bindings import Bindings
 from AKBL.settings import IndicatorCodes
-from AKBL.utils import string_is_hex_color
+from AKBL.utils import string_is_hex_color, getuser
 from AKBL.Engine.Controller import Controller
+from AKBL.Theme.Theme import Theme
 from AKBL.Theme import factory as theme_factory
 import AKBL.Computer.factory as computer_factory
 from AKBL.console_printer import print_warning, print_error, print_info, print_debug
@@ -65,14 +66,14 @@ class Daemon:
         # (True, self.__computer.block_battery_power),
         # (True, self.__computer.block_battery_critical),
 
-        self.__user = 'root'
-        self.__paths = Paths(self.__user)
-        self.__ccp = CCParser(self.__paths._configuration_file, 'GUI Configuration')
-
-        self.__theme = None
+        self.__user = ""  # To force the reload
         self.__lights_state = False
         self.__pyro_indicator = None
-        self.reload_themes(self.__user)
+        self.__ccp = None
+        self.__theme = None
+        self.__paths = None
+
+        self.reload_themes(getuser())
 
     """
         General Bindings
@@ -90,32 +91,33 @@ class Daemon:
         return self.__controller.is_ready()
 
     @Pyro4.expose
-    def reload_themes(self,
-                      user: str,
-                      indicator: bool = True,
-                      set_default: bool = True) -> None:
+    def reload_themes(self, user: str) -> None:
 
-        print_debug(f"user={user}, indicator={indicator}, set_default={set_default}")
+        print_debug(f"user={user}")
 
+        indicator_theme_state = self.__lights_state
         if user != self.__user:
             self.__user = user
             self.__paths = Paths(user)
-            self.__ccp.set_configuration_path(self.__paths._configuration_file)
+            self.__ccp = CCParser(self.__paths._configuration_file, 'GUI Configuration')
 
-        theme_factory.load_themes(self.__computer, self.__paths._profiles_dir)
-        theme_names = theme_factory.get_theme_names()
-        print_debug(f"user={self.__user}, themes={theme_names}", direct_output=True)
+            # Do not mark as "active" the theme of the indicator.
+            indicator_theme_state = False
 
-        if set_default:
-            _, theme_name = theme_factory.get_last_theme()
-            self.__theme = theme_factory.get_theme_by_name(theme_name)
-            print_debug(f"default theme={self.__theme.get_name()}", direct_output=True)
+            last_theme_name = theme_factory.get_last_theme_name(self.__paths._themes_dir)
+            if last_theme_name is None:
+                self.__theme = Theme(self.__computer)
+                print_debug(f"there is no default theme.", direct_output=True)
+            else:
+                print_debug(f"default theme={last_theme_name}", direct_output=True)
+                self.__theme = theme_factory.get_theme_by_name(self.__computer,
+                                                               self.__paths._themes_dir,
+                                                               last_theme_name)
 
-        if self.__pyro_indicator is not None and indicator:
+        if self.__pyro_indicator is not None:
             try:
-                self.__pyro_indicator.load_themes(theme_names,
-                                                  self.__theme.get_name(),
-                                                  self.__lights_state)
+                self.__pyro_indicator.load_themes(self.__theme.get_name(),
+                                                  indicator_theme_state)
             except Exception:
                 print_error(format_exc())
 
@@ -139,11 +141,18 @@ class Daemon:
             self.__user = user
             self.__paths = Paths(user)
 
-        self.reload_themes(user, indicator=False, set_default=False)
+        if not theme_name.endswith(".cfg"):
+            theme_name += ".cfg"
 
-        theme = theme_factory.get_theme_by_name(theme_name)
+        theme_path = os.path.join(self.__paths._themes_dir, theme_name)
+
+        if not os.path.exists(theme_path):
+            print_warning(f"The theme does not exist = {theme_path}")
+            return False
+
+        theme = theme_factory.load_theme_from_file(self.__computer, theme_path)
         if theme is None:
-            print_warning("The theme is not in the user list.")
+            print_warning("The theme could not be reloaded.")
             return False
 
         self.__theme = theme
@@ -189,7 +198,7 @@ class Daemon:
 
                     for area in self.__theme.get_areas():
                         if area._name not in areas_to_keep_on:
-                            for areaitem in area.get_areaitems():
+                            for areaitem in area.get_items():
                                 self.__controller.add_color_line(areaitem.get_hex_id(), 'fixed', '#000000', '#000000')
                             self.__controller.end_colors_line()
                     self.__controller.end_block_line()
@@ -276,7 +285,8 @@ class Daemon:
                 for i, (left_color, right_color) in enumerate(zip(left_colors, right_colors)):
 
                     if i + 1 > region._max_commands:
-                        print_warning(f"The number of maximum commands for the region={region._name} have been exceed. The loop was stopped at {i+1}.")
+                        print_warning(
+                            f"The number of maximum commands for the region={region._name} have been exceed. The loop was stopped at {i + 1}.")
                         break
 
                     if mode == 'blink':
@@ -284,14 +294,16 @@ class Daemon:
                             self.__controller.add_color_line(region._hex_id, 'blink', left_color, right_color)
                         else:
                             self.__controller.add_color_line(region._hex_id, 'fixed', left_color)
-                            print_warning(f"The mode=blink is not supported for the region={region._name}, the mode=fixed will be used instead.")
+                            print_warning(
+                                f"The mode=blink is not supported for the region={region._name}, the mode=fixed will be used instead.")
 
                     elif mode == 'morph':
                         if region._can_morph:
                             self.__controller.add_color_line(region._hex_id, 'morph', left_color, right_color)
                         else:
                             self.__controller.add_color_line(region._hex_id, 'fixed', left_color)
-                            print_warning(f"The mode=morph is not supported for the region={region._name}, the mode=fixed will be used instead.")
+                            print_warning(
+                                f"The mode=morph is not supported for the region={region._name}, the mode=fixed will be used instead.")
 
                     else:
                         self.__controller.add_color_line(region._hex_id, 'fixed', left_color)
@@ -353,7 +365,7 @@ class Daemon:
             print_warning("Failed to initialize the indicator")
             print_warning(format_exc(), direct_output=True)
         else:
-            self.reload_themes(user, indicator=True)
+            self.reload_themes(user)
 
     @Pyro4.expose
     def update_indicator(self) -> None:
@@ -392,7 +404,7 @@ class Daemon:
             self.__controller.add_speed_line(self.__theme.get_speed())
 
             for area in self.__theme.get_areas():
-                for areaitem in area.get_areaitems():
+                for areaitem in area.get_items():
                     self.__controller.add_color_line(areaitem.get_hex_id(),
                                                      areaitem.get_mode(),
                                                      areaitem.get_left_color(),
@@ -407,18 +419,18 @@ class Daemon:
         #
         # Mark the current theme as "last used"
         #
-        if os.path.exists(self.__theme.path):
+        if os.path.exists(self.__theme.get_path()):
             print_debug(f"Mark theme as last used... path={self.__theme.get_path()}", direct_output=True)
             os.utime(self.__theme.get_path(), None)
 
         # Update the Indicator
         #
         if self.__pyro_indicator is not None:
-            print_debug("Sending update to the indicator...", direct_output=True)
+            print_debug(f"Sending update to the indicator... theme_name={self.__theme.get_name()} state={self.__lights_state}",
+                        direct_output=True)
             self.__indicator_send_code(IndicatorCodes._lights_on)
             try:
-                self.__pyro_indicator.load_themes(theme_factory.get_theme_names(),
-                                                  self.__theme.get_name(),
+                self.__pyro_indicator.load_themes(self.__theme.get_name(),
                                                   self.__lights_state)
             except Exception:
                 print_error(format_exc())
