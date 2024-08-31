@@ -49,10 +49,9 @@ _BUTTONS_IMAGE_PATTERN_WITH_DELETE = ['cross_on',
                                       'blink_off']
 
 
-class ZoneWidget(Gtk.Frame):
+class AreaItemWidget(Gtk.Frame):
     """
-        Zone Widget Architecture:
-
+        Architecture:
             Gtk.Frame()
                 > Gtk.Box()
                     > Gtk.DrawingArea()
@@ -68,7 +67,7 @@ class ZoneWidget(Gtk.Frame):
                             > Gtk.Image()
     """
 
-    __gtype_name__ = 'ZoneWidget'
+    __gtype_name__ = 'AreaItemWidget'
 
     def __init__(self,
                  area_name,
@@ -104,7 +103,7 @@ class ZoneWidget(Gtk.Frame):
         # requested objects and variables
         #
         self.__get_color_callback = get_color_callback
-        self.zone = None
+        self.areaitem = None
 
         self.set_left_color(left_color)
         self.set_right_color(right_color)
@@ -343,8 +342,8 @@ class ZoneWidget(Gtk.Frame):
 
 
 # I ignore why this wasn't possible to be defined at __init__ as the same as the ColorChooserToolbar
-GObject.type_register(ZoneWidget)
-GObject.signal_new('updated', ZoneWidget, GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, ())
+GObject.type_register(AreaItemWidget)
+GObject.signal_new('updated', AreaItemWidget, GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, ())
 
-GObject.type_register(ZoneWidget)
-GObject.signal_new('request-delete', ZoneWidget, GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, ())
+GObject.type_register(AreaItemWidget)
+GObject.signal_new('request-delete', AreaItemWidget, GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, ())

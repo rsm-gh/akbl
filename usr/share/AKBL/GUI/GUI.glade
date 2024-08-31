@@ -35,7 +35,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment_verical_zone_scrolling">
+  <object class="GtkAdjustment" id="adjustment_verical_areaitem_scrolling">
     <property name="upper">100</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
@@ -650,7 +650,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="vadjustment">adjustment_verical_zone_scrolling</property>
+                <property name="vadjustment">adjustment_verical_areaitem_scrolling</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="shadow-type">in</property>
                 <child>
@@ -680,10 +680,10 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow_zones">
+              <object class="GtkScrolledWindow" id="scrolledwindow_areaitems">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="vadjustment">adjustment_verical_zone_scrolling</property>
+                <property name="vadjustment">adjustment_verical_areaitem_scrolling</property>
                 <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkViewport" id="viewport1">

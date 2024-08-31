@@ -46,7 +46,7 @@ Files:
 	usr/share/AKBL/ModelChooser/ModelChooser.py
 	usr/share/AKBL/ModelChooser/cmd.py
 	usr/share/AKBL/test/bindings.py
-	usr/share/AKBL/test/zones_and_toolbar.py
+	usr/share/AKBL/test/areaitems_and_toolbar.py
     usr/share/AKBL/commands.py
     usr/share/AKBL/Daemon.py
     usr/share/AKBL/gtk_utils.py

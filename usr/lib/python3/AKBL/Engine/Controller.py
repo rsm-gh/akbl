@@ -101,18 +101,18 @@ class Controller:
             return
 
         elif mode == 'fixed':
-            self.__constructor.add_light_zone(area_hex_id, left_color)
+            self.__constructor.add_light_areaitem(area_hex_id, left_color)
 
         elif mode == 'blink':
-            self.__constructor.add_blink_zone(area_hex_id, left_color)
+            self.__constructor.add_blink_areaitem(area_hex_id, left_color)
 
         elif mode == 'morph':
             if right_color is None:
                 print_warning(
                     'trying to set `morph` mode without a `right_color`.The `fixed` mode will be used instead.')
-                self.__constructor.add_light_zone(area_hex_id, left_color)
+                self.__constructor.add_light_areaitem(area_hex_id, left_color)
             else:
-                self.__constructor.add_morph_zone(area_hex_id, left_color, right_color)
+                self.__constructor.add_morph_areaitem(area_hex_id, left_color, right_color)
         else:
             print_warning('wrong mode=`{}`'.format(mode))
 

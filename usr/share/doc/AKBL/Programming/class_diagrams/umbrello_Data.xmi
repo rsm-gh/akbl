@@ -44,13 +44,13 @@
         <UML:Generalization xmi.idref="uICGy3GbWtsmH"/>
        </UML:GeneralizableElement.generalization>
        <UML:Classifier.feature>
-        <UML:Attribute visibility="private" type="uP6Blki6O6xlV" xmi.id="u3wLsv1YG8vg8" isSpecification="false" name="__current_zone_hex_id"/>
-        <UML:Attribute visibility="private" type="uuAR7tmo48SXZ" xmi.id="upfYie8HO2lB5" isSpecification="false" name="__zones"/>
-        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="usLeFAhIWipnj" isSpecification="false" name="get_zone" isOverride="false" isVirtual="false"/>
-        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="um0wLw9nLupgW" isSpecification="false" name="get_zones" isOverride="false" isVirtual="false"/>
-        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uDjres8MWZCxv" isSpecification="false" name="get_number_of_zones" isOverride="false" isVirtual="false"/>
-        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="u0qT1A1CSl9MG" isSpecification="false" name="add_zone" isOverride="false" isVirtual="false"/>
-        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uuN7pJGYv2Pmm" isSpecification="false" name="remove_zone" isOverride="false" isVirtual="false"/>
+        <UML:Attribute visibility="private" type="uP6Blki6O6xlV" xmi.id="u3wLsv1YG8vg8" isSpecification="false" name="__current_areaitem_hex_id"/>
+        <UML:Attribute visibility="private" type="uuAR7tmo48SXZ" xmi.id="upfYie8HO2lB5" isSpecification="false" name="__areaitems"/>
+        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="usLeFAhIWipnj" isSpecification="false" name="get_areaitem" isOverride="false" isVirtual="false"/>
+        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="um0wLw9nLupgW" isSpecification="false" name="get_areaitems" isOverride="false" isVirtual="false"/>
+        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uDjres8MWZCxv" isSpecification="false" name="get_number_of_areaitems" isOverride="false" isVirtual="false"/>
+        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="u0qT1A1CSl9MG" isSpecification="false" name="add_areaitem" isOverride="false" isVirtual="false"/>
+        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uuN7pJGYv2Pmm" isSpecification="false" name="remove_areaitem" isOverride="false" isVirtual="false"/>
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Generalization visibility="public" xmi.id="uPLZ1RO3bf6KF" parent="u57gtCyGmUZIo" discriminator="" isSpecification="false" name="" child="usgRepMI0cyOy" namespace="Logical_View"/>
@@ -172,8 +172,8 @@
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="unn97VbqxfQU0" isSpecification="false" name="set_speed" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uTIIAZGb0tOAL" isSpecification="false" name="create_profile" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uxK2aAGVGSlLT" isSpecification="false" name="add_area" isOverride="false" isVirtual="false"/>
-        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uap7rWJ7SJ9l8" isSpecification="false" name="modify_zone" isOverride="false" isVirtual="false"/>
-        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uiloE40j4OYEW" isSpecification="false" name="delete_zone" isOverride="false" isVirtual="false"/>
+        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uap7rWJ7SJ9l8" isSpecification="false" name="modify_areaitem" isOverride="false" isVirtual="false"/>
+        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uiloE40j4OYEW" isSpecification="false" name="delete_areaitem" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uKEXBCGorB5cb" isSpecification="false" name="update_time" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="urTQNQp9zhfYx" isSpecification="false" name="save" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uDAGzAFXl9mxU" isSpecification="false" name="load" isOverride="false" isVirtual="false"/>

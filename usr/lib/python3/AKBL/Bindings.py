@@ -110,14 +110,14 @@ class Bindings:
 
     def set_fixed_mode(self, colors: list[str], speed: int = 1) -> bool:
         """
-            Change all the light zones, with the fixed mode. Each color of the list will
-            be set in all the zones, and it will move to the next value depending on the speed.
+            Change all the light areas, with the fixed mode. Each color of the list will
+            be set in all the areas, and it will move to the next value depending on the speed.
 
             If only one color is provided, the lights will remain at one single color and the speed
             will not have any effect.
 
             :param list[str] colors: A list of Hex colors.
-            :param int speed: Speed for switching each zone to the next color, 1 =< speed >= 256.
+            :param int speed: Speed for switching each areaitem to the next color, 1 =< speed >= 256.
         """
 
         if len(colors) == 0:
@@ -130,8 +130,8 @@ class Bindings:
 
     def set_blink_mode(self, colors: list[str], speed: int = 50) -> bool:
         """
-            Change all the light zones, with the blink mode. Each color of the list will
-            be set in all the zones, and it will blink depending on the speed.
+            Change all the light areas, with the blink mode. Each color of the list will
+            be set in all the areas, and it will blink depending on the speed.
 
             :param list[str] colors: A list of Hex colors.
             :param int speed: Speed for blinking, 1 =< speed >= 256.
@@ -149,12 +149,12 @@ class Bindings:
                        colors: list[Tuple[str, str]],
                        speed: int = 50) -> bool:
         """
-            Change all the light zones, with the morph mode. Each color pair of the list will
-            be set in all the zones, and it will create a gradient from the first color, to
+            Change all the light areas, with the morph mode. Each color pair of the list will
+            be set in all the areas, and it will create a gradient from the first color, to
             the second color, depending on the speed.
 
-            :param list[tuple(str, str)] colors: A list of lists containing two values of Hex colors.
-            :param int speed: Speed for switching each zone to the next color, 1 =< speed >= 256.
+            :param list[tuple[str, str]] colors: A list of lists containing two values of Hex colors.
+            :param int speed: Speed for switching each areaitem to the next color, 1 =< speed >= 256.
         """
 
         if len(colors) == 0:

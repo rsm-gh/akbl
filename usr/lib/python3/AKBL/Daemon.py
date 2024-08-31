@@ -103,18 +103,18 @@ class Daemon:
             self.__ccp.set_configuration_path(self.__paths._configuration_file)
 
         theme_factory.load_themes(self.__computer, self.__paths._profiles_dir)
-        user_themes = list(theme_factory._AVAILABLE_THEMES.keys())
-        print_debug(f"user={self.__user}, themes={user_themes}", direct_output=True)
+        theme_names = theme_factory.get_theme_names()
+        print_debug(f"user={self.__user}, themes={theme_names}", direct_output=True)
 
         if set_default:
             _, theme_name = theme_factory.get_last_theme()
             self.__theme = theme_factory.get_theme_by_name(theme_name)
-            print_debug(f"default theme={self.__theme.name}", direct_output=True)
+            print_debug(f"default theme={self.__theme.get_name()}", direct_output=True)
 
         if self.__pyro_indicator is not None and indicator:
             try:
-                self.__pyro_indicator.load_themes(user_themes,
-                                                  self.__theme.name,
+                self.__pyro_indicator.load_themes(theme_names,
+                                                  self.__theme.get_name(),
                                                   self.__lights_state)
             except Exception:
                 print_error(format_exc())
@@ -141,11 +141,12 @@ class Daemon:
 
         self.reload_themes(user, indicator=False, set_default=False)
 
-        if theme_name not in theme_factory._AVAILABLE_THEMES.keys():
+        theme = theme_factory.get_theme_by_name(theme_name)
+        if theme is None:
             print_warning("The theme is not in the user list.")
             return False
 
-        self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
+        self.__theme = theme
         self.__illuminate_keyboard()
         return True
 
@@ -188,8 +189,8 @@ class Daemon:
 
                     for area in self.__theme.get_areas():
                         if area._name not in areas_to_keep_on:
-                            for zone in area.get_zones():
-                                self.__controller.add_color_line(zone.get_hex_id(), 'fixed', '#000000', '#000000')
+                            for areaitem in area.get_areaitems():
+                                self.__controller.add_color_line(areaitem.get_hex_id(), 'fixed', '#000000', '#000000')
                             self.__controller.end_colors_line()
                     self.__controller.end_block_line()
                 self.__controller.apply_config()
@@ -391,11 +392,11 @@ class Daemon:
             self.__controller.add_speed_line(self.__theme.get_speed())
 
             for area in self.__theme.get_areas():
-                for zone in area.get_zones():
-                    self.__controller.add_color_line(zone.get_hex_id(),
-                                                     zone.get_mode(),
-                                                     zone.get_left_color(),
-                                                     zone.get_right_color())
+                for areaitem in area.get_areaitems():
+                    self.__controller.add_color_line(areaitem.get_hex_id(),
+                                                     areaitem.get_mode(),
+                                                     areaitem.get_left_color(),
+                                                     areaitem.get_right_color())
 
                 self.__controller.end_colors_line()
 
@@ -407,8 +408,8 @@ class Daemon:
         # Mark the current theme as "last used"
         #
         if os.path.exists(self.__theme.path):
-            print_debug(f"Mark theme as last used... path={self.__theme.path}", direct_output=True)
-            os.utime(self.__theme.path, None)
+            print_debug(f"Mark theme as last used... path={self.__theme.get_path()}", direct_output=True)
+            os.utime(self.__theme.get_path(), None)
 
         # Update the Indicator
         #
@@ -416,8 +417,8 @@ class Daemon:
             print_debug("Sending update to the indicator...", direct_output=True)
             self.__indicator_send_code(IndicatorCodes._lights_on)
             try:
-                self.__pyro_indicator.load_themes(theme_factory._AVAILABLE_THEMES.keys(),
-                                                  self.__theme.name,
+                self.__pyro_indicator.load_themes(theme_factory.get_theme_names(),
+                                                  self.__theme.get_name(),
                                                   self.__lights_state)
             except Exception:
                 print_error(format_exc())

@@ -21,7 +21,7 @@ from AKBL.utils import string_is_hex_color
 from AKBL.console_printer import print_warning
 
 
-class Zone:
+class AreaItem:
 
     def __init__(self,
                  left_color: str,

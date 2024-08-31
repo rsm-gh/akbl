@@ -20,7 +20,6 @@ import os
 import sys
 import shutil
 from time import sleep
-from copy import deepcopy
 from gi.repository import Gtk, Gdk, GLib
 from gi.repository.GdkPixbuf import Pixbuf
 from threading import Thread, current_thread
@@ -37,7 +36,7 @@ import AKBL.Computer.factory as computer_factory
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.dirname(_SCRIPT_DIR))
 
-from GUI.ZoneWidget import ZoneWidget
+from GUI.AreaItemWidget import AreaItemWidget
 from GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
 from gtk_utils import (gtk_dialog_question,
                        gtk_dialog_info,
@@ -199,22 +198,17 @@ class MainWindow:
         self.__application.quit()
 
     def new_profile(self):
-        text = self.entry_new_profile.get_text()
 
         self.window_new_profile.hide()
+        new_path = f'{self.__paths._profiles_dir}{self.entry_new_profile.get_text()}.cfg'
+        theme_factory.copy_theme(self.__theme, new_path)
 
-        clone = deepcopy(theme_factory._AVAILABLE_THEMES[self.__theme.name])
-        clone.name = text
-        clone.path = '{}{}.cfg'.format(self.__paths._profiles_dir, text)
-        clone.save()
-        theme_factory._AVAILABLE_THEMES[clone.name] = clone
         self.populate_liststore_profiles()
-
         self.__bindings.reload_themes()
 
     def populate_box_areas(self):
         """
-            This will add all the Areas and Zones to the graphical interphase.
+            This will add all the Areas and AreaItems to the graphical interphase.
         """
 
         # Empty the label box
@@ -238,26 +232,26 @@ class MainWindow:
 
             box_area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
-            for column_index, zone in enumerate(area.get_zones()):
+            for column_index, areaitem in enumerate(area.get_areaitems()):
 
-                zone_widget = ZoneWidget(area_name=area._name,
-                                         left_color=zone.get_left_color(),
-                                         right_color=zone.get_right_color(),
-                                         mode=zone.get_mode(),
+                areaitem_widget = AreaItemWidget(area_name=area._name,
+                                         left_color=areaitem.get_left_color(),
+                                         right_color=areaitem.get_right_color(),
+                                         mode=areaitem.get_mode(),
                                          column=column_index,
                                          get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
 
-                zone_widget.connect("updated", self.on_zonewidget_updated)
-                zone_widget.connect("request-delete", self.on_zonewidget_request_delete)
+                areaitem_widget.connect("updated", self.on_areaitemwidget_updated)
+                areaitem_widget.connect("request-delete", self.on_areaitemwidget_request_delete)
 
-                box_area.pack_start(child=zone_widget, expand=False, fill=False, padding=5)
+                box_area.pack_start(child=areaitem_widget, expand=False, fill=False, padding=5)
 
                 if column_index + 1 >= area._max_commands:
                     break
 
             if area._max_commands > 1:
                 add_button = Gtk.Button(label=texts._TEXT_ADD)
-                add_button.connect('button-press-event', self.on_button_add_zone_clicked, area, box_area)
+                add_button.connect('button-press-event', self.on_button_add_areaitem_clicked, area, box_area)
                 box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
 
             self.box_areas.pack_start(child=box_area, expand=False, fill=False, padding=5)
@@ -268,8 +262,8 @@ class MainWindow:
 
         self.liststore_profiles.clear()
 
-        for theme_name in sorted(theme_factory._AVAILABLE_THEMES.keys()):
-            self.liststore_profiles.append([theme_name])
+        for theme in sorted(theme_factory._AVAILABLE_THEMES, key=lambda x: x.get_name()):
+            self.liststore_profiles.append([theme.get_name()])
 
         row, _ = theme_factory.get_last_theme()
 
@@ -292,7 +286,7 @@ class MainWindow:
         if tree_iter is not None:
             model = widget.get_model()
             theme_name = model[tree_iter][0]
-            self.__theme = theme_factory._AVAILABLE_THEMES[theme_name]
+            self.__theme = theme_factory.get_theme_by_name(theme_name)
             self.populate_box_areas()
 
     def on_entry_new_profile_changed(self, *_):
@@ -315,10 +309,9 @@ class MainWindow:
                 self.button_new_profile_create.set_sensitive(False)
                 return
 
-        for name in theme_factory._AVAILABLE_THEMES.keys():
-            if name == text:
-                self.button_new_profile_create.set_sensitive(False)
-                return
+        if theme_factory.get_theme_by_name(text) is not None:
+            self.button_new_profile_create.set_sensitive(False)
+            return
 
         self.button_new_profile_create.set_sensitive(True)
 
@@ -328,28 +321,28 @@ class MainWindow:
 
         self.__ccp.write('areas_to_keep_on', '|'.join(areas_to_keep_on))
 
-    def on_zonewidget_updated(self, zone_widget):
+    def on_areaitemwidget_updated(self, areaitem_widget):
 
-        self.__theme.modify_zone(area_name=zone_widget.get_area_name(),
-                                 column=zone_widget.get_column(),
-                                 left_color=zone_widget.get_left_color(),
-                                 right_color=zone_widget.get_right_color(),
-                                 mode=zone_widget.get_mode())
+        self.__theme.modify_areaitem(area_name=areaitem_widget.get_area_name(),
+                                 column=areaitem_widget.get_column(),
+                                 left_color=areaitem_widget.get_left_color(),
+                                 right_color=areaitem_widget.get_right_color(),
+                                 mode=areaitem_widget.get_mode())
 
         if self.checkbutton_autosave.get_active():
             Thread(target=self.__on_thread_save_configuration_file).start()
 
-    def on_zonewidget_request_delete(self, zone_widget):
+    def on_areaitemwidget_request_delete(self, areaitem_widget):
 
-        self.__theme.delete_zone(zone_widget.get_area_name(), zone_widget.get_column())
-        zone_widget.destroy()
+        self.__theme.delete_areaitem(areaitem_widget.get_area_name(), areaitem_widget.get_column())
+        areaitem_widget.destroy()
 
-        # Reset the column of all the zone_widgets. This could be
+        # Reset the column of all the areaitem_widgets. This could be
         # improved by being done to only 1 box area.
         for box_area in self.box_areas:
             column_counter = 0
             for widget in box_area.get_children():
-                if isinstance(widget, ZoneWidget):
+                if isinstance(widget, AreaItemWidget):
                     widget.set_column(column_counter)
                     column_counter += 1
 
@@ -409,13 +402,13 @@ class MainWindow:
                                          icon_path=self.__paths._icon_file)
 
         if folder_path is not None:
-            new_path = '{}/{}.cfg'.format(folder_path, self.__theme.name)
+            new_path = '{}/{}.cfg'.format(folder_path, self.__theme.get_name())
 
             if os.path.exists(new_path) and not gtk_dialog_question(
                     self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
                 return
 
-            shutil.copy(self.__theme.path, new_path)
+            shutil.copy(self.__theme.get_path(), new_path)
 
     def on_menuitem_new_activate(self, *_):
         self.entry_new_profile.set_text('')
@@ -443,37 +436,37 @@ class MainWindow:
     def on_button_new_profile_cancel_clicked(self, *_):
         self.window_new_profile.hide()
 
-    def on_button_add_zone_clicked(self, button, _, area, area_box):
+    def on_button_add_areaitem_clicked(self, button, _, area, area_box):
         """
             This button is not in glade, it is dynamically generated.
         """
 
-        nb_of_zone_widgets = sum(1 for child in area_box.get_children() if isinstance(child, ZoneWidget))
+        nb_of_areaitem_widgets = sum(1 for child in area_box.get_children() if isinstance(child, AreaItemWidget))
 
-        if nb_of_zone_widgets >= area._max_commands:
+        if nb_of_areaitem_widgets >= area._max_commands:
             gtk_dialog_info(self.window_root, texts._TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED.format(area._description))
             return
 
-        zone_widget = ZoneWidget(area_name=area._name,
+        areaitem_widget = AreaItemWidget(area_name=area._name,
                                  left_color=self.__color_chooser_toolbar.get_current_hex_color(),
                                  right_color=self.__color_chooser_toolbar.get_current_hex_color(),
                                  mode='fixed',
-                                 column=nb_of_zone_widgets,
+                                 column=nb_of_areaitem_widgets,
                                  get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
 
-        zone_widget.connect("updated", self.on_zonewidget_updated)
-        zone_widget.connect("request-delete", self.on_zonewidget_request_delete)
+        areaitem_widget.connect("updated", self.on_areaitemwidget_updated)
+        areaitem_widget.connect("request-delete", self.on_areaitemwidget_request_delete)
 
         #
         # Update the configuration
         #
-        area.add_zone(zone_widget)
+        area.add_areaitem(areaitem_widget)
 
         #
         # Update the GUI
         #
         area_box.remove(button)
-        area_box.pack_start(child=zone_widget, expand=False, fill=False, padding=5)
+        area_box.pack_start(child=areaitem_widget, expand=False, fill=False, padding=5)
         area_box.pack_start(child=button, expand=False, fill=False, padding=5)
 
     def on_button_apply_clicked(self, *_):
@@ -525,12 +518,12 @@ class MainWindow:
 
         GLib.idle_add(self.label_user_message.set_text, texts._TEXT_CONFIGURATION_DELETED)
 
-        theme_factory._AVAILABLE_THEMES.pop(self.__theme.name)
+        theme_factory._AVAILABLE_THEMES.remove(self.__theme)
 
-        if os.path.exists(self.__theme.path):
-            os.remove(self.__theme.path)
+        if os.path.exists(self.__theme.get_path()):
+            os.remove(self.__theme.get_path())
 
-        if len(theme_factory._AVAILABLE_THEMES.keys()) == 0:
+        if len(theme_factory._AVAILABLE_THEMES) == 0:
             theme_factory.create_default_theme(self.__computer, self.__paths._profiles_dir)
 
         GLib.idle_add(self.populate_liststore_profiles)
@@ -548,16 +541,16 @@ class MainWindow:
 
     def __on_thread_illuminate_keyboard(self):
 
-        if not os.path.exists(self.__theme.path):
+        if not os.path.exists(self.__theme.get_path()):
             print_warning("The theme does not exist.")
             return
 
-        elif self.__theme.name == "":
+        elif self.__theme.get_name() == "":
             print_warning("The theme must have a name.")
             return
 
         GLib.idle_add(self.label_user_message.set_text, texts._TEXT_APPLYING_CONFIGURATION)
-        self.__bindings.set_theme(self.__theme.name)
+        self.__bindings.set_theme(self.__theme.get_name())
         GLib.idle_add(self.label_user_message.set_text, '')
 
     def __on_thread_save_configuration_file(self):
