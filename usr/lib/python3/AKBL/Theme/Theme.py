@@ -68,11 +68,11 @@ right_color={areaitem.get_right_color()}
             print_warning(f'Duplicated area "{area._name}"')
 
     def modify_areaitem(self,
-                    area_name: str,
-                    column: int,
-                    left_color: str,
-                    right_color: str,
-                    mode: str) -> None:
+                        area_name: str,
+                        column: int,
+                        left_color: str,
+                        right_color: str,
+                        mode: str) -> None:
         areaitem = self.__areas[area_name].get_item_at(column)
         areaitem.set_left_color(left_color)
         areaitem.set_right_color(right_color)
