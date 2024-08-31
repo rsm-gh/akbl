@@ -23,6 +23,21 @@ import pwd
 import subprocess
 
 
+def getuser() -> str:
+    return pwd.getpwuid(os.geteuid()).pw_name
+
+
+def rgb_to_hex(rgb) -> str:
+    return '#%02x%02x%02x' % (int(rgb[0]), int(rgb[1]), int(rgb[2]))
+
+
+def string_is_hex_color(string) -> bool:
+    if isinstance(string, str) and re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', string):
+        return True
+
+    return False
+
+
 def get_alienware_device_info() -> str:
     cmd = subprocess.run("lsusb", stdout=subprocess.PIPE)
     device_info = cmd.stdout.decode('utf-8', errors="ignore")
@@ -39,18 +54,3 @@ def get_alienware_device_info() -> str:
             break
 
     return device_info
-
-
-def getuser() -> str:
-    return pwd.getpwuid(os.geteuid()).pw_name
-
-
-def string_is_hex_color(string) -> bool:
-    if isinstance(string, str) and re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', string):
-        return True
-
-    return False
-
-
-def rgb_to_hex(rgb) -> str:
-    return '#%02x%02x%02x' % (int(rgb[0]), int(rgb[1]), int(rgb[2]))

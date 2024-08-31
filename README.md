@@ -171,7 +171,7 @@ What will happen next?
 
 If, after all, your computer is recognized, and you have minor problems (Ex: left and right keyboard), I'll commit the fixes.
 
-If some zones are not recognized, I'll ask you to launch the block testing window to find the appropriate hex values. Once the blocks are found, I'll add them to the configuration file, and I'll commit the changes to the code.
+If some areas are not recognized, I'll ask you to launch the block testing window to find the appropriate hex values. Once the blocks are found, I'll add them to the configuration file, and I'll commit the changes to the code.
 
 ### How to use the block testing window?
 
@@ -181,7 +181,7 @@ If some zones are not recognized, I'll ask you to launch the block testing windo
 
 The block testing will help you find the hex id's of your keyboard by iterating one by one the different possible hex values. Normally, the only thing you need to do is to change the Block Number combobox, and click the Test button.
 
-When iterating over the block numbers, everything will be logged. Once that you have found a hex color of a zone, you can directly write the zone name. Here is an example:
+When iterating over the block numbers, everything will be logged. Once that you have found a hex color of a areaitem, you can directly write the areaitem name. Here is an example:
 
 ```
 ## Text File ##
@@ -206,9 +206,9 @@ For the moment, the themes need to be saved before applying them. Any unsaved ch
 ### What's the function of the tempo button / clock icon / right-top corner button?
 
 That button manages the speed of the theme in the following cases:
-  * When the section of a theme (keyboard-left, keyboard-right, etc...) has multiple zones.
-  * When some zone has the morph (gradient) mode.
-  * When some zone has the blink mode.
+  * When the section of a theme (keyboard-left, keyboard-right, etc...) has multiple areas.
+  * When some areaitem has the morph (gradient) mode.
+  * When some areaitem has the blink mode.
 
 # Python Bindings
 
@@ -240,20 +240,20 @@ class Bindings:
        
     def set_fixed_mode(self, colors: list[str], speed: int = 1) -> bool:
         """
-            Change all the light zones, with the fixed mode. Each color of the list will
-            be set in all the zones, and it will move to the next value depending on the speed.
+            Change all the light areas, with the fixed mode. Each color of the list will
+            be set in all the areas, and it will move to the next value depending on the speed.
 
             If only one color is provided, the lights will remain at one single color and the speed
             will not have any effect.
 
             :param list[str] colors: A list of Hex colors.
-            :param int speed: Speed for switching each zone to the next color, 1 =< speed >= 256.
+            :param int speed: Speed for switching each areaitem to the next color, 1 =< speed >= 256.
         """
 
     def set_blink_mode(self, colors: list[str], speed: int = 50) -> bool:
         """
-            Change all the light zones, with the blink mode. Each color of the list will
-            be set in all the zones, and it will blink depending on the speed.
+            Change all the light areas, with the blink mode. Each color of the list will
+            be set in all the areas, and it will blink depending on the speed.
 
             :param list[str] colors: A list of Hex colors.
             :param int speed: Speed for blinking, 1 =< speed >= 256.
@@ -263,12 +263,12 @@ class Bindings:
                        colors: list[Tuple[str, str]],
                        speed: int = 50) -> bool:
         """
-            Change all the light zones, with the morph mode. Each color pair of the list will
-            be set in all the zones, and it will create a gradient from the first color, to
+            Change all the light areas, with the morph mode. Each color pair of the list will
+            be set in all the areas, and it will create a gradient from the first color, to
             the second color, depending on the speed.
 
             :param list[tuple(str, str)] colors: A list of lists containing two values of Hex colors.
-            :param int speed: Speed for switching each zone to the next color, 1 =< speed >= 256.
+            :param int speed: Speed for switching each areaitem to the next color, 1 =< speed >= 256.
         """
 ```
 
@@ -511,7 +511,7 @@ AKBL is a software based on PyAlienFX. I mostly created new addons, improved the
 
 ## PyALienFX
 
-* Ledjfou125
+* Founded125
 * LightHash
 * Corp
 * Niai

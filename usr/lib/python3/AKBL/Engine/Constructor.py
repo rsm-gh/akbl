@@ -57,34 +57,34 @@ class Constructor:
 
         return None
 
-    def add_light_zone(self, area_hex_id: int, color: list[int] | str) -> None:
-        legend = '''add_light_zone: left_color={}, hex_id={}'''.format(color, area_hex_id)
+    def add_light_areaitem(self, area_hex_id: int, color: list[int] | str) -> None:
+        legend = '''add_light_areaitem: left_color={}, hex_id={}'''.format(color, area_hex_id)
 
         self.__save_line()
-        self.__add_zone(area_hex_id=area_hex_id,
+        self.__add_areaitem(area_hex_id=area_hex_id,
                         left_color=color,
                         right_color=None,
                         legend=legend,
                         cmd_color_type=self.__computer.command_set_color)
 
-    def add_blink_zone(self, area_hex_id: int, color: list[int] | str) -> None:
-        legend = "add_blink_zone:color={}, hex_id={}".format(color, area_hex_id)
-        self.__add_zone(area_hex_id=area_hex_id,
+    def add_blink_areaitem(self, area_hex_id: int, color: list[int] | str) -> None:
+        legend = "add_blink_areaitem:color={}, hex_id={}".format(color, area_hex_id)
+        self.__add_areaitem(area_hex_id=area_hex_id,
                         left_color=color,
                         right_color=None,
                         legend=legend,
                         cmd_color_type=self.__computer.command_set_blink_color)
 
-    def add_morph_zone(self,
+    def add_morph_areaitem(self,
                        area_hex_id: int,
                        left_color: list[int] | str,
                        right_color: list[int] | str) -> None:
 
-        legend = '''add_morph_zone: left_color={}, right_color={}, hex_id={}'''.format(left_color,
+        legend = '''add_morph_areaitem: left_color={}, right_color={}, hex_id={}'''.format(left_color,
                                                                                        right_color,
                                                                                        area_hex_id)
 
-        self.__add_zone(area_hex_id=area_hex_id,
+        self.__add_areaitem(area_hex_id=area_hex_id,
                         left_color=left_color,
                         right_color=right_color,
                         legend=legend,
@@ -178,7 +178,7 @@ class Constructor:
 
         self.__commands.append(Command(legend, cmd))
 
-    def __add_zone(self,
+    def __add_areaitem(self,
                    area_hex_id: int,
                    left_color: str,
                    right_color: None | str,

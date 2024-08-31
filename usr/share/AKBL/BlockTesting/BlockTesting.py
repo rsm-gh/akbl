@@ -39,7 +39,7 @@ from gtk_utils import gtk_dialog_info, gtk_append_text_to_buffer
 
 _TEXT_DEVICE_NOT_FOUND = '''[Device not found]: Vendor ID: {}\t Product ID: {}\n'''
 _TEXT_DEVICE_FOUND = '''[Device found]: Vendor ID: {}\t Product ID: {}\n'''
-_TEXT_BLOCK_TEST = '''[TEST]: zone: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
+_TEXT_BLOCK_TEST = '''[TEST]: areaitem: {}\t mode:{}\t speed:{}\t color1:{}\t color2: {}\n'''
 _TEXT_BLOCK_LIGHTS_OFF = '''[Command]: Lights off'''
 
 
@@ -230,31 +230,31 @@ class BlockTesting(Gtk.Window):
             self.on_button_block_testing_lights_off_clicked(button)
 
         try:
-            zone_left_color = self.colorbutton_1_block.get_color()
-            zone_left_color = rgb_to_hex([zone_left_color.red / 65535.0,
-                                          zone_left_color.green / 65535.0,
-                                          zone_left_color.blue / 65535.0])
+            areaitem_left_color = self.colorbutton_1_block.get_color()
+            areaitem_left_color = rgb_to_hex([areaitem_left_color.red / 65535.0,
+                                          areaitem_left_color.green / 65535.0,
+                                          areaitem_left_color.blue / 65535.0])
 
-            zone_right_color = self.colorbutton_2_block.get_color()
-            zone_right_color = rgb_to_hex([zone_right_color.red / 65535.0,
-                                           zone_right_color.green / 65535.0,
-                                           zone_right_color.blue / 65535.0])
+            areaitem_right_color = self.colorbutton_2_block.get_color()
+            areaitem_right_color = rgb_to_hex([areaitem_right_color.red / 65535.0,
+                                           areaitem_right_color.green / 65535.0,
+                                           areaitem_right_color.blue / 65535.0])
 
-            zone_block = int(self.entry_block_testing.get_text())
+            areaitem_block = int(self.entry_block_testing.get_text())
             speed = self.spinbutton_block_speed.get_value_as_int()
 
             index = self.combobox_block_modes.get_active()
             model = self.combobox_block_modes.get_model()
-            zone_mode = model[index][0]
-            zone_mode = zone_mode.lower()
+            areaitem_mode = model[index][0]
+            areaitem_mode = areaitem_mode.lower()
 
             # Log the test
             #
-            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_BLOCK_TEST.format(zone_block,
-                                                                                             zone_mode,
+            gtk_append_text_to_buffer(self.textbuffer_block_testing, _TEXT_BLOCK_TEST.format(areaitem_block,
+                                                                                             areaitem_mode,
                                                                                              speed,
-                                                                                             zone_left_color,
-                                                                                             zone_right_color))
+                                                                                             areaitem_left_color,
+                                                                                             areaitem_right_color))
 
             #   Test
             #
@@ -264,7 +264,7 @@ class BlockTesting(Gtk.Window):
                 self.__controller.add_block_line(save=save, block=block)
                 self.__controller.add_reset_line(self.__computer.reset_all_lights_on)
                 self.__controller.add_speed_line(speed)
-                self.__controller.add_color_line(zone_block, zone_mode, zone_left_color, zone_right_color)
+                self.__controller.add_color_line(areaitem_block, areaitem_mode, areaitem_left_color, areaitem_right_color)
                 self.__controller.end_colors_line()
                 self.__controller.end_block_line()
 

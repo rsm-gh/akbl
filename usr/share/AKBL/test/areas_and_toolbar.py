@@ -27,7 +27,7 @@ _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 _PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
 sys.path.insert(0, _PROJECT_DIR)
 
-from GUI.ZoneWidget import ZoneWidget
+from GUI.AreaItemWidget import AreaItemWidget
 from GUI.ColorChooserToolbar.ColorChooserToolbar import ColorChooserToolbar
 
 
@@ -52,35 +52,35 @@ class DialogWindow(Gtk.Window):
 
         self.add(box)
 
-        # Add the Zone objects to be tested
+        # Add the AreaItem objects to be tested
         #
         for row_index in range(2):
-            fixed_zone = ZoneWidget(area_name='PB',
-                                    left_color='#020202',
-                                    right_color='#020202',
-                                    mode='fixed',
-                                    column=0,
-                                    get_color_callback=self.color_chooser_toolbar.get_current_rgba)
+            fixed_areaitem = AreaItemWidget(area_name='PB',
+                                            left_color='#020202',
+                                            right_color='#020202',
+                                            mode='fixed',
+                                            column=0,
+                                            get_color_callback=self.color_chooser_toolbar.get_current_rgba)
 
-            grid.attach(child=fixed_zone, left=0, top=row_index, width=1, height=1)
+            grid.attach(child=fixed_areaitem, left=0, top=row_index, width=1, height=1)
 
-            blink_zone = ZoneWidget(area_name='',
-                                    left_color='#020202',
-                                    right_color='#020202',
-                                    mode='blink',
-                                    column=1,
-                                    get_color_callback=self.color_chooser_toolbar.get_current_rgba)
+            blink_areaitem = AreaItemWidget(area_name='',
+                                            left_color='#020202',
+                                            right_color='#020202',
+                                            mode='blink',
+                                            column=1,
+                                            get_color_callback=self.color_chooser_toolbar.get_current_rgba)
 
-            grid.add(blink_zone)
+            grid.add(blink_areaitem)
 
-            morph_zone = ZoneWidget(area_name='',
-                                    left_color='#020202',
-                                    right_color='#020202',
-                                    mode='morph',
-                                    column=2,
-                                    get_color_callback=self.color_chooser_toolbar.get_current_rgba)
+            morph_areaitem = AreaItemWidget(area_name='',
+                                            left_color='#020202',
+                                            right_color='#020202',
+                                            mode='morph',
+                                            column=2,
+                                            get_color_callback=self.color_chooser_toolbar.get_current_rgba)
 
-            grid.add(morph_zone)
+            grid.add(morph_areaitem)
 
     @staticmethod
     def on_toolbar_colorlist_changed(_):

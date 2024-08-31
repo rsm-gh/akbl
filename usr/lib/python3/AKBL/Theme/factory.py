@@ -19,19 +19,25 @@
 import os
 
 from AKBL.Theme.Area import Area
-from AKBL.Theme.Zone import Zone
+from AKBL.Theme.AreaItem import AreaItem
 from AKBL.utils import string_is_hex_color
 from AKBL.console_printer import print_warning, print_debug
 from AKBL.Computer.Computer import Computer
-from AKBL.Theme.Theme import Theme, _MISSING_ZONE_COLOR
+from AKBL.Theme.Theme import Theme
+from AKBL.settings import _MISSING_ZONE_COLOR
 
 _AVAILABLE_THEMES = []  # It can not be a dictionary, because the theme name can change.
 
 
-def get_theme_by_name(name) -> None | Theme:
+def get_theme_names():
+    names = [theme.get_name() for theme in _AVAILABLE_THEMES]
+    names.sort()
+    return names
 
+
+def get_theme_by_name(name) -> None | Theme:
     for theme in _AVAILABLE_THEMES:
-        if theme.name == name:
+        if theme.get_name() == name:
             return theme
 
     return None
@@ -52,10 +58,10 @@ def load_themes(computer: Computer, folder_path: str = None) -> Theme:
             if file_name.endswith('.cfg'):
                 theme = load_theme_from_file(computer, folder_path + file_name)
 
-                if get_theme_by_name(theme.name) is None:
+                if get_theme_by_name(theme.get_name()) is None:
                     _AVAILABLE_THEMES.append(theme)
                 else:
-                    print_warning(f"Skipping duplicate theme name={theme.name}")
+                    print_warning(f"Skipping duplicate theme name={theme.get_name()}")
 
     # Add the default theme
     #
@@ -69,7 +75,7 @@ def load_themes(computer: Computer, folder_path: str = None) -> Theme:
 
 def create_default_theme(computer: Computer, theme_path: str = None) -> Theme:
     theme = Theme(computer)
-    copy_theme(theme, 'Default', theme_path + 'Default.cfg')
+    copy_theme(theme, theme_path + 'Default.cfg')
     theme.save()
 
     return theme
@@ -87,7 +93,7 @@ def get_last_theme() -> tuple[int, None | Theme]:
         if theme_time > max_time:
             max_time = theme_time
             profile_numb = num
-            theme_name = theme.name
+            theme_name = theme.get_name()
 
     return profile_numb, theme_name
 
@@ -125,16 +131,6 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
         var_arg = line_data[1]
 
         match var_name:
-            case 'name':
-                if var_arg == '':
-                    name = os.path.basename(path)
-                else:
-                    name = var_arg
-
-                if name.endswith('.cfg'):
-                    name = name[:-4]
-
-                theme.name = name
 
             case 'speed':
                 theme.set_speed(int(var_arg))
@@ -170,13 +166,13 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
 
         if area is not None and left_color != "" and right_color != "" and mode != "":
             print_debug(
-                f'Area={area._name}, loading Zone mode={mode}, left_color={left_color}, right_color={right_color}',
+                f'Area={area._name}, loading AreaItem mode={mode}, left_color={left_color}, right_color={right_color}',
                 direct_output=True)
 
-            zone = Zone(mode=mode,
+            areaitem = AreaItem(mode=mode,
                         left_color=left_color,
                         right_color=right_color)
-            area.add_zone(zone)
+            area.add_item(areaitem)
 
             left_color = ""
             right_color = ""
@@ -193,13 +189,13 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
             theme.add_area(area)
             warning_text += f'Adding missing Area="{area_name}"\n'
 
-            zone = Zone(mode=computer.default_mode,
+            areaitem = AreaItem(mode=computer.default_mode,
                         left_color=_MISSING_ZONE_COLOR,
                         right_color=_MISSING_ZONE_COLOR)
 
-            area.add_zone(zone)
+            area.add_item(areaitem)
 
-            warning_text += f'Adding Zone to the previous area, mode="{zone.get_mode()}" left_color="{zone.get_left_color()}" right_color="{zone.get_right_color()}"\n'
+            warning_text += f'Adding AreaItem to the previous area, mode="{areaitem.get_mode()}" left_color="{areaitem.get_left_color()}" right_color="{areaitem.get_right_color()}"\n'
 
     if warning_text != "":
         print_warning(warning_text)
@@ -207,21 +203,22 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
     return theme
 
 
-def copy_theme(theme: Theme, name: str, path: str) -> Theme:
+def copy_theme(theme: Theme, path: str) -> Theme:
+    global _AVAILABLE_THEMES
 
     new_theme = Theme(computer=theme._computer)
-    new_theme.name = name
     new_theme.path = path
     new_theme.set_speed(theme.get_speed())
 
     for region in theme._computer.get_regions():
         area = Area(region)
-        zone = Zone(mode=theme._computer.default_mode,
+        areaitem = AreaItem(mode=theme._computer.default_mode,
                     left_color=_MISSING_ZONE_COLOR,
                     right_color=_MISSING_ZONE_COLOR)
 
-        area.add_zone(zone)
+        area.add_item(areaitem)
         theme.add_area(area)
 
-    _AVAILABLE_THEMES[theme.name] = theme
+    _AVAILABLE_THEMES.append(theme)
+
     return new_theme

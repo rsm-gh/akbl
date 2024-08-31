@@ -18,6 +18,8 @@
 
 __version__ = "2.240811"
 
+_MISSING_ZONE_COLOR = "#0000FF"
+
 
 class IndicatorCodes:
     _lights_on = 100

@@ -19,7 +19,7 @@
 
 from copy import copy
 
-from AKBL.Theme.Zone import Zone
+from AKBL.Theme.AreaItem import AreaItem
 from AKBL.Computer.Region import Region
 
 
@@ -34,43 +34,43 @@ class Area(Region):
                          can_morph=region._can_morph,
                          max_commands=region._max_commands)
 
-        self.__current_zone_hex_id = self._hex_id
-        self.__zones = []
+        self.__current_areaitem_hex_id = self._hex_id
+        self.__area_items = []
 
     def __str__(self) -> str:
 
-        zones_description = ""
-        for zone in self.__zones:
-            zones_description += str(zone)
+        area_items_description = ""
+        for areaitem in self.__area_items:
+            area_items_description += str(areaitem)
 
         return f'''
     name={self._name}
     description={self._description}
     hex_id={self._hex_id}
-    current_zone_hex_id={self.__current_zone_hex_id}
+    current_areaitem_hex_id={self.__current_areaitem_hex_id}
     can_light={self._can_light}
     can_blink={self._can_blink}
     can_morph={self._can_morph}
     max_commands={self._max_commands}
-    zones:
-{zones_description}
+    area_items:
+{area_items_description}
 '''
 
-    def add_zone(self, zone: Zone) -> None:
-        zone.set_hex_id(self.__current_zone_hex_id)
-        self.__zones.append(zone)
-        self.__current_zone_hex_id += 1
+    def add_item(self, areaitem: AreaItem) -> None:
+        areaitem.set_hex_id(self.__current_areaitem_hex_id)
+        self.__area_items.append(areaitem)
+        self.__current_areaitem_hex_id += 1
 
-    def remove_zone(self, column_index: int) -> None:
-        zone = self.__zones[column_index]
-        self.__zones.remove(zone)
-        self.__current_zone_hex_id = self._hex_id
-        for zone in self.__zones:
-            zone.set_hex_id(self.__current_zone_hex_id)
-            self.__current_zone_hex_id += 1
+    def remove_item_at(self, column_index: int) -> None:
+        areaitem = self.__area_items[column_index]
+        self.__area_items.remove(areaitem)
+        self.__current_areaitem_hex_id = self._hex_id
+        for areaitem in self.__area_items:
+            areaitem.set_hex_id(self.__current_areaitem_hex_id)
+            self.__current_areaitem_hex_id += 1
 
-    def get_zone(self, column_index: int) -> Zone:
-        return self.__zones[column_index]
+    def get_item_at(self, column_index: int) -> AreaItem:
+        return self.__area_items[column_index]
 
-    def get_zones(self) -> list[Zone]:
-        return copy(self.__zones)
+    def get_items(self) -> list[AreaItem]:
+        return copy(self.__area_items)
