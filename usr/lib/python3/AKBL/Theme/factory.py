@@ -170,8 +170,8 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
                 direct_output=True)
 
             areaitem = AreaItem(mode=mode,
-                        left_color=left_color,
-                        right_color=right_color)
+                                left_color=left_color,
+                                right_color=right_color)
             area.add_item(areaitem)
 
             left_color = ""
@@ -190,8 +190,8 @@ def load_theme_from_file(computer: Computer, path: str) -> Theme:
             warning_text += f'Adding missing Area="{area_name}"\n'
 
             areaitem = AreaItem(mode=computer.default_mode,
-                        left_color=_MISSING_ZONE_COLOR,
-                        right_color=_MISSING_ZONE_COLOR)
+                                left_color=_MISSING_ZONE_COLOR,
+                                right_color=_MISSING_ZONE_COLOR)
 
             area.add_item(areaitem)
 
@@ -213,8 +213,8 @@ def copy_theme(theme: Theme, path: str) -> Theme:
     for region in theme._computer.get_regions():
         area = Area(region)
         areaitem = AreaItem(mode=theme._computer.default_mode,
-                    left_color=_MISSING_ZONE_COLOR,
-                    right_color=_MISSING_ZONE_COLOR)
+                            left_color=_MISSING_ZONE_COLOR,
+                            right_color=_MISSING_ZONE_COLOR)
 
         area.add_item(areaitem)
         theme.add_area(area)

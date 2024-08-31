@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2019, 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #
 #
 #  This program is free software; you can redistribute it and/or modify
