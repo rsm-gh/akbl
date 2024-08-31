@@ -49,7 +49,7 @@
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="usLeFAhIWipnj" isSpecification="false" name="get_areaitem" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="um0wLw9nLupgW" isSpecification="false" name="get_areaitems" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uDjres8MWZCxv" isSpecification="false" name="get_number_of_areaitems" isOverride="false" isVirtual="false"/>
-        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="u0qT1A1CSl9MG" isSpecification="false" name="add_areaitem" isOverride="false" isVirtual="false"/>
+        <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="u0qT1A1CSl9MG" isSpecification="false" name="add_item" isOverride="false" isVirtual="false"/>
         <UML:Operation isAbstract="false" visibility="public" isInline="false" isQuery="false" isLeaf="false" isRoot="false" xmi.id="uuN7pJGYv2Pmm" isSpecification="false" name="remove_areaitem" isOverride="false" isVirtual="false"/>
        </UML:Classifier.feature>
       </UML:Class>

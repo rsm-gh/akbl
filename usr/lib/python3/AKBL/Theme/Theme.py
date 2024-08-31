@@ -42,7 +42,6 @@ class Theme:
 #####            AKBL theme             #####
 #############################################
 
-name={self.__name}
 speed={self.__speed}
 \n'''
 
