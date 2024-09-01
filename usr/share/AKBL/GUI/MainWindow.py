@@ -177,8 +177,8 @@ class MainWindow:
 
         icon_pixbuf = Pixbuf.new_from_file(self.__paths._icon_file)
         self.window_root.set_icon(icon_pixbuf)
-
         self.window_root.show_all()
+        self.window_root.maximize()
 
         # It must be called after show_all() or it wont work.
         if not self.checkbutton_profile_buttons.get_active():
