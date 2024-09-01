@@ -30,7 +30,7 @@ from gi.repository import Gtk, GLib
 from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 from AKBL.Paths import Paths
-from AKBL.texts import Texts
+from AKBL.Texts import Texts
 from AKBL.Bindings import Bindings
 from AKBL.settings import IndicatorCodes
 from AKBL.Theme import factory
