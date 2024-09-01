@@ -65,13 +65,11 @@ class MainWindow:
             'menuitem_profile',
             'menuitem_options',
             'checkbutton_autosave',
-            'checkbutton_profile_buttons',
             'checkbutton_delete_warning',
             'menuitem_off_areas',
             'menuitem_apply_configuration',
-            'button_apply',
-            'button_lights_on',
-            'button_lights_off',
+            'menuitem_lights_on',
+            'menuitem_lights_off',
             'liststore_themes',
             'combobox_profiles',
             'tempobutton',
@@ -99,8 +97,8 @@ class MainWindow:
                               ('menuitem_delete', 'd'),
                               ('menuitem_new', 'n'),
                               ('menuitem_quit', 'q'),
-                              ('button_lights_on', 'o'),
-                              ('button_lights_off', 'f'),
+                              ('menuitem_lights_on', 'o'),
+                              ('menuitem_lights_off', 'f'),
                               ('menuitem_export', 'e'),
                               ('menuitem_import', 'i')):
             menuitem_apply_configuration = builder.get_object(_id)
@@ -170,7 +168,6 @@ class MainWindow:
         self.horizontal_main_box.reorder_child(self.__color_chooser_toolbar, 0)
 
         self.checkbutton_autosave.set_active(self.__ccp.get_bool_defval('auto_save', True))
-        self.checkbutton_profile_buttons.set_active(self.__ccp.get_bool_defval('profile_buttons', False))
         self.checkbutton_delete_warning.set_active(self.__ccp.get_bool_defval('delete_warning', True))
 
         self.__populate_box_areas()
@@ -179,10 +176,6 @@ class MainWindow:
         self.window_root.set_icon(icon_pixbuf)
         self.window_root.show_all()
         self.window_root.maximize()
-
-        # It must be called after show_all() or it wont work.
-        if not self.checkbutton_profile_buttons.get_active():
-            self.box_profile_buttons.hide()
 
         #
         # Start the thread to scan the Daemon
@@ -290,14 +283,6 @@ class MainWindow:
 
     def on_checkbutton_autosave_activate(self, *_):
         self.__ccp.write('auto_save', self.checkbutton_autosave.get_active())
-
-    def on_checkbutton_profile_buttons_activate(self, *_):
-        if self.checkbutton_profile_buttons.get_active():
-            self.box_profile_buttons.show()
-            self.__ccp.write('profile_buttons', True)
-        else:
-            self.box_profile_buttons.hide()
-            self.__ccp.write('profile_buttons', False)
 
     def on_menuitem_apply_configuration_activate(self, *_):
         Thread(target=self.__on_thread_illuminate_keyboard).start()
@@ -413,24 +398,6 @@ class MainWindow:
         area_box.pack_start(child=areaitem_widget, expand=False, fill=False, padding=5)
         area_box.pack_start(child=button, expand=False, fill=False, padding=5)
 
-    def on_button_apply_clicked(self, *_):
-        self.on_menuitem_apply_configuration_activate()
-
-    def on_button_export_clicked(self, *_):
-        self.on_menuitem_export_activate()
-
-    def on_button_import_clicked(self, *_):
-        self.on_menuitem_import_activate()
-
-    def on_button_save_clicked(self, *_):
-        self.on_menuitem_save_activate()
-
-    def on_button_delete_clicked(self, *_):
-        self.on_menuitem_delete_activate()
-
-    def on_button_new_clicked(self, *_):
-        self.on_menuitem_new_activate()
-
     def __populate_box_areas(self):
         """
             This will add all the Areas and AreaItems to the graphical interphase.
@@ -513,9 +480,8 @@ class MainWindow:
                 akbl_status = status
 
                 GLib.idle_add(self.menuitem_apply_configuration.set_sensitive, akbl_status)
-                GLib.idle_add(self.button_lights_on.set_sensitive, akbl_status)
-                GLib.idle_add(self.button_lights_off.set_sensitive, akbl_status)
-                GLib.idle_add(self.button_apply.set_sensitive, akbl_status)
+                GLib.idle_add(self.menuitem_lights_on.set_sensitive, akbl_status)
+                GLib.idle_add(self.menuitem_lights_off.set_sensitive, akbl_status)
 
             if not status:
                 self.__bindings.reload_address(verbose=False)

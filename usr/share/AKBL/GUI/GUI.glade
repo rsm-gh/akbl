@@ -40,54 +40,6 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkImage" id="image12">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="tooltip-text" translatable="yes">Apply Theme
-     (ctrl-a)</property>
-    <property name="icon-name">view-refresh</property>
-    <property name="icon_size">3</property>
-  </object>
-  <object class="GtkImage" id="image13">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="tooltip-text" translatable="yes">Save Theme 
-    (ctrl-s)</property>
-    <property name="icon-name">document-save</property>
-    <property name="icon_size">3</property>
-  </object>
-  <object class="GtkImage" id="image14">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="tooltip-text" translatable="yes">Delete Theme 
-     (ctrl-d)</property>
-    <property name="icon-name">list-remove</property>
-    <property name="icon_size">3</property>
-  </object>
-  <object class="GtkImage" id="image15">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="tooltip-text" translatable="yes">New Theme 
-    (ctrl-n)</property>
-    <property name="icon-name">list-add</property>
-    <property name="icon_size">3</property>
-  </object>
-  <object class="GtkImage" id="image27">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="tooltip-text" translatable="yes">Import Theme
-     (ctrl-i)</property>
-    <property name="icon-name">document-open</property>
-    <property name="icon_size">3</property>
-  </object>
-  <object class="GtkImage" id="image28">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="tooltip-text" translatable="yes">Export Theme
-     (ctrl-e)</property>
-    <property name="icon-name">document-save-as</property>
-    <property name="icon_size">3</property>
-  </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -324,7 +276,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                           </object>
                         </child>
                         <child>
-                          <object class="GtkMenuItem" id="button_lights_on">
+                          <object class="GtkMenuItem" id="menuitem_lights_on">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Lights On</property>
@@ -332,7 +284,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                           </object>
                         </child>
                         <child>
-                          <object class="GtkMenuItem" id="button_lights_off">
+                          <object class="GtkMenuItem" id="menuitem_lights_off">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Lights Off</property>
@@ -374,14 +326,6 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="label" translatable="yes">Auto Save</property>
                             <property name="active">True</property>
                             <signal name="activate" handler="on_checkbutton_autosave_activate" swapped="no"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkCheckMenuItem" id="checkbutton_profile_buttons">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes">File Toolbar</property>
-                            <signal name="activate" handler="on_checkbutton_profile_buttons_activate" swapped="no"/>
                           </object>
                         </child>
                         <child>
@@ -433,113 +377,6 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="box_profile_buttons">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <object class="GtkButton" id="button_apply">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="image">image12</property>
-                    <signal name="clicked" handler="on_button_apply_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button_save">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="image">image13</property>
-                    <signal name="clicked" handler="on_button_save_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button_new">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="image">image15</property>
-                    <signal name="clicked" handler="on_button_new_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button_delete">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="image">image14</property>
-                    <signal name="clicked" handler="on_button_delete_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button_export">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="image">image28</property>
-                    <signal name="clicked" handler="on_button_export_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button_import">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="image">image27</property>
-                    <signal name="clicked" handler="on_button_import_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">6</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
               </packing>
             </child>
             <child>
