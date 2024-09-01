@@ -76,12 +76,10 @@ class MainWindow:
             'combobox_profiles',
             'tempobutton',
             'label_computer_model',
-            'label_daemon_off',
             'box_profile_buttons',
             'horizontal_main_box',
             'box_area_labels',
             'box_areas',
-            'label_user_message',
             'window_new_profile',
             'entry_new_profile',
             'button_new_profile_create',
@@ -500,7 +498,6 @@ class MainWindow:
 
         self.combobox_profiles.set_active(active_row)
 
-
     def __on_thread_scan_daemon(self):
 
         akbl_status = None
@@ -512,11 +509,6 @@ class MainWindow:
 
             if akbl_status != status:
                 akbl_status = status
-
-                if akbl_status:
-                    GLib.idle_add(self.label_daemon_off.hide)
-                else:
-                    GLib.idle_add(self.label_daemon_off.show)
 
                 GLib.idle_add(self.menuitem_apply_configuration.set_sensitive, akbl_status)
                 GLib.idle_add(self.button_lights_on.set_sensitive, akbl_status)
@@ -530,8 +522,6 @@ class MainWindow:
 
     def __on_thread_delete_current_configuration(self):
 
-        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_CONFIGURATION_DELETED)
-
         if os.path.exists(self.__theme.get_path()):
             os.remove(self.__theme.get_path())
 
@@ -539,33 +529,18 @@ class MainWindow:
             theme_factory.create_default_theme(self.__computer, self.__paths._themes_dir)
 
         GLib.idle_add(self.__populate_liststore_themes)
-
         self.__bindings.reload_themes()
 
-        sleep(0.5)
-
-        GLib.idle_add(self.label_user_message.set_text, ' ')
-
     def __on_thread_turn_lights_off(self):
-        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_SHUTTING_LIGHTS_OFF)
         self.__bindings.set_lights(False)
-        GLib.idle_add(self.label_user_message.set_text, "")
 
     def __on_thread_illuminate_keyboard(self):
 
         if not os.path.exists(self.__theme.get_path()):
-            print_warning("The theme does not exist.")
+            print_warning(f"The theme {self.__theme.get_name()} must be saved before applying it.")
             return
 
-        elif self.__theme.get_name() == "":
-            print_warning("The theme must have a name.")
-            return
-
-        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_APPLYING_CONFIGURATION)
         self.__bindings.set_theme(self.__theme.get_name())
-        GLib.idle_add(self.label_user_message.set_text, '')
 
     def __on_thread_save_configuration_file(self):
-        GLib.idle_add(self.label_user_message.set_text, texts._TEXT_SAVING_THE_CONFIGURATION)
         self.__theme.save()
-        GLib.idle_add(self.label_user_message.set_text, '')

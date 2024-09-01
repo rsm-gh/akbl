@@ -89,15 +89,10 @@ class Texts:
         lights_off = "Off"
         no_daemon = "No Daemon"
 
-
 _TEXT_ERROR_DAEMON_OFF = "Error: The daemon is off or the connection couldn't be established."
 _TEXT_WRONG_ARGUMENT = '''Error: wrong argument. use "akbl --help"'''
-_TEXT_APPLYING_CONFIGURATION = "Applying the configuration.."
-_TEXT_SHUTTING_LIGHTS_OFF = "Shutting the lights off.."
 _TEXT_TURNING_LIGHTS_ON = "Turning the lights on.."
 _TEXT_THE_GUI_NEEDS_ROOT = "The graphical interface needs to be run as root."
 _TEXT_GUI_CANT_DAEMON_OFF = "The GUI can not start because the daemon is off."
-_TEXT_SAVING_THE_CONFIGURATION = "Saving the configuration.."
-_TEXT_CONFIGURATION_DELETED = "The configuration has been deleted.."
 _TEXT_CONFIRM_DELETE_CONFIGURATION = "Are you sure that you want to\n delete this configuration?"
 _TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED = "You have reached the maximum number of AreaItems for the {}."
