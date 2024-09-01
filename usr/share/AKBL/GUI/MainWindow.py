@@ -141,7 +141,7 @@ class MainWindow:
                                                            self.__paths._themes_dir,
                                                            theme_name)
 
-        self.populate_liststore_themes()
+        self.__populate_liststore_themes()
 
         """
             Extra GUI initialization
@@ -175,7 +175,7 @@ class MainWindow:
         self.checkbutton_profile_buttons.set_active(self.__ccp.get_bool_defval('profile_buttons', False))
         self.checkbutton_delete_warning.set_active(self.__ccp.get_bool_defval('delete_warning', True))
 
-        self.populate_box_areas()
+        self.__populate_box_areas()
 
         icon_pixbuf = Pixbuf.new_from_file(self.__paths._icon_file)
         self.window_root.set_icon(icon_pixbuf)
@@ -189,7 +189,7 @@ class MainWindow:
         #
         # Start the thread to scan the Daemon
         #
-        self.__thread_scan_daemon = Thread(target=self.__thread_daemon_check)
+        self.__thread_scan_daemon = Thread(target=self.__on_thread_scan_daemon)
         self.__thread_scan_daemon.start()
 
     def present(self):
@@ -201,75 +201,6 @@ class MainWindow:
         self.__thread_scan_daemon.join()
 
         self.__application.quit()
-
-    def populate_box_areas(self):
-        """
-            This will add all the Areas and AreaItems to the graphical interphase.
-        """
-
-        # Empty the label box
-        for area_label in self.box_area_labels.get_children():
-            self.box_area_labels.remove(area_label)
-
-        # Empty the grid
-        for box_area in self.box_areas.get_children():
-            self.box_areas.remove(box_area)
-
-        # Populate the label box and the grid
-        #
-        for area in self.__theme.get_areas():
-
-            area_label = Gtk.Label()
-            area_label.set_text(area._description)
-            area_label.set_xalign(0)
-            area_label.set_size_request(width=100, height=112)
-            self.box_area_labels.pack_start(child=area_label, expand=False, fill=False, padding=0)
-            self.box_area_labels.show_all()
-
-            box_area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-
-            for column_index, areaitem in enumerate(area.get_items()):
-
-                areaitem_widget = AreaItemWidget(area_name=area._name,
-                                                 left_color=areaitem.get_left_color(),
-                                                 right_color=areaitem.get_right_color(),
-                                                 mode=areaitem.get_mode(),
-                                                 column=column_index,
-                                                 get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
-
-                areaitem_widget.connect("updated", self.on_areaitemwidget_updated)
-                areaitem_widget.connect("request-delete", self.on_areaitemwidget_request_delete)
-
-                box_area.pack_start(child=areaitem_widget, expand=False, fill=False, padding=5)
-
-                if column_index + 1 >= area._max_commands:
-                    break
-
-            if area._max_commands > 1:
-                add_button = Gtk.Button(label=texts._TEXT_ADD)
-                add_button.connect('button-press-event', self.on_button_add_item_clicked, area, box_area)
-                box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
-
-            self.box_areas.pack_start(child=box_area, expand=False, fill=False, padding=5)
-
-        self.box_areas.show_all()
-
-    def populate_liststore_themes(self, select: str = None):
-
-        self.liststore_themes.clear()
-
-        theme_names = theme_factory.get_theme_names(self.__paths._themes_dir)
-
-        if select is None:
-            select = theme_factory.get_last_theme_name(self.__paths._themes_dir)
-
-        active_row = 0
-        for i, theme_name in enumerate(theme_names):
-            self.liststore_themes.append([theme_name])
-            if theme_name == select:
-                active_row = i
-
-        self.combobox_profiles.set_active(active_row)
 
     def on_toolbar_colorlist_changed(self, *_):
         hex_colors = self.__color_chooser_toolbar.get_hex_colors()
@@ -292,7 +223,7 @@ class MainWindow:
                                                            theme_name)
 
             self.tempobutton.set_value(self.__theme.get_speed())
-            self.populate_box_areas()
+            self.__populate_box_areas()
 
     def on_entry_new_profile_changed(self, *_):
 
@@ -401,7 +332,7 @@ class MainWindow:
 
         shutil.copy(file_path, new_path)
         theme = theme_factory.load_theme_from_file(self.__computer, new_path)
-        self.populate_liststore_themes(select=theme.get_name())
+        self.__populate_liststore_themes(sel_theme_name=theme.get_name())
 
     def on_menuitem_export_activate(self, *_):
         folder_path = gtk_folder_chooser(parent=self.window_root,
@@ -436,7 +367,7 @@ class MainWindow:
         new_theme = theme_factory.copy_theme(self.__theme, new_path)
         new_theme.save()
 
-        self.populate_liststore_themes(select=new_theme.get_name())
+        self.__populate_liststore_themes(sel_theme_name=new_theme.get_name())
         self.__bindings.reload_themes()
 
     def on_button_reset_toolbar_colors_activate(self, *_):
@@ -500,7 +431,77 @@ class MainWindow:
     def on_button_new_clicked(self, *_):
         self.on_menuitem_new_activate()
 
-    def __thread_daemon_check(self):
+    def __populate_box_areas(self):
+        """
+            This will add all the Areas and AreaItems to the graphical interphase.
+        """
+
+        # Empty the label box
+        for area_label in self.box_area_labels.get_children():
+            self.box_area_labels.remove(area_label)
+
+        # Empty the grid
+        for box_area in self.box_areas.get_children():
+            self.box_areas.remove(box_area)
+
+        # Populate the label box and the grid
+        #
+        for area in self.__theme.get_areas():
+
+            area_label = Gtk.Label()
+            area_label.set_text(area._description)
+            area_label.set_xalign(0)
+            area_label.set_size_request(width=100, height=112)
+            self.box_area_labels.pack_start(child=area_label, expand=False, fill=False, padding=0)
+            self.box_area_labels.show_all()
+
+            box_area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+
+            for column_index, areaitem in enumerate(area.get_items()):
+
+                areaitem_widget = AreaItemWidget(area_name=area._name,
+                                                 left_color=areaitem.get_left_color(),
+                                                 right_color=areaitem.get_right_color(),
+                                                 mode=areaitem.get_mode(),
+                                                 column=column_index,
+                                                 get_color_callback=self.__color_chooser_toolbar.get_current_rgba)
+
+                areaitem_widget.connect("updated", self.on_areaitemwidget_updated)
+                areaitem_widget.connect("request-delete", self.on_areaitemwidget_request_delete)
+
+                box_area.pack_start(child=areaitem_widget, expand=False, fill=False, padding=5)
+
+                if column_index + 1 >= area._max_commands:
+                    break
+
+            if area._max_commands > 1:
+                add_button = Gtk.Button(label=texts._TEXT_ADD)
+                add_button.connect('button-press-event', self.on_button_add_item_clicked, area, box_area)
+                box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
+
+            self.box_areas.pack_start(child=box_area, expand=False, fill=False, padding=5)
+
+        self.box_areas.show_all()
+
+    def __populate_liststore_themes(self, sel_theme_name: str = None):
+
+        self.liststore_themes.clear()
+
+        theme_names = theme_factory.get_theme_names(self.__paths._themes_dir)
+
+        if sel_theme_name is None:
+            sel_theme_name = theme_factory.get_last_theme_name(self.__paths._themes_dir)
+
+        active_row = 0
+        for i, theme_name in enumerate(theme_names):
+            self.liststore_themes.append([theme_name])
+            if theme_name == sel_theme_name:
+                active_row = i
+
+        self.combobox_profiles.set_active(active_row)
+
+
+    def __on_thread_scan_daemon(self):
 
         akbl_status = None
 
@@ -537,7 +538,7 @@ class MainWindow:
         if len(theme_factory.get_theme_names(self.__paths._themes_dir)) == 0:
             theme_factory.create_default_theme(self.__computer, self.__paths._themes_dir)
 
-        GLib.idle_add(self.populate_liststore_themes)
+        GLib.idle_add(self.__populate_liststore_themes)
 
         self.__bindings.reload_themes()
 
