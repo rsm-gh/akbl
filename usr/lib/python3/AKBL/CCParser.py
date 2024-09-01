@@ -40,8 +40,8 @@ class CCParser(object):
             To init CCParser you can enter a path and a section.
             If you don't know them, you can leave them empty.
 
-            If debug is set to True, all the exceptions
-            will print its traceback.
+            If print_errors is set to True, all the exceptions
+            will print their traceback.
         """
         self.__print_errors = print_errors
         self.__config = configparser.ConfigParser()
