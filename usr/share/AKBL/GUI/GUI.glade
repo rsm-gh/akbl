@@ -333,7 +333,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="tooltip-text" translatable="yes">Display a warning when deleting a theme.</property>
-                            <property name="label" translatable="yes">Warning on Delete</property>
+                            <property name="label" translatable="yes">Warning on delete</property>
                             <property name="active">True</property>
                             <signal name="activate" handler="on_checkbutton_delete_warning_activate" swapped="no"/>
                           </object>
@@ -464,6 +464,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkBox" id="horizontal_main_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="border-width">0</property>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
@@ -482,6 +483,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkBox" id="box_area_labels">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="border-width">0</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <placeholder/>
@@ -511,6 +513,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkBox" id="box_areas">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="border-width">0</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <placeholder/>

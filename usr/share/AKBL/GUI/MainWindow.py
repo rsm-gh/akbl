@@ -139,9 +139,9 @@ class MainWindow:
 
         self.__populate_liststore_themes()
 
-        """
-            Extra GUI initialization
-        """
+        #
+        #    Extra GUI initialization
+        #
 
         # Add the areas to the "menuitem_off_areas"
         #
