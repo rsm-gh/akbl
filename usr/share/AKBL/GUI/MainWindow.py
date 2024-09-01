@@ -143,7 +143,7 @@ class MainWindow:
         #
         #    Extra GUI initialization
         #
-        self.window_about.set_version(str(settings.__version__))
+        self.window_about.set_version(f"v{settings.__version__}")
 
         # Add the areas to the "menuitem_off_areas"
         #
