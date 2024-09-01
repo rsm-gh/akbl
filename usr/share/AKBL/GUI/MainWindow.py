@@ -24,7 +24,7 @@ from gi.repository import Gtk, Gdk, GLib
 from gi.repository.GdkPixbuf import Pixbuf
 from threading import Thread, current_thread
 
-import AKBL.texts as texts
+from AKBL.Texts import Texts
 from AKBL.Paths import Paths
 from AKBL.Bindings import Bindings
 from AKBL.CCParser import CCParser
@@ -316,32 +316,33 @@ class MainWindow:
 
     def on_menuitem_import_activate(self, *_):
         file_path = gtk_file_chooser(parent=self.window_root,
-                                     title=texts._TEXT_CHOOSE_A_THEME,
+                                     title=Texts.GUI._theme_choose,
                                      icon_path=self.__paths._icon_file,
                                      filters=(("AKBL theme", '*.cfg'),))
 
         if not file_path:
             return
 
-        new_path = self.__paths._themes_dir + os.path.basename(file_path)
-
-        if os.path.exists(new_path) and not gtk_dialog_question(self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
+        destination_path = self.__paths._themes_dir + os.path.basename(file_path)
+        if os.path.exists(destination_path) and not gtk_dialog_question(self.window_root,
+                                                                        Texts.GUI._theme_duplicate):
             return
 
-        shutil.copy(file_path, new_path)
-        theme = theme_factory.load_theme_from_file(self.__computer, new_path)
+        shutil.copy(file_path, destination_path)
+
+        theme = theme_factory.load_theme_from_file(self.__computer, destination_path)
         self.__populate_liststore_themes(sel_theme_name=theme.get_name())
 
     def on_menuitem_export_activate(self, *_):
         folder_path = gtk_folder_chooser(parent=self.window_root,
-                                         title=texts._TEXT_CHOOSE_A_FOLDER_TO_EXPORT,
+                                         title=Texts.GUI._theme_choose_folder,
                                          icon_path=self.__paths._icon_file)
 
         if folder_path is not None:
             new_path = '{}/{}.cfg'.format(folder_path, self.__theme.get_name())
 
-            if os.path.exists(new_path) and not gtk_dialog_question(
-                    self.window_root, texts._TEXT_THEME_ALREADY_EXISTS):
+            if os.path.exists(new_path) and not gtk_dialog_question(self.window_root,
+                                                                    Texts.GUI._theme_duplicate):
                 return
 
             shutil.copy(self.__theme.get_path(), new_path)
@@ -351,11 +352,11 @@ class MainWindow:
         self.window_new_profile.show()
 
     def on_menuitem_delete_activate(self, *_):
-        if self.checkbutton_delete_warning.get_active():
-            if not gtk_dialog_question(self.window_root,
-                                       texts._TEXT_CONFIRM_DELETE_CONFIGURATION,
-                                       icon=self.__paths._icon_file):
-                return
+        if self.checkbutton_delete_warning.get_active() and \
+                not gtk_dialog_question(self.window_root,
+                                        Texts.GUI._theme_confirm_delete,
+                                        icon=self.__paths._icon_file):
+            return
 
         Thread(target=self.__on_thread_delete_current_configuration).start()
 
@@ -386,7 +387,8 @@ class MainWindow:
         nb_of_areaitem_widgets = sum(1 for child in area_box.get_children() if isinstance(child, AreaItemWidget))
 
         if nb_of_areaitem_widgets >= area._max_commands:
-            gtk_dialog_info(self.window_root, texts._TEXT_MAXIMUM_NUMBER_OF_ZONES_REACHED.format(area._description))
+            gtk_dialog_info(self.window_root,
+                            Texts.GUI._maximum_zones.format(area._description))
             return
 
         areaitem_widget = AreaItemWidget(area_name=area._name,
@@ -473,7 +475,7 @@ class MainWindow:
                     break
 
             if area._max_commands > 1:
-                add_button = Gtk.Button(label=texts._TEXT_ADD)
+                add_button = Gtk.Button(label=Texts.GUI._add)
                 add_button.connect('button-press-event', self.on_button_add_item_clicked, area, box_area)
                 box_area.pack_start(child=add_button, expand=False, fill=False, padding=5)
 

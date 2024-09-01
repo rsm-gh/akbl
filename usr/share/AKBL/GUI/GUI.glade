@@ -224,6 +224,7 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="margin-bottom">5</property>
             <child>
               <object class="GtkMenuBar" id="menubar">
                 <property name="visible">True</property>
@@ -435,21 +436,6 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label_computer_model">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">10</property>
-                <property name="margin-end">10</property>
-                <property name="label" translatable="yes">&lt;COMPUTER-MODEL&gt;</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkBox" id="box_profile_buttons">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -552,6 +538,21 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
               </object>
               <packing>
                 <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_computer_model">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
+                <property name="label" translatable="yes">&lt;COMPUTER-MODEL&gt;</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>

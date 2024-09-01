@@ -23,14 +23,14 @@
 
 import sys
 
-import AKBL.texts as texts
+from AKBL.Texts import Texts
 from AKBL.Bindings import Bindings
 from AKBL.settings import __version__
 
 
 def process_args(args):
     if len(args) < 2:
-        print(texts._TEXT_WRONG_ARGUMENT)
+        print(Texts.Commands._wrong_argument)
         return
 
     akbl_bindings = Bindings(sender="CMD")
@@ -38,10 +38,10 @@ def process_args(args):
 
     match arg1:
         case '--help' | '-h':
-            print(texts._TEXT_HELP)
+            print(Texts.Commands._help)
 
         case '--license' | '-l':
-            print(texts._TEXT_LICENSE)
+            print(Texts.Commands._license)
 
         case '--version' | '-v':
             print(__version__)
@@ -52,7 +52,7 @@ def process_args(args):
         case '--off' | '--on' | '--switch' | '--set-theme':
 
             if not akbl_bindings.ping():
-                print(texts._TEXT_ERROR_DAEMON_OFF)
+                print(Texts.Commands._daemon_off)
                 return
 
             match arg1:
@@ -67,14 +67,14 @@ def process_args(args):
 
                 case '--set-theme':
                     if len(args) != 3:
-                        print(texts._TEXT_WRONG_ARGUMENT)
+                        print(Texts.Commands._wrong_argument)
                     else:
                         akbl_bindings.set_theme(args[2])
                 case _:
-                    print(texts._TEXT_WRONG_ARGUMENT)
+                    print(Texts.Commands._wrong_argument)
 
         case _:
-            print(texts._TEXT_WRONG_ARGUMENT)
+            print(Texts.Commands._wrong_argument)
 
 
 if __name__ == '__main__':
