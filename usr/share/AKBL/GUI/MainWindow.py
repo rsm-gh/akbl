@@ -339,7 +339,7 @@ class MainWindow:
     def on_menuitem_delete_activate(self, *_):
         if self.checkbutton_delete_warning.get_active() and \
                 not gtk_dialog_question(self.window_root,
-                                        Texts.GUI._theme_confirm_delete,
+                                        Texts.GUI._theme_confirm_delete.format(self.__theme.get_name()),
                                         icon=self.__paths._icon_file):
             return
 
