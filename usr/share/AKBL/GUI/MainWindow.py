@@ -187,10 +187,8 @@ class MainWindow:
         self.window_root.present()
 
     def quit(self, *_):
-
         self.__thread_scan_daemon.do_run = False
         self.__thread_scan_daemon.join()
-
         self.__application.quit()
 
     def on_toolbar_colorlist_changed(self, *_):
@@ -468,11 +466,21 @@ class MainWindow:
         self.combobox_profiles.set_active(active_row)
 
     def __on_thread_scan_daemon(self):
+        """
+            The thread will be executed much faster than the ping, to avoid
+            lagging the GUI when using the close button.
+        """
 
         akbl_status = None
+        last_pinged = .8
 
         t = current_thread()
         while getattr(t, "do_run", True):
+
+            last_pinged += .2
+
+            if last_pinged < 1:
+                continue
 
             status = self.__bindings.ping()
 
@@ -486,7 +494,7 @@ class MainWindow:
             if not status:
                 self.__bindings.reload_address(verbose=False)
 
-            sleep(1)
+            sleep(.2)
 
     def __on_thread_delete_current_configuration(self):
 
