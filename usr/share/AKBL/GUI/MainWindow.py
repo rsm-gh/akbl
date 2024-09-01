@@ -24,6 +24,7 @@ from gi.repository import Gtk, Gdk, GLib
 from gi.repository.GdkPixbuf import Pixbuf
 from threading import Thread, current_thread
 
+from AKBL import settings
 from AKBL.Texts import Texts
 from AKBL.Paths import Paths
 from AKBL.Bindings import Bindings
@@ -89,9 +90,9 @@ class MainWindow:
         self.window_root.connect('delete-event', self.quit)
         self.window_root.set_application(self.__application)
 
-        """
-            Add the accel groups
-        """
+        #
+        #    Add the accel groups
+        #
         for _id, shortcut in (('menuitem_apply_configuration', 'a'),
                               ('menuitem_save', 's'),
                               ('menuitem_delete', 'd'),
@@ -142,6 +143,7 @@ class MainWindow:
         #
         #    Extra GUI initialization
         #
+        self.window_about.set_version(str(settings.__version__))
 
         # Add the areas to the "menuitem_off_areas"
         #
