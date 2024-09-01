@@ -28,49 +28,12 @@ from AKBL.Theme.Theme import Theme
 from AKBL.settings import _MISSING_ZONE_COLOR
 
 
-def get_theme_names(path):
-    names = [filename[:-4] for filename in os.listdir(path) if filename.endswith('.cfg')]
-    names.sort()
-    #  names = [theme.get_name() for theme in _AVAILABLE_THEMES]
-    #  names.sort()
-    return names
-
-
-def get_theme_by_name(computer: Computer,
-                      themes_dir: str,
-                      theme_name: str) -> None | Theme:
-    if not theme_name.endswith('.cfg'):
-        theme_name += ".cfg"
-
-    theme_path = os.path.join(themes_dir, theme_name)
-
-    if not os.path.exists(theme_path):
-        return None
-
-    return load_theme_from_file(computer, theme_path)
-
-
 def create_default_theme(computer: Computer, theme_dir: str = None) -> Theme:
     theme = Theme(computer)
     copy_theme(theme, os.path.join(theme_dir, 'Default.cfg'))
     theme.save()
 
     return theme
-
-
-def get_last_theme_name(path) -> None | str:
-    max_time = 0
-    theme_name = None
-
-    for filename in os.listdir(path):
-        if filename.endswith(".cfg"):
-            full_path = os.path.join(path, filename)
-            theme_time = os.path.getmtime(full_path)
-            if theme_time > max_time:
-                max_time = theme_time
-                theme_name = filename
-
-    return theme_name
 
 
 def load_theme_from_file(computer: Computer, path: str) -> Theme:
@@ -188,3 +151,40 @@ def copy_theme(theme: Theme, path: str) -> Theme:
         new_theme.add_area(deepcopy(area))
 
     return new_theme
+
+
+def get_theme_names(path):
+    names = [filename[:-4] for filename in os.listdir(path) if filename.endswith('.cfg')]
+    names.sort()
+    #  names = [theme.get_name() for theme in _AVAILABLE_THEMES]
+    #  names.sort()
+    return names
+
+
+def get_theme_by_name(computer: Computer,
+                      themes_dir: str,
+                      theme_name: str) -> None | Theme:
+    if not theme_name.endswith('.cfg'):
+        theme_name += ".cfg"
+
+    theme_path = os.path.join(themes_dir, theme_name)
+
+    if not os.path.exists(theme_path):
+        return None
+
+    return load_theme_from_file(computer, theme_path)
+
+
+def get_last_theme_name(path) -> None | str:
+    max_time = 0
+    theme_name = None
+
+    for filename in os.listdir(path):
+        if filename.endswith(".cfg"):
+            full_path = os.path.join(path, filename)
+            theme_time = os.path.getmtime(full_path)
+            if theme_time > max_time:
+                max_time = theme_time
+                theme_name = filename[:-4]
+
+    return theme_name

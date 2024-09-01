@@ -128,7 +128,7 @@ class Indicator:
         #
         # Scan Thread
         #
-        self.__thread_scan_daemon = Thread(target=self.__thread_daemon_check)
+        self.__thread_scan_daemon = Thread(target=self.__on_thread_scan_daemon)
         self.__thread_scan_daemon.start()
 
     """
@@ -217,7 +217,7 @@ class Indicator:
         Private methods
     """
 
-    def __thread_daemon_check(self):
+    def __on_thread_scan_daemon(self):
 
         t = current_thread()
         while getattr(t, "do_run", True):
