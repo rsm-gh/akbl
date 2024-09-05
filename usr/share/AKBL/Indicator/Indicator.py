@@ -41,43 +41,12 @@ _PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)
 sys.path.insert(0, _PROJECT_DIR)
 
 
-class ConnectIndicator:
-
-    def __init__(self, white=False):
-        self.__bindings = Bindings(sender="Indicator")
-        self.__indicator = Indicator(self, self.__bindings, white)
-        self.__pyro_daemon = Pyro4.Daemon()
-        self.__uri = self.__pyro_daemon.register(self.__indicator)
-
-        print_debug("URI={}".format(self.__uri))
-
-        Thread(target=self.__pyro_thread).start()
-        Thread(target=self.connect).start()
-
-    def connect(self):
-        # Todo: read the return status of connect_indicator
-        sleep(0.5)
-        return self.__bindings.connect_indicator(self.__uri)
-
-    def shutdown(self):
-        self.__pyro_daemon.shutdown()
-
-    def __pyro_thread(self):
-        self.__pyro_daemon.requestLoop()
-
-
 class Indicator:
 
-    def __init__(self, parent, akbl=None, white=False):
+    def __init__(self, white=False):
 
-        self.__parent = parent
         self.__paths = Paths()
         self.__current_code = -1
-
-        if akbl is None:
-            self.__bindings = Bindings(sender="Indicator")
-        else:
-            self.__bindings = akbl
 
         if white:
             suffix = "-white"
@@ -87,6 +56,17 @@ class Indicator:
         self.__icon_no_daemon = os.path.join(image_dir, 'icon-no-daemon{}.png'.format(suffix))
         self.__icon_lights_on = os.path.join(image_dir, 'icon-on{}.png'.format(suffix))
         self.__icon_lights_off = os.path.join(image_dir, 'icon-off{}.png'.format(suffix))
+
+        # Pyro
+        #
+        self.__pyro_daemon = Pyro4.Daemon()
+        self.__uri = self.__pyro_daemon.register(self)
+        print_debug("URI={}".format(self.__uri))
+        Thread(target=self.__on_thread_pyro_loop).start()
+
+        # AKBL Bindings
+        self.__bindings = Bindings(sender="Indicator")
+        self.__bindings.connect_indicator(self.__uri)
 
         # GUI / Indicator
         #
@@ -137,10 +117,7 @@ class Indicator:
     @Pyro4.expose
     def exit(self):
         self.__bindings.disconnect_indicator()
-
-        if self.__parent is not None:
-            self.__parent.shutdown()
-
+        self.__pyro_daemon.shutdown()
         self.__thread_scan_daemon.do_run = False
         self.__thread_scan_daemon.join()
 
@@ -224,6 +201,9 @@ class Indicator:
         Private methods
     """
 
+    def __on_thread_pyro_loop(self):
+        self.__pyro_daemon.requestLoop()
+
     def __on_thread_scan_daemon(self):
 
         t = current_thread()
@@ -232,7 +212,9 @@ class Indicator:
             if self.__bindings.ping():
 
                 if self.__current_code in (IndicatorCodes._daemon_off, -1):
-                    self.__parent.connect()
+                    # Todo: read the return status of connect_indicator
+                    self.__bindings.connect_indicator(self.__uri)
+
                     self.__bindings.update_indicator()
 
             elif self.__current_code != IndicatorCodes._daemon_off:
@@ -261,5 +243,5 @@ class Indicator:
 
 
 if __name__ == "__main__":
-    _ = ConnectIndicator(white='--white' in sys.argv)
+    _ = Indicator(white='--white' in sys.argv)
     Gtk.main()
