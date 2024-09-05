@@ -24,9 +24,9 @@
 
 import os
 import sys
-from traceback import format_exc
-
 import Pyro4
+from traceback import format_exc
+from time import sleep
 
 from AKBL.Paths import Paths
 from AKBL.CCParser import CCParser
@@ -357,14 +357,21 @@ class Daemon:
         """Connect the Daemon to the Indicator."""
 
         print_debug("uri: {}".format(uri))
-
         try:
-            self.__pyro_indicator = Pyro4.Proxy(uri)
+            new_indicator = Pyro4.Proxy(uri)
         except Exception:
-            self.__pyro_indicator = None
             print_warning("Failed to initialize the indicator")
             print_warning(format_exc(), direct_output=True)
         else:
+            # Kill the already connected indicator (if any)
+            if self.__pyro_indicator is not None:
+                print_debug("disconnecting previous indicator", direct_output=True)
+                self.__pyro_indicator.exit()
+                self.__pyro_indicator = None
+
+            # Load the new indicator
+            self.__pyro_indicator = new_indicator
+            self.update_indicator()
             self.reload_themes(user)
 
     @Pyro4.expose

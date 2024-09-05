@@ -57,17 +57,6 @@ class Indicator:
         self.__icon_lights_on = os.path.join(image_dir, 'icon-on{}.png'.format(suffix))
         self.__icon_lights_off = os.path.join(image_dir, 'icon-off{}.png'.format(suffix))
 
-        # Pyro
-        #
-        self.__pyro_daemon = Pyro4.Daemon()
-        self.__uri = self.__pyro_daemon.register(self)
-        print_debug("URI={}".format(self.__uri))
-        Thread(target=self.__on_thread_pyro_loop).start()
-
-        # AKBL Bindings
-        self.__bindings = Bindings(sender="Indicator")
-        self.__bindings.connect_indicator(self.__uri)
-
         # GUI / Indicator
         #
         self.__app_indicator = AppIndicator.Indicator.new_with_path(
@@ -100,6 +89,17 @@ class Indicator:
         self.__menu.show_all()
         self.__app_indicator.set_menu(self.__menu)
 
+        # Pyro
+        #
+        self.__pyro_daemon = Pyro4.Daemon()
+        self.__uri = self.__pyro_daemon.register(self)
+        print_debug("URI={}".format(self.__uri))
+        Thread(target=self.__on_thread_pyro_loop).start()
+
+        # AKBL Bindings
+        self.__bindings = Bindings(sender="Indicator")
+        self.__bindings.connect_indicator(self.__uri)
+
         #
         # Scan Thread
         #
@@ -109,14 +109,18 @@ class Indicator:
     """
         Public & Pyro Methods
     """
-
     @Pyro4.expose
     def ping(self) -> None:
         print_debug()
 
     @Pyro4.expose
-    def exit(self):
-        self.__bindings.disconnect_indicator()
+    def exit(self, from_daemon: bool = True) -> None:
+
+        if from_daemon:
+            print_debug("Closing the indicator, requested by the daemon.")
+        else:
+            self.__bindings.disconnect_indicator()
+
         self.__pyro_daemon.shutdown()
         self.__thread_scan_daemon.do_run = False
         self.__thread_scan_daemon.join()
@@ -212,10 +216,7 @@ class Indicator:
             if self.__bindings.ping():
 
                 if self.__current_code in (IndicatorCodes._daemon_off, -1):
-                    # Todo: read the return status of connect_indicator
                     self.__bindings.connect_indicator(self.__uri)
-
-                    self.__bindings.update_indicator()
 
             elif self.__current_code != IndicatorCodes._daemon_off:
                 GLib.idle_add(self.set_code, IndicatorCodes._daemon_off)
@@ -235,7 +236,7 @@ class Indicator:
         self.__bindings.switch_lights()
 
     def __on_menuitem_exit(self, *_):
-        self.exit()
+        self.exit(from_daemon=False)
 
     @staticmethod
     def __on_menuitem_gui(*_):
