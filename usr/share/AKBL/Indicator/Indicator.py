@@ -72,32 +72,27 @@ class Indicator:
 
         self.__parent = parent
         self.__paths = Paths()
+        self.__current_code = -1
 
         if akbl is None:
             self.__bindings = Bindings(sender="Indicator")
         else:
             self.__bindings = akbl
 
-        # Status variables for the loop
-        #
-        self.__current_code = -1
-
-        image_dir = os.path.join(os.path.join(_SCRIPT_DIR, "img"))
-
         if white:
             suffix = "-white"
         else:
             suffix = ""
-
+        image_dir = os.path.join(os.path.join(_SCRIPT_DIR, "img"))
         self.__icon_no_daemon = os.path.join(image_dir, 'icon-no-daemon{}.png'.format(suffix))
         self.__icon_lights_on = os.path.join(image_dir, 'icon-on{}.png'.format(suffix))
         self.__icon_lights_off = os.path.join(image_dir, 'icon-off{}.png'.format(suffix))
 
-        # GUI stuff
+        # GUI / Indicator
         #
         self.__app_indicator = AppIndicator.Indicator.new_with_path(
             'akbl-indicator',
-            self.__icon_no_daemon,
+            self.__icon_lights_off,
             AppIndicator.IndicatorCategory.APPLICATION_STATUS,
             image_dir)
 
@@ -138,6 +133,18 @@ class Indicator:
     @Pyro4.expose
     def ping(self) -> None:
         print_debug()
+
+    @Pyro4.expose
+    def exit(self):
+        self.__bindings.disconnect_indicator()
+
+        if self.__parent is not None:
+            self.__parent.shutdown()
+
+        self.__thread_scan_daemon.do_run = False
+        self.__thread_scan_daemon.join()
+
+        Gtk.main_quit()
 
     @Pyro4.expose
     def load_themes(self,
@@ -246,15 +253,7 @@ class Indicator:
         self.__bindings.switch_lights()
 
     def __on_menuitem_exit(self, *_):
-        self.__bindings.disconnect_indicator()
-
-        if self.__parent is not None:
-            self.__parent.shutdown()
-
-        self.__thread_scan_daemon.do_run = False
-        self.__thread_scan_daemon.join()
-
-        Gtk.main_quit()
+        self.exit()
 
     @staticmethod
     def __on_menuitem_gui(*_):
@@ -262,6 +261,5 @@ class Indicator:
 
 
 if __name__ == "__main__":
-    white_icon = '--white' in sys.argv
-    _ = ConnectIndicator(white_icon)
+    _ = ConnectIndicator(white='--white' in sys.argv)
     Gtk.main()
