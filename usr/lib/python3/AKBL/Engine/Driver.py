@@ -21,8 +21,8 @@
 import usb
 from traceback import format_exc
 
-from AKBL.Engine import Constructor
-from AKBL.console_printer import print_debug, print_error
+from Engine import Constructor
+from console_printer import print_debug, print_error
 
 
 class Driver:

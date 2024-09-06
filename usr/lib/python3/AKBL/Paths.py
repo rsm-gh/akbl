@@ -20,7 +20,7 @@
 import os
 import shutil
 
-from AKBL.utils import getuser
+from utils import getuser
 
 
 class Paths:

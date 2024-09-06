@@ -19,13 +19,13 @@
 import os
 from copy import deepcopy
 
-from AKBL.Theme.Area import Area
-from AKBL.Theme.AreaItem import AreaItem
-from AKBL.utils import string_is_hex_color
-from AKBL.console_printer import print_warning, print_debug
-from AKBL.Computer.Computer import Computer
-from AKBL.Theme.Theme import Theme
-from AKBL.settings import _MISSING_ZONE_COLOR
+from utils import string_is_hex_color
+from settings import _MISSING_ZONE_COLOR
+from console_printer import print_warning, print_debug
+from Theme.Area import Area
+from Theme.Theme import Theme
+from Theme.AreaItem import AreaItem
+from Computer.Computer import Computer
 
 
 def create_default_theme(computer: Computer, theme_dir: str = None) -> Theme:

@@ -19,8 +19,8 @@
 
 from copy import copy
 
-from AKBL.Theme.AreaItem import AreaItem
-from AKBL.Computer.Region import Region
+from Theme.AreaItem import AreaItem
+from Computer.Region import Region
 
 
 class Area(Region):

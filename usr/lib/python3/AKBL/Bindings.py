@@ -18,13 +18,16 @@
 
 
 import os
+import sys
 import Pyro4
 import getpass
 from typing import Tuple
 from traceback import format_exc
 
-from AKBL.Paths import Paths
-from AKBL.console_printer import print_error, print_warning
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+
+from Paths import Paths
+from console_printer import print_error, print_warning
 
 
 class Bindings:
@@ -110,7 +113,7 @@ class Bindings:
 
     def set_fixed_mode(self, colors: list[str], speed: int = 1) -> bool:
         """
-            Change all the light areas, with the fixed mode. Each color of the list will
+            Change all the light areas with the fixed mode. Each color of the list will
             be set in all the areas, and it will move to the next value depending on the speed.
 
             If only one color is provided, the lights will remain at one single color and the speed
@@ -192,7 +195,7 @@ class Bindings:
         self.__command('reload_themes')
 
     def reload_address(self, verbose=False) -> bool:
-        """Reload the pyro address, and try to make a connection with the Daemon."""
+        """Reload the pyro address and try to make a connection with the Daemon."""
 
         if not self.ping() and os.path.exists(self.__paths._daemon_pyro_file):
 
@@ -250,7 +253,7 @@ class Bindings:
                 try:
                     #
                     # I ignore why this has to be inside an exception.
-                    # Its like if there was a problem printing format_exc().
+                    # It's like if there was a problem printing format_exc().
                     # The bug happens when reducing the following scenario:
                     #    1) There is a launched indicator.
                     #    2) The software is re-installed.
