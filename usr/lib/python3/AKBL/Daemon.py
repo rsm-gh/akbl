@@ -27,7 +27,9 @@ import sys
 import Pyro4
 from traceback import format_exc
 
-sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+akbl_path = os.path.dirname(os.path.realpath(__file__))
+if akbl_path not in sys.path:
+    sys.path.insert(0, akbl_path)
 
 from Paths import Paths
 from CCParser import CCParser

@@ -18,7 +18,12 @@
 
 
 import os
+import sys
 import shutil
+
+akbl_path = os.path.dirname(os.path.realpath(__file__))
+if akbl_path not in sys.path:
+    sys.path.insert(0, akbl_path)
 
 from utils import getuser
 
