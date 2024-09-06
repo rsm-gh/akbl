@@ -469,7 +469,7 @@ class MainWindow:
 
     def __on_thread_scan_daemon(self):
         """
-            The thread will be executed much faster than the ping, to avoid
+            The thread will be executed much faster than the ping to avoid
             lagging the GUI when using the close button.
         """
 
@@ -478,11 +478,13 @@ class MainWindow:
 
         t = current_thread()
         while getattr(t, "do_run", True):
-
+            sleep(.2)
             last_pinged += .2
 
             if last_pinged < 1:
                 continue
+            else:
+                last_pinged = 0
 
             status = self.__bindings.ping()
 
@@ -495,8 +497,6 @@ class MainWindow:
 
             if not status:
                 self.__bindings.reload_address(verbose=False)
-
-            sleep(.2)
 
     def __on_thread_delete_current_configuration(self):
 
