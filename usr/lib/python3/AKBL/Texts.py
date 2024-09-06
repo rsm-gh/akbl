@@ -85,3 +85,4 @@ Usage:
         _theme_confirm_delete = "Are you sure that you want to delete {}?"
         _theme_choose = "Choose an AKBL theme"
         _theme_duplicate = "A theme with this name already exists. Do you want to overwrite it?"
+        _theme_must_saved = "The theme {} must be saved before applying it."

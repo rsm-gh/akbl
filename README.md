@@ -12,7 +12,7 @@
 
 # Highlights
 
-* 2022: **AKBL is not actively developed.** I almost stopped the development because I changed my laptop, so I have major limitations for using and testing the software.
+* 2022: The software cannot be correctly tested since I changed my laptop. I do not possess an Alienware computer any more.
 * 2019: Many users with recent Alienware computers are facing issues, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues.
 
 # Software Features
@@ -194,6 +194,12 @@ That button manages the speed of the theme in the following cases:
 
 ### GUI: What's the difference between "Apply theme" & "Lights on"?
 
+* Apply them will apply the current theme that it's selected in the GUI.
+* Lights on will apply either:
+  * The last modified theme, if the lights have not been turned on (by the same user).
+  * The last theme used for turning the lights on.
+
+Note: these to buttons have the same behavior as the CMD commands `akbl --on` and `akbl --set-theme <name>`.
 
 # Python Bindings
 
@@ -482,7 +488,7 @@ Then with the time, I realized that PyAlienFX was kinda dead, and I was having f
 
 + 2015-2016: Custom Debian Repository, Bug report pages, Sharing profiles pages, and chat hosted on my website (These features are not available anymore).  
 
-+ XXXX: Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
++ Improved the software architecture for maintenance purposes. And I also added some more friendly configuration files like the current INI files.
 
 # About & Credits
 
