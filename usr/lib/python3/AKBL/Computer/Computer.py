@@ -18,6 +18,13 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import os
+import sys
+
+akbl_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+if akbl_path not in sys.path:
+    sys.path.insert(0, akbl_path)
+
 from Computer.Region import Region
 from console_printer import print_warning
 
