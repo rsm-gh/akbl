@@ -75,6 +75,7 @@ class MainWindow:
             'combobox_profiles',
             'tempobutton',
             'label_computer_model',
+            'label_daemon_off',
             'box_profile_buttons',
             'horizontal_main_box',
             'box_area_labels',
@@ -178,6 +179,7 @@ class MainWindow:
         self.window_root.set_icon(icon_pixbuf)
         self.window_root.show_all()
         self.window_root.maximize()
+        self.label_daemon_off.hide()
 
         #
         # Start the thread to scan the Daemon
@@ -494,6 +496,11 @@ class MainWindow:
 
             if akbl_status != status:
                 akbl_status = status
+
+                if status:
+                    GLib.idle_add(self.label_daemon_off.hide)
+                else:
+                    GLib.idle_add(self.label_daemon_off.show)
 
                 GLib.idle_add(self.menuitem_apply_theme.set_sensitive, akbl_status)
                 GLib.idle_add(self.menuitem_lights_on.set_sensitive, akbl_status)
