@@ -2,29 +2,11 @@
 # Index
   * [Highlights](https://github.com/rsm-gh/akbl#highlights)
   * [Software Features](https://github.com/rsm-gh/akbl#about)
-    * [Graphical Interface](https://github.com/rsm-gh/akbl#graphical-interface)
-    * [System Tray Indicator](https://github.com/rsm-gh/akbl#system-tray-indicator)
-    * [Default commands](https://github.com/rsm-gh/akbl#default-commands)
-    * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings)
-   
   * [How to Install](https://github.com/rsm-gh/akbl#how-to-install)
- 
   * [F. A. Q.](https://github.com/rsm-gh/akbl#faq)
-    * If my computer is not supported, what can I do?
-    * How to use the block testing window?
-    * After making changes to a theme, the changes are not applied
-    * What's the function of the tempo button / clock icon / right-top corner button?
-
   * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings-1)
-    * API
-    * Testing all the commands
-    * Changing the keyboard colors by checking the CPU Temperature
-    * Changing the keyboard colors by checking the weather
-
   * [Documentation](https://github.com/rsm-gh/akbl#documentation)
-  
   * [History](https://github.com/rsm-gh/akbl#history)
-  
   * [About & Credits](https://github.com/rsm-gh/akbl#credits)
   
 
@@ -109,7 +91,7 @@ The Python bindings allow modifying the computer lights by using other program s
 1. Download the [stable branch](https://github.com/rsm-gh/akbl/archive/stable.zip).
 2. Install the dependencies:
 
-    * Debian based distributions:
+    * Debian-based distributions:
       + Core: `systemd usbutils python3 python3-usb python3-pyro4`.
       + GUI: `libgtk-3-0 libgtk-3-dev python3-gi python3-cairo` and `gir1.2-ayatanaappindicator3-0.1` for the app indicator.
 
@@ -126,7 +108,7 @@ The Python bindings allow modifying the computer lights by using other program s
 Check if there's a bug concerning your computer model on GitHub, and if it doesn't exist, create one:
 
   1. Set the title of the bug as: "Add support to <computer model>"
-  2. Fill the general information of the bug (GNU/Linux distribution, python version etc...)
+  2. Fill the general information of the bug (GNU/Linux distribution, python version, etc...)
   3. Add the USB data of your computer:  
    3.1 Open a terminal and execute the `lsusb` command:
 ```
@@ -173,15 +155,15 @@ If, after all, your computer is recognized, and you have minor problems (Ex: lef
 
 If some areas are not recognized, I'll ask you to launch the block testing window to find the appropriate hex values. Once the blocks are found, I'll add them to the configuration file, and I'll commit the changes to the code.
 
-### How to use the block testing window?
+### Block Testing Window: How to use it?
 
 1. Execute as root `akbl --block-testing`.
 2. A window will appear, and normally the ID Vendor and ID Product will be already filled. If not, akbl may not support your computer.
 3. Click the Connect button, and the block testing block should be ready to be used.
 
-The block testing will help you find the hex id's of your keyboard by iterating one by one the different possible hex values. Normally, the only thing you need to do is to change the Block Number combobox, and click the Test button.
+The block testing will help you find the hex id's of your keyboard by iterating one by one the different possible hex values. Normally, the only thing you need to do is to change the Block Number combobox and click the Test button.
 
-When iterating over the block numbers, everything will be logged. Once that you have found a hex color of a areaitem, you can directly write the areaitem name. Here is an example:
+When iterating over the block numbers, everything will be logged. Once that you have found a hex color of an area, you can directly write the areaitem name. Here is an example:
 
 ```
 ## Text File ##
@@ -199,16 +181,19 @@ When iterating over the block numbers, everything will be logged. Once that you 
 [TEST]: block: 256     hex: 0x100     mode:blink     speed:1     color1:#00ff00     color2: #00ff00
  ``` 
 
-### After making changes to a theme, the changes are not applied
+### GUI: After making changes to a theme, the changes are not applied
 
 For the moment, the themes need to be saved before applying them. Any unsaved change will not be recognized by the daemon.
 
-### What's the function of the tempo button / clock icon / right-top corner button?
+### GUI: What's the function of the tempo button / clock icon / right-top corner button?
 
 That button manages the speed of the theme in the following cases:
   * When the section of a theme (keyboard-left, keyboard-right, etc...) has multiple areas.
   * When some areaitem has the morph (gradient) mode.
   * When some areaitem has the blink mode.
+
+### GUI: What's the difference between "Apply theme" & "Lights on"?
+
 
 # Python Bindings
 
@@ -221,7 +206,7 @@ class Bindings:
         """Check if the Daemon is connected and ready to execute commands."""
 
     def reload_address(self, verbose=False) -> bool:
-        """Reload the pyro address, and try to make a connection with the Daemon."""
+        """Reload the pyro address and try to make a connection with the Daemon."""
         
     def switch_lights(self) -> None:
         """Switch the lights on or off."""
@@ -240,7 +225,7 @@ class Bindings:
        
     def set_fixed_mode(self, colors: list[str], speed: int = 1) -> bool:
         """
-            Change all the light areas, with the fixed mode. Each color of the list will
+            Change all the light areas with the fixed mode. Each color of the list will
             be set in all the areas, and it will move to the next value depending on the speed.
 
             If only one color is provided, the lights will remain at one single color and the speed
@@ -507,7 +492,7 @@ This software is the work of libre-software hackers of the GNU/Linux community. 
 
 * Rafael Senties Martinelli
 
-AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the proprietary content, and fixed some bugs. Now days AKBL is like 98% different from pyAlienFX, but the code/concept that allows communicating with the hardware stills is the same.
+AKBL is a software based on PyAlienFX. I mostly created new addons, improved the software architecture, removed all the proprietary content, and fixed some bugs. Nowadays AKBL is like 98% different from pyAlienFX, but the code/concept that allows communicating with the hardware stills is the same.
 
 ## PyALienFX
 
@@ -516,7 +501,7 @@ AKBL is a software based on PyAlienFX. I mostly created new addons, improved the
 * Corp
 * Niai
 
-As far as I know, pyAlienFX is not maintained anymore. They made work the project for some years, and at the start, they got inspired from AlienFX lite.
+As far as I know, pyAlienFX is not maintained anymore. They made work the project for some years, and at the start, they got inspired by AlienFX lite.
 
 
 ## AlienFX Lite
