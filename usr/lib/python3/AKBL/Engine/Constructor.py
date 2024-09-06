@@ -17,10 +17,10 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from AKBL.utils import rgb_to_hex
-from AKBL.Computer import Computer
-from AKBL.Engine.Command import Command
-from AKBL.console_printer import print_warning
+from utils import rgb_to_hex
+from console_printer import print_warning
+from Computer import Computer
+from Engine.Command import Command
 
 
 class Constructor:
@@ -62,18 +62,18 @@ class Constructor:
 
         self.__save_line()
         self.__add_item(area_hex_id=area_hex_id,
-                            left_color=color,
-                            right_color=None,
-                            legend=legend,
-                            cmd_color_type=self.__computer.command_set_color)
+                        left_color=color,
+                        right_color=None,
+                        legend=legend,
+                        cmd_color_type=self.__computer.command_set_color)
 
     def add_blink_areaitem(self, area_hex_id: int, color: list[int] | str) -> None:
         legend = "add_blink_areaitem:color={}, hex_id={}".format(color, area_hex_id)
         self.__add_item(area_hex_id=area_hex_id,
-                            left_color=color,
-                            right_color=None,
-                            legend=legend,
-                            cmd_color_type=self.__computer.command_set_blink_color)
+                        left_color=color,
+                        right_color=None,
+                        legend=legend,
+                        cmd_color_type=self.__computer.command_set_blink_color)
 
     def add_morph_areaitem(self,
                            area_hex_id: int,
@@ -85,10 +85,10 @@ class Constructor:
                                                                                            area_hex_id)
 
         self.__add_item(area_hex_id=area_hex_id,
-                            left_color=left_color,
-                            right_color=right_color,
-                            legend=legend,
-                            cmd_color_type=self.__computer.command_set_morph_color)
+                        left_color=left_color,
+                        right_color=right_color,
+                        legend=legend,
+                        cmd_color_type=self.__computer.command_set_morph_color)
 
     def set_block(self, save: bool, block: int) -> None:
         self.__save = save
@@ -179,11 +179,11 @@ class Constructor:
         self.__commands.append(Command(legend, cmd))
 
     def __add_item(self,
-                       area_hex_id: int,
-                       left_color: str,
-                       right_color: None | str,
-                       legend: str,
-                       cmd_color_type: int) -> None:
+                   area_hex_id: int,
+                   left_color: str,
+                   right_color: None | str,
+                   legend: str,
+                   cmd_color_type: int) -> None:
 
         self.__save_line()
 

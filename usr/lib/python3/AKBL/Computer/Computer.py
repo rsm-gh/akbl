@@ -18,15 +18,15 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from AKBL.Computer.Region import Region
-from AKBL.console_printer import print_warning
+from Computer.Region import Region
+from console_printer import print_warning
 
 
 class Computer:
 
     def __init__(self) -> None:
 
-        self.name = '<Default>'
+        self.name = 'Undefined'
         self.default_mode = 'fixed'
         self.default_speed = 1
         self.configuration_path = ""

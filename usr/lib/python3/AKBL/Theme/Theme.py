@@ -18,10 +18,8 @@
 
 import os
 
-from AKBL.console_printer import print_warning
-from AKBL.Theme.Area import Area
-
-from AKBL.console_printer import print_error
+from Theme.Area import Area
+from console_printer import print_warning, print_error
 
 
 class Theme:
@@ -39,7 +37,7 @@ class Theme:
 
         theme_text = f'''
 #############################################
-#####            AKBL theme             #####
+#####            AKBL Theme             #####
 #############################################
 
 speed={self.__speed}

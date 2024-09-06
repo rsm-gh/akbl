@@ -18,14 +18,17 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import os
+import sys
 import traceback
 from configparser import ConfigParser
 
-from AKBL.Paths import Paths
-from AKBL.Engine.Driver import Driver
-from AKBL.Computer.Region import Region
-from AKBL.Computer.Computer import Computer
-from AKBL.console_printer import print_debug, print_warning, print_error
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
+from console_printer import print_debug, print_warning, print_error
+from Paths import Paths
+from Engine.Driver import Driver
+from Computer.Region import Region
+from Computer.Computer import Computer
 
 _AKBL_PATHS = Paths()
 

@@ -17,8 +17,8 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from AKBL.utils import string_is_hex_color
-from AKBL.console_printer import print_warning
+from utils import string_is_hex_color
+from console_printer import print_warning
 
 
 class AreaItem:

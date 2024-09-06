@@ -19,25 +19,26 @@
 """
     You must be very careful with this API because it runs as admin.
     The 'user' sender parameter can be faked. Currently, any user can hack this API
-        and "os.utime()" any file of the system.
+    and "os.utime()" any file of the system.
 """
 
 import os
 import sys
 import Pyro4
 from traceback import format_exc
-from time import sleep
 
-from AKBL.Paths import Paths
-from AKBL.CCParser import CCParser
-from AKBL.Bindings import Bindings
-from AKBL.settings import IndicatorCodes
-from AKBL.utils import string_is_hex_color, getuser
-from AKBL.Engine.Controller import Controller
-from AKBL.Theme.Theme import Theme
-from AKBL.Theme import factory as theme_factory
-import AKBL.Computer.factory as computer_factory
-from AKBL.console_printer import print_warning, print_error, print_info, print_debug
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+
+from Paths import Paths
+from CCParser import CCParser
+from Bindings import Bindings
+from settings import IndicatorCodes
+from utils import string_is_hex_color, getuser
+from Engine.Controller import Controller
+from Theme.Theme import Theme
+from Theme import factory as theme_factory
+import Computer.factory as computer_factory
+from console_printer import print_warning, print_error, print_info, print_debug
 
 
 class Daemon:
