@@ -68,7 +68,7 @@ class MainWindow:
             'checkbutton_autosave',
             'checkbutton_delete_warning',
             'menuitem_off_areas',
-            'menuitem_apply_configuration',
+            'menuitem_apply_theme',
             'menuitem_lights_on',
             'menuitem_lights_off',
             'liststore_themes',
@@ -93,7 +93,7 @@ class MainWindow:
         #
         #    Add the accel groups
         #
-        for _id, shortcut in (('menuitem_apply_configuration', 'a'),
+        for _id, shortcut in (('menuitem_apply_theme', 'a'),
                               ('menuitem_save', 's'),
                               ('menuitem_delete', 'd'),
                               ('menuitem_new', 'n'),
@@ -102,10 +102,10 @@ class MainWindow:
                               ('menuitem_lights_off', 'f'),
                               ('menuitem_export', 'e'),
                               ('menuitem_import', 'i')):
-            menuitem_apply_configuration = builder.get_object(_id)
+            menuitem_apply_theme = builder.get_object(_id)
             accel_group = Gtk.AccelGroup()
             self.window_root.add_accel_group(accel_group)
-            menuitem_apply_configuration.add_accelerator('activate',
+            menuitem_apply_theme.add_accelerator('activate',
                                                          accel_group,
                                                          ord(shortcut),
                                                          Gdk.ModifierType.CONTROL_MASK,
@@ -202,7 +202,7 @@ class MainWindow:
         self.__theme.set_speed(255 - value)
 
         if self.checkbutton_autosave.get_active():
-            Thread(target=self.__on_thread_save_configuration_file).start()
+            Thread(target=self.__on_thread_save_theme).start()
 
     def on_combobox_profiles_changed(self, widget, *_):
         tree_iter = widget.get_active_iter()
@@ -257,7 +257,7 @@ class MainWindow:
                                      mode=areaitem_widget.get_mode())
 
         if self.checkbutton_autosave.get_active():
-            Thread(target=self.__on_thread_save_configuration_file).start()
+            Thread(target=self.__on_thread_save_theme).start()
 
     def on_areaitemwidget_request_delete(self, areaitem_widget):
 
@@ -276,7 +276,7 @@ class MainWindow:
         #
         #
         if self.checkbutton_autosave.get_active():
-            Thread(target=self.__on_thread_save_configuration_file).start()
+            Thread(target=self.__on_thread_save_theme).start()
 
     def on_checkbutton_delete_warning_activate(self, *_):
         self.__ccp.write('delete_warning', self.checkbutton_delete_warning.get_active())
@@ -284,17 +284,21 @@ class MainWindow:
     def on_checkbutton_autosave_activate(self, *_):
         self.__ccp.write('auto_save', self.checkbutton_autosave.get_active())
 
-    def on_menuitem_apply_configuration_activate(self, *_):
-        Thread(target=self.__on_thread_illuminate_keyboard).start()
+    def on_menuitem_apply_theme_activate(self, *_):
+        if not os.path.exists(self.__theme.get_path()):
+            gtk_dialog_info(self, Texts.GUI._theme_must_saved.format(self.__theme.get_name()))
+            return
+
+        Thread(target=self.__on_thread_apply_theme).start()
 
     def on_menuitem_save_activate(self, *_):
-        Thread(target=self.__on_thread_save_configuration_file).start()
+        Thread(target=self.__on_thread_save_theme).start()
 
     def on_menuitem_lights_on_activate(self, *_):
-        Thread(target=self.__on_thread_illuminate_keyboard).start()
+        Thread(target=self.__on_thread_set_lights, args=[True]).start()
 
     def on_menuitem_lights_off_activate(self, *_):
-        Thread(target=self.__on_thread_turn_lights_off).start()
+        Thread(target=self.__on_thread_set_lights, args=[False]).start()
 
     def on_menuitem_quit_activate(self, *_):
         self.quit()
@@ -491,7 +495,7 @@ class MainWindow:
             if akbl_status != status:
                 akbl_status = status
 
-                GLib.idle_add(self.menuitem_apply_configuration.set_sensitive, akbl_status)
+                GLib.idle_add(self.menuitem_apply_theme.set_sensitive, akbl_status)
                 GLib.idle_add(self.menuitem_lights_on.set_sensitive, akbl_status)
                 GLib.idle_add(self.menuitem_lights_off.set_sensitive, akbl_status)
 
@@ -509,16 +513,11 @@ class MainWindow:
         GLib.idle_add(self.__populate_liststore_themes)
         self.__bindings.reload_themes()
 
-    def __on_thread_turn_lights_off(self):
-        self.__bindings.set_lights(False)
-
-    def __on_thread_illuminate_keyboard(self):
-
-        if not os.path.exists(self.__theme.get_path()):
-            print_warning(f"The theme {self.__theme.get_name()} must be saved before applying it.")
-            return
-
+    def __on_thread_apply_theme(self):
         self.__bindings.set_theme(self.__theme.get_name())
 
-    def __on_thread_save_configuration_file(self):
+    def __on_thread_set_lights(self, status):
+        self.__bindings.set_lights(status)
+
+    def __on_thread_save_theme(self):
         self.__theme.save()
