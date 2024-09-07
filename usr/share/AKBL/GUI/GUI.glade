@@ -380,6 +380,25 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="label_daemon_off">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
+                <property name="label" translatable="yes">The daemon is not active.</property>
+                <property name="xalign">1</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                  <attribute name="foreground" value="#ffff00000000"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label_computer_model">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -425,7 +444,9 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="value">1</property>
                 <property name="size">large-toolbar</property>
                 <property name="adjustment">adjustment_tempo</property>
-                <property name="icons">appointment-soon</property>
+                <property name="icons">appointment-soon
+appointment-soon
+appointment-soon</property>
                 <property name="use-symbolic">False</property>
                 <signal name="value-changed" handler="on_tempobutton_value_changed" swapped="no"/>
                 <child internal-child="plus_button">
@@ -458,24 +479,6 @@ along with akbl.  If not, see <http://www.gnu.org/licenses/>.
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_daemon_off">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="label" translatable="yes">The daemon is off. It is not possible to turn the lights on, off, or to apply any theme.</property>
-            <property name="justify">center</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-              <attribute name="foreground" value="#ffff00000000"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
           </packing>
         </child>
         <child>
