@@ -21,7 +21,6 @@ import os
 import sys
 import Pyro4
 import getpass
-from typing import Tuple
 from traceback import format_exc
 
 akbl_path = os.path.dirname(os.path.realpath(__file__))
@@ -113,7 +112,9 @@ class Bindings:
 
         self.__command('set_lights', state)
 
-    def set_fixed_mode(self, colors: list[str], speed: int = 1) -> bool:
+    def set_fixed_mode(self,
+                       colors: list[str],
+                       speed: int = 1) -> bool:
         """
             Change all the light areas with the fixed mode. Each color of the list will
             be set in all the areas, and it will move to the next value depending on the speed.
@@ -133,7 +134,9 @@ class Bindings:
             status = False
         return status
 
-    def set_blink_mode(self, colors: list[str], speed: int = 50) -> bool:
+    def set_blink_mode(self,
+                       colors: list[str],
+                       speed: int = 50) -> bool:
         """
             Change all the light areas, with the blink mode. Each color of the list will
             be set in all the areas, and it will blink depending on the speed.
@@ -151,7 +154,7 @@ class Bindings:
         return status
 
     def set_morph_mode(self,
-                       colors: list[Tuple[str, str]],
+                       colors: list[tuple[str, str], ...],
                        speed: int = 50) -> bool:
         """
             Change all the light areas, with the morph mode. Each color pair of the list will
