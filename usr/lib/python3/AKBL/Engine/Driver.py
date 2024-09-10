@@ -83,7 +83,8 @@ class Driver:
                                                          self.__send_index,
                                                          command)
 
-                print_debug(f"command output={status}")
+                if not self.__fake:
+                    print_debug(f"command output={status}")
 
         except Exception:
             print_error(format_exc())
@@ -103,7 +104,8 @@ class Driver:
             print_error(format_exc())
             return None
 
-        print_debug(f"msg={msg}")
+        if not self.__fake:
+            print_debug(f"msg={msg}")
 
         return msg
 

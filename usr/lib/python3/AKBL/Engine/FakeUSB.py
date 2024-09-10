@@ -27,15 +27,18 @@ class FakeUSB:
         self.__computer = Computer()
 
     def ctrl_transfer(self, *args):
-        print_debug()
-        for arg in args:
-            print_debug(str(arg), direct_output=True)
+        #print_debug()
+        #for arg in args:
+        #    print_debug(str(arg), direct_output=True)
         return [self.__computer.state_ready]
 
     @staticmethod
     def set_configuration():
-        print_debug()
+        #print_debug()
+        pass
 
     @staticmethod
     def detach_kernel_driver(*args):
-        print_debug(str(args))
+        #print_debug(str(args))
+        pass
+

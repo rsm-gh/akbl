@@ -25,7 +25,7 @@ class Command:
         self.__command = command
 
     def __str__(self) -> str:
-        return f"[{','.join(str(item) for item in self.__command)}] \t legend={self.__legend}"
+        return f"[{','.join(str(item) for item in self.__command)}] \t {self.__legend}"
 
     def __iter__(self):
         for item in self.__command:
