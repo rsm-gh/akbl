@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
-#                2011-2012 the pyAlienFX team.
+#  Copyright (C) 2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -17,19 +16,26 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+from console_printer import print_debug
 
-class Command:
 
-    def __init__(self, legend: str, command: list[int]) -> None:
-        self.__legend = legend
-        self.__command = command
+class FakeUSB:
+    """This class is for debugging in computers that are not alienware."""
 
-    def __str__(self) -> str:
-        return f"[{','.join(str(item) for item in self.__command)}] \t legend={self.__legend}"
+    def __init__(self):
+        from AKBL.Computer.Computer import Computer
+        self.__computer = Computer()
 
-    def __iter__(self):
-        for item in self.__command:
-            yield item
+    def ctrl_transfer(self, *args):
+        print_debug()
+        for arg in args:
+            print_debug(str(arg), direct_output=True)
+        return [self.__computer.state_ready]
 
-    def __len__(self) -> int:
-        return len(self.__command)
+    @staticmethod
+    def set_configuration():
+        print_debug()
+
+    @staticmethod
+    def detach_kernel_driver(*args):
+        print_debug(str(args))

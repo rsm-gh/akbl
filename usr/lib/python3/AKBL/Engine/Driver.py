@@ -22,14 +22,16 @@ import usb
 from traceback import format_exc
 
 from Engine import Constructor
+from Engine.FakeUSB import FakeUSB
 from console_printer import print_debug, print_error
 
 
 class Driver:
 
-    def __init__(self):
+    def __init__(self, fake: bool = False):
 
         self.__usb_device = None
+        self.__fake = fake
 
         # Define I/O Request types
         self.__send_request_type = 33
@@ -45,13 +47,17 @@ class Driver:
 
         print_debug(f"id_vendor={id_vendor}, id_product={id_product}")
 
-        try:
-            self.__usb_device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
-        except Exception:
-            self.__usb_device = None
-            print_error(format_exc())
+        if self.__fake:
+            print_debug(f'faking usb device...', direct_output=True)
+            self.__usb_device = FakeUSB()
+        else:
+            try:
+                self.__usb_device = usb.core.find(idVendor=id_vendor, idProduct=id_product)
+            except Exception:
+                self.__usb_device = None
+                print_error(format_exc())
 
-        print_debug(f'usb_device={self.__usb_device}', direct_output=True)
+            print_debug(f'usb_device={self.__usb_device}', direct_output=True)
 
         if self.__usb_device is not None:
             self.take_over()
@@ -84,7 +90,7 @@ class Driver:
 
     def read_device(self, constructor: Constructor) -> None | int:
 
-        print_debug(constructor)
+        print_debug(str(constructor))
 
         try:
             msg = self.__usb_device.ctrl_transfer(self.__read_request_type,
