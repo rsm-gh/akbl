@@ -183,7 +183,7 @@ When iterating over the block numbers, everything will be logged. Once that you 
 
 ### GUI: After making changes to a theme, the changes are not applied
 
-For the moment, the themes need to be saved before applying them. Any unsaved change will not be recognized by the daemon.
+This is because the themes need to be saved before applying them. Any unsaved change will not be recognized by the daemon.
 
 ### GUI: What's the function of the tempo button / clock icon / right-top corner button?
 
@@ -229,7 +229,9 @@ class Bindings:
     def set_lights(self, state: bool) -> None:
         """Set the lights on or off."""
        
-    def set_fixed_mode(self, colors: list[str], speed: int = 1) -> bool:
+    def set_fixed_mode(self,
+                       colors: list[str],
+                       speed: int = 1) -> bool:
         """
             Change all the light areas with the fixed mode. Each color of the list will
             be set in all the areas, and it will move to the next value depending on the speed.
@@ -241,7 +243,9 @@ class Bindings:
             :param int speed: Speed for switching each areaitem to the next color, 1 =< speed >= 256.
         """
 
-    def set_blink_mode(self, colors: list[str], speed: int = 50) -> bool:
+    def set_blink_mode(self,
+                       colors: list[str],
+                       speed: int = 50) -> bool:
         """
             Change all the light areas, with the blink mode. Each color of the list will
             be set in all the areas, and it will blink depending on the speed.
@@ -251,7 +255,7 @@ class Bindings:
         """
 
     def set_morph_mode(self,
-                       colors: list[Tuple[str, str]],
+                       colors: list[tuple[str, str], ...],
                        speed: int = 50) -> bool:
         """
             Change all the light areas, with the morph mode. Each color pair of the list will
@@ -415,24 +419,6 @@ if __name__ == '__main__':
 
         # Wait and check again in X seconds
         time.sleep(5)
-```
-
-Note that if you want to test the code, you can create a fake temperature:
-
-```python
-max_temp=0
-while True:
-    
-    # Get the CPU temperature
-    #max_temp=get_max_temp()
-    print("The maximum temperature is", max_temp)
-    
-    #
-    # The rest of the code...
-    #
-    
-    max_temp+=10
-    time.sleep(5)
 ```
 
 ### Changing the keyboard colors by checking the weather
