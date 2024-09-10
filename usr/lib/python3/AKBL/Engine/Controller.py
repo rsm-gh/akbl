@@ -27,23 +27,27 @@ from console_printer import print_warning, print_error, print_debug
 
 class Controller:
 
-    def __init__(self, computer: Computer, fake=False) -> None:
+    def __init__(self,
+                 computer: Computer,
+                 fake: bool = False) -> None:
 
         self.__driver = None
         self.__computer = None
         self.__constructor = None
 
-        self.set_computer(computer)
-        if not self.is_ready() and not fake:
+        self.set_computer(computer, fake=fake)
+        if not self.is_ready():
             sys.exit(1)
 
     def is_ready(self) -> bool:
         return self.__driver is not None and self.__constructor is not None
 
-    def set_computer(self, computer: Computer) -> bool:
-        self.__computer = computer
+    def set_computer(self,
+                     computer: Computer,
+                     fake: bool) -> bool:
 
-        driver = Driver()
+        self.__computer = computer
+        driver = Driver(fake=fake)
         driver.load_device(self.__computer.vendor_id,
                            self.__computer.product_id)
 

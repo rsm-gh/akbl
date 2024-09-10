@@ -404,7 +404,7 @@ class Daemon:
 
         # Illuminate the computer lights
         #
-        print_debug("Sending commands to the controller...", direct_output=True)
+        print_debug("Preparing the controller...", direct_output=True)
 
         self.__controller.clear_constructor()
         for save, block in self.__computer_blocks_to_save:
@@ -424,6 +424,7 @@ class Daemon:
 
             self.__controller.end_block_line()
 
+        print_debug("Applying constructor...", direct_output=True)
         self.__controller.apply_config()
 
         #
