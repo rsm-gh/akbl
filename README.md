@@ -93,7 +93,7 @@ The Python bindings allow modifying the computer lights by using other program s
 
     * Debian-based distributions:
       + Core: `systemd usbutils python3 python3-usb python3-pyro4`.
-      + GUI: `libgtk-3-0 gir1.2-ayatanaappindicator3-0.1 libgtk-3-dev python3-gi python3-cairo`.
+      + GUI: `libgtk-3-0 libgtk-3-dev gir1.2-ayatanaappindicator3-0.1 python3-gi python3-cairo`.
 
     * ArchLinux:
        + Core: `systemd usbutils python python-pyusb python-pyro`.
