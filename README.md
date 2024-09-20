@@ -97,7 +97,7 @@ The Python bindings allow modifying the computer lights by using other program s
 
     * ArchLinux:
        + Core: `systemd usbutils python python-pyusb python-pyro`.
-       + GUI:  `webkit2gtk python-gobject python-cairo`) `gir1.2-ayatanaappindicator3-0.1` from the AUR for the app indicator.
+       + GUI:  `webkit2gtk libayatana-appindicator python-gobject python-cairo`
 
 3. Execute the setup file.
 
@@ -163,7 +163,7 @@ If some areas are not recognized, I'll ask you to launch the block testing windo
 
 The block testing will help you find the hex id's of your keyboard by iterating one by one the different possible hex values. Normally, the only thing you need to do is to change the Block Number combobox and click the Test button.
 
-When iterating over the block numbers, everything will be logged. Once that you have found a hex color of an area, you can directly write the areaitem name. Here is an example:
+When iterating over the block numbers, everything will be logged. Once that you have found a hex color of an area, you can directly write the area item name. Here is an example:
 
 ```
 ## Text File ##
@@ -189,8 +189,8 @@ This is because the themes need to be saved before applying them. Any unsaved ch
 
 That button manages the speed of the theme in the following cases:
   * When the section of a theme (keyboard-left, keyboard-right, etc...) has multiple areas.
-  * When some areaitem has the morph (gradient) mode.
-  * When some areaitem has the blink mode.
+  * When some area has the morph (gradient) mode.
+  * When some area has the blink mode.
 
 ### GUI: What's the difference between "Apply theme" & "Lights on"?
 
@@ -240,7 +240,7 @@ class Bindings:
             will not have any effect.
 
             :param list[str] colors: A list of Hex colors.
-            :param int speed: Speed for switching each areaitem to the next color, 1 =< speed >= 256.
+            :param int speed: Speed for switching each area item to the next color, 1 =< speed >= 256.
         """
 
     def set_blink_mode(self,
@@ -263,7 +263,7 @@ class Bindings:
             the second color, depending on the speed.
 
             :param list[tuple(str, str)] colors: A list of lists containing two values of Hex colors.
-            :param int speed: Speed for switching each areaitem to the next color, 1 =< speed >= 256.
+            :param int speed: Speed for switching each area item to the next color, 1 =< speed >= 256.
         """
 ```
 
