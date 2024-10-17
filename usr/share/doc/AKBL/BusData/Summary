@@ -8,15 +8,18 @@ COMPUTER                idVendor        idProduct       COMMENT
 ------------------------------------------------------------------
 
 M11X R3                 6268            1314            # There is no BUS data for this computer
-M18X R2                 6268            1315            # There is no BUS data for this computer
-M17X R2                 6268            1316
 M14X R3                 6268            1317
+M17X R2                 6268            1316
+M17X R0                 6268            1298			(R0 to avoid the duplicated with R1)
+M18X R2                 6268            1315            # There is no BUS data for this computer
+
 Alienware13 R1          6268            1319
 Alienware13 R3          6268            1321
-Aurora R7               16700           8467           
-M17X R0                 6268            1298			(R0 to avoid the duplicated with R1)
-
 Alienware17 R?		    6268			1304
+
+Dell G16 7630           6268            1361
+
+Aurora R7               16700           8467
 
 
 ------------- D U P L I C A T E D    I D'S ------------------------
