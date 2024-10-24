@@ -32,8 +32,6 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
 sys.path.insert(0, PROJECT_DIR)
 
-from gtk_utils import gtk_dialog_question
-
 _EMPTY_MODEL = "<NONE>"
 _AKBL_PATHS = Paths()
 

@@ -18,6 +18,7 @@
 
 import sys
 from AKBL.utils import get_alienware_device_info
+from AKBL.console_printer import print_error, print_info
 import AKBL.Computer.factory as computer_factory
 
 computer = computer_factory.get_default_computer()
@@ -30,7 +31,7 @@ if len(sys.argv) > 1:
 if computer is None or force:
 
     if len(compatible_computers) == 0:
-        print("Error: No configuration is available for this hardware.")
+        print_error("Error: No configuration is available for this hardware.")
 
     elif len(compatible_computers) == 1:
         computer = compatible_computers[0]
@@ -66,10 +67,10 @@ if computer is None or force:
 # Re-install the computer configuration
 #
 if computer is None:
-    print(get_alienware_device_info())
+    print_info(get_alienware_device_info())
 else:
     computer_factory.set_default_computer(computer.name)
-    print("Installed computer set to: {}".format(computer.name))
+    print_info("Installed computer set to: {}".format(computer.name))
 
     if len(compatible_computers) > 1:
-        print("If you want to change it, use the commands 'akbl --model-chooser-gui' or '--model-chooser-cmd'")
+        print_info("If you want to change it, use the commands 'akbl --model-chooser-gui' or '--model-chooser-cmd'", direct_output=True)
