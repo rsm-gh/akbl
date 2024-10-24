@@ -25,6 +25,7 @@ from gi.repository import Gtk
 
 from AKBL.Paths import Paths
 from AKBL.utils import get_alienware_device_info
+from AKBL.console_printer import print_info
 import AKBL.Computer.factory as computer_factory
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -35,12 +36,6 @@ from gtk_utils import gtk_dialog_question
 
 _EMPTY_MODEL = "<NONE>"
 _AKBL_PATHS = Paths()
-_TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT = '''
-No computer model is chosen. If you quit without
-choosing a computer the software will not work. 
-
-Do you want to go back?
-'''
 
 
 class ModelChooser(Gtk.Window):
@@ -105,7 +100,11 @@ class ModelChooser(Gtk.Window):
         else:
             return default_computer.name
 
-    def _on_button_close_clicked(self, *_):
+    def on_window_destroy(self, *_):
+        """
+            I removed the code to warn the user if no computer is selected, because
+            it was not possible to get the GUI back.
+        """
 
         #
         # Install the selected configuration
@@ -125,16 +124,9 @@ class ModelChooser(Gtk.Window):
         installed_computer_name = self.__get_default_computer_name()
 
         #
-        # Warn the user that no computer is installed
-        #
-        if installed_computer_name == _EMPTY_MODEL:
-            if gtk_dialog_question(None, _TEXT_NO_COMPUTER_MODEL_WANT_TO_QUIT, icon=_AKBL_PATHS._icon_file):
-                return
-
-        #
         # Print the computer model
         #
-        print("The installed computer model is:", installed_computer_name)
+        print_info(f"The installed computer model is: {installed_computer_name}")
 
         #
         # Quit the application
@@ -142,8 +134,6 @@ class ModelChooser(Gtk.Window):
 
         Gtk.main_quit()
 
-    def on_window_destroy(self, *_):
-        self._on_button_close_clicked()
 
 
 if __name__ == "__main__":
