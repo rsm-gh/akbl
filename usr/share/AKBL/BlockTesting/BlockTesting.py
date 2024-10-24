@@ -124,8 +124,8 @@ class BlockTesting(Gtk.Window):
 
         try:
             if hex_format:
-                vendor = int(self.entry_id_vendor.get_text(), 16)  # this is because its string
-                product = int(self.entry_id_product.get_text(), 16)  # this is because its string
+                vendor = int(self.entry_id_vendor.get_text(), 16)  # this is because it's a  string
+                product = int(self.entry_id_product.get_text(), 16)  # this is because it's a string
             else:
                 vendor = int(self.entry_id_vendor.get_text())
                 product = int(self.entry_id_product.get_text())
@@ -157,7 +157,7 @@ class BlockTesting(Gtk.Window):
             return
 
         gtk_dialog_info(self.window_block_testing, "The connection was successful.")
-        self.button_connect.set_active(False)
+        self.button_connect.set_sensitive(False)
 
         self.__computer.vendor_id = vendor
         self.__computer.product_id = product
