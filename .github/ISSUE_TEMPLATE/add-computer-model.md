@@ -12,7 +12,7 @@ assignees: ''
 + Python3 version: `python3 --version`
 + akbl version: `akbl -v`
 + Computer model: <add your computer model>
-+ Daemon status:  `akbl --daemon-is-on`
++ Daemon status:  `akbl --ping`
 
 # Installation Log
 ```
