@@ -29,7 +29,7 @@ class Theme:
         self._computer = computer
 
         self.__name = ''
-        self.__path = ''
+        self.__path = ""
         self.__areas = {}
         self.__speed = 1
 
@@ -81,8 +81,14 @@ right_color={areaitem.get_right_color()}
 
     def save(self) -> None:
 
-        with open(self.__path, encoding='utf-8', mode='w') as f:
-            f.write(self.__str__())
+        if self.__path == "":
+            raise ValueError(f"Attempting to save a theme without a path")
+
+        try:
+            with open(self.__path, encoding='utf-8', mode='w') as f:
+                f.write(self.__str__())
+        except FileNotFoundError as e:
+            raise ValueError(f"Theme could not be saved: \n{e}\n\n__path: {self.__path}")
 
     def get_name(self) -> str:
         return self.__name
