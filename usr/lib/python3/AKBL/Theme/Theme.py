@@ -80,9 +80,13 @@ right_color={areaitem.get_right_color()}
         area.remove_item_at(column)
 
     def save(self) -> None:
+        # todo: is it possible that the root user (daemon) writes in a user dir?
 
         if self.__path == "":
             raise ValueError(f"Attempting to save a theme without a path")
+
+        theme_dir = os.path.dirname(self.__path)
+        os.makedirs(theme_dir, exist_ok=True)
 
         try:
             with open(self.__path, encoding='utf-8', mode='w') as f:

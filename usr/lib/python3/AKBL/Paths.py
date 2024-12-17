@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2019 Rafael Senties Martinelli.
+#  Copyright (C) 2015-2024 Rafael Senties Martinelli.
 #
 #  This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -45,8 +45,8 @@ class Paths:
             self._configuration_file = '/root/.config/akbl.ini'
             self._themes_dir = '/root/.local/share/akbl/'
         else:
-            self._configuration_file = '/home/{}/.config/akbl.ini'.format(user)
-            self._themes_dir = '/home/{}/.local/share/akbl/'.format(user)
+            self._configuration_file = f'/home/{user}/.config/akbl.ini'
+            self._themes_dir = f'/home/{user}/.local/share/akbl/'
 
         # The paths went renamed from "alienware-kbl" to "akbl", this will migrate the data.
         for location in (self._configuration_file, self._themes_dir):
