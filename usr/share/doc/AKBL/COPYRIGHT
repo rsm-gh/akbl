@@ -1,15 +1,24 @@
 
 Source: https://github.com/rsm-gh
 The licenses mentioned on this file can be found here:
-	LICENSE
-	usr/share/doc/AKBL/Licenses/GPL3
-	usr/share/doc/AKBL/Licenses/LGPL3
-	usr/share/doc/AKBL/Licenses/CC-BY-4.0
+	usr/share/doc/AKBL/Licenses/CC0v1.0-Universal.txt
+	usr/share/doc/AKBL/Licenses/GPLv3.txt
+	usr/share/doc/AKBL/Licenses/LGPLv3.txt
+	usr/share/doc/AKBL/Licenses/CC-BY-4.0.txt
 
 
 Copyright: Taken from a ubuntu build in 2015, http://www.libusb.info
-License: LGPL3
+License: LGPL v3
 Files: usr/share/AKBL/libusb-1.0.so.0
+
+
+Copyright: 2015-2024 Rafael Senties Martinelli.
+License: CC0 v1.0 Universal
+Files:
+    install.sh
+    uninstall.sh
+    usr/lib/systemd/system/akbl.service
+
 
 Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli
 License: MIT
@@ -17,12 +26,11 @@ Files:
     usr/lib/python3/AKBL/CCParser.py
     usr/lib/python3/AKBL/console.py
 
+
 Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli
-License: GPL-3
+License: GPL v3
 Files:
 	README.md
-	remove
-	setup
 	usr/bin/akbl
     usr/lib/python3/AKBL/Computer/factory.py
     usr/lib/python3/AKBL/Theme/factory.py
@@ -32,8 +40,7 @@ Files:
     usr/lib/python3/AKBL/settings.py
     usr/lib/python3/AKBL/texts.py
 	usr/lib/python3/AKBL/utils.py
-	usr/lib/systemd/system/akbl.service
-
+	
 	usr/share/AKBL/BlockTesting/BlockTesting.py
 	usr/share/AKBL/BlockTesting/BlockTesting.glade
 	usr/share/AKBL/GUI/GUI.glade
@@ -59,7 +66,7 @@ Files:
 
 Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli.
            Copyright (C) 2011-2012 the pyAlienFX team.
-License: GPL-3
+License: GPL v3
 Files:
 	usr/lib/python3/AKBL/Computer/Computer.py
 	usr/lib/python3/AKBL/Computer/Region.py
@@ -71,7 +78,7 @@ Files:
 	usr/lib/python3/AKBL/Theme/Area.py
 
 Copyright: GNU/Linux community.
-License: GPL-3
+License: GPL v3
 Files:
 	usr/share/doc/AKBL/BusData/Data/*
 	usr/share/AKBL/computers/*
