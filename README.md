@@ -212,7 +212,7 @@ class Bindings:
     def ping(self) -> bool:
         """Check if the Daemon is connected and ready to execute commands."""
 
-    def reload_address(self, verbose=False) -> bool:
+    def reload_address(self, verbose: bool=False) -> bool:
         """Reload the pyro address and try to make a connection with the Daemon."""
         
     def switch_lights(self) -> None:

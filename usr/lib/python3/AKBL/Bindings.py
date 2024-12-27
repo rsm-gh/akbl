@@ -199,7 +199,7 @@ class Bindings:
         """Reload the configurations for the current user."""
         self.__command('reload_themes')
 
-    def reload_address(self, verbose=False) -> bool:
+    def reload_address(self, verbose: bool=False) -> bool:
         """Reload the pyro address and try to make a connection with the Daemon."""
 
         if not self.ping() and os.path.exists(self.__paths._daemon_pyro_file):
