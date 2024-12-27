@@ -199,7 +199,7 @@ That button manages the speed of the theme in the following cases:
   * The last modified theme, if the lights have not been turned on (by the same user).
   * The last theme used for turning the lights on.
 
-Note: these to buttons have the same behavior as the CMD commands `akbl --on` and `akbl --set-theme <name>`.
+Note: these to buttons have the same behavior as the CMD commands `akbl --set-theme <name>` and  `akbl --on`.
 
 # Python Bindings
 
