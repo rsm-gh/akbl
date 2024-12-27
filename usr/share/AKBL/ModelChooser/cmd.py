@@ -3,7 +3,7 @@
 
 #  Copyright (C) 2024 Rafael Senties Martinelli.
 #
-#  This program is free software; you can redistribute it and/or modify
+#  AKBL is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
 #   the Free Software Foundation.
 #
@@ -17,7 +17,7 @@
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import sys
-from AKBL.utils import get_alienware_device_info
+from AKBL.utils_akbl import get_alienware_device_info
 from AKBL.console_printer import print_error, print_info
 import AKBL.Computer.factory as computer_factory
 

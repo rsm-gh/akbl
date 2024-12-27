@@ -1,6 +1,6 @@
 
-Source: https://github.com/rsm-gh
-The licenses mentioned on this file can be found here:
+Source: https://github.com/rsm-gh/akbl
+The licenses mentioned in this file can be find here:
 	usr/share/doc/AKBL/Licenses/CC0v1.0-Universal.txt
 	usr/share/doc/AKBL/Licenses/GPLv3.txt
 	usr/share/doc/AKBL/Licenses/LGPLv3.txt
@@ -12,19 +12,71 @@ License: LGPL v3
 Files: usr/share/AKBL/libusb-1.0.so.0
 
 
+Copyright: GNU/Linux community, author described inside each file.
+License: GPL v3
+Files:
+	usr/share/doc/AKBL/BusData/Data/*
+	usr/share/AKBL/computers/*
+
+
+Copyright: Copyright (C) 2015 Amalia Angeli.
+License: CC-BY 4.0
+Files:
+    usr/share/AKBL/icon.png
+    usr/share/AKBL/icon-big.png
+
+    usr/share/AKBL/Indicator/img/icon-no-daemon.png
+    usr/share/AKBL/Indicator/img/icon-off.png
+    usr/share/AKBL/Indicator/img/icon-on.png
+
+    usr/share/AKBL/GUI/img/blink_off.png
+    usr/share/AKBL/GUI/img/blink_on.png
+    usr/share/AKBL/GUI/img/cross.png
+    usr/share/AKBL/GUI/img/cross_on.png
+    usr/share/AKBL/GUI/img/cross_off.png
+    usr/share/AKBL/GUI/img/empty.png
+    usr/share/AKBL/GUI/img/fixed_off.png
+    usr/share/AKBL/GUI/img/fixed_on.png
+    usr/share/AKBL/GUI/img/morph_off.png
+    usr/share/AKBL/GUI/img/morph_on.png
+    usr/share/AKBL/GUI/img/tempo.png
+
+Copyright: Copyright (C) 2015 Amalia Angeli, modified by Rafael Senties Martinelli.
+License: CC-BY 4.0
+Files:
+    usr/share/AKBL/Indicator/img/icon-no-daemon-white.png
+    usr/share/AKBL/Indicator/img/icon-off-white.png
+    usr/share/AKBL/Indicator/img/icon-on-white.png
+
+
 Copyright: 2015-2024 Rafael Senties Martinelli.
 License: CC0 v1.0 Universal
 Files:
     install.sh
     uninstall.sh
     usr/lib/systemd/system/akbl.service
+    usr/lib/python3/AKBL/utils.py
+    usr/share/AKBL/gtk_utils.py
+    usr/share/applications/com.senties-martinelli.AKBL.desktop
+    usr/share/applications/com.senties-martinelli.AKBL-indicator.desktop
+    usr/share/applications/com.senties-martinelli.AKBL-windicator.desktop
 
+
+Copyright: Copyright (C) 2015-2024 Rafael Senties Martinelli.
+License: CC-BY 4.0
+Files:
+    usr/share/doc/AKBL/BusData/Summary
+
+    usr/share/doc/AKBL/ImagesPreview/GUI.png
+    usr/share/doc/AKBL/ImagesPreview/indicator.png
+    usr/share/doc/AKBL/ImagesPreview/model_chooser.png
 
 Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli
 License: MIT
 Files:
     usr/lib/python3/AKBL/CCParser.py
     usr/lib/python3/AKBL/console.py
+    usr/share/doc/AKBL/Programming/*
 
 
 Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli
@@ -39,7 +91,7 @@ Files:
     usr/lib/python3/AKBL/Paths.py
     usr/lib/python3/AKBL/settings.py
     usr/lib/python3/AKBL/texts.py
-	usr/lib/python3/AKBL/utils.py
+    usr/lib/python3/AKBL/utils_akbl.py
 	
 	usr/share/AKBL/BlockTesting/BlockTesting.py
 	usr/share/AKBL/BlockTesting/BlockTesting.glade
@@ -56,13 +108,6 @@ Files:
 	usr/share/AKBL/test/areaitems_and_toolbar.py
     usr/share/AKBL/commands.py
     usr/share/AKBL/Daemon.py
-    usr/share/AKBL/gtk_utils.py
-
-    usr/share/applications/AKBL.desktop
-
-	usr/share/doc/AKBL/ImagesPreview/*
-	usr/share/doc/AKBL/Programming/*
-	usr/share/doc/AKBL/BusData/Summary
 
 Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli.
            Copyright (C) 2011-2012 the pyAlienFX team.
@@ -76,14 +121,3 @@ Files:
     usr/lib/python3/AKBL/Engine/Driver.py
 	usr/lib/python3/AKBL/Theme/Zone.py
 	usr/lib/python3/AKBL/Theme/Area.py
-
-Copyright: GNU/Linux community.
-License: GPL v3
-Files:
-	usr/share/doc/AKBL/BusData/Data/*
-	usr/share/AKBL/computers/*
-
-
-Copyright: Copyright (C) 2015 Amalia Angeli.
-License: CC-BY 4.0
-Files: *.png

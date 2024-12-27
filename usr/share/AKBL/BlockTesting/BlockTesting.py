@@ -3,7 +3,7 @@
 
 #  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #
-#  This program is free software; you can redistribute it and/or modify
+#  AKBL is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
 #   the Free Software Foundation.
 #
@@ -29,7 +29,8 @@ from AKBL.Computer.Computer import Computer
 from AKBL.Engine.Driver import Driver
 from AKBL.Engine.Command import Command
 from AKBL.Engine.Controller import Controller
-from AKBL.utils import get_alienware_device_info, rgb_to_hex
+from AKBL.utils import rgb_to_hex
+from AKBL.utils_akbl import get_alienware_device_info
 
 _SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 _PROJECT_DIR = os.path.dirname(_SCRIPT_DIR)

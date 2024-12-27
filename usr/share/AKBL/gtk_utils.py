@@ -1,20 +1,18 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #
-#  This program is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License 3 as published by
-#   the Free Software Foundation.
+# Public domain.
 #
-#  This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-#   along with this program; if not, write to the Free Software Foundation,
-#   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# gtk_utils.py by Rafael Senties Martinelli.
+#
+# To the extent possible under law, the person who associated CC0 with
+# gtk_utils.py has waived all copyright and related or neighboring rights
+# to gtk_utils.py.
+#
+# You should have received a copy of the CC0 legalcode along with this
+# work.  If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
 
 import gi
 gi.require_version('Gtk', '3.0')

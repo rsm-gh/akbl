@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2024 Rafael Senties Martinelli.
+#  Copyright (C) 2016-2024 Rafael Senties Martinelli.
 #
 #  AKBL is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -16,12 +16,20 @@
 #   along with this program; if not, write to the Free Software Foundation,
 #   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-__version__ = "241217~0"
 
-_MISSING_ZONE_COLOR = "#0000FF"
+import subprocess
 
+def get_alienware_device_info() -> str:
+    cmd = subprocess.run("lsusb", stdout=subprocess.PIPE)
+    device_info = cmd.stdout.decode('utf-8', errors="ignore")
 
-class IndicatorCodes:
-    _lights_on = 100
-    _lights_off = 150
-    _daemon_off = 666
+    for line in device_info.split("\n"):
+        if "alienware" in line.lower():
+            bus_id = line.split()[1]
+            device_id = line.split()[3][:-1]
+            cmd = subprocess.run(['lsusb', '-D', f"/dev/bus/usb/{bus_id}/{device_id}"], stdout=subprocess.PIPE)
+
+            device_info += "\n" + cmd.stdout.decode('utf-8', errors="ignore")
+            break
+
+    return device_info

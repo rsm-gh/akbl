@@ -4,7 +4,7 @@
 #  Copyright (C) 2014-2024 Rafael Senties Martinelli.
 #                2011-2012 the pyAlienFX team.
 #
-#  This program is free software; you can redistribute it and/or modify
+#  AKBL is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
 #   the Free Software Foundation.
 #
