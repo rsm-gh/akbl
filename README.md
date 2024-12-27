@@ -184,6 +184,7 @@ When iterating over the block numbers, everything will be logged. Once that you 
 ### GUI: After making changes to a theme, the changes are not applied
 
 This is because the themes need to be saved before applying them. Any unsaved change will not be recognized by the daemon.
+To avoid this problem, enable Auto Save: `Settings > Auto Save`.
 
 ### GUI: What's the function of the tempo button / clock icon / right-top corner button?
 
