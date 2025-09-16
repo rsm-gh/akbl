@@ -19,6 +19,7 @@
 
 import os
 import sys
+import pwd
 import shutil
 
 akbl_path = os.path.dirname(os.path.realpath(__file__))
@@ -80,6 +81,12 @@ class Paths:
         for dir_path in (os.path.dirname(self._configuration_file), self._themes_dir):
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
+
+                # Set the right permissions
+                uid = pwd.getpwnam(user).pw_uid
+                gid = pwd.getpwnam(user).pw_gid
+                os.chown(dir_path, uid, gid)
+
 
         #
         # Bug #84: In case there be a folder instead of the configuration file, delete the folder.  
