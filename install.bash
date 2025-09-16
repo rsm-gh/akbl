@@ -113,6 +113,8 @@ else
 fi
 
 echo -e "\e[00;33m\n[6/$NUMBER_OF_STEPS] Testing the installation...\e[00m"
+echo -e "AKBL version: $(akbl --version)"
+
 ping=$(akbl --ping)
 
 if [[ "$ping" == "False" ]]; then
