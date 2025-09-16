@@ -30,10 +30,11 @@ from Computer.Computer import Computer
 
 def create_default_theme(computer: Computer, theme_dir: str = None) -> Theme:
     theme = Theme(computer)
-    copy_theme(theme, os.path.join(theme_dir, 'Default.cfg'))
-    theme.save()
 
-    return theme
+    new_theme = copy_theme(theme, os.path.join(theme_dir, 'Default.cfg'))
+    new_theme.save()
+
+    return new_theme
 
 
 def load_theme_from_file(computer: Computer, path: str) -> Theme:
