@@ -52,8 +52,8 @@ Files:
 Copyright: 2015-2024 Rafael Senties Martinelli.
 License: CC0 v1.0 Universal
 Files:
-    install.sh
-    uninstall.sh
+    install.bash
+    uninstall.bash
     usr/lib/systemd/system/akbl.service
     usr/lib/python3/AKBL/utils.py
     usr/share/AKBL/gtk_utils.py

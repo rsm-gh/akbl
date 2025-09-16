@@ -4,13 +4,13 @@
 # Public domain.
 #
 #
-# install.sh by Rafael Senties Martinelli.
+# install.bash by Rafael Senties Martinelli.
 #
 # To the extent possible under law, the person who associated CC0 with
-# install.sh has waived all copyright and related or neighboring rights
-# to install.sh.
+# install.bash has waived all copyright and related or neighboring rights
+# to install.bash.
 #
-# You should have received a copy of the CC0 legalcode along with this
+# You should have received a copy of the CC0 legal code along with this
 # work.  If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
 
 if [ "$EUID" -ne 0 ]
@@ -25,13 +25,13 @@ NUMBER_OF_STEPS=5 			# installation steps
 #
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd "$DIR" || exit
-chmod a+x ./remove
+chmod a+x ./uninstall.bash
 
 #
 # Remove previous versions
 #
 echo -e "\e[00;33m[1/$NUMBER_OF_STEPS] Removing previous versions..\e[00m"
-./remove
+./uninstall.bash
 
 #
 # Start the installation

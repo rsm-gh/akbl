@@ -98,7 +98,7 @@ The Python bindings allow modifying the computer lights by using other program s
        + Core: `systemd usbutils python python-pyusb python-pyro`.
        + GUI:  `webkit2gtk libayatana-appindicator python-gobject python-cairo`.
 
-3. Execute the setup file.
+3. Execute `install.bash`.
 
 # F.A.Q.
 

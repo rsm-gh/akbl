@@ -4,11 +4,11 @@
 # Public domain.
 #
 #
-# uninstall.sh by Rafael Senties Martinelli.
+# uninstall.bash by Rafael Senties Martinelli.
 #
 # To the extent possible under law, the person who associated CC0 with
-# uninstall.sh has waived all copyright and related or neighboring rights
-# to uninstall.sh.
+# uninstall.bash has waived all copyright and related or neighboring rights
+# to uninstall.bash.
 #
 # You should have received a copy of the CC0 legalcode along with this
 # work.  If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
@@ -20,7 +20,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd "$DIR"
+cd "$DIR" || exit
 
 if [ -f /bin/systemctl ]; then
 	echo -e "\n\033[0;32m Disabling the systemd daemon...\033[0m"
@@ -31,7 +31,7 @@ fi
 
 echo -e "\033[0;32m Removing the python links..\033[0m"
 
-AKBL_PYTHON_VERSIONS=($(ls /usr/lib/ | grep python3))
+AKBL_PYTHON_VERSIONS=("$(ls /usr/lib/ | grep python3)")
 
 for python_version in "${AKBL_PYTHON_VERSIONS[@]}"; do
 
