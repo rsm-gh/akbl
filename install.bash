@@ -18,7 +18,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-NUMBER_OF_STEPS=5 			# installation steps
+NUMBER_OF_STEPS=6 			# installation steps
 
 #
 # Set the scripts permissions
@@ -87,12 +87,12 @@ chmod go=r /usr/lib/systemd/system/akbl.service # The permissions must be forced
 
 echo -e "\e[00;33m\n[3/$NUMBER_OF_STEPS] Creating the python links...\e[00m"
 
-PYTHON_VERSIONS=($(ls /usr/lib/ | grep python3))
-for python_version in "${PYTHON_VERSIONS[@]}"; do
+for python_directory in /usr/lib/python3*; do
 
-  if [[ "$python_version" != "python3" ]]; then
-    if [ -d "/usr/lib/$python_version" ]; then
-        ln -s /usr/lib/python3/AKBL "/usr/lib/$python_version/AKBL" && echo -e "linked $python_version"
+  if [[ "$python_directory" != "/usr/lib/python3" ]]; then
+
+    if [ -d "$python_directory" ]; then
+        ln -s /usr/lib/python3/AKBL "$python_directory/AKBL" && echo -e "Linked $python_directory"
     fi
   fi
 
@@ -108,10 +108,15 @@ if [ -f /bin/systemctl ]; then
     systemctl enable akbl
     systemctl restart akbl
     sleep 2
-    ping=$(akbl --ping)
-    echo "AKBL ping... $ping"
 else
 	echo -e "\e[00;31m Warning: systemd seems to be missing. The daemon will have to be manually launched.\e[00m"
 fi
 
-echo -e "\e[00;33m \nThe installation has finished. If you have any window of the software (GUI, BlockTesting, Bindings script, etc..) or the indicator is running, you must restart them.\e[00m\n"
+echo -e "\e[00;33m\n[6/$NUMBER_OF_STEPS] Testing the installation...\e[00m"
+ping=$(akbl --ping)
+
+if [[ "$ping" == "False" ]]; then
+  echo -e "\e[00;31mThe daemon ping is OFF, to make the software work you need to correct this problem.\e[00m"
+else
+  echo -e "\033[0;32The installation has finished. If you have any window of the software (GUI, BlockTesting, Bindings script, etc..) or the indicator is running, you must restart them.\e[00m\n"
+fi

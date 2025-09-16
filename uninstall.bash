@@ -23,40 +23,37 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd "$DIR" || exit
 
 if [ -f /bin/systemctl ]; then
-	echo -e "\n\033[0;32m Disabling the systemd daemon...\033[0m"
+	echo -e "\e[00;33mDisabling the systemd daemon...\033[0m"
     systemctl stop akbl
     systemctl disable akbl
     echo ""
 fi
 
-echo -e "\033[0;32m Removing the python links..\033[0m"
+echo -e "\e[00;33mRemoving the python links..\033[0m"
 
-AKBL_PYTHON_VERSIONS=("$(ls /usr/lib/ | grep python3)")
+for python_directory in /usr/lib/python3*; do
 
-for python_version in "${AKBL_PYTHON_VERSIONS[@]}"; do
+    echo -e "Checking $python_directory"
 
-  if [[ "$python_version" != "python3" ]]; then
-
-    if [[ -L "/usr/lib/$python_version/AKBL" ]]; then
-      rm -f "/usr/lib/$python_version/AKBL" && echo -e "/usr/lib/$python_version/AKBL link removed"
+    if [[ -L "$python_directory/AKBL" ]]; then
+      rm -f "$python_directory/AKBL" && echo -e "- Link removed"
     fi
 
-    if [ -f "/usr/lib/$python_version/AKBL" ] || [ -f "/usr/lib/$python_version/AKBL.py" ]; then
-        rm -f "/usr/lib/$python_version/AKBL" && echo -e "/usr/lib/$python_version/AKBL file removed"
+    if [ -f "$python_directory/AKBL" ] || [ -f "$python_directory/AKBL.py" ]; then
+        rm -f "$python_directory/AKBL" && echo -e "- File removed"
     fi
 
-    if [ -d "/usr/lib/$python_version/AKBL" ] || [ -d "/usr/lib/$python_version/AKBL.py" ]; then
-        rm -rf "/usr/lib/$python_version/AKBL.py" && echo -e "/usr/lib/$python_version/AKBL directory removed"
+    if [ -d "$python_directory/AKBL" ] || [ -d "$python_directory/AKBL.py" ]; then
+        rm -rf "$python_directory/AKBL.py" && echo -e "- Directory removed"
     fi
 
-  fi
-    
 done
+
 echo ""
 
 
 
-echo -e "\033[0;32m Removing the software files and directories..\033[0m"
+echo -e "\e[00;33mRemoving the software files and directories..\033[0m"
 
 
 function remove_file(){
