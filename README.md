@@ -1,13 +1,12 @@
-
 # Index
-  * [Highlights](https://github.com/rsm-gh/akbl#highlights)
-  * [Software Features](https://github.com/rsm-gh/akbl#about)
-  * [How to Install](https://github.com/rsm-gh/akbl#how-to-install)
-  * [F. A. Q.](https://github.com/rsm-gh/akbl#faq)
-  * [Python Bindings](https://github.com/rsm-gh/akbl#python-bindings-1)
-  * [Documentation](https://github.com/rsm-gh/akbl#documentation)
-  * [History](https://github.com/rsm-gh/akbl#history)
-  * [About & Credits](https://github.com/rsm-gh/akbl#credits)
+  * [Highlights](#highlights)
+  * [Software Features](#software-features)
+  * [How to Install](#how-to-install)
+  * [F. A. Q.](#f-a-q)
+  * [Python Bindings](#python-bindings-1)
+  * [Documentation](#documentation)
+  * [History](#history)
+  * [About & Credits](#about-credits)
   
 
 # Highlights
@@ -21,13 +20,13 @@ AKBL is a software to control the lights of Alienware computers (The keyboard, t
 
 ## Graphical Interface
 
-![GUI](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/ImagesPreview/GUI.png)
+![GUI](/usr/share/doc/AKBL/ImagesPreview/GUI.png)
 
 The GUI is designed to be easy and comfortable to use, it will allow you to easily create, delete, and modify profiles.
 
 ## System Tray Indicator
 
-![System tray indicator](https://raw.githubusercontent.com/rsm-gh/akbl/stable/usr/share/doc/AKBL/ImagesPreview/Indicator.png)
+![System tray indicator](/usr/share/doc/AKBL/ImagesPreview/Indicator.png)
 
 
 It allows starting the GUI, turning the lights On/Off, and choosing profiles. By default, it is not enabled, but it can be added to the start session of a user with the command `akbl --start-indicator`.
@@ -84,11 +83,11 @@ while True:
     # Wait 2 seconds
     time.sleep(2)     
 ```
-The Python bindings allow modifying the computer lights by using other program signals, for example, when receiving an email, when monitoring things like the weather or the CPU temperature. You can read more about this in the [Bindings section](https://github.com/rsm-gh/akbl#python-bindings-1).
+The Python bindings allow modifying the computer lights by using other program signals, for example, when receiving an email, when monitoring things like the weather or the CPU temperature. You can read more about this in the [Bindings section](#python-bindings-1).
 
 # How to Install
 
-1. Download the [stable branch](https://github.com/rsm-gh/akbl/archive/stable.zip).
+1. Download the master branch.
 2. Install the dependencies:
 
     * Debian-based distributions:
@@ -105,7 +104,7 @@ The Python bindings allow modifying the computer lights by using other program s
 
 ### If my computer is not supported, what can I do?
 
-Check if there's a bug concerning your computer model on GitHub, and if it doesn't exist, create one:
+Check if there's a bug concerning your computer model, and if it doesn't exist, create one:
 
   1. Set the title of the bug as: "Add support to <computer model>"
   2. Fill the general information of the bug (GNU/Linux distribution, python version, etc...)
@@ -458,7 +457,7 @@ def get_max_temp():
 so you can replace the function `get_max_temp` of the previous code, and it will now change the colors regarding the weather.
 
 # Documentation
-Some more diagrams and documentation can be found [here](https://github.com/rsm-gh/akbl/tree/stable/usr/share/doc/AKBL).
+Some more diagrams and documentation can be found [here](/usr/share/doc/AKBL).
 
 # History
 
