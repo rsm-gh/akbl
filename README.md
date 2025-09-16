@@ -2,6 +2,7 @@
 
 # ⚠️ IMPORTANT ⚠️
 
+* **The official git repository is located at [Codeberg.org](https://codeberg.org/rsm92/akbl).** It contains the latest code & packages.
 * **Since 2022** this software only receives **minimal maintenance updates**. I'm the only developer and I do not possess an Alienware computer anymore. I can not correctly test the software.
 * **Since 2019** Many users are **facing issues with recent Alienware computers**, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues. **Such computers do not work**.
 
