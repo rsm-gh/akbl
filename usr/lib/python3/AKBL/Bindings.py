@@ -19,9 +19,10 @@
 
 import os
 import sys
-import Pyro4
 import getpass
 from traceback import format_exc
+
+from Pyro5.client import Proxy as PyroClientProxy
 
 akbl_path = os.path.dirname(os.path.realpath(__file__))
 if akbl_path not in sys.path:
@@ -208,7 +209,7 @@ class Bindings:
                 address = f.readline().strip()
 
             try:
-                pyro = Pyro4.Proxy(address)
+                pyro = PyroClientProxy(address)
                 pyro.ping(sender=self.__sender + ":" + self.__pyro_address)
 
             except Exception:

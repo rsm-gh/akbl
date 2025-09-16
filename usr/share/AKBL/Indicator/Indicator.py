@@ -19,10 +19,12 @@
 import os
 import gi
 import sys
-import Pyro4
 import subprocess
 from time import sleep
 from threading import Thread, current_thread
+
+from Pyro5.server import Daemon as PyroServerDaemon
+from Pyro5.server import expose as pyro_server_expose
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('AyatanaAppIndicator3', '0.1')
@@ -91,7 +93,7 @@ class Indicator:
 
         # Pyro
         #
-        self.__pyro_daemon = Pyro4.Daemon()
+        self.__pyro_daemon = PyroServerDaemon()
         self.__uri = self.__pyro_daemon.register(self)
         print_debug("URI={}".format(self.__uri))
         Thread(target=self.__on_thread_pyro_loop).start()
@@ -109,11 +111,11 @@ class Indicator:
     """
         Public & Pyro Methods
     """
-    @Pyro4.expose
+    @pyro_server_expose
     def ping(self) -> None:
         print_debug()
 
-    @Pyro4.expose
+    @pyro_server_expose
     def exit(self, from_daemon: bool = True) -> None:
 
         if from_daemon:
@@ -127,7 +129,7 @@ class Indicator:
 
         Gtk.main_quit()
 
-    @Pyro4.expose
+    @pyro_server_expose
     def load_themes(self,
                     current_profile: str,
                     state: bool) -> None:
@@ -146,7 +148,7 @@ class Indicator:
 
         self.__submenu_profiles.show_all()
 
-    @Pyro4.expose
+    @pyro_server_expose
     def set_code(self, indicator_code: int) -> None:
 
         print_debug("indicator_code={}".format(indicator_code))
@@ -196,7 +198,7 @@ class Indicator:
             for children in self.__submenu_profiles.get_children():
                 children.set_active(children_state)
 
-    @Pyro4.expose
+    @pyro_server_expose
     def set_theme(self, _widget: object, theme_name: str) -> None:
         print_debug("theme_name={}".format(theme_name))
         self.__bindings.set_theme(theme_name)

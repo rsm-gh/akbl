@@ -24,8 +24,11 @@
 
 import os
 import sys
-import Pyro4
 from traceback import format_exc
+
+from Pyro5.client import Proxy as PyroClientProxy
+from Pyro5.server import expose as pyro_server_expose
+from Pyro5.server import Daemon as PyroServerDaemon
 
 akbl_path = os.path.dirname(os.path.realpath(__file__))
 if akbl_path not in sys.path:
@@ -82,7 +85,7 @@ class Daemon:
         General Bindings
     """
 
-    @Pyro4.expose
+    @pyro_server_expose
     def ping(self, sender: str = "Anonymous") -> bool:
         """Check if the Daemon ready to execute commands."""
         print_debug()
@@ -93,7 +96,7 @@ class Daemon:
 
         return self.__controller.is_ready()
 
-    @Pyro4.expose
+    @pyro_server_expose
     def reload_themes(self, user: str) -> None:
 
         print_debug(f"user={user}")
@@ -128,13 +131,13 @@ class Daemon:
         Bindings for the users
     """
 
-    @Pyro4.expose
+    @pyro_server_expose
     def switch_lights(self, user: str):
         """Toggle on/off the lights of the keyboard."""
         print_debug(f"user={user}")
         self.set_lights(user, not self.__lights_state)
 
-    @Pyro4.expose
+    @pyro_server_expose
     def set_theme(self, user: str, theme_name: str) -> bool:
         """Set a theme by name."""
 
@@ -162,7 +165,7 @@ class Daemon:
         self.__illuminate_keyboard()
         return True
 
-    @Pyro4.expose
+    @pyro_server_expose
     def set_lights(self, user: str, state: bool) -> None:
         """Set the lights on or off."""
 
@@ -212,7 +215,7 @@ class Daemon:
         else:
             self.__illuminate_keyboard()
 
-    @Pyro4.expose
+    @pyro_server_expose
     def set_colors(self,
                    mode: str,
                    speed: int,
@@ -324,7 +327,7 @@ class Daemon:
         Bindings for the graphical interphase
     """
 
-    @Pyro4.expose
+    @pyro_server_expose
     def get_computer_name(self) -> str:
         print_debug()
 
@@ -333,7 +336,7 @@ class Daemon:
 
         return self.__computer.name
 
-    @Pyro4.expose
+    @pyro_server_expose
     def get_computer_info(self) -> tuple[str, str, str, str]:
         """
             :rtype: tuple(str: computer name,
@@ -355,13 +358,13 @@ class Daemon:
         Indicator Bindings
     """
 
-    @Pyro4.expose
+    @pyro_server_expose
     def connect_indicator(self, user: str, uri: str) -> None:
         """Connect the Daemon to the Indicator."""
 
         print_debug("uri: {}".format(uri))
         try:
-            new_indicator = Pyro4.Proxy(uri)
+            new_indicator = PyroClientProxy(uri)
         except Exception:
             print_warning("Failed to initialize the indicator")
             print_warning(format_exc(), direct_output=True)
@@ -377,7 +380,7 @@ class Daemon:
             self.update_indicator()
             self.reload_themes(user)
 
-    @Pyro4.expose
+    @pyro_server_expose
     def update_indicator(self) -> None:
         """Update the status (lights on/off) of the indicator."""
 
@@ -388,7 +391,7 @@ class Daemon:
         else:
             self.__indicator_send_code(IndicatorCodes._lights_off)
 
-    @Pyro4.expose
+    @pyro_server_expose
     def disconnect_indicator(self) -> None:
         """Disconnect the Daemon from the Indicator."""
         print_debug()
@@ -465,7 +468,7 @@ def main(fake=False):
     os.chdir(os.path.dirname(os.path.realpath(__file__)))  # todo: why is this necessary?
 
     akbl_daemon = Daemon(fake=fake)
-    pyro_daemon = Pyro4.Daemon()
+    pyro_daemon = PyroServerDaemon()
     pyro_uri = str(pyro_daemon.register(akbl_daemon))
     pyro_uri_file = Paths()._daemon_pyro_file
     print_info(f'Registering URI={pyro_uri}\nUpdating {pyro_uri_file}')
