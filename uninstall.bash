@@ -77,6 +77,8 @@ function remove_dir(){
 
 remove_file "/usr/share/applications/AKBL.desktop"
 remove_file "/usr/share/applications/com.senties-martinelli.AKBL.desktop"
+remove_file "/usr/share/applications/com.senties-martinelli.AKBL-indicator.desktop"
+remove_file "/usr/share/applications/com.senties-martinelli.AKBL-windicator.desktop"
 remove_file "/usr/bin/akbl"
 remove_file "/usr/lib/systemd/system/AKBL.service"
 remove_dir  "/usr/share/AKBL"
