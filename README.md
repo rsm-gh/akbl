@@ -97,7 +97,7 @@ The Python bindings allow modifying the computer lights by using other program s
       + GUI: `libgtk-3-0 libgtk-3-dev gir1.2-ayatanaappindicator3-0.1 python3-gi python3-cairo`.
 
     * ArchLinux:
-       + Core: `systemd usbutils python python-pyusb python-pyro`.
+       + Core: `systemd usbutils python python-pyusb` and from the AUR `python-pyro5`.
        + GUI:  `webkit2gtk libayatana-appindicator python-gobject python-cairo`.
 
 3. Execute `install.bash`.
