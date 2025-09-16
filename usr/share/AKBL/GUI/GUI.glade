@@ -577,11 +577,11 @@ appointment-soon</property>
 </property>
     <property name="comments" translatable="yes">
 </property>
-    <property name="website">https://github.com/rsm-gh/akbl</property>
+    <property name="website">https://codeberg.org/rsm92/akbl</property>
     <property name="website-label" translatable="yes">Home</property>
     <property name="authors">
 AKBL:
-Rafael Senties Martinelli https://www.senties-martinelli.com
+Rafael Senties Martinelli https://rsm92.fr
 
 PyALienFX:
 Ledjfou125 &lt;ledjfou125@gmail.com&gt;

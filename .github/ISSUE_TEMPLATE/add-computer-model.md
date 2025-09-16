@@ -22,7 +22,6 @@ ADD HERE THE LOG OF THE AKBL INSTALLATION
 # Block Testing Window
 
 > To make AKBL work, the Block Testing Window must be able to turn on/off the lights of your computer. 
-> If your computer is not working with AKBL, start by following this doc:
-> https://github.com/rsm-gh/akbl#how-to-use-the-block-testing-window
+> If your computer is not working with AKBL, start by following the **Block Testing Documentation**.
 
 + What is the status of the Block Testing Window? Can it switch the lights on/off?
