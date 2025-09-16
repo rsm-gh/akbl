@@ -1,5 +1,13 @@
+
+
+# ⚠️ IMPORTANT ⚠️
+
+* **Since 2022** this software only receives **minimal maintenance updates**. I'm the only developer and I do not possess an Alienware computer anymore. I can not correctly test the software.
+* **Since 2019** Many users are **facing issues with recent Alienware computers**, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues. **Such computers do not work**.
+
+
+
 # Index
-  * [Highlights](#highlights)
   * [Software Features](#software-features)
   * [How to Install](#how-to-install)
   * [F. A. Q.](#f-a-q)
@@ -7,12 +15,6 @@
   * [Documentation](#documentation)
   * [History](#history)
   * [About & Credits](#about-credits)
-  
-
-# Highlights
-
-* 2022: The software cannot be correctly tested since I changed my laptop. I do not possess an Alienware computer anymore.
-* 2019: Many users with recent Alienware computers are facing issues, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues.
 
 # Software Features
 
@@ -500,6 +502,6 @@ As far as I know, pyAlienFX is not maintained anymore. They made work the projec
 
 * Wattos
 
-I have no information about AlienFX Lite, but in any case, Wattos was the first hacker to understand the USB communication and to make some code to work with. Definitely the most important work since DELL engineers have never helped us.
+I have no information about AlienFX Lite, but in any case, Wattos was the first hacker to understand the USB communication and to make some code to work with.
 
 
