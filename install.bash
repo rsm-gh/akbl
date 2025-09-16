@@ -24,14 +24,13 @@ NUMBER_OF_STEPS=5 			# installation steps
 # Set the scripts permissions
 #
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd "$DIR" || exit
-chmod a+x ./uninstall.bash
+chmod a+x "$DIR/uninstall.bash"
 
 #
 # Remove previous versions
 #
 echo -e "\e[00;33m[1/$NUMBER_OF_STEPS] Removing previous versions..\e[00m"
-./uninstall.bash
+"$DIR/uninstall.bash"
 
 #
 # Start the installation
