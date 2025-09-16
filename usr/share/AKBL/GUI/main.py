@@ -41,6 +41,6 @@ class AKBLApp(Gtk.Application):
             self.__gui.present()
 
 
-app = AKBLApp(application_id="com.senties-martinelli.AKBL")
+app = AKBLApp(application_id="fr.rsm92.akbl")
 app_status = app.run(sys.argv)
 sys.exit(app_status)
