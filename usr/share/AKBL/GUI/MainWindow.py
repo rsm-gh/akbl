@@ -53,6 +53,7 @@ class MainWindow:
         self.__bindings = Bindings(sender="GUI")
         self.__paths = Paths()
         self.__response = None
+        self.__thread_scan_daemon = None
 
         # Glade
         #
@@ -191,8 +192,9 @@ class MainWindow:
         self.window_root.present()
 
     def quit(self, *_):
-        self.__thread_scan_daemon.do_run = False
-        self.__thread_scan_daemon.join()
+        if self.__thread_scan_daemon is not None:
+            self.__thread_scan_daemon.do_run = False
+            self.__thread_scan_daemon.join()
         self.__application.quit()
 
     def on_toolbar_colorlist_changed(self, *_):
