@@ -114,4 +114,4 @@ else
 	echo -e "\e[00;31m Warning: systemd seems to be missing. The daemon will have to be manually launched.\e[00m"
 fi
 
-echo -e "\nThe installation has finished. If you have any window of the software (GUI, BlockTesting, Bindings script, etc..) or the indicator is running, you must restart them.\n"
+echo -e "\e[00;33m \nThe installation has finished. If you have any window of the software (GUI, BlockTesting, Bindings script, etc..) or the indicator is running, you must restart them.\e[00m\n"
