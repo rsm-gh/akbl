@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2024 Rafael Senties Martinelli.
+#  Copyright (C) 2015-2025 Rafael Senties Martinelli.
 #
 #  AKBL is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -174,7 +174,7 @@ class Daemon:
         if user != self.__user:
             self.reload_themes(user)
 
-        if state is False:
+        if not state:
 
             areas_to_keep_on = self.__ccp.get_str_defval('areas_to_keep_on', '')
 

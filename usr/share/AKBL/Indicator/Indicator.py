@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 
-#  Copyright (C) 2015-2024 Rafael Senties Martinelli.
+#  Copyright (C) 2015-2025 Rafael Senties Martinelli.
 #
 #  AKBL is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License 3 as published by
@@ -194,7 +194,7 @@ class Indicator:
             self.__submenu_switch_state.set_sensitive(enable_gui)
             self.__profiles_menu.set_sensitive(enable_gui)
 
-        if children_state is False:
+        if not children_state:
             for children in self.__submenu_profiles.get_children():
                 children.set_active(children_state)
 

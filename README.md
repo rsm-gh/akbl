@@ -11,7 +11,7 @@
 
 # Highlights
 
-* 2022: The software cannot be correctly tested since I changed my laptop. I do not possess an Alienware computer any more.
+* 2022: The software cannot be correctly tested since I changed my laptop. I do not possess an Alienware computer anymore.
 * 2019: Many users with recent Alienware computers are facing issues, probably because DELL has changed their USB protocol. Such computers are not supported, and you can find some interesting information in the open issues.
 
 # Software Features
