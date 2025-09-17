@@ -127,8 +127,10 @@ class MainWindow:
         #   Load a configuration
         #
         self.__computer = computer_factory.get_default_computer()
-        if self.__computer is None:  # todo: display message install computer model
-            self.__computer = Computer()
+        if self.__computer is None:
+            gtk_dialog_info(self.window_root, Texts.GUI._no_computer_title, Texts.GUI._no_computer)
+            self.quit()
+            return
 
         self.label_computer_model.set_text(self.__computer.name)
 
