@@ -82,10 +82,12 @@ class Paths:
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
 
-                # Set the right permissions
-                uid = pwd.getpwnam(user).pw_uid
-                gid = pwd.getpwnam(user).pw_gid
-                os.chown(dir_path, uid, gid)
+            # Force the right permissions
+            # Also to already existent directories, because previous versions of AKBL set root on the users directory.
+            # making bug the GUI.
+            uid = pwd.getpwnam(user).pw_uid
+            gid = pwd.getpwnam(user).pw_gid
+            os.chown(dir_path, uid, gid)
 
 
         #
