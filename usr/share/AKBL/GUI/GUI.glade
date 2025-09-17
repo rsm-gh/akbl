@@ -572,7 +572,7 @@ appointment-soon</property>
     <property name="type-hint">dialog</property>
     <property name="transient-for">window_root</property>
     <property name="program-name">AKBL</property>
-    <property name="copyright" translatable="yes">© 2014-2024 Rafael Senties Martinelli
+    <property name="copyright" translatable="yes">© 2014-2025 Rafael Senties Martinelli
 © 2011-2012 The pyAlienFX team
 </property>
     <property name="comments" translatable="yes">
