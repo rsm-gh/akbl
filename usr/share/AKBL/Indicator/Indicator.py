@@ -31,9 +31,14 @@ except ImportError:
     from Pyro4 import Daemon as PyroServerDaemon
 
 gi.require_version('Gtk', '3.0')
-gi.require_version('AyatanaAppIndicator3', '0.1')
 from gi.repository import Gtk, GLib
-from gi.repository import AyatanaAppIndicator3 as AppIndicator
+
+try:
+    gi.require_version('AyatanaAppIndicator3', '0.1')
+    from gi.repository import AyatanaAppIndicator3 as AppIndicator
+except ValueError: # On Fedora
+    gi.require_version('AppIndicator3', '0.1')
+    from gi.repository import AppIndicator3 as AppIndicator
 
 from AKBL.Paths import Paths
 from AKBL.Texts import Texts
