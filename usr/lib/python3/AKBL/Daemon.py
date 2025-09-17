@@ -26,9 +26,14 @@ import os
 import sys
 from traceback import format_exc
 
-from Pyro5.client import Proxy as PyroClientProxy
-from Pyro5.server import expose as pyro_server_expose
-from Pyro5.server import Daemon as PyroServerDaemon
+try:
+    from Pyro5.client import Proxy as PyroClientProxy
+    from Pyro5.server import expose as pyro_server_expose
+    from Pyro5.server import Daemon as PyroServerDaemon
+except ImportError:
+    from Pyro4 import Proxy as PyroClientProxy
+    from Pyro4 import expose as pyro_server_expose
+    from Pyro4 import Daemon as PyroServerDaemon
 
 akbl_path = os.path.dirname(os.path.realpath(__file__))
 if akbl_path not in sys.path:

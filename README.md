@@ -94,15 +94,15 @@ The Python bindings allow modifying the computer lights by using other program s
 2. Install the dependencies:
 
     * Debian-based:
-      + Core: `systemd usbutils python3 python3-usb python3-pyro5`.
+      + Core: `systemd usbutils python3 python3-usb python3-pyro5` (or `python3-pyro4` on older distributions).
       + GUI: `libgtk-3-0 libgtk-3-dev python3-gi python3-cairo gir1.2-ayatanaappindicator3-0.1`.
 
     * ArchLinux:
-       + Core: `systemd usbutils python python-pyusb` and from the AUR `python-pyro5`.
+       + Core: `systemd usbutils python python-pyusb python-pyro`.
        + GUI:  `gtk3 python-gobject python-cairo libayatana-appindicator`.
 
    * Fedora:
-       + Core: `systemd usbutils python3 python3-usb python3-pyro5`
+       + Core: `systemd usbutils python3 python3-usb python3-pyro`
        + GUI: `gtk3 gtk-devel python3-gobject python3-cairo libappindicator-gtk3` 
 
 3. Execute `install.bash`.

@@ -22,7 +22,10 @@ import sys
 import getpass
 from traceback import format_exc
 
-from Pyro5.client import Proxy as PyroClientProxy
+try:
+    from Pyro5.client import Proxy as PyroClientProxy
+except ImportError:
+    from Pyro4 import Proxy as PyroClientProxy
 
 akbl_path = os.path.dirname(os.path.realpath(__file__))
 if akbl_path not in sys.path:

@@ -23,8 +23,12 @@ import subprocess
 from time import sleep
 from threading import Thread, current_thread
 
-from Pyro5.server import Daemon as PyroServerDaemon
-from Pyro5.server import expose as pyro_server_expose
+try:
+    from Pyro5.server import expose as pyro_server_expose
+    from Pyro5.server import Daemon as PyroServerDaemon
+except ImportError:
+    from Pyro4 import expose as pyro_server_expose
+    from Pyro4 import Daemon as PyroServerDaemon
 
 gi.require_version('Gtk', '3.0')
 gi.require_version('AyatanaAppIndicator3', '0.1')
