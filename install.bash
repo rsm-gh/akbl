@@ -119,6 +119,8 @@ ping=$(akbl --ping)
 
 if [[ "$ping" == "False" ]]; then
   echo -e "\e[00;31mThe daemon ping is OFF, to make the software work you need to correct this problem.\e[00m"
-else
+elif [[ "$ping" == "True" ]]; then
   echo -e "\033[0;32The installation has finished. If you have any window of the software (GUI, BlockTesting, Bindings script, etc..) or the indicator is running, you must restart them.\e[00m\n"
+else
+  echo -e "\e[00;31mThe installation was not successful.\e[00m"
 fi
