@@ -1,17 +1,22 @@
 #!/bin/bash
 
 #
-# Public domain.
+# This file is part of AKBL.
 #
+#  Copyright (C) 2015-2025 Rafael Senties Martinelli.
 #
-# install.bash by Rafael Senties Martinelli.
+# This work is free. You can redistribute it and/or modify it under the
+# terms of the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
+# <https://creativecommons.org/publicdomain/zero/1.0/>
 #
-# To the extent possible under law, the person who associated CC0 with
-# install.bash has waived all copyright and related or neighboring rights
-# to install.bash.
-#
-# You should have received a copy of the CC0 legal code along with this
-# work.  If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 
 if [ "$EUID" -ne 0 ]
   then echo -e "\e[00;31m The script must be run as root.\e[00m"
