@@ -87,4 +87,4 @@ Usage:
         _theme_duplicate = "A theme with this name already exists. Do you want to overwrite it?"
         _theme_must_saved = "The theme {} must be saved before applying it."
         _no_computer_title = "Undefined Computer"
-        _no_computer = 'It is mandatory to select a computer model. Run as root \n"akbl --model-chooser-gui".'
+        _no_computer = 'It is mandatory to select a computer model. Run as root \n"akbl --model-chooser-gui"\nand restart your computer.'
