@@ -8,19 +8,19 @@ The licenses mentioned in this file can be find here:
 
 
 Copyright: Taken from a ubuntu build in 2015, http://www.libusb.info
-License: LGPL v3
+License: LGPL-3.0
 Files: usr/share/AKBL/libusb-1.0.so.0
 
 
 Copyright: GNU/Linux community, author described inside each file.
-License: GPL v3
+License: GPL-3.0
 Files:
 	usr/share/doc/AKBL/BusData/Data/*
 	usr/share/AKBL/computers/*
 
 
 Copyright: Copyright (C) 2015 Amalia Angeli.
-License: CC-BY 4.0
+License: CC-BY-4.0
 Files:
     usr/share/AKBL/icon.png
     usr/share/AKBL/icon-big.png
@@ -42,7 +42,7 @@ Files:
     usr/share/AKBL/GUI/img/tempo.png
 
 Copyright: Copyright (C) 2015 Amalia Angeli, modified by Rafael Senties Martinelli.
-License: CC-BY 4.0
+License: CC-BY-4.0
 Files:
     usr/share/AKBL/Indicator/img/icon-no-daemon-white.png
     usr/share/AKBL/Indicator/img/icon-off-white.png
@@ -50,7 +50,7 @@ Files:
 
 
 Copyright: 2015-2024 Rafael Senties Martinelli.
-License: CC0 v1.0 Universal
+License: CC0-1.0-Universal
 Files:
     install.bash
     uninstall.bash
@@ -63,7 +63,7 @@ Files:
 
 
 Copyright: Copyright (C) 2015-2024 Rafael Senties Martinelli.
-License: CC-BY 4.0
+License: CC-BY-4.0
 Files:
     usr/share/doc/AKBL/BusData/Summary
 
@@ -80,7 +80,7 @@ Files:
 
 
 Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli
-License: GPL v3
+License: GPL-3.0
 Files:
 	README.md
 	usr/bin/akbl
@@ -111,7 +111,7 @@ Files:
 
 Copyright: Copyright (C) 2014-2024 Rafael Senties Martinelli.
            Copyright (C) 2011-2012 the pyAlienFX team.
-License: GPL v3
+License: GPL-3.0
 Files:
 	usr/lib/python3/AKBL/Computer/Computer.py
 	usr/lib/python3/AKBL/Computer/Region.py
@@ -121,3 +121,19 @@ Files:
     usr/lib/python3/AKBL/Engine/Driver.py
 	usr/lib/python3/AKBL/Theme/Zone.py
 	usr/lib/python3/AKBL/Theme/Area.py
+
+
+License: CC0-1.0-Universal
+ Refer to the file usr/share/doc/phantom-player/Licenses/CC0-1.0-Universal.txt for the full license text.
+
+License: CC-BY-4.0
+ Refer to the file usr/share/doc/phantom-player/Licenses/CC-BY-4.0.txt for the full license text.
+
+License: MIT
+ Refer to the file usr/share/doc/phantom-player/Licenses/MIT for the full license text.
+
+License: LGPL-3.0
+ Refer to the file usr/share/doc/phantom-player/Licenses/LGPL-3.0 for the full license text.
+
+License: GPL-3.0
+ Refer to the file usr/share/doc/phantom-player/Licenses/GPL-3.0 for the complete license text.
