@@ -103,7 +103,7 @@ The software will only work if:
 There are packages available at the [Releases](https://codeberg.org/rsm92/akbl/releases) section, and they cover the
 most popular distributions: Debian/Ubuntu, Fedora, Archlinux.
 
-They are based on the stable/official releases, and if you want to install the latest content commit from git,
+They are based on the stable/official releases, and if you want to install the latest commits from git,
 you need to install it from sources (except [Archlinux - AUR](https://aur.archlinux.org/packages/akbl-git) users). 
 
 **Important**: The first time that you install the package in the system, 
