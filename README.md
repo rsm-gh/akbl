@@ -90,6 +90,33 @@ The Python bindings allow modifying the computer lights by using other program s
 
 # How to Install
 
+**Important Installation remarks**
+
+The software will only work if:
++ You have selected a computer model, and if you can not select any computer model, it means that your computer is not compatible.
++ After installing the software, `akbl --ping` returns `True`.
+
+
+
+## From Packages
+
+There are packages available at the [Releases](https://codeberg.org/rsm92/akbl/releases) section. And they cover the
+most popular distributions: Debian/Ubuntu, Fedora, Archlinux.
+
+They are based on the stable/official releases, and if you want to install the latest content commit from git,
+you need to install it from sources (except [Archlinux - AUR](https://aur.archlinux.org/packages/akbl-git) users). 
+
+**Important**: The first time that you install the package in the system, 
+**it is mandatory to choose the computer model.** For that, after installing the package, 
+run as root 
+ `akbl --model-chooser-cmd` (for the command line version)
+  or
+ `akbl --model-chooser-gui` (for a graphical interphase). 
+
+After selecting a computer model, restart the systemd service `systemd restart akbl`.
+
+## From sources
+
 1. Download the master branch.
 2. Install the dependencies:
 
