@@ -100,7 +100,7 @@ The software will only work if:
 
 ## From Packages
 
-There are packages available at the [Releases](https://codeberg.org/rsm92/akbl/releases) section. And they cover the
+There are packages available at the [Releases](https://codeberg.org/rsm92/akbl/releases) section, and they cover the
 most popular distributions: Debian/Ubuntu, Fedora, Archlinux.
 
 They are based on the stable/official releases, and if you want to install the latest content commit from git,
