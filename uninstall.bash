@@ -43,20 +43,20 @@ for python_directory in /usr/lib/python3*; do
       rm -f "$python_directory/AKBL" && echo -e "- Link removed"
     fi
 
+    if [ -f "$python_directory/AKBL" ]; then
+        rm -f "$python_directory/AKBL" && echo -e "- File removed"
+    fi
+
+    if [ -d "$python_directory/AKBL" ]; then
+        rm -rf "$python_directory/AKBL" && echo -e "- Directory removed"
+    fi
+
     if [[ -L "$python_directory/site-packages/AKBL" ]]; then
       rm -f "$python_directory/site-packages/AKBL" && echo -e "- Link (site-package) removed"
     fi
 
     if [[ -L "$python_directory/dist-packages/AKBL" ]]; then
       rm -f "$python_directory/dist-packages/AKBL" && echo -e "- Link (dist-package) removed"
-    fi
-
-    if [ -f "$python_directory/AKBL" ] || [ -f "$python_directory/AKBL.py" ]; then
-        rm -f "$python_directory/AKBL" && echo -e "- File removed"
-    fi
-
-    if [ -d "$python_directory/AKBL" ] || [ -d "$python_directory/AKBL.py" ]; then
-        rm -rf "$python_directory/AKBL.py" && echo -e "- Directory removed"
     fi
 
 done
