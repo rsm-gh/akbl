@@ -37,10 +37,18 @@ echo -e "\e[00;33mRemoving the python links..\033[0m"
 
 for python_directory in /usr/lib/python3*; do
 
-    echo -e "Checking $python_directory"
+    echo -e "Uninstalling from $python_directory"
 
     if [[ -L "$python_directory/AKBL" ]]; then
       rm -f "$python_directory/AKBL" && echo -e "- Link removed"
+    fi
+
+    if [[ -L "$python_directory/site-packages/AKBL" ]]; then
+      rm -f "$python_directory/site-packages/AKBL" && echo -e "- Link (site-package) removed"
+    fi
+
+    if [[ -L "$python_directory/dist-packages/AKBL" ]]; then
+      rm -f "$python_directory/dist-packages/AKBL" && echo -e "- Link (dist-package) removed"
     fi
 
     if [ -f "$python_directory/AKBL" ] || [ -f "$python_directory/AKBL.py" ]; then
@@ -61,7 +69,7 @@ echo -e "\e[00;33mRemoving the software files and directories..\033[0m"
 
 
 function remove_file(){
-     
+
     if [ -f "$1" ]; then
         rm -f "$1"
         echo "removed.f: $1"
@@ -69,7 +77,7 @@ function remove_file(){
 }
 
 function remove_dir(){
-     
+
     if [ -d "$1" ]; then
         rm -rf "$1"
         echo "removed.d: $1"

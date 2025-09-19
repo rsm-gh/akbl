@@ -96,7 +96,15 @@ for python_directory in /usr/lib/python3*; do
 
   if [[ "$python_directory" != "/usr/lib/python3" ]]; then
 
-    if [ -d "$python_directory" ]; then
+    echo "$python_directory"
+
+    if [ -d "$python_directory/dist-packages" ]; then # ubuntu and debian
+      ln -s /usr/lib/python3/AKBL "$python_directory/dist-packages/AKBL" && echo -e "Linked dist-packages $python_directory"
+
+    elif [ -d "$python_directory/site-packages" ]; then # fedora and archlinux
+      ln -s /usr/lib/python3/AKBL "$python_directory/site-packages/AKBL" && echo -e "Linked site-packages $python_directory"
+
+    elif [ -d "$python_directory" ]; then
         ln -s /usr/lib/python3/AKBL "$python_directory/AKBL" && echo -e "Linked $python_directory"
     fi
   fi
